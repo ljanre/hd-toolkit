@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Local Road Note 29 Figure 6 sub-base thickness calculator." />
+    <meta name="color-scheme" content="light" />
+    <title>Subbase Thickness Design | HD Toolkit</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230b2e4f'/%3E%3Cpath d='M12 46h40M16 40l10-18 9 10 13-18' fill='none' stroke='%23f1b545' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" /><link rel="stylesheet" href="../../tool-theme.css" /><link rel="stylesheet" href="../toolkit-overrides.css" />
+    <script defer src="model-data.js"></script>
+    <script defer src="engine.js"></script>
+    <script defer src="../traffic-input.js"></script><script defer src="app.js"></script><script defer src="../toolkit-ui.js"></script>
+  </head>
+  <body>
+
+
+    
+<main class="workspace">
+      <section class="calculator-panel" aria-labelledby="calculator-heading">
+        <div class="panel-heading">
+          <div>
+            <h2 id="calculator-heading">Design Inputs</h2>
+          </div>
+          <span id="model-health" class="health-badge" aria-live="polite">Checking model…</span>
+        </div>
+
+        <form id="calculator-form" novalidate>
+<div class="pavement-type-input"><p class="pavement-type-label">Pavement Type</p><nav class="subbase-modes" aria-label="Pavement type"><a href="../rigid.html">Rigid Pavement</a><a href="index.html" aria-current="page">Asphalt / Flexible Pavement</a></nav></div>
+          <div class="field-group">
+            <label for="traffic-input">Design Traffic <span class="variable">W₁₈</span></label>
+            <div class="input-shell">
+              <input
+                id="traffic-input"
+                name="traffic_msa"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="Enter total ESAL"
+                aria-describedby="traffic-hint traffic-error"
+              />
+              <span id="traffic-unit" class="input-unit">×10⁶ ESAL</span>
+            </div>
+            <p id="traffic-hint" class="field-hint">Enter total design-lane ESALs · Range: 10,000–100,000,000</p>
+            <p id="traffic-error" class="field-error" aria-live="polite"></p>
+          </div>
+
+          <div class="field-group">
+            <label for="cbr-input">Subgrade Design CBR <span class="variable">CBR</span></label>
+            <div class="input-shell">
+              <input
+                id="cbr-input"
+                name="subgrade_cbr"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="Enter CBR"
+                aria-describedby="cbr-hint cbr-error"
+              />
+              <span class="input-unit">%</span>
+            </div>
+            <p id="cbr-hint" class="field-hint">Use the project-specific design CBR</p>
+            <p id="cbr-error" class="field-error" aria-live="polite"></p>
+          </div>
+
+          <div class="form-actions">
+            <button id="calculate-button" class="button button-primary" type="submit">Calculate Thickness</button>
+            <button id="clear-button" class="button button-secondary" type="button">Clear</button>
+          </div>
+        <div class="design-input-actions"><button type="button" disabled>Generate Report</button><button type="button" disabled>Save</button></div></form>
+
+
+
+
+
+      </section>
+
+      <section class="chart-panel" aria-labelledby="chart-heading">
+        <div class="chart-toolbar">
+          <div>
+            <h2 id="chart-heading">Subbase Thickness Result</h2><p class="reference-basis">Road Note 29 · Figure 6 · DPWH Figure 11</p>
+          </div>
+
+        </div>
+
+                <section id="result-card" class="result-card is-empty" aria-labelledby="result-label" aria-live="polite">
+          <div class="result-topline">
+            <span id="result-label">Result Subbase Thickness</span>
+            <span id="status-pill" class="status-pill status-neutral">INPUT REQUIRED</span>
+          </div>
+          <div class="result-value-row">
+            <output id="result-value" for="traffic-input cbr-input">—</output>
+            <span class="result-unit">mm</span>
+          </div>
+          <p id="result-message" class="result-message">Enter both project inputs to calculate.</p>
+          <p class="result-precision">Reported in 10 mm increments · raw graphical uncertainty ±5 mm</p>
+        </section>
+        <aside id="active-notice" class="active-notice" hidden>
+          <strong>Chart limitation active</strong>
+          <span id="active-notice-text"></span>
+        </aside>
+<div class="nomograph-toolbar"><h3>Subbase Thickness Nomograph</h3>          <div class="chart-actions">
+            <button id="toggle-overlay" class="button button-quiet" type="button" disabled>Hide trace</button>
+            <a class="button button-quiet" href="assets/rn29-figure6-display.png" target="_blank" rel="noopener">Full-size chart</a>
+          </div></div>
+        <div class="chart-scroll" tabindex="0" aria-label="Scrollable source chart and construction overlay">
+          <figure class="chart-figure">
+            <div class="chart-stage" id="chart-stage">
+              <img
+                src="assets/rn29-figure6-display.png"
+                width="861"
+                height="512"
+                alt="Complete Road Note 29 Figure 6 nomograph with logarithmic traffic axis, sub-base thickness scales, CBR curves, minimum-thickness regions, and applicability notes."
+              />
+              <svg id="chart-overlay" viewBox="0 0 861 512" preserveAspectRatio="none" aria-hidden="true">
+                <g id="construction-lines" hidden>
+                  <line id="overlay-vertical" class="construction construction-primary" />
+                  <line id="overlay-horizontal" class="construction construction-primary" />
+                  <line id="overlay-minimum" class="construction construction-minimum" hidden />
+                  <line id="overlay-bracket" class="construction construction-bracket" hidden />
+                  <circle id="overlay-lower-point" class="point point-bracket" r="4.5" hidden />
+                  <circle id="overlay-upper-point" class="point point-bracket" r="4.5" hidden />
+                  <circle id="overlay-raw-point" class="point point-primary" r="5.5" />
+                  <circle id="overlay-governing-point" class="point point-minimum" r="5.5" hidden />
+                  <g id="overlay-label-group">
+                    <rect id="overlay-label-bg" rx="7" ry="7" />
+                    <text id="overlay-label" text-anchor="middle"></text>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <figcaption>
+              Full nomograph supplied by the user and registered to the plotting frame. Red lines reproduce the chart construction; gold indicates the governing or reported result.
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="legend" aria-label="Overlay legend">
+          <span><i class="legend-line legend-primary"></i>Chart construction</span>
+          <span><i class="legend-line legend-bracket"></i>Bracketing curves</span>
+          <span><i class="legend-line legend-minimum"></i>Governing/reporting rule</span>
+        </div>
+
+        <div class="chart-note">
+          <strong>Numerical authority</strong>
+          <p>The validated coefficient model governs the result. The chart overlay is a registered visual trace and does not replace the calculation engine.</p>
+        </div>
+      </section>
+    </main>
+<details id="calculationSteps" class="calculation-steps" hidden><summary>Subbase Thickness Design · Calculation Steps &amp; References</summary><div class="calculation-body">        <details id="trace-details" class="details-card">
+          <summary>Calculation trace</summary>
+          <dl class="trace-list">
+            <div><dt>Branch</dt><dd id="trace-branch">—</dd></div>
+            <div><dt>Curve selection</dt><dd id="trace-curves">—</dd></div>
+            <div><dt>Interpolation</dt><dd id="trace-method">—</dd></div>
+            <div><dt>Raw chart reading</dt><dd id="trace-raw">—</dd></div>
+            <div><dt>Applicable minimum</dt><dd id="trace-minimum">—</dd></div>
+            <div><dt>Rule IDs</dt><dd id="trace-rules">—</dd></div>
+          </dl>
+        </details>
+
+        <details class="details-card"><summary>DPWH Manual · Figure 11 Reference</summary><p>§1.9.3, p.16 refers to Figure 11 for subbase thickness. It shows the same 80/150 mm minimum branches and the below-CBR-2% addition used by the RN29 tool. Material suitability and project requirements remain separate checks.</p><figure class="manual-figure"><a href="../../../assets/dpwh-manual/subbase-thickness.png" target="_blank" rel="noopener"><img src="../../../assets/dpwh-manual/subbase-thickness.png" loading="lazy" alt="Figure 11 · Subbase Thickness · p.146"></a><figcaption>DPWH Design Procedure Manual for Roads (2017) · Figure 11 · Subbase Thickness · p.146 · Click to enlarge.</figcaption></figure></details><details class="details-card limitations-card">
+          <summary>Scope and limitations</summary>
+          <ul>
+            <li>Figure 6 provides structural sub-base thickness only.</li>
+            <li>No extrapolation is permitted outside the supported chart domain.</li>
+            <li>Frost, total pavement depth, material suitability, and local requirements remain separate checks.</li>
+            <li>The model status is <strong>VALIDATED_WITH_LIMITATIONS</strong>; no professional certification is implied.</li>
+          </ul>
+        </details>
+</div></details>
+
+<footer class="footer"><span>HD Toolkit · Subbase Thickness Design</span><span>Road Note 29 · Figure 6</span><span id="qa-summary" hidden></span></footer>
+  </body>
+</html>
+

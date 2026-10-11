@@ -1,0 +1,35 @@
+{
+  "Nomograph_ID": "RN29_1970_FIG6",
+  "Model_Version": "1.0.0",
+  "Application_Version": "1.1.0",
+  "Authoritative_Source": {
+    "filename": "(Road Note 29) A Guide to the Structural Design of Pavements for New Roads - Department of the Environment Road Research Lab.pdf",
+    "sha256": "1b3198aa0d49953b1dcd89418a76264ee339c409dae78d0c2d176cbe93fa8f0c",
+    "figure": "Road Note 29 (1970), Figure 6",
+    "printedAndPdfPage": 25
+  },
+  "Display_Asset": {
+    "filename": "assets/rn29-figure6-display.png",
+    "sha256": "f78c2c0b48a8e65b07b51866f828ce73dbce7e32805e2298cd2a3deda8532c00",
+    "widthPx": 861,
+    "heightPx": 512,
+    "plotOriginX": 59.5,
+    "plotOriginY": 25.25,
+    "plotWidth": 730.0,
+    "plotHeight": 437.25,
+    "plotRight": 789.5,
+    "plotBottom": 462.5,
+    "role": "REGISTERED_DISPLAY_DERIVATIVE",
+    "authoritative": false,
+    "sourceFilename": "image(20261010-171214).png",
+    "sourceSha256": "f78c2c0b48a8e65b07b51866f828ce73dbce7e32805e2298cd2a3deda8532c00",
+    "registrationMethod": "Frame-line intensity centroid checked against the previously registered plot-only derivative.",
+    "registrationUncertaintyPx": 0.75,
+    "notes": "User-supplied full nomograph retained byte-for-byte under a stable application filename; axes, labels, curve family, and printed limitations are visible."
+  },
+  "Production_Data": {
+    "filename": "RN29_Figure6_Production_Data_v1.0.0.json",
+    "sha256": "42c9766042c3846571b33890a5f0d6da33e6dae8746626dfe22cf39c3f82b73b",
+    "embedded_as": "model-data.js"
+  }
+}

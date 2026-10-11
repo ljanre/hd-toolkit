@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Regression verification for the RN29 Figure 6 local calculator." />
+    <title>RN29 Figure 6 · Model Verification</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230b2e4f'/%3E%3Cpath d='M12 46h40M16 40l10-18 9 10 13-18' fill='none' stroke='%23f1b545' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="model-data.js"></script>
+    <script defer src="engine.js"></script>
+    <script defer src="qa.js"></script>
+  </head>
+  <body class="qa-page">
+    <header class="topbar">
+      <div class="brand-block">
+        <span class="brand-mark" aria-hidden="true">QA</span>
+        <div>
+          <p class="eyebrow">RN29 Figure 6 · Application 1.1.0</p>
+          <h1>Model verification</h1>
+        </div>
+      </div>
+      <a class="button qa-back-button" href="index.html">Return to calculator</a>
+    </header>
+
+    <main class="qa-main">
+      <section class="qa-summary-card" aria-labelledby="qa-heading">
+        <div>
+          <p class="section-kicker">Permanent regression suite</p>
+          <h2 id="qa-heading">Golden Test execution</h2>
+          <p>Statuses and branches are exact. Numerical regression tolerance is 0.000001 mm.</p>
+        </div>
+        <div class="qa-score" aria-live="polite">
+          <strong id="qa-score-value">—</strong>
+          <span id="qa-score-label">Preparing checks</span>
+        </div>
+        <button id="rerun-tests" class="button button-primary" type="button">Run tests again</button>
+      </section>
+
+      <section class="qa-integrity" aria-labelledby="integrity-heading">
+        <h2 id="integrity-heading">Release integrity</h2>
+        <dl>
+          <div><dt>Nomograph</dt><dd id="qa-model-id">—</dd></div>
+          <div><dt>Model version</dt><dd id="qa-model-version">—</dd></div>
+          <div><dt>Production data SHA-256</dt><dd id="qa-model-digest">—</dd></div>
+          <div><dt>Source PDF SHA-256</dt><dd id="qa-source-digest">—</dd></div>
+          <div><dt>Display asset SHA-256</dt><dd id="qa-display-digest">—</dd></div>
+          <div><dt>Supplemental checks</dt><dd id="qa-supplemental">—</dd></div>
+        </dl>
+      </section>
+
+      <section class="qa-results" aria-labelledby="results-heading">
+        <div class="qa-results-heading">
+          <div>
+            <p class="section-kicker">Case-level record</p>
+            <h2 id="results-heading">55 Golden Tests</h2>
+          </div>
+          <span id="qa-run-time"></span>
+        </div>
+        <div class="qa-table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Test</th>
+                <th scope="col">Category</th>
+                <th scope="col">Description</th>
+                <th scope="col">Expected status</th>
+                <th scope="col">Actual status</th>
+                <th scope="col">Expected mm</th>
+                <th scope="col">Actual mm</th>
+                <th scope="col">Result</th>
+              </tr>
+            </thead>
+            <tbody id="qa-results-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>
+        <strong>Engineering status: VALIDATED_WITH_LIMITATIONS</strong>
+        <span>App readiness: APP_READY_WITH_LIMITATIONS</span>
+      </div>
+      <span>Golden Tests verify the software port; they do not replace independent chart validation.</span>
+    </footer>
+  </body>
+</html>
