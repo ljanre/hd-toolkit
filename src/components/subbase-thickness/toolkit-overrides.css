@@ -1,0 +1,81 @@
+/* HD Toolkit presentation overrides; the RN29 model and engine are unchanged. */
+:root{--navy-900:#17665d;--navy-800:#12544d;--navy-700:#17665d;--canvas:#f5f7fa;--ink:#203444;--muted:#536977;--line:#dce5eb;--shadow:0 3px 14px #17384705}
+body{padding:0;background:#f5f7fa;font-family:'Segoe UI',Arial,sans-serif}.topbar{background:white;border-bottom:1px solid var(--line);min-height:82px;padding:16px 22px;gap:16px}.topbar h1{font-size:24px}.brand-mark{background:#17665d}.workspace{padding:20px 22px;gap:18px}.calculator-panel,.chart-panel{border-radius:14px;box-shadow:var(--shadow)}.calculator-panel{padding:20px}.panel-heading h2,.chart-toolbar h2{font-size:16px}.input-shell input{background:#f0faf4;border-color:#b8d8c8;min-height:44px}.result-card{background:#ecf7f3;border-color:#cbe1db}.result-value-row output{color:#12544d}.result-value-row{color:#12544d}.button{font-size:12px;border-radius:8px}.button-primary{background:#17665d}.chart-panel{padding:18px}.details-card{font-size:12px}.footer{padding:16px 22px;font-size:11px}.release-block{font-size:11px}
+@media(max-width:760px){.topbar{padding:16px}.topbar h1{font-size:21px}.workspace{padding:16px;gap:16px}.calculator-panel,.chart-panel{padding:16px}.release-block{display:none}.footer{padding:16px}}
+@media print{body,.topbar{background:white}.workspace{padding:0}.calculator-panel,.chart-panel{box-shadow:none}}
+/* Keep header text legible on the toolkit's light surface. */
+.topbar{color:var(--ink)}.topbar .eyebrow,.release-label{color:#17665d}.release-block{color:var(--muted)}.release-block strong{color:var(--ink)}.brand-mark{color:white;border-color:#d3e7de;border-radius:9px}
+/* Keep calculator and nomograph panels aligned with the other worksheets. */
+.workspace{gap:24px;align-items:start}
+.calculator-panel,.chart-panel{min-width:0;padding:22px}
+.field-group{margin-bottom:18px}
+.field-group label{line-height:1.5}
+.topbar{align-items:center}
+@media(max-width:600px){.workspace{padding:16px 12px;gap:18px}.calculator-panel,.chart-panel{padding:16px}}
+
+/* Pavement workspace layout, controls and result typography. */
+:root{--canvas:#f3f6f8;--navy-950:#12544d;--shadow:0 4px 20px #17384705}
+body{font-size:14px;background:var(--canvas);line-height:1.5}
+.workspace{padding:0;gap:24px;grid-template-columns:minmax(380px,.95fr) minmax(0,1.15fr);align-items:stretch}
+.calculator-panel,.chart-panel{padding:0;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.calculator-panel{display:flex;flex-direction:column;align-self:stretch}
+.panel-heading,.chart-toolbar{padding:16px 20px;min-height:62px;margin:0;border-bottom:1px solid var(--line);align-items:center;gap:12px}
+.panel-heading h2,.chart-toolbar h2{font-size:17px;line-height:1.4;letter-spacing:-.015em;margin:0}
+.reference-basis{font-size:11px;line-height:1.5;color:var(--muted);margin:4px 0 0}
+.health-badge.is-pass{display:none}.health-badge{font-size:10px}
+#calculator-form{display:flex;flex-direction:column;flex:1;padding-top:20px}
+.field-group{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,1.08fr);align-items:center;gap:8px 14px;padding-right:34px;margin:0 20px 18px;min-width:0}
+.field-group label{font-size:13px;font-weight:400;margin:0;line-height:1.45}
+.variable{display:inline-block;margin-left:8px;color:var(--muted);font-family:Georgia,serif;font-style:italic}
+.input-shell{border:1px solid #b4d9c3;border-radius:8px;min-width:0;background:#f0faf5;box-shadow:none;overflow:visible}
+.input-shell input{min-height:38px;padding:7px 10px;font-size:14px;font-weight:400;line-height:1.5;border:0;border-radius:8px;background:transparent;box-shadow:none;min-width:0}
+.input-shell:focus-within{outline:2px solid #308e7b;outline-offset:2px;border-color:#b4d9c3;box-shadow:none}
+.input-shell input:focus{outline:none;box-shadow:none}
+.input-unit{min-width:0;padding:0 10px 0 0;font-size:11px;font-weight:400;color:#476576;background:transparent;border:0}
+.field-hint{grid-column:1/-1;font-size:11px;line-height:1.6;margin:0;color:var(--muted)}
+.field-error{grid-column:1/-1;font-size:11px;margin:0;min-height:0}.field-error:empty{display:none}
+.input-guide-button{position:absolute;right:0;top:19px;transform:translateY(-50%);display:grid;place-items:center;width:26px;height:26px;min-height:26px;padding:0;border:1px solid #b8ccca;border-radius:50%;font-size:12px;font-weight:600;background:#f5faf8;color:#21675c;cursor:pointer}
+.form-actions{gap:10px;margin:2px 20px 20px;flex-wrap:wrap}
+.button{min-height:38px;padding:8px 12px;font-size:12px;font-weight:600;border-radius:8px;line-height:1.5}
+.button-secondary,.button-quiet{color:#294b59;background:#f5f8fa;border-color:var(--line)}
+.design-input-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:auto;padding:18px 24px;border-top:1px solid var(--line);background:#f8fafb}
+.design-input-actions button:disabled{min-height:40px;padding:10px 18px;border:1px solid #d1d8dd;border-radius:8px;background:#e5e9ec;color:#687580;opacity:1;cursor:not-allowed;font-size:12px;font-weight:600}
+.result-card,.result-card.is-zero{margin:20px;padding:20px;border:1px solid #d3e7de;border-radius:12px;color:var(--ink);background:#edf7f3}
+.result-card.is-error{background:#fff0ed;border-color:#dfb7b3}
+.result-topline{align-items:baseline;flex-wrap:wrap;font-size:13px;line-height:1.5;font-weight:600;gap:8px}
+#result-value{font-size:40px;line-height:1.15;font-weight:650;letter-spacing:0;color:#124e47}
+.result-value-row{margin-top:10px;gap:8px}.result-unit{font-size:13px;font-weight:400;color:#32665b}
+.result-message{font-size:12px;line-height:1.6;margin-top:12px}.result-precision{font-size:11px;line-height:1.65;color:var(--muted);margin-top:8px}
+.status-pill{font-size:10px;letter-spacing:0;font-weight:600;border:0;border-radius:5px;padding:4px 7px}
+.status-neutral{color:#536977;background:#e3ecec}.status-ok{color:#226d4f;background:#dcefe3}
+.status-error{color:#a32929;background:#f7ded8}
+.active-notice{margin:0 20px 18px;border-radius:8px;font-size:12px;line-height:1.6}
+.nomograph-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:0 20px 14px}
+.nomograph-toolbar h3{font-size:13px;line-height:1.5;margin:0;color:#294b59}
+.chart-actions{gap:8px;flex-wrap:wrap}.chart-scroll{margin:0 20px;border:1px solid var(--line);border-radius:9px}
+.chart-figure{margin:0}.chart-figure figcaption{font-size:11px;line-height:1.6;padding:12px 14px;color:var(--muted)}
+.chart-scroll{background:white}.chart-figure{min-width:0;padding:12px}.chart-stage{border:0;box-shadow:none}
+.legend{gap:12px;font-size:11px;padding:14px 20px;margin:0;flex-wrap:wrap}
+.chart-note{margin:0 20px 20px;padding:12px 14px;font-size:11px;background:#f8fafb;border:1px solid var(--line);border-radius:9px}
+.chart-note p{font-size:11px;line-height:1.6;margin:4px 0 0}
+.calculation-steps{margin:24px auto 0;max-width:1760px;border:1px solid var(--line);border-radius:16px;background:white;overflow:hidden;box-shadow:var(--shadow)}
+.calculation-steps>summary{padding:18px 20px;font-size:13px;font-weight:600;line-height:1.5;cursor:pointer}
+.calculation-body{padding:0 24px 24px}.calculation-body .details-card{font-size:13px;margin-top:14px;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:white}
+.calculation-body .details-card summary{padding:12px 14px;font-size:13px;line-height:1.5;background:#f8fafb;color:#294b59}
+.calculation-body .details-card p,.calculation-body .details-card ul{font-size:12px;line-height:1.75;padding:0 14px}
+.trace-list{padding:0 14px 14px;margin:0}.trace-list>div{padding:10px 0;border-bottom:1px solid var(--line)}.trace-list dt,.trace-list dd{font-size:12px;line-height:1.6}
+.manual-figure{margin:16px}.manual-figure img{display:block;width:100%;max-width:860px;height:auto}.manual-figure figcaption{font-size:11px;line-height:1.6;color:var(--muted);margin-top:8px}
+.footer{padding:16px 0 0;max-width:1760px;margin:auto;font-size:11px;color:var(--muted)}
+.subbase-guide{width:min(600px,calc(100vw - 32px));padding:24px;border:1px solid var(--line);border-radius:16px;color:var(--ink);box-shadow:0 20px 70px #102b3b40}
+.subbase-guide::backdrop{background:#152d3d88}.subbase-guide h2{font-size:17px;margin:0}.subbase-guide p{font-size:13px;line-height:1.75}.subbase-guide button{min-height:38px;padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:#f5f8fa;color:var(--ink);cursor:pointer}
+[hidden]{display:none!important}
+@media(min-width:889px){.workspace{grid-template-columns:minmax(380px,.95fr) minmax(0,1.15fr)}}
+@media(max-width:888px){.workspace{padding:0;grid-template-columns:1fr;gap:24px;align-items:start}.calculator-panel,.chart-panel{padding:0}.calculator-panel{align-self:start}}
+@media(max-width:568px){.workspace{padding:0;gap:24px}.panel-heading,.chart-toolbar{padding:14px 16px}.field-group{grid-template-columns:1fr;padding-right:0;gap:6px;margin:0 16px 18px}.field-group label{padding-right:32px}.input-guide-button{top:9px}.input-shell input{font-size:16px;min-height:42px}.result-card{margin:16px;padding:14px}#result-value{font-size:32px}.nomograph-toolbar{padding:0 16px 14px}.chart-scroll{margin:0 16px}.design-input-actions{padding:16px}.design-input-actions button{flex:1}.form-actions{margin:2px 16px 16px}.calculation-body{padding:0 16px 16px}.chart-note{margin:0 16px 16px}.legend{padding:14px 16px}.footer{flex-wrap:wrap;gap:8px}}
+@media print{.workspace{padding:0;grid-template-columns:1fr}.form-actions,.design-input-actions,.chart-actions,.input-guide-button,.footer{display:none}.calculator-panel,.chart-panel,.calculation-steps{box-shadow:none}.result-card{background:#edf7f3;color:var(--ink)}.chart-scroll{overflow:visible}.chart-stage{min-width:0}.calculation-steps{break-before:page}}
+
+.subbase-modes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}.subbase-modes a{display:block;padding:10px 16px;background:#fff;color:#294b59;border:1px solid var(--line);border-radius:8px;font-size:13px;text-decoration:none}.subbase-modes a[aria-current=page]{background:#17665d;color:#fff;border-color:#17665d}.subbase-modes a:focus-visible{outline:2px solid #308e7b;outline-offset:2px}
+
+.pavement-type-label{margin:0 0 8px;font-size:13px;font-weight:600;color:#294b59}
+
+.pavement-type-input{margin:0 20px 20px;padding-bottom:20px;border-bottom:1px solid var(--line)}.pavement-type-input .subbase-modes{margin-bottom:0}.pavement-type-input .subbase-modes a{flex:1;text-align:center}@media(max-width:568px){.pavement-type-input{margin:0 16px 18px;padding-bottom:18px}}

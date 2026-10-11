@@ -1,0 +1,111 @@
+{
+  "Release_ID": "RN29_FIG6_LOCAL_APP_1.1.0",
+  "Release_Name": "RN29_Figure6_Local_Browser_App_v1.1.0",
+  "Nomograph_ID": "RN29_1970_FIG6",
+  "Application_Version": "1.1.0",
+  "Model_Version": "1.0.0",
+  "Numerical_Model_Basis": "0.3.0",
+  "Generated_At_UTC": "2026-10-10T17:18:52+00:00",
+  "Launch_File": "dist/index.html",
+  "Browser_QA_File": "dist/qa.html",
+  "Authoritative_Source_SHA256": "1b3198aa0d49953b1dcd89418a76264ee339c409dae78d0c2d176cbe93fa8f0c",
+  "Production_Data_SHA256": "42c9766042c3846571b33890a5f0d6da33e6dae8746626dfe22cf39c3f82b73b",
+  "Display_Asset_SHA256": "f78c2c0b48a8e65b07b51866f828ce73dbce7e32805e2298cd2a3deda8532c00",
+  "Files": [
+    {
+      "Path": "CHANGELOG.md",
+      "Bytes": 930,
+      "SHA256": "58921d162e51dd5a32f25e81bfcbed26ac28666591e854f37579282742db83f7"
+    },
+    {
+      "Path": "CHECKPOINT7_VERIFICATION.json",
+      "Bytes": 3573,
+      "SHA256": "b0bfe105de93b525cc433c252adbef7dbc47fe3328334b08c2e9de4d8eb05f10"
+    },
+    {
+      "Path": "README.md",
+      "Bytes": 4427,
+      "SHA256": "f4c193635c13eb875dff08b9a9402a67690de5337f0a0ebb0ec66b064b606dac"
+    },
+    {
+      "Path": "START_WINDOWS.bat",
+      "Bytes": 73,
+      "SHA256": "d8f9d0d7b7707e130769a71bde5a1679edfdeee2b5c9d32a89782db21356f225"
+    },
+    {
+      "Path": "dist/app.js",
+      "Bytes": 16385,
+      "SHA256": "f6664f432e67593ab2b775688af4d440da4ff839cf4713ef31a3f4d9e8bb75d9"
+    },
+    {
+      "Path": "dist/assets/asset-manifest.json",
+      "Bytes": 1538,
+      "SHA256": "7bc1682cf258eb9bbd00fc7bee5ac541305024df138b9b35566d753306139379"
+    },
+    {
+      "Path": "dist/assets/rn29-figure6-display.png",
+      "Bytes": 281252,
+      "SHA256": "f78c2c0b48a8e65b07b51866f828ce73dbce7e32805e2298cd2a3deda8532c00"
+    },
+    {
+      "Path": "dist/engine.js",
+      "Bytes": 17964,
+      "SHA256": "f856c3cb10e2fd0318320e924c4e4a54f266abf422308c3a600441cb27e834f0"
+    },
+    {
+      "Path": "dist/index.html",
+      "Bytes": 9317,
+      "SHA256": "838b081c1fb47bd8f46bd26ef49d83270e019fefc10a68914531b10cf765b4a1"
+    },
+    {
+      "Path": "dist/model-data.js",
+      "Bytes": 273460,
+      "SHA256": "34f03d8e94aaf247d05fb1f9a5f4eea48614d4c91dd83c62616cf86dcd5353d0"
+    },
+    {
+      "Path": "dist/qa.html",
+      "Bytes": 3817,
+      "SHA256": "0e5b82f4bc689c3c1b3133bb5359b3bbdd1f8275bfcb629a95ab05ba2d71e18a"
+    },
+    {
+      "Path": "dist/qa.js",
+      "Bytes": 4797,
+      "SHA256": "9a03d6a25ebc29744fcad387c3398fcca0326c0d80e21ffb87ae254a4ab985d7"
+    },
+    {
+      "Path": "dist/styles.css",
+      "Bytes": 16631,
+      "SHA256": "68606caad5808042867e3a1b8df6da22fe0c4671a0fec9b8ee14a4d0dcbb0949"
+    },
+    {
+      "Path": "package.json",
+      "Bytes": 362,
+      "SHA256": "98e0f92765ddd1d8ce53a920c024d6dd26deeb93c07d63284f683de3694f9f44"
+    },
+    {
+      "Path": "start_macos_linux.sh",
+      "Bytes": 314,
+      "SHA256": "1ef50dd1d52dbe4a52483c7a2167c6c98666962940fedca99ef7037fa84120ca"
+    },
+    {
+      "Path": "tests/run-tests.js",
+      "Bytes": 5839,
+      "SHA256": "19e4e9f39c9d5420f07f4d67c387d6bb49ab640e77b2a4342871d7180a5a855f"
+    },
+    {
+      "Path": "tests/static-validation-report.json",
+      "Bytes": 1446,
+      "SHA256": "7540126e7765e410b8ae9e683adc4eef65359aa865d976dd329929d6d654308c"
+    },
+    {
+      "Path": "tests/test-report.json",
+      "Bytes": 1983,
+      "SHA256": "db3e2103efea0e22894057b2c62333c34c7ac13704996c2846e4f3cc41f341c6"
+    },
+    {
+      "Path": "tests/validate_static.py",
+      "Bytes": 5641,
+      "SHA256": "84d9d53ff52bff79ffcc4d82d0acc640d241386bc6b540db257c01f0e1462e93"
+    }
+  ]
+}

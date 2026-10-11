@@ -1,0 +1,55 @@
+{
+  "Verification_Type": "STATIC_BROWSER_INTERFACE_AND_OVERLAY_STRUCTURE",
+  "Counts": {
+    "Executed": 9,
+    "Passed": 9,
+    "Failed": 0
+  },
+  "Checks": [
+    {
+      "Check_ID": "APP_UI_001",
+      "Disposition": "PASS",
+      "Detail": "required calculator/overlay IDs present; missing=[]"
+    },
+    {
+      "Check_ID": "APP_UI_002",
+      "Disposition": "PASS",
+      "Detail": "both project inputs have explicit labels"
+    },
+    {
+      "Check_ID": "APP_UI_003",
+      "Disposition": "PASS",
+      "Detail": "two blank project inputs; nonblank defaults=[]"
+    },
+    {
+      "Check_ID": "APP_OFFLINE_001",
+      "Disposition": "PASS",
+      "Detail": "external=[]; missing=[]"
+    },
+    {
+      "Check_ID": "APP_OVERLAY_002",
+      "Disposition": "PASS",
+      "Detail": "overlay viewBoxes=['0 0 861 512']"
+    },
+    {
+      "Check_ID": "APP_ASSET_002",
+      "Disposition": "PASS",
+      "Detail": "registered display dimensions=861x512"
+    },
+    {
+      "Check_ID": "APP_RESPONSIVE_001",
+      "Disposition": "PASS",
+      "Detail": "desktop, tablet, mobile, and chart-overflow rules present"
+    },
+    {
+      "Check_ID": "APP_WEBMCP_001",
+      "Disposition": "PASS",
+      "Detail": "feature-detected WebMCP calculator tool is registered when supported"
+    },
+    {
+      "Check_ID": "APP_QA_UI_001",
+      "Disposition": "PASS",
+      "Detail": "browser QA page includes score, case table, and rerun control"
+    }
+  ]
+}

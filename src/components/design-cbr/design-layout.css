@@ -1,0 +1,48 @@
+/* Match the pavement design panels without changing the CBR worksheet. */
+body{max-width:1760px;padding:0;line-height:1.5;font-size:14px}
+.workspace{max-width:none;grid-template-columns:minmax(380px,.95fr) minmax(0,1.15fr);gap:24px;align-items:stretch}
+.workspace>.card{padding:0;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px #17384705}
+.worksheet{display:flex;flex-direction:column}
+.panel-heading{padding:16px 20px;min-height:62px;border-bottom:1px solid var(--border)}
+.panel-heading h2{font-size:17px;line-height:1.4;letter-spacing:-.015em;margin:0}
+#cbrForm{padding:20px;flex:1}
+.samples-heading{margin:0 0 14px;font-weight:650;color:#294b59}
+.help{width:26px;height:26px;min-height:26px;background:#f5faf8}
+.sample-worksheet{padding:0;background:white;border-radius:9px}
+.sample-columns{padding:10px 8px;background:#edf3f6}
+.sample-inputs{padding:8px;max-height:320px;gap:8px}
+.sample-columns,.sample-input-row{grid-template-columns:44px minmax(100px,1.3fr) minmax(70px,1fr) minmax(74px,1fr) 30px;gap:7px;min-width:390px}
+.sample-entry{background:#f0faf5;border-color:#b4d9c3}
+.sample-entry input[type=number]{min-height:38px;padding:7px 8px;font-size:14px}
+.sample-entry span{font-size:11px;padding-right:8px}
+.sample-input-row output{background:#fff9df;border-color:#ead998;padding:8px 6px;font-size:12px}
+.remove-test{width:30px;height:30px;min-height:30px;font-size:20px}
+.step-controls{margin:22px 0 0;border-top:1px solid var(--border);padding-top:20px}
+.step-controls>label:first-child{margin:0 0 10px;font-size:13px;font-weight:400}
+.step-controls select{background:#f0faf5;border-color:#b4d9c3;min-height:38px;font-size:14px;padding:8px 10px}
+.step-controls .check{align-items:flex-start;justify-content:flex-start;margin-top:12px;font-size:12px}
+.check input{margin-top:3px}
+.worksheet-actions{margin:18px 0 0;justify-content:flex-start}
+.worksheet-actions .quiet{border:1px solid var(--border);border-radius:8px;background:#f5f8fa;min-height:38px;padding:8px 14px;font-weight:600;color:#294b59}
+.design-input-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;padding:18px 24px;background:#f8fafb;border-top:1px solid var(--border);margin-top:auto}
+.design-input-actions button:disabled{min-height:40px;padding:10px 18px;border:1px solid #d1d8dd;border-radius:8px;background:#e5e9ec;color:#687580;opacity:1;cursor:not-allowed;font-size:12px;font-weight:600}
+.result-body{padding:20px}
+.worksheet-results{grid-template-columns:1fr;gap:16px}
+.result{padding:20px;background:#edf7f3;border:1px solid #d3e7de;border-radius:12px}
+.result p:first-child{font-size:13px;font-weight:600;color:#294b59}
+.value output{font-size:40px;font-weight:650;color:#124e47}
+.value{margin:10px 0}.value span{font-size:13px}
+.result.secondary{background:#f4f8fa}.secondary .value output{font-size:32px}
+.result #designStatus,.result #mrStatus{font-size:12px;line-height:1.6}
+.stats{display:grid;grid-template-columns:1fr;gap:0;margin:20px 0 0;border:1px solid var(--border);border-radius:9px;overflow:hidden}
+.stats>div{display:grid;grid-template-columns:1fr minmax(80px,.5fr);align-items:baseline;gap:12px;padding:10px 14px;background:white;border-bottom:1px solid var(--border);border-radius:0}
+.stats>div:last-child{border-bottom:0}.stats span{margin:0;font-size:12px;color:#294b59}.stats output{font-size:14px;font-weight:500;text-align:right}
+.sample-warning{margin:0 0 16px;padding:12px;gap:10px}.error{margin:0 0 16px}
+.calculation-details{margin:24px 0 0;padding:0;border-radius:16px;background:white;overflow:hidden}
+.calculation-details>summary{padding:18px 20px;font-size:13px;font-weight:600;color:var(--text)}
+.calculation-details .steps{margin:0;padding:0 24px 24px 46px;display:grid;grid-template-columns:1fr;gap:16px}
+.calculation-details .steps li{margin:0;padding:0 0 16px 6px}.calculation-details .steps li:last-child{border-bottom:0;padding-bottom:0}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid #308e7b;outline-offset:2px}
+@media(max-width:888px){.workspace{grid-template-columns:1fr}.worksheet{align-self:start}}
+@media(max-width:568px){.panel-heading{padding:14px 16px}#cbrForm,.result-body{padding:16px}.sample-entry input[type=number],.step-controls select{min-height:42px;font-size:16px}.value output{font-size:32px}.secondary .value output{font-size:28px}.design-input-actions{padding:16px}.design-input-actions button{flex:1}.calculation-details .steps{padding:0 16px 16px 38px}}
+@media print{.workspace{grid-template-columns:1fr}.design-input-actions,.worksheet-actions{display:none}.workspace>.card{box-shadow:none}.sample-inputs{max-height:none}.result-panel{break-inside:avoid}}

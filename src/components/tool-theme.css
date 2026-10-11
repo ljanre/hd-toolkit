@@ -1,0 +1,12 @@
+/* Common HD Toolkit visual language for isolated tool documents. */
+:root{--bg:#f5f7fa;--panel:#fff;--panel2:#f3f7f9;--text:#203444;--muted:#536977;--border:#dce5eb;--accent:#17665d;--accent2:#12544d;--accent-dark:#12544d;--navy:#152d3d;--navy-dark:#122737;--good:#226d4f;--warn:#925d08;--bad:#ac3535}
+body{background:var(--bg);font-family:'Segoe UI',Arial,sans-serif;line-height:1.6;color:var(--text)}
+.card{border-radius:14px;border-color:var(--border);box-shadow:0 3px 14px #17384705}
+input[type=text],input[type=number],select{min-height:44px;border-radius:9px;font-variant-numeric:tabular-nums}
+button{min-height:40px}button.go{color:white;background:var(--accent)}.tab.active{color:white;background:var(--accent)}.tab{font:inherit;font-size:13px}
+:focus-visible{outline:3px solid #308e7b;outline-offset:3px}input:focus,select:focus{box-shadow:0 0 0 3px #17665d18;border-color:var(--accent)}
+.links a,.links button{color:var(--accent)}.hint{line-height:1.65}.stat .v{color:#124e47}.stat .k{color:var(--muted)}
+@media(max-width:520px){body{padding:20px 14px}.card{padding:18px}.tabs{gap:6px}.tab{font-size:12px;padding:10px 6px}}
+@media print{body{background:white}.card{box-shadow:none}}
+
+.manual-figure{margin:14px 0;border:1px solid var(--border,#dce5eb);border-radius:8px;padding:10px;background:white}.manual-figure img{display:block;width:100%;height:auto;max-height:none}.manual-figure figcaption{font-size:11px;color:var(--muted,#536977);line-height:1.6;margin-top:8px}.manual-figure a{display:block}.manual-note{font-size:12px;line-height:1.65;color:var(--muted,#536977)}

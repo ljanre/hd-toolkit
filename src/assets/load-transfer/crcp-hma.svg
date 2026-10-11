@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 350" role="img" aria-labelledby="title desc">
+<title id="title">CRCP with HMA shoulders — schematic plan</title><desc id="desc">Continuous longitudinal reinforcement runs through transverse cracks. Asphalt shoulders border the two-lane concrete carriageway. This plan is schematic and does not specify reinforcement sizes or spacing.</desc>
+<defs><pattern id="hma" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#e3e9ed"/><path d="M0 10L10 0" stroke="#c0ccd4"/></pattern><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#176d77"/></marker></defs>
+<rect width="860" height="350" rx="10" fill="#fff"/>
+<g font-family="Segoe UI,Arial,sans-serif" fill="#213e4d"><text x="28" y="30" font-size="18" font-weight="700">CRCP · HMA SHOULDERS</text><text x="28" y="52" font-size="13" fill="#57717e">Continuously reinforced concrete pavement · Schematic plan · Not to scale</text>
+<rect x="70" y="75" width="555" height="30" fill="url(#hma)" stroke="#82929a"/><rect x="70" y="235" width="555" height="30" fill="url(#hma)" stroke="#82929a"/>
+<rect x="70" y="105" width="555" height="130" fill="#f3f6f7" stroke="#344f5c" stroke-width="2"/>
+<path d="M70 120H625M70 135H625M70 150H625M70 190H625M70 205H625M70 220H625" stroke="#ae6528" stroke-width="2"/>
+<path d="M70 170H625" stroke="#176d77" stroke-width="2" stroke-dasharray="10 5"/>
+<path d="M110 156V184M155 156V184M335 156V184M380 156V184M540 156V184M585 156V184" stroke="#176d77" stroke-width="4"/>
+<path d="M242 105L248 126L239 146L247 169L240 188L249 211L243 235M451 105L444 129L452 151L445 173L453 195L446 217L451 235" fill="none" stroke="#344f5c" stroke-width="2" stroke-dasharray="4 3"/>
+<g fill="none" stroke="#176d77" stroke-width="1.5" marker-end="url(#arrow)"><path d="M667 90H630L597 90"/><path d="M667 142H650L590 135"/><path d="M667 195H644L451 195"/><path d="M190 292H155L110 184"/></g>
+<text x="670" y="84" font-size="14">HMA shoulder</text><text x="670" y="103" font-size="12" fill="#57717e">Asphalt surfacing</text>
+<text x="670" y="132" font-size="14">Longitudinal steel</text><text x="670" y="151" font-size="12" fill="#57717e">Continuous through cracks</text>
+<text x="670" y="185" font-size="14">Transverse crack</text><text x="670" y="204" font-size="12" fill="#57717e">Illustrative crack pattern</text>
+<text x="197" y="287" font-size="14">Tie bars across the longitudinal joint between lanes</text><text x="197" y="308" font-size="12" fill="#57717e">No regular transverse contraction joints are shown.</text>
+<path d="M28 326H832" stroke="#d0d9dd"/><text x="28" y="345" font-size="12" fill="#57717e">Reinforcement, construction joints and shoulder details follow the approved project drawings.</text></g></svg>

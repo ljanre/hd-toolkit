@@ -1,0 +1,96 @@
+{
+  "Checkpoint": 7,
+  "Title": "Local Browser Application Acceptance",
+  "Nomograph_ID": "RN29_1970_FIG6",
+  "Application_Version": "1.1.0",
+  "Model_Version": "1.0.0",
+  "Numerical_Model_Basis": "0.3.0",
+  "Generated_At_UTC": "2026-10-10T17:18:52+00:00",
+  "Release_Disposition": "LOCAL_BROWSER_READY_WITH_LIMITATIONS",
+  "Engineering_Model_Status": "VALIDATED_WITH_LIMITATIONS",
+  "App_Readiness_Status": "APP_READY_WITH_LIMITATIONS",
+  "Implementation_Status": {
+    "Code_Generated": "YES",
+    "Local_Engine_Tested": "YES",
+    "Static_Interface_Tested": "YES",
+    "In_Browser_Runtime_Tested_In_This_Environment": "NOT_RUN",
+    "Installed": "NOT_APPLICABLE_PORTABLE_APPLICATION",
+    "Deployed": "NOT_APPLICABLE_LOCAL_ONLY",
+    "Live_Deployment_Verified": "NOT_APPLICABLE_LOCAL_ONLY"
+  },
+  "Revision_Scope": {
+    "Calculation_Logic_Changed": "NO",
+    "Numerical_Model_Changed": "NO",
+    "Display_Asset_Changed": "YES",
+    "Overlay_Registration_Changed": "YES",
+    "Description": "Replaced the plot-only illustration with the complete user-supplied nomograph and registered the existing dynamic trace to its plot frame."
+  },
+  "Display_Registration": {
+    "Source_Filename": "image(20261010-171214).png",
+    "Display_SHA256": "f78c2c0b48a8e65b07b51866f828ce73dbce7e32805e2298cd2a3deda8532c00",
+    "Image_Size_Px": [
+      861,
+      512
+    ],
+    "Plot_Frame_Px": {
+      "Left": 59.5,
+      "Top": 25.25,
+      "Right": 789.5,
+      "Bottom": 462.5
+    },
+    "Estimated_Registration_Uncertainty_Px": 0.75
+  },
+  "Executed_Evidence": {
+    "Engine_And_Asset_Checks": {
+      "Executed": 10,
+      "Passed": 10,
+      "Failed": 0
+    },
+    "Golden_Tests": {
+      "Total": 55,
+      "Passed": 55,
+      "Failed": 0
+    },
+    "Reference_Lookup": {
+      "Total": 294,
+      "Passed": 294,
+      "Failed": 0
+    },
+    "Repeatability_Cases": {
+      "Total": 500,
+      "Passed": 500,
+      "Seed": 20261007
+    },
+    "Dense_Curve_Evaluations": {
+      "Total": 6006,
+      "Passed": 6006
+    },
+    "Static_Interface_And_Overlay_Checks": {
+      "Executed": 9,
+      "Passed": 9,
+      "Failed": 0
+    },
+    "Commands": [
+      "npm run check",
+      "npm test",
+      "python3 tests/validate_static.py"
+    ]
+  },
+  "Browser_Runtime_Note": "The managed build environment did not expose an authorized local-browser preview session. Calculation logic was executed with Node.js; the local asset graph, blank input contract, responsive rules, overlay coordinate frame, and QA page were checked statically. The package includes dist/qa.html so the 55 Golden Tests can be executed in the user's browser.",
+  "Authoritative_Engine": "dist/engine.js plus dist/model-data.js",
+  "Primary_Output": "Corrected sub-base thickness (mm)",
+  "Project_Inputs": [
+    "Cumulative traffic (million standard axles, MSA)",
+    "Subgrade design CBR (%)"
+  ],
+  "Input_Defaults": "NONE_INPUTS_INTENTIONALLY_BLANK",
+  "Network_Requirement": "NONE",
+  "External_Runtime_Dependencies": "NONE_FOR_CALCULATOR",
+  "Known_Limitations": [
+    "Engineering-model status remains VALIDATED_WITH_LIMITATIONS.",
+    "The raw CBR 7% chart curve is obscured by annotation over approximately 0.49–4.70 MSA; the 150 mm minimum governs where applicable.",
+    "Independent graphical readings were AI-assisted and have not received separate human-engineer sign-off.",
+    "No exact independent governing equation was verified for this chart edition.",
+    "A live browser rendering was not executed in the managed build environment; use dist/qa.html for local browser verification."
+  ]
+}

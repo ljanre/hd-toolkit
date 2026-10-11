@@ -1,0 +1,37 @@
+import { readFile } from 'node:fs/promises';
+import { runInNewContext, Script } from 'node:vm';
+import assert from 'node:assert/strict';
+const base = new URL('../src/components/concrete-strength/', import.meta.url);
+const ctx = {};
+runInNewContext(await readFile(new URL('engine.js',base),'utf8'),ctx);
+const { calculate, table } = ctx.ConcreteStrengthCalculation;
+const pavementHtml=await readFile(new URL('../src/index.html',import.meta.url),'utf8');
+const pavementCtx={};runInNewContext(pavementHtml.match(/<script id="calculation-core">([\s\S]*?)<\/script>/)[1],pavementCtx);
+for(const r of [50,75,80,85,90,92,92.5,95,98,99,99.9,99.99]){
+  const linked=ctx.ConcreteStrengthCalculation.fromReliability(24,r);
+  const zr=pavementCtx.PavementCalc.reliability(r,'supplied').z;
+  const rigid=pavementCtx.PavementCalc.concreteProperties(24,zr,'supplied');
+  assert.equal(linked.zr,zr);assert.ok(Math.abs(linked.meanPsi-rigid.meanPsi)<1e-9);assert.equal(linked.ps,100-r);
+}
+assert.equal(ctx.ConcreteStrengthCalculation.fromReliability(24,null),null);
+assert.throws(()=>ctx.ConcreteStrengthCalculation.fromReliability(24,100));
+const result = calculate(24,10,1.476);
+assert.ok(Math.abs(result.scMpa-3.821204) < .000001);
+assert.ok(Math.abs(result.scPsi-554.220) < .001);
+assert.ok(Math.abs(result.meanPsi-636.023) < .001);
+assert.ok(Math.abs(result.ecPsi-3362957.491) < .001);
+assert.equal(calculate(24,0,1.476).meanPsi, result.scPsi);
+assert.equal(calculate(24,10,0).meanPsi, result.scPsi);
+assert.equal(calculate(null,10,1.476),null);
+assert.throws(() => calculate(0,10,1.476));
+assert.throws(() => calculate(24,101,1.476));
+assert.throws(() => calculate(24,10,-1.476));
+assert.throws(() => calculate(Infinity,10,1.476));
+assert.equal(table.find(([percent]) => percent===10)[1],1.282);
+assert.ok(calculate(24,10,1.282).meanPsi < result.meanPsi);
+new Script(await readFile(new URL('strength.js',base),'utf8'));
+const html = await readFile(new URL('index.html',base),'utf8');
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+assert.equal(ids.length,new Set(ids).size);
+for (const [,id] of (await readFile(new URL('strength.js',base),'utf8')).matchAll(/\$\('([^']+)'\)/g)) assert.ok(ids.includes(id),id);
+console.log(`Concrete strength checks passed: supplied example S′c=${result.meanPsi.toFixed(3)} psi, Ec=${result.ecMillion.toFixed(6)} million psi; table selection, missing/invalid inputs and interface references.`);

@@ -1,0 +1,75 @@
+{
+  "Nomograph_ID": "RN29_1970_FIG6",
+  "Model_Version": "1.0.0",
+  "Application_Version": "1.1.0",
+  "Engineering_Validation_Status": "VALIDATED_WITH_LIMITATIONS",
+  "App_Readiness_Status": "APP_READY_WITH_LIMITATIONS",
+  "Verification_Type": "LOCAL_BROWSER_APPLICATION_ENGINE_AND_ASSET_REGRESSION",
+  "Counts": {
+    "Executed": 10,
+    "Passed": 10,
+    "Failed": 0
+  },
+  "Golden_Tests": {
+    "Total": 55,
+    "Passed": 55,
+    "Failed": 0
+  },
+  "Reference_Lookup": {
+    "Total": 294,
+    "Passed": 294,
+    "Failed": 0
+  },
+  "Checks": [
+    {
+      "Check_ID": "APP_MODEL_001",
+      "Disposition": "PASS",
+      "Detail": "model identity and inventory verified"
+    },
+    {
+      "Check_ID": "APP_GOLDEN_001",
+      "Disposition": "PASS",
+      "Detail": "55/55 Golden Tests passed"
+    },
+    {
+      "Check_ID": "APP_LOOKUP_001",
+      "Disposition": "PASS",
+      "Detail": "294/294 reference lookup records reproduced"
+    },
+    {
+      "Check_ID": "APP_EXAMPLE_001",
+      "Disposition": "PASS",
+      "Detail": "published example status=OK; corrected=240; raw=240.80031442432107"
+    },
+    {
+      "Check_ID": "APP_INPUT_001",
+      "Disposition": "PASS",
+      "Detail": "12/12 input/status cases passed"
+    },
+    {
+      "Check_ID": "APP_REPEAT_001",
+      "Disposition": "PASS",
+      "Detail": "500 cases; failures=0; seed=20261007"
+    },
+    {
+      "Check_ID": "APP_DENSE_001",
+      "Disposition": "PASS",
+      "Detail": "6006 curve evaluations; failures=0"
+    },
+    {
+      "Check_ID": "APP_OVERLAY_001",
+      "Disposition": "PASS",
+      "Detail": "lower-left={\"x\":59.5,\"y\":462.5}; upper-right={\"x\":789.5,\"y\":25.25}"
+    },
+    {
+      "Check_ID": "APP_ASSET_001",
+      "Disposition": "PASS",
+      "Detail": "display digest=f78c2c0b48a8e65b07b51866f828ce73dbce7e32805e2298cd2a3deda8532c00"
+    },
+    {
+      "Check_ID": "APP_FILES_001",
+      "Disposition": "PASS",
+      "Detail": "13/13 required application files present"
+    }
+  ]
+}

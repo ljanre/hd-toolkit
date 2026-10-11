@@ -1,0 +1,41 @@
+/* Consistent rhythm across the isolated calculation worksheets. */
+body{max-width:1680px;margin:0 auto;padding:24px;line-height:1.65}
+.workspace,.card,.field,.cesal-inputs>label,.stats>div{min-width:0}
+.workspace{gap:24px;align-items:start}
+header{gap:20px;align-items:flex-start;margin-bottom:24px}
+header>div{min-width:0}
+h1{line-height:1.3}h2,h3{line-height:1.45}
+.card{padding:22px}
+.card-heading{gap:12px;align-items:center;flex-wrap:wrap}
+.field{margin-bottom:18px}
+.field label{line-height:1.5;font-size:13px}
+.field input[type=number],.field input[type=text],.field select{width:100%;min-width:0}
+input[type=number],input[type=text],select{font-size:14px;line-height:1.4;min-height:40px}
+button{line-height:1.4}
+.help{width:27px;height:27px;min-height:27px;flex-shrink:0}
+.result{padding:18px;line-height:1.65}
+.result small,.note,.source-note,.field small{font-size:11px;line-height:1.65}
+.result .value{gap:8px;flex-wrap:wrap}
+.stats{gap:12px}
+.stats>div{padding:14px}
+.stats span{font-size:12px;line-height:1.5;margin-bottom:6px}
+.stats output{line-height:1.25}
+.table-scroll{border-radius:9px;overscroll-behavior-x:contain}
+table th,table td{vertical-align:middle;line-height:1.5}
+table input{font-variant-numeric:tabular-nums}
+summary{line-height:1.5;padding-top:4px;padding-bottom:4px}
+.cesal-inputs{gap:18px;align-items:start}
+.cesal-inputs>label{display:grid;grid-template-rows:minmax(40px,auto) auto;align-content:start;gap:6px}
+.cesal-inputs input,.cesal-inputs select{margin-top:0;font-size:13px}
+.cesal-inputs small{font-weight:400;line-height:1.6;color:var(--muted)}
+.cesal-results{gap:18px}
+.cesal-results .result{margin-top:18px}
+.confirm{line-height:1.6;align-items:flex-start;gap:10px;margin:16px 0}
+.confirm input{margin-top:5px;flex-shrink:0}
+.step-controls{gap:12px}
+.steps li{padding-bottom:22px;margin-bottom:22px}
+.steps p{line-height:1.75}
+dialog{line-height:1.65}
+@media screen and (max-width:950px){.cesal-inputs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media screen and (max-width:600px){body{padding:16px 12px}.card{padding:16px}.workspace{gap:18px}.cesal-inputs{grid-template-columns:1fr;gap:16px}.cesal-inputs>label{grid-template-rows:auto auto}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cesal-results{grid-template-columns:1fr;gap:0}input[type=number],input[type=text],select{font-size:16px;min-height:44px}.table-scroll input{font-size:14px}.field{margin-bottom:16px}header{margin-bottom:18px}}
+@media print{body{max-width:none;padding:0}.card{padding:12px}.workspace{gap:14px}.field{margin-bottom:10px}input[type=number],input[type=text],select{min-height:0;font-size:11px}.stats{gap:6px}.stats>div,.result{padding:10px}.cesal-inputs{gap:10px}}

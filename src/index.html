@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Offline AASHTO 1993 rigid pavement calculator with automatic R-to-Z lookup and an interactive pavement cross-section.">
+  <title>HD Toolkit | Rigid Pavement Design</title>
+  <style>
+    :root{--ink:#18302f;--muted:#61716f;--line:#dce5e0;--page:#f3f6f3;--green:#d9f6df;--green-line:#89c899;--green-ink:#145532;--yellow:#fff2ad;--yellow-line:#e4c854;--dark:#153f34;--red:#a42626;--red-bg:#fff0ed;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
+    *{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--page);font-family:Inter,Segoe UI,Arial,sans-serif;font-size:14px;line-height:1.5}
+    button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.5}a{color:#216749;text-underline-offset:3px}
+    :focus-visible{outline:3px solid #38775d;outline-offset:3px}button,input,select{border-radius:7px}button{border:1px solid #c5d3ca;background:white;color:var(--ink);padding:9px 13px;font-weight:600}
+    button:hover:not(:disabled){background:#eef5ef}button.primary{color:white;background:var(--dark);border-color:var(--dark)}button.primary:hover:not(:disabled){background:#235647}
+    .wrap{max-width:1160px;margin:0 auto;padding:28px 30px 32px}.topline{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:23px}.brand{display:flex;align-items:center;gap:12px}.brand-icon{display:grid;place-items:center;width:40px;height:40px;background:var(--dark);color:#d9f6df;border-radius:9px}.brand-name{font-size:13px;font-weight:700;letter-spacing:.035em}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.offline{font-size:11px;color:var(--green-ink);border:1px solid #c7ddcc;background:#eaf4eb;padding:5px 9px;border-radius:20px;white-space:nowrap}.offline:before{content:"";display:inline-block;width:6px;height:6px;background:#347a49;border-radius:50%;margin-right:7px}
+    .heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:22px}h1{font-size:30px;line-height:1.2;letter-spacing:-.035em;margin:0 0 8px;font-weight:700}.subtitle{margin:0;color:var(--muted);font-size:14px}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{font-size:12px;white-space:nowrap}
+    .legend{display:flex;gap:18px;align-items:center;font-size:12px;margin-bottom:17px;color:var(--muted)}.legend span{display:flex;align-items:center;gap:7px}.swatch{width:12px;height:12px;border:1px solid var(--green-line);background:var(--green);border-radius:3px}.swatch.yellow{border-color:var(--yellow-line);background:var(--yellow)}.legend .live{margin-left:auto;font-size:11px}
+    .layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,1fr);gap:20px;align-items:start}.card{background:white;border:1px solid var(--line);border-radius:13px;overflow:hidden}.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}h2{font-size:16px;letter-spacing:-.015em;margin:0}.hint{color:var(--muted);font-size:11px}.small-button{font-size:11px;padding:6px 9px}.form-body{padding:20px 22px 22px}.group+.group{border-top:1px solid #e7ede9;margin-top:19px;padding-top:18px}.group-title{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#6d8076;margin:0 0 12px}
+    .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px 17px}.field{min-width:0}.field.full{grid-column:1/-1}.field label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;margin-bottom:5px;min-height:19px}.symbol{font-family:Georgia,serif;font-size:15px;font-style:italic;margin-left:auto;font-weight:400}.symbol sub{font-size:10px}.entry{display:flex;align-items:center;border:1px solid var(--green-line);border-radius:7px;background:var(--green);overflow:hidden}.entry:focus-within{outline:2px solid #3b8054;outline-offset:2px}.entry input{min-width:0;width:100%;border:0;background:transparent;padding:9px 11px;outline:none;color:var(--green-ink);font-family:var(--mono);font-size:16px;font-weight:600;border-radius:0;font-variant-numeric:tabular-nums}.entry input:focus-visible{outline:none}.entry .unit{padding:0 10px 0 4px;white-space:nowrap;color:#527c5d;font-size:11px}.entry.auto{background:var(--yellow);border-color:var(--yellow-line)}.entry.auto input{color:#6a5511}.entry.auto .unit{color:#84702b}.field small{display:block;min-height:15px;font-size:10px;color:var(--muted);margin-top:5px;line-height:1.45}.field [aria-invalid=true]{color:var(--red)}.entry.invalid{background:var(--red-bg);border-color:#c75d53}.field small.error{color:var(--red);font-weight:600}
+    .form-foot{padding:14px 22px;background:#f8faf8;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}.form-foot strong{color:var(--ink);font-weight:600}.results{display:grid;gap:14px;position:sticky;top:20px}.hero{padding:24px;background:var(--dark);color:white;border-radius:13px}.eyebrow{font-size:10px;letter-spacing:.13em;font-weight:600;text-transform:uppercase;color:#b3cfc0}.result-line{display:flex;align-items:baseline;gap:9px;margin:12px 0 3px}.result-number{font-size:61px;line-height:1.1;letter-spacing:-.055em;font-weight:600;font-variant-numeric:tabular-nums}.result-unit{font-size:19px;font-weight:500;color:#bcd6c8}.result-sub{font-family:var(--mono);font-size:12px;color:#cee1d7}.result-divider{height:1px;background:#3b5f50;margin:22px 0 18px}.round-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.round-label{color:#d2e4da;font-size:12px}.round-select{border:1px solid var(--green-line);padding:5px 7px;background:var(--green);color:var(--green-ink);font-size:12px;font-weight:600;max-width:110px}.rounded{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:9px}.rounded strong{font-size:31px;letter-spacing:-.035em}.rounded span{font-family:var(--mono);font-size:12px;color:#d2e4da}.hero-note{font-size:10px;color:#b3cfc0;margin-top:14px;line-height:1.5}.status{display:inline-flex;gap:6px;align-items:center;font-size:10px;letter-spacing:.025em;color:#d6efe0;background:#2c5544;border-radius:4px;padding:4px 7px;margin-top:16px}.status.invalid{color:#fee5dc;background:#7b4737}
+    .check-card{padding:18px 21px}.check-card h2{font-size:14px}.check-card .field{margin-top:14px}.check-output{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;padding-top:13px;border-top:1px solid var(--line)}.check-output small{font-size:10px;color:var(--muted);display:block;margin-bottom:3px}.check-output strong{font-family:var(--mono);font-size:13px}.capacity-status{font-size:11px;margin-top:12px;padding:8px 10px;border-radius:6px;background:#edf7ef;color:#2c6440}.capacity-status.fail{background:var(--red-bg);color:var(--red)}.capacity-status.neutral{background:#f2f4f2;color:var(--muted)}.error-panel{background:var(--red-bg);color:var(--red);padding:12px 14px;border:1px solid #edc0b8;border-radius:8px;font-size:12px}.error-panel ul{margin:6px 0 0;padding-left:18px}
+    .details{margin-top:20px}.details details{background:white;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}.details summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;font-size:12px;font-weight:600}.details summary::-webkit-details-marker{display:none}.details summary:after{content:"+";font-size:18px;line-height:1;color:#6c8376;font-weight:400}.details details[open] summary:after{content:"−"}.detail-body{padding:0 20px 20px;border-top:1px solid var(--line)}.detail-body p{font-size:12px;color:var(--muted);margin:14px 0 10px}.detail-body h3{font-size:12px;margin:18px 0 8px}.lookup-layout{display:grid;grid-template-columns:minmax(250px,1fr) minmax(250px,1fr);gap:24px;margin-top:16px}.lookup-choice{width:100%;padding:9px 10px;background:var(--green);border:1px solid var(--green-line);color:var(--green-ink);font-size:12px}.lookup-note{background:#fff9df;border:1px solid #ece1b4;border-radius:6px;padding:11px 12px;font-size:11px;color:#786121;margin-top:12px}.table-scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:7px 10px;text-align:left;border-bottom:1px solid #e4ebe5}th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#65776b;background:#f5f8f4}td.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}tr.active td{background:#fff4b6}tr.bound td{background:#f1f8ee}tr:last-child td{border-bottom:0}.calc-table{margin-top:14px}.calc-table td:first-child{width:70%}.detail-actions{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-top:12px}.detail-actions button{font-size:11px}.pill{font-size:10px;border:1px solid var(--line);border-radius:4px;padding:3px 6px;color:var(--muted)}
+    .formula{overflow-x:auto;background:#f7f9f6;padding:16px 12px;border-radius:7px;margin-top:14px}.formula math{font-size:16px;min-width:700px}.formula pre{font:11px/1.9 var(--mono);margin:0;color:#345448;white-space:pre-wrap}.method-list{font-size:12px;color:var(--muted);padding-left:20px}.method-list li+li{margin-top:7px}.source-images{display:flex;align-items:flex-start;flex-wrap:wrap;gap:20px;padding:14px 0 0}.source-images figure{margin:0}.source-images img{max-width:100%;height:auto;background:white}.source-images figcaption{font-size:10px;color:var(--muted);margin-top:5px}.equation-source{margin-top:12px;overflow:auto}.equation-source img{max-width:none;width:600px;height:70px}.footer{display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:10px;margin-top:20px}.toast{min-height:18px;color:#476854;font-size:11px;margin-top:12px}.print-only{display:none}[hidden]{display:none!important}
+    @media(max-width:850px){.wrap{padding:22px}.heading{align-items:start;flex-direction:column;gap:14px}.layout{grid-template-columns:minmax(0,1.25fr) minmax(280px,1fr);gap:15px}.form-body{padding:17px}.card-head{padding:16px 17px}.result-number{font-size:49px}.hero{padding:21px}.form-foot{padding:12px 17px}.field-grid{gap:13px 12px}.field label{font-size:11px}.entry input{font-size:15px;padding:9px}.entry .unit{font-size:10px;padding-right:7px}.legend .live{display:none}}
+    @media(max-width:660px){.wrap{padding:20px 15px}.topline{margin-bottom:20px}.brand-icon{width:35px;height:35px}.brand-name{font-size:11px}.offline{font-size:10px}h1{font-size:27px}.layout{grid-template-columns:1fr}.results{position:static;grid-template-columns:1fr}.result-number{font-size:59px}.form-body{padding:18px}.card-head{padding:16px 18px}.lookup-layout{grid-template-columns:1fr;gap:14px}.legend{gap:12px;font-size:11px}.legend .swatch{width:10px;height:10px}.footer{flex-direction:column;gap:4px}.field-grid{gap:15px}.detail-body{padding:0 15px 17px}.details summary{padding:13px 15px}.actions button{padding:8px 11px}.rounded strong{font-size:31px}.entry input{font-size:16px}.field label{font-size:12px}.formula math{font-size:15px}}
+    @media(max-width:360px){.field-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.topline{gap:7px}.brand small{font-size:10px}.offline{font-size:9px;padding:4px 6px}.check-output{grid-template-columns:1fr}}
+    @media print{@page{size:A4;margin:14mm}body{background:white;font-size:10pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}.wrap{max-width:none;padding:0}.topline,.actions,.legend,.footer,.toast,.no-print,.small-button,.source-detail{display:none!important}.heading{margin-bottom:14px}h1{font-size:22px}.subtitle{font-size:11px}.layout{grid-template-columns:1.35fr 1fr;gap:13px}.results{position:static}.card,.hero,.check-card{break-inside:avoid}.card-head{padding:10px 13px}.form-body{padding:12px 13px}.field-grid{gap:10px}.group+.group{margin-top:12px;padding-top:12px}.entry input{font-size:12px;padding:5px 7px}.entry .unit{font-size:8px}.field label{font-size:10px}.field small{font-size:8px}.symbol{font-size:12px}.group-title{font-size:8px;margin-bottom:8px}.form-foot{padding:8px 13px;font-size:8px}.hero{padding:17px}.result-number{font-size:43px}.result-unit{font-size:14px}.result-sub,.rounded span{font-size:9px}.hero-note{font-size:8px}.result-divider{margin:13px 0}.rounded strong{font-size:25px}.check-card{padding:13px}.check-card .field{margin-top:8px}.check-output{margin-top:10px;padding-top:9px}.check-output strong{font-size:10px}.capacity-status{font-size:9px}.details{margin-top:13px}.details summary{padding:10px 13px}.detail-body{padding:0 13px 13px}.detail-body p,.detail-body table,.method-list{font-size:9px}.detail-body th{font-size:8px}.calc-table td,.calc-table th{padding:5px 7px}.formula{padding:10px}.formula pre{font-size:8px}.formula math{font-size:12px;min-width:0}.print-only{display:block;font-size:9px;color:#61716f;margin:10px 0}.lookup-layout{grid-template-columns:1fr 1fr}.lookup-note{font-size:8px}.status{font-size:8px}}
+    .section-link{display:inline-flex;align-items:center;justify-content:center;border:1px solid #c5d3ca;background:white;color:var(--ink);padding:9px 13px;border-radius:7px;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}.section-link:hover{background:#eef5ef}
+    .pavement-card{margin-top:20px;scroll-margin-top:20px}.pavement-head{align-items:start}.pavement-head p{margin:5px 0 0;font-size:12px;color:var(--muted)}.pavement-head .pill{white-space:nowrap;margin-top:2px}.pavement-content{padding:18px 22px}.figure-controls{display:grid;grid-template-columns:1fr 1fr;gap:17px;align-items:start;margin-bottom:15px}.figure-select{width:100%;padding:9px 10px;background:var(--green);border:1px solid var(--green-line);color:var(--green-ink);font-size:12px;height:43px}.figure-stage{border:1px solid #dce6df;border-radius:9px;background:#f7faf7;overflow:hidden}.figure-topline{display:flex;justify-content:space-between;gap:14px;padding:12px 15px;border-bottom:1px solid #e3ebe3;font-size:10px;color:var(--muted)}.figure-topline strong{font-size:11px;color:var(--ink)}.figure-viewport{overflow-x:auto}.pavement-svg{display:block;width:100%;min-width:640px;height:auto;max-height:395px;aspect-ratio:960/360}.pavement-svg text{font-family:Segoe UI,Arial,sans-serif}.part-shape{stroke-width:1.3}.svg-layer-label{font-size:15px;fill:#3c5549;font-weight:600}.svg-small-label{font-size:11px;fill:#65786e}.svg-dimension-label{font-size:14px;fill:#244436;font-weight:600}.figure-empty{min-height:225px;display:grid;place-items:center;padding:32px;text-align:center;color:var(--muted);font-size:13px}.figure-check{color:#316e42}.figure-check.fail{color:var(--red)}
+    @media(max-width:850px){.pavement-content{padding:17px}.pavement-head .pill{font-size:9px}}
+    @media(max-width:660px){.pavement-content{padding:15px}.pavement-head{flex-direction:column;gap:8px}.figure-controls{gap:13px}.figure-controls label{font-size:11px}.figure-topline{flex-direction:column;gap:4px}.section-link{padding:8px 11px}}
+    @media(max-width:400px){.figure-controls{grid-template-columns:1fr}}
+    @media print{.pavement-card{break-inside:avoid;margin-top:14px}.pavement-content{padding:10px 13px}.pavement-head p{font-size:9px}.pavement-svg{min-width:0;width:100%;max-height:310px}.figure-topline{font-size:8px;padding:7px 9px}.figure-topline strong{font-size:9px}.figure-controls{display:none!important}.pavement-head .pill{font-size:8px}.section-link{display:none}}
+  </style>
+  <link rel="stylesheet" href="./toolkit.css">
+  <link rel="stylesheet" href="./ui-refinement.css">
+  <link rel="stylesheet" href="./compact-workspace.css">
+  <link rel="stylesheet" href="./engineering-section.css">
+  <link rel="stylesheet" href="./workspace-layout.css">
+</head>
+<body>
+<a class="skip-link" href="#designForm">Skip to design inputs</a>
+<aside class="toolkit-sidebar" id="toolkitSidebar" aria-label="Toolkit navigation">
+  <a class="toolkit-brand" href="./"><span class="toolkit-mark">HD</span><span class="brand-label">HD Toolkit<small>Highways Design Toolkit</small></span></a>
+  <p class="nav-caption">DESIGN WORKSPACE</p>
+  <nav>
+    <a data-tool="traffic" hidden href="#trafficTool" title="Design Traffic"><span aria-hidden="true">⇄</span><span class="nav-label">Design Traffic</span></a>
+    <a data-tool="cbr" href="#cbrTool" title="Design CBR"><span aria-hidden="true">◫</span><span class="nav-label">Design CBR</span></a>
+    <a class="nav-current" data-tool="pavement" href="#pavementTool" aria-current="page" title="Rigid Pavement Design"><span aria-hidden="true">▤</span><span class="nav-label">Rigid Pavement Design</span></a>
+    <a data-tool="flexible" hidden href="#flexibleTool" title="Flexible Pavement Design"><span aria-hidden="true">▥</span><span class="nav-label">Flexible Pavement Design</span></a>
+    <a data-tool="subgrade" hidden href="#subgradeTool" title="Corrected Subgrade Reaction"><span aria-hidden="true">▱</span><span class="nav-label">Corrected Subgrade Reaction</span></a>
+    <a data-tool="subbase" href="#subbaseTool" title="Subbase Thickness Design"><span aria-hidden="true">▰</span><span class="nav-label">Subbase Thickness Design</span></a>
+    <a data-tool="strength" hidden href="#strengthTool" title="Concrete Modulus of Rupture"><span aria-hidden="true">◇</span><span class="nav-label">Concrete Modulus of Rupture</span></a>
+    <a data-tool="rainfall" hidden href="#rainfallTool" title="Rainfall station locator"><span aria-hidden="true">☂</span><span class="nav-label">Rainfall Station Locator</span></a>
+    <a data-tool="culvert" href="#culvertTool" title="Culvert Hydraulics" hidden><span aria-hidden="true">▱</span><span class="nav-label">Culvert Hydraulics</span></a>
+    <a data-tool="coordinates" href="#coordinatesTool" title="PRS92 ⇄ WGS 84"><span aria-hidden="true">⌖</span><span class="nav-label">PRS92 ⇄ WGS 84</span></a>
+  </nav>
+  <div class="sidebar-bottom">
+  <div class="sidebar-note"><span class="sidebar-dot"></span> Browser-based workspace<p>Your design inputs are saved in this browser on this device.</p></div>
+  <div class="sidebar-footer">HD Toolkit <span>v0.1</span></div>
+  <button id="adminModeToggle" class="admin-mode-toggle" type="button" role="switch" aria-checked="false" aria-label="Admin Mode" title="Admin Mode: Off" aria-controls="adminPasswordDialog" aria-haspopup="dialog">
+    <span class="admin-icon" aria-hidden="true">⚙</span><span class="admin-label">Admin Mode</span><span id="adminModeState" class="admin-state" aria-hidden="true">Off</span><span class="admin-switch" aria-hidden="true"></span>
+  </button>
+  </div>
+</aside>
+<button class="sidebar-toggle" id="sidebarToggle" type="button" aria-controls="toolkitSidebar" aria-expanded="true" aria-label="Collapse sidebar" title="Collapse sidebar"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<dialog id="adminPasswordDialog" class="admin-password-dialog" aria-labelledby="adminPasswordTitle" aria-describedby="adminPasswordDescription">
+  <form id="adminPasswordForm">
+    <h2 id="adminPasswordTitle">Enable Admin Mode</h2>
+    <p id="adminPasswordDescription">Enter the admin password to access additional tools.</p>
+    <label for="adminPassword">Password</label>
+    <input id="adminPassword" type="password" autocomplete="current-password" required aria-describedby="adminPasswordError">
+    <p id="adminPasswordError" class="admin-password-error" role="alert" hidden></p>
+    <div class="admin-password-actions"><button id="adminPasswordCancel" type="button">Cancel</button><button type="submit" class="admin-unlock">Enable Admin Mode</button></div>
+  </form>
+</dialog>
+<div class="wrap" id="pavementTool">
+  <main>
+    <div class="layout">
+      <section class="card" aria-labelledby="inputTitle">
+        <div class="card-head"><h2 id="inputTitle">Design Inputs</h2><button id="resetInputs" type="button" class="small-button">Reset to Defaults</button></div>
+                <form id="designForm" tabindex="-1" novalidate>
+          <div class="form-body">
+            <div class="group">
+              <h3 class="group-title">Reliability &amp; Traffic</h3>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="r">Reliability<span class="symbol">R</span></label>
+                  <div class="entry"><input id="r" name="r" type="number" min="50" max="99.99" step="any" required aria-describedby="rHelp"><span class="unit">%</span></div>
+                  <small id="rHelp">Supported table range: 50–99.99%.</small>
+                </div>
+                <div class="field">
+                  <label for="zr">Standard Normal Deviate<span class="symbol">Z<sub>R</sub></span></label>
+                  <div class="entry auto"><input id="zr" type="text" readonly aria-describedby="zrHelp"><span class="unit">auto</span></div>
+                  <small id="zrHelp">From R → Z table. Read only.</small>
+                </div>
+                <div class="field">
+                  <label for="so">Overall Standard Deviation<span class="symbol">S<sub>o</sub></span></label>
+                  <div class="entry"><input id="so" name="so" type="number" value="0.30" min="0" max="1" step="any" required aria-describedby="soHelp"><span class="unit">—</span></div>
+                  <small id="soHelp">Dimensionless · Allowed range: 0–1.</small>
+                </div>
+                <div class="field">
+                  <label for="wMillion">Design Traffic<span class="symbol">W<sub>18</sub></span></label>
+                  <div class="entry"><input id="wMillion" name="wMillion" type="number" min="0" step="any" required aria-describedby="wMillionHelp"><span id="trafficUnit" class="unit">× 10⁶ ESAL</span></div>
+                  <small id="wMillionHelp">42,230,000 total 18-kip ESALs.</small>
+                </div>
+              </div>
+            </div>
+            <div class="group">
+              <h3 class="group-title">Serviceability</h3>
+              <div class="field-grid">
+              <div class="field">
+                <label for="p0">Initial Serviceability<span class="symbol">p<sub>0</sub></span></label>
+                <div class="entry"><input id="p0" name="p0" type="number" min="0" max="5" step="any" required aria-describedby="p0Help"><span class="unit">PSI</span></div>
+                <small id="p0Help">Enter the adopted initial serviceability.</small>
+              </div>
+                <div class="field">
+                  <label for="pt">Terminal Serviceability<span class="symbol">p<sub>t</sub></span></label>
+                  <div class="entry"><input id="pt" name="pt" type="number" min="0" max="5" step="any" required aria-describedby="ptHelp"><span class="unit">PSI</span></div>
+                  <small id="ptHelp">Present serviceability index.</small>
+                </div>
+                <div class="field">
+                  <label for="dpsi">Serviceability Loss<span class="symbol">ΔPSI</span></label>
+                  <div class="entry auto"><input id="dpsi" name="dpsi" type="number" min="0" max="5" step="any" readonly aria-describedby="dpsiHelp"><span class="unit">PSI · auto</span></div>
+                  <small id="dpsiHelp">Automatic: ΔPSI = p₀ − pₜ.</small>
+                </div>
+              </div>
+            </div>
+            <div class="group">
+              <h3 class="group-title">Concrete &amp; Load Transfer</h3>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="fcMPa">Concrete Compressive Strength<span class="symbol">f′<sub>c</sub></span></label>
+                  <div class="entry"><input id="fcMPa" name="fcMPa" type="number" min="0" step="any" required aria-describedby="fcMPaHelp"><span class="unit">MPa</span></div>
+                  <small id="fcMPaHelp">Enter f′c in MPa. S′c and Ec are calculated automatically.</small>
+                </div>
+                <div class="field">
+                  <label for="sc">Concrete Modulus of Rupture<span class="symbol">S′<sub>c</sub></span></label>
+                  <div class="entry auto"><input id="sc" name="sc" type="number" readonly aria-describedby="scHelp" data-si-factor="0.006894757293168" data-si-unit="MPa"><span class="unit">psi · auto</span></div>
+                  <small id="scHelp">Flexural strength, not compressive strength.</small>
+                </div>
+                <div class="field">
+                  <label for="ecMillion">Concrete Elastic Modulus<span class="symbol">E<sub>c</sub></span></label>
+                  <div class="entry auto"><input id="ecMillion" name="ecMillion" type="number" readonly aria-describedby="ecMillionHelp" data-si-factor="6.894757293168" data-si-unit="GPa"><span class="unit">× 10⁶ psi · auto</span></div>
+                  <small id="ecMillionHelp">Calculated from compressive strength.</small>
+                </div>
+                <div class="field">
+                  <label for="cd">Drainage Coefficient<span class="symbol">C<sub>d</sub></span></label>
+                  <div class="entry"><input id="cd" name="cd" type="number" min="0" step="any" required aria-describedby="cdHelp"><span class="unit">—</span></div>
+                  <small id="cdHelp">Dimensionless.</small>
+                </div>
+                <div id="loadTransferField" class="load-transfer-block">
+                  <div class="field">
+                  <label for="jCondition">Joint Layout</label>
+                  <select id="jCondition" class="lookup-choice" aria-describedby="jHelp">
+                    <option value="undoweled-aggregate" selected>Undoweled PCC on crushed aggregate surfacing</option>
+                    <option value="doweled-aggregate">Doweled PCC on crushed aggregate surfacing</option>
+                    <option value="doweled-hma">Doweled PCC on HMA (without widened outside lane)</option>
+                    <option value="crcp-hma">CRCP with HMA shoulders</option>
+                    <option value="crcp-pcc">CRCP with tied PCC shoulders</option>
+                    <option value="project">Others</option>
+                  </select>
+                  </div>
+                  <details id="jUploadControls" class="joint-upload" hidden><summary>Upload Illustration · Optional</summary><div><button id="jUploadButton" type="button" class="small-button">Choose Image</button><button id="jRemoveImage" type="button" class="small-button" hidden>Remove Image</button></div><input id="jImageFile" type="file" accept="image/png,image/jpeg,image/webp" hidden><small>PNG, JPG or WebP · Up to 2 MB · Stored locally with this case.</small><small id="jUploadStatus" role="status" aria-live="polite"></small></details>
+                  <figure class="load-transfer-figure"><img id="jFigure" src="./assets/load-transfer/undoweled.svg" alt="Two-lane undoweled pavement joint layout"><p id="jNoFigure" hidden>No Figure Available</p></figure>
+                  <div class="field">
+                  <label for="j">Load Transfer Coefficient<span class="symbol">J</span></label>
+                  <div class="entry"><input id="j" name="j" type="number" min="0" step="any" required aria-describedby="jHelp"><span id="jUnit" class="unit">J</span></div>
+                  <small id="jHelp">Default: 3.8 · Undoweled PCC on crushed aggregate surfacing.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="group">
+              <h3 class="group-title">Foundation Support</h3>
+              <label class="round-toggle foundation-auto-toggle" for="foundationMode"><input id="foundationMode" type="checkbox" role="switch" checked aria-controls="foundationInputs"><span class="toggle-track" aria-hidden="true"></span>Auto-Calculate kcorr</label>
+              <div id="foundationInputs" class="field-grid foundation-inputs">
+                <div class="field"><label for="foundationDsb">Subbase Thickness<span class="symbol">D<sub>SB</sub></span></label><div class="entry"><input id="foundationDsb" type="number" min="101.6" max="508" step="any"><span class="unit">mm</span></div><small id="foundationDsbHelp">Foundation calculation and pavement illustration use this thickness.</small></div>
+                <div class="field"><label for="foundationMaterial">Subbase Material</label><select id="foundationMaterial" class="lookup-choice" aria-describedby="foundationEsbHelp"><option value="unbound" selected>Unbound Granular Material</option><option value="lime">Lime Stabilized</option><option value="bituminous">Bituminous Stabilized Mixtures</option><option value="asphalt">Asphalt Treated Base</option><option value="cement-aggregate">Cement Aggregate Mixtures</option><option value="cement-treated">Cement Treated Granular Base</option><option value="project">Others / Project-Specific Modulus</option></select></div>
+                <div class="field"><label for="foundationEsb">Subbase Elastic Modulus<span class="symbol">E<sub>SB</sub></span></label><div class="entry"><input id="foundationEsb" type="number" min="15000" max="45000" aria-describedby="foundationEsbHelp" step="any" data-si-factor="0.006894757293168" data-si-unit="MPa"><span class="unit">psi</span></div><small id="foundationEsbHelp">Material range: 15,000–45,000 psi.</small></div>
+                <div class="field"><label for="foundationMr">Subgrade Resilient Modulus<span class="symbol">M<sub>R</sub></span></label><div class="entry"><input id="foundationMr" type="number" min="1000" max="20000" step="any" data-si-factor="0.006894757293168" data-si-unit="MPa"><span class="unit">psi</span></div><small>1,000–20,000 psi</small></div>
+                <div class="field"><label for="foundationLs">Loss of Support Factor<span class="symbol">LS</span></label><div class="entry"><input id="foundationLs" type="number" min="0" max="3" step="any"><span class="unit">0–3</span></div><small>Select for material and erosion potential.</small></div>
+              </div>
+              <div class="field-grid">
+                <div class="field full">
+                  <label for="k">Corrected Subgrade Reaction<span class="symbol">k<sub>corr</sub></span></label>
+                  <div class="entry"><input id="k" name="k" type="number" min="0" step="any" required aria-describedby="kHelp" data-si-factor="0.271447138" data-si-unit="MN/m³"><span class="unit">pci · lb/in³</span></div>
+                  <small id="kHelp">Enter the corrected foundation support value for slab design.</small>
+                </div>
+              </div>
+              <p id="foundationStatus" class="foundation-status" role="status" aria-live="polite" hidden></p>
+            </div>
+          </div>
+          <div class="field"><label for="rigidDesignYears">Design Period</label><div class="entry"><input id="rigidDesignYears" type="number" value="20" min="1" max="100" step="1" aria-describedby="rigidDesignYearsHelp"><span class="unit">years</span></div><small id="rigidDesignYearsHelp">Default 20 years. Edit for the project; entered ESALs should cover this design period.</small></div>
+          <p id="legacyConcreteNotice" class="concrete-auto-summary" hidden>This older case did not store f′c. Using 24 MPa and recalculating S′c and Ec; review the compressive-strength input for your project.</p>
+          <div class="design-input-actions no-print" aria-label="Design input actions"><button type="button" disabled>Generate Report</button><button type="button" disabled>Save</button></div>
+        </form>
+      </section>
+      <aside class="results" aria-label="Pavement section and calculated results">
+    <section class="card pavement-card" id="pavementSection" aria-labelledby="pavementTitle">
+      <div class="card-head pavement-head">
+        <div><h2 id="pavementTitle">Design Pavement Structure</h2><p class="structure-reference-basis">AASHTO 1993 · Rigid Pavement Design Reference</p></div>
+      </div>
+      <div class="pavement-content">
+        <div class="figure-stage">
+          <div class="thickness-results" id="resultLive" aria-live="polite" aria-atomic="true">
+            <section class="thickness-summary" aria-label="Actual slab thickness">
+              <h3>Result Slab Thickness</h3>
+              <div class="thickness-value"><strong id="dMm">—</strong><span>mm</span></div>
+              <div class="thickness-conversion" id="dConversions">Enter valid design inputs</div>
+            </section>
+            <section class="thickness-summary rounded-summary" aria-label="Rounded slab thickness">
+              <h3>Rounded Thickness</h3>
+              <div class="thickness-value"><strong id="roundedMm">—</strong><span>mm</span></div>
+              <div class="thickness-conversion" id="roundedConversions">Enter valid design inputs</div>
+          <div class="rounded-controls no-print">
+            <label class="round-toggle" for="figureThickness"><input id="figureThickness" type="checkbox" role="switch" checked aria-describedby="figureThicknessHelp"><span class="toggle-track" aria-hidden="true"></span>Round Up</label>
+            <label class="round-increment" for="roundStep">Increment <select class="round-select" id="roundStep"><option value="5">5 mm</option><option value="10" selected>10 mm</option><option value="20">20 mm</option><option value="25">25 mm</option><option value="50">50 mm</option></select></label>
+            <small id="figureThicknessHelp">Toggle selects the thickness shown in the illustration.</small>
+          </div>
+            </section>
+          </div>
+          <div class="figure-empty" id="figureEmpty" hidden>Enter valid design inputs to display the pavement.</div>
+          <div class="figure-viewport" id="figureViewport">
+            <svg class="pavement-svg" id="pavementSvg" xmlns="http://www.w3.org/2000/svg" viewBox="80 0 940 360" role="img" aria-labelledby="pavementSvgTitle pavementSvgDescription">
+              <title id="pavementSvgTitle">Pavement section with live layer depths</title>
+              <desc id="pavementSvgDescription">Continuous concrete slab over granular subbase and compacted subgrade. Slab and subbase depths follow displayed values in proportion. Horizontal lengths and subgrade depth are schematic.</desc>
+              <defs>
+                <pattern id="concreteTexture" width="48" height="36" patternUnits="userSpaceOnUse"><rect width="48" height="36" fill="#f5f6f6"/><path d="M6 10l6-4 5 8zM31 27l5-7 6 6z" fill="none" stroke="#87949b" stroke-width=".8"/><path d="M29 7h2M10 29h2M43 15h2" stroke="#a1abb0" stroke-width="1.5"/></pattern>
+                <pattern id="gravelTexture" width="44" height="32" patternUnits="userSpaceOnUse"><rect width="44" height="32" fill="#edf1f2"/><path d="M3 7l6-4 7 3-2 7-7 1zM25 20l5-6 9 3-1 8-7 3zM2 29l7-8 7 5" fill="none" stroke="#8b979e" stroke-width=".9"/></pattern>
+                <pattern id="soilTexture" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#f7f7f4"/><path d="M-6 6L6-6M0 24L24 0M18 30L30 18" stroke="#a6afb1" stroke-width=".8"/></pattern>
+                <marker id="dimensionArrow" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto-start-reverse"><path d="M0 0L6 3L0 6z" fill="#344954"/></marker>
+              </defs>
+              <g id="layerSubgrade">
+                <path id="soilShape" class="part-shape" d="" fill="url(#soilTexture)" stroke="#a58d76"/>
+                <text id="soilLabel" x="130" y="339" class="svg-layer-label">Compacted Subgrade</text>
+                <text id="soilSmallLabel" x="130" y="358" class="svg-small-label">Foundation support · entered kcorr</text>
+              </g>
+              <g id="layerSubbase">
+                <rect id="baseShape" class="part-shape" x="110" y="225" width="650" height="58" fill="url(#gravelTexture)" stroke="#b5a278"/>
+                <text id="baseLabel" x="130" y="260" class="svg-layer-label">Granular Subbase</text>
+                <text id="baseSmallLabel" x="130" y="280" class="svg-small-label"></text>
+              </g>
+              <g id="layerSlab">
+                <rect id="slabShape" class="part-shape" x="110" y="40" width="650" height="125" fill="url(#concreteTexture)" stroke="#9eaf9d"/>
+                <text id="slabLabel" x="130" y="169" class="svg-layer-label">PCC Slab</text>
+                <text id="slabSmallLabel" x="130" y="189" class="svg-small-label"></text>
+              </g>
+              <path id="finishedSurface" d="M110 40H760" fill="none" stroke="#344954" stroke-width="2.4"/>
+              <text x="110" y="26" class="svg-surface-label">DESIGN PAVEMENT STRUCTURE</text>
+              <g id="figureDimensions" pointer-events="none">
+                <path id="slabExtension" d="" fill="none" stroke="#99ac9a" stroke-width="1"/>
+                <line id="slabDimension" x1="820" x2="820" y1="102" y2="223" stroke="#627b6a" stroke-width="1" marker-start="url(#dimensionArrow)" marker-end="url(#dimensionArrow)"/>
+                <text id="slabDimensionLabel" x="841" y="164" class="svg-dimension-label">D = 330 mm</text>
+                <text id="slabDimensionMetres" x="841" y="184" class="svg-small-label">0.330 m</text>
+                <g id="baseDimensionGroup">
+                  <path id="baseExtension" d="" fill="none" stroke="#99ac9a" stroke-width="1"/>
+                  <line id="baseDimension" x1="820" x2="820" y1="226" y2="280" stroke="#627b6a" stroke-width="1" marker-start="url(#dimensionArrow)" marker-end="url(#dimensionArrow)"/>
+                  <text id="baseDimensionLabel" x="841" y="265" class="svg-dimension-label">150 mm</text>
+                  <path id="baseDimensionLeader" d="" fill="none" stroke="#647781" stroke-width=".8"/>
+                  <text id="baseDimensionNote" x="841" y="282" class="svg-small-label">Subbase depth</text>
+                </g>
+                <text id="soilDepthLabel" x="841" y="329" class="svg-small-label">Subgrade</text>
+                <text id="soilDepthNote" x="841" y="345" class="svg-small-label">Depth schematic</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <details class="structure-table-wrap"><summary>Design Parameters Summary</summary><table class="structure-parameters" aria-label="Design Parameters Summary"><thead><tr><th scope="col">Parameter</th><th scope="col">Value</th><th scope="col">Unit</th></tr></thead><tbody>
+          <tr><th scope="row">Design Period · n</th><td id="structurePeriod">—</td><td>years</td></tr>
+          <tr><th scope="row">Design Traffic · W18</th><td id="structureTraffic">—</td><td>ESAL</td></tr>
+          <tr><th scope="row">Reliability · R</th><td id="structureReliability">—</td><td>%</td></tr>
+          <tr><th scope="row">Standard Normal Deviate · ZR</th><td id="structureZ">—</td><td>—</td></tr>
+          <tr><th scope="row">Overall Standard Deviation · So</th><td id="structureSo">—</td><td>—</td></tr>
+          <tr><th scope="row">Initial Serviceability · p₀</th><td id="structureServiceability">—</td><td>PSI</td></tr>
+          <tr><th scope="row">Terminal Serviceability · pₜ</th><td id="structurePt">—</td><td>PSI</td></tr>
+          <tr><th scope="row">Serviceability Loss · ΔPSI</th><td id="structureDelta">—</td><td>PSI</td></tr>
+          <tr><th scope="row">Modulus of Rupture · S′c</th><td id="structureSc">—</td><td>psi</td></tr>
+          <tr><th scope="row">Drainage Coefficient · Cd</th><td id="structureCoefficients">—</td><td>—</td></tr>
+          <tr><th scope="row">Load Transfer Coefficient · J</th><td id="structureJ">—</td><td>—</td></tr>
+          <tr><th scope="row">Concrete Elastic Modulus · Ec</th><td id="structureEc">—</td><td>psi</td></tr>
+          <tr id="structureMrRow"><th scope="row">Subgrade Resilient Modulus · MR</th><td id="structureMr">—</td><td>psi</td></tr>
+          <tr><th scope="row">Corrected Subgrade Reaction · kcorr</th><td id="structureSupport">—</td><td>pci</td></tr>
+        </tbody></table></details>
+        <p class="structure-reference-note">Section schematic · Dimensions shown govern. Values reflect the current inputs and the slab thickness selected for the drawing.</p>
+      </div>
+    </section>
+
+        <section class="card pavement-nomographs" aria-labelledby="pavementNomographTitle"><div class="card-head"><h2 id="pavementNomographTitle">Subgrade Reaction Nomographs</h2></div><div class="pavement-nomograph-body">
+          <figure><figcaption>Figure 3.3 · Composite Subgrade Reaction <output id="pavementCompositeValue">— pci</output></figcaption><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-3.png" loading="lazy" alt="Composite subgrade reaction nomograph beneath the pavement section"><svg viewBox="0 0 1086 1046" aria-hidden="true"><polyline id="pavementCompositePath" points=""/><g id="pavementCompositePoints"></g></svg></div></figure>
+          <figure><figcaption>Figure 3.6 · Loss-of-Support Correction <output id="pavementCorrectedValue">— pci</output></figcaption><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-6.png" loading="lazy" alt="Loss of support correction nomograph beneath the pavement section"><svg viewBox="0 0 1241 1082" aria-hidden="true"><polyline id="pavementLossPath" points=""/><g id="pavementLossPoints"></g></svg></div></figure>
+          <small>Red paths follow the current foundation inputs. Manual kcorr mode shows reference charts without calculated paths.</small>
+        </div></section>
+        <div id="errors" class="error-panel" role="alert" hidden></div>
+      </aside>
+    </div>
+
+
+    <details id="foundationSteps" class="card foundation-steps"><summary>Rigid Pavement Design · Calculation Steps &amp; Nomographs</summary><div class="foundation-steps-body">
+      <ol><li><h3>Establish Design Traffic · W18</h3><p>Use cumulative 18-kip ESALs in the design lane over the design period. The Design Traffic tab uses Ni = 365 × AADTopening,i × Gi × DD × DL, then W18 = Σ(Ni × EFi). Transfer a complete result or enter the adopted design traffic in millions.</p><p class="equation">W18 = Design Traffic (million) × 1,000,000 <span>Eq. (1)</span></p><p id="stepTraffic"></p><small>Two lanes total means one per direction: assumed DD = 0.50 and DL = 1.00. AADT, growth and axle factors remain project inputs.</small></li>
+      <li><h3>Determine Reliability and Variability</h3><p>Look up or interpolate ZR from the active R–ZR table. So represents the adopted overall standard deviation for rigid pavement.</p><p class="equation">Reliability Term = ZR × So <span>Eq. (2)</span></p><p id="stepReliability"></p></li>
+      <li><h3>Calculate Serviceability Loss</h3><p class="equation">ΔPSI = p₀ − pₜ <span>Eq. (3)</span></p><p id="stepServiceability"></p><small>Initial serviceability must exceed terminal. Both are serviceability indices, not pressure units.</small></li>
+      <li><h3>Calculate Concrete Properties</h3><p class="equation">Sc(MPa) = 0.78√f′c(MPa); Sc(psi) = Sc(MPa) × 145.038 <span>Eq. (4)</span></p><p class="equation">SDs = (PS/100) × Sc; S′c = Sc + |ZR| × SDs <span>Eq. (5)</span></p><p class="equation">Ec(psi) = 57,000√[f′c(MPa) × 145.038] <span>Eq. (6)</span></p><p id="stepConcrete"></p><small>This toolkit uses the requested coupling of concrete PS to pavement ZR. The DPWH manual’s strength example uses independently selected PS/z; the coupling is a worksheet assumption.</small></li></ol>
+      <ol start="5"><li><h3>Determine Composite Subgrade Reaction · Figure 3.3</h3><p>Enter subbase thickness DSB, subbase elastic modulus ESB and roadbed resilient modulus MR. The digital nomograph follows the plotted scales without extrapolation.</p><p>Composite k∞: <output id="foundationCompositeValue">— pci</output></p><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-3.png" loading="lazy" alt="AASHTO Figure 3.3 composite subgrade reaction nomograph"><svg viewBox="0 0 1086 1046" aria-hidden="true"><polyline id="foundationCompositePath" points=""/><g id="foundationCompositePoints"></g></svg></div><small>Figure 3.3 graphical model allowance: ±6%; this is not a statistical confidence interval.</small></li>
+      <li><h3>Determine Effective k</h3><p>Use the composite result only when seasonal and shallow-foundation adjustments do not change k. Otherwise select Adjusted Effective k and enter the value after those project-specific adjustments.</p><p>Effective k before loss of support: <output id="foundationEffectiveValue">— pci</output></p></li>
+      <li><h3>Correct for Loss of Support · Figure 3.6</h3><p>From effective k on the horizontal axis, move upward to the selected LS line, then left to read kcorr. LS = 0 leaves k unchanged; fractional LS interpolates log10(kcorr) between adjacent printed lines.</p><p>Corrected kcorr: <output id="foundationCorrectedValue">—</output></p><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-6.png" loading="lazy" alt="AASHTO Figure 3.6 loss-of-support correction nomograph"><svg viewBox="0 0 1241 1082" aria-hidden="true"><polyline id="foundationLossPath" points=""/><g id="foundationLossPoints"></g></svg></div><p>Printed correction range: effective k 1–2,000 pci, LS 0–3, corrected k 1–1,000 pci. The result is an approximate chart reading, rounded to whole pci for slab design.</p></li></ol>
+      <ol start="8"><li><h3>Adopt Drainage and Load Transfer Coefficients</h3><p>Choose Cd for drainage quality and time near saturation; choose J for joints, load-transfer devices and shoulder conditions. The input guides contain the reference tables.</p><p id="stepFactors"></p></li><li><h3>Solve the AASHTO 1993 Rigid Slab Equation</h3><pre class="rigid-equation">log10(W18) = ZR × So + 7.35 log10(D + 1) − 0.06
+  + log10(ΔPSI / 3) / [1 + 1.624 × 10⁷ / (D + 1)^8.46]
+  + (4.22 − 0.32pt) × log10{S′c × Cd × (D^0.75 − 1.132)
+    / [215.63 × J × (D^0.75 − 18.42 / (Ec / kcorr)^0.25)]}    Eq. (7)</pre><p>D is in inches; S′c and Ec are in psi; kcorr is in pci. The solver brackets the rising-capacity branch, then solves until the equation residual converges. Invalid logarithm domains are rejected.</p><p id="stepEquationTerms"></p><p id="stepSolve"></p></li><li><h3>Round the Thickness and Check Capacity</h3><p class="equation">D(mm) = 25.4 × D(in); Drounded = ceiling(D / increment) × increment <span>Eq. (8)</span></p><p id="stepRounding"></p><small>Rounding is a numerical option. Adopt construction thickness using the applicable project criteria. Foundation Support Subbase Thickness controls both the drawing and automatic kcorr. With auto-calculate off, the entered kcorr is independent of drawing thickness.</small></li></ol><details><summary>Material Selection &amp; DPWH Reference Illustrations</summary><p>Typical LS ranges: cement/asphalt-treated or bituminous-stabilized material 0–1; lime-stabilized or unbound granular material 1–3; fine-grained/natural subgrade 2–3. Select project values from the material investigation and erosion conditions.</p><figure class="manual-figure"><img src="./assets/dpwh-manual/subbase-modulus.png" loading="lazy" alt="DPWH Figure 8 granular subbase modulus"><figcaption>DPWH Manual · Figure 8 · p.143. The flexible-pavement structural coefficient a3 is not used in rigid slab design.</figcaption></figure><figure class="manual-figure"><img src="./assets/dpwh-manual/loss-support-materials.png" loading="lazy" alt="DPWH Table 10 material modulus and loss of support"><figcaption>DPWH Manual · Table 10 · p.128.</figcaption></figure></details><p class="manual-note">DPWH Design Procedure Manual for Roads (2017), §§1.9.1–1.9.4, pp.15–16. The existing digital Figure 3.3 and 3.6 models are shared with the Corrected Subgrade Reaction tab.</p>
+    </div></details>
+    <div id="message" class="toast no-print" hidden role="status" aria-live="polite"></div>
+  </main>
+  <footer class="footer"><span>HD Toolkit · AASHTO 1993 pavement design · v0.1</span><span>No installation required · Inputs and calculations stay on this device</span></footer>
+</div>
+<section id="rainfallTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Rainfall station locator"><rainfall-locator></rainfall-locator></section>
+<section id="culvertTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Culvert Hydraulics"><culvert-hydraulics></culvert-hydraulics></section>
+<section id="coordinatesTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Coordinate converter"><coordinate-converter></coordinate-converter></section>
+<section id="subgradeTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Corrected Subgrade Reaction"><subgrade-reaction></subgrade-reaction></section>
+<section id="subbaseTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Subbase Thickness Design"><subbase-thickness></subbase-thickness></section>
+<section id="strengthTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Concrete Modulus of Rupture"><concrete-strength></concrete-strength></section>
+<section id="trafficTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Design Traffic"><design-traffic></design-traffic></section>
+<section id="cbrTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Design CBR"><design-cbr></design-cbr></section>
+<section id="flexibleTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Flexible Pavement Design"><flexible-pavement></flexible-pavement></section>
+<script src="./components/flexible-pavement/component.js"></script>
+<script src="./components/rainfall-locator/component.js"></script>
+<script src="./components/culvert-hydraulics/component.js"></script>
+<script src="./components/coordinate-converter/component.js"></script>
+<script src="./components/subgrade-reaction/component.js"></script>
+<script src="./components/subbase-thickness/component.js"></script>
+<script src="./components/concrete-strength/component.js"></script>
+<script src="./components/design-traffic/component.js"></script>
+<script src="./components/design-cbr/component.js"></script>
+<script src="./admin-mode.js"></script>
+<script src="./toolkit.js"></script>
+<script src="./components/input-guide.js"></script>
+<script src="./components/si-equivalents.js"></script>
+<script src="./components/subgrade-reaction/model-data.js"></script>
+<script src="./components/subgrade-reaction/engine.js"></script>
+<script src="./components/subgrade-reaction/loss-support.js"></script>
+<script src="./components/subgrade-reaction/nomograph-labels.js"></script><script src="./rigid-foundation.js"></script>
+<script id="calculation-core">
+(function(root){
+  'use strict';
+  const CONSTANT = 1.624e7;
+  const MM_PER_IN = 25.4;
+  const MAX_IN = 60;
+  const TABLE = [[50,0],[60,-0.253],[70,-0.524],[75,-0.674],[80,-0.841],[85,-1.037],[90,-1.282],[91,-1.340],[92,-1.405],[93,-1.476],[94,-1.555],[95,-1.645],[96,-1.751],[97,-1.881],[98,-2.045],[99,-2.327],[99.9,-3.090],[99.99,-3.750]];
+  const DEFAULTS = {r:92,so:0.35,wMillion:42.23,p0:4.5,pt:2.5,dpsi:2,fcMPa:24,sc:600,ecMillion:3.372,cd:1,j:3.8,k:215,roundStep:10,trialMm:null,lookupSource:'supplied'};
+  const DEFAULT_INPUTS={...DEFAULTS,r:85,so:0.30,wMillion:1,p0:4.5,pt:2,dpsi:2.5,fcMPa:24,cd:1,j:3.8,jCondition:'undoweled-aggregate',k:34,foundation:{mode:'auto',source:'composite',material:'unbound',dsb:200/25.4,esb:15000,mr:1000,ls:1,adjusted:null}};
+  const NUMERIC_KEYS = ['r','so','wMillion','p0','pt','dpsi','fcMPa','sc','ecMillion','cd','j','k'];
+  const LABELS = {r:'Reliability R',so:'Standard deviation So',wMillion:'Design traffic W18',p0:'Initial serviceability p₀',pt:'Terminal serviceability pt',dpsi:'Serviceability loss ΔPSI',fcMPa:'Concrete compressive strength f′c',sc:'Modulus of rupture Sc',ecMillion:'Concrete elastic modulus Ec',cd:'Drainage coefficient Cd',j:'Load transfer coefficient J',k:'Corrected k'};
+  function table(source){return TABLE.map(function(row){return [row[0],row[0]===98&&source==='fhwa'?-2.054:row[1]];});}
+  function reliability(r,source){
+    if(!Number.isFinite(r)||r<50||r>99.99) throw new Error('Reliability R must be between 50% and 99.99%.');
+    const rows=table(source);
+    for(let i=0;i<rows.length;i++){
+      if(Math.abs(r-rows[i][0])<1e-10) return {z:rows[i][1],exact:true,lower:rows[i],upper:rows[i]};
+      if(i>0&&r<rows[i][0]){
+        const lo=rows[i-1],hi=rows[i];
+        return {z:lo[1]+(r-lo[0])/(hi[0]-lo[0])*(hi[1]-lo[1]),exact:false,lower:lo,upper:hi};
+      }
+    }
+    throw new Error('Reliability lookup failed.');
+  }
+  function concreteProperties(fc,z,source){
+    if(!Number.isFinite(fc)||fc<=0||!Number.isFinite(z)) throw new Error('Enter valid f′c and Reliability to determine concrete properties.');
+    const magnitude=Math.abs(z),rows=table(source);
+    let ps=null;
+    for(let i=0;i<rows.length;i++){
+      const high=Math.abs(rows[i][1]);
+      if(Math.abs(magnitude-high)<1e-10){ps=100-rows[i][0];break;}
+      if(i>0&&magnitude<high){const lo=rows[i-1],low=Math.abs(lo[1]);ps=100-(lo[0]+(magnitude-low)/(high-low)*(rows[i][0]-lo[0]));break;}
+    }
+    if(ps===null) throw new Error('z is outside the selected reliability table.');
+    const specificationMPa=.78*Math.sqrt(fc),specificationPsi=specificationMPa*145.038;
+    const sdPsi=ps/100*specificationPsi,meanPsi=specificationPsi+magnitude*sdPsi;
+    const ecMillion=57000*Math.sqrt(fc*145.038)/1e6;
+    if(!Number.isFinite(meanPsi)||!Number.isFinite(ecMillion)) throw new Error('Concrete strength is too large to calculate.');
+    return {ps:ps,z:magnitude,specificationMPa:specificationMPa,specificationPsi:specificationPsi,sdPsi:sdPsi,meanPsi:meanPsi,ecMillion:ecMillion};
+  }
+  const defaultConcrete=concreteProperties(DEFAULTS.fcMPa,reliability(DEFAULTS.r,DEFAULTS.lookupSource).z,DEFAULTS.lookupSource);
+  DEFAULTS.sc=defaultConcrete.meanPsi;DEFAULTS.ecMillion=defaultConcrete.ecMillion;
+  function validate(p){
+    const errors=[];
+    NUMERIC_KEYS.forEach(function(key){if(!Number.isFinite(p[key])) errors.push({key:key,message:LABELS[key]+' requires a number.'});});
+    if(errors.length) return errors;
+    if(p.r<50||p.r>99.99) errors.push({key:'r',message:'Reliability R must be between 50% and 99.99%.'});
+    if(p.so<0||p.so>1) errors.push({key:'so',message:'Overall Standard Deviation must be between 0 and 1.'});
+    ['wMillion','fcMPa','sc','ecMillion','cd','j','k'].forEach(function(key){if(p[key]<=0) errors.push({key:key,message:LABELS[key]+' must be greater than zero.'});});
+    if(p.pt<=0||p.pt>=5) errors.push({key:'pt',message:'Terminal serviceability pt must be greater than 0 and less than 5.'});
+    if(p.p0<=0||p.p0>5) errors.push({key:'p0',message:'Initial serviceability p₀ must be greater than 0 and no more than 5.'});
+    if(p.p0<=p.pt) errors.push({key:'pt',message:'Terminal serviceability must be less than initial serviceability.'});
+    if(Math.abs(p.dpsi-(p.p0-p.pt))>1e-10) errors.push({key:'dpsi',message:'Serviceability loss must equal initial minus terminal serviceability.'});
+    if(p.dpsi<=0||p.dpsi>5) errors.push({key:'dpsi',message:'Serviceability loss ΔPSI must be greater than 0 and no more than 5.'});
+    if(p.pt+p.dpsi>5+1e-10) errors.push({key:'dpsi',message:'pt + ΔPSI exceeds the maximum serviceability index of 5.'});
+    if(![5,10,20,25,50].includes(p.roundStep)) errors.push({key:'roundStep',message:'Select an available rounding increment.'});
+    if(!['supplied','fhwa'].includes(p.lookupSource)) errors.push({key:'lookupSource',message:'Select an available reliability table.'});
+    return errors;
+  }
+  function normalized(p){
+    return {z:reliability(p.r,p.lookupSource).z,so:p.so,w:p.wMillion*1e6,pt:p.pt,dpsi:p.dpsi,sc:p.sc,ec:p.ecMillion*1e6,cd:p.cd,j:p.j,k:p.k};
+  }
+  function terms(d,n){
+    if(!Number.isFinite(d)||d<=0) return null;
+    const pow=Math.pow(d,0.75),support=18.42/Math.pow(n.ec/n.k,0.25);
+    const numerator=n.sc*n.cd*(pow-1.132),denominator=215.63*n.j*(pow-support);
+    if(numerator<=0||denominator<=0) return null;
+    const reliabilityTerm=n.z*n.so;
+    const thicknessTerm=7.35*Math.log10(d+1)-0.06;
+    const serviceabilityTerm=Math.log10(n.dpsi/3)/(1+CONSTANT/Math.pow(d+1,8.46));
+    const strengthTerm=(4.22-0.32*n.pt)*Math.log10(numerator/denominator);
+    const rhs=reliabilityTerm+thicknessTerm+serviceabilityTerm+strengthTerm;
+    if(!Number.isFinite(rhs)) return null;
+    return {reliability:reliabilityTerm,thickness:thicknessTerm,serviceability:serviceabilityTerm,strength:strengthTerm,rhs:rhs};
+  }
+  function slope(d,n){
+    const h=Math.max(1e-5,d*1e-5),a=terms(d-h,n),b=terms(d+h,n);
+    return a&&b?(b.rhs-a.rhs)/(2*h):NaN;
+  }
+  function solve(p){
+    const errors=validate(p);
+    if(errors.length) throw new Error(errors.map(function(e){return e.message;}).join(' '));
+    const n=normalized(p),target=Math.log10(n.w);
+    if(!Number.isFinite(target)||!Number.isFinite(n.ec)) throw new Error('Traffic or elastic modulus is too large to calculate.');
+    const support=18.42/Math.pow(n.ec/n.k,0.25);
+    const domain=Math.pow(Math.max(1.132,support),4/3);
+    const start=domain+Math.max(1e-7,domain*1e-8);
+    if(!Number.isFinite(start)||start>=MAX_IN) throw new Error('The equation is outside its valid logarithm domain up to 60 inches. Review Ec and k.');
+    let prevD=start,prev=terms(start,n),bracket=null;
+    for(let i=1;i<=2048;i++){
+      const d=start+(MAX_IN-start)*i/2048,cur=terms(d,n);
+      if(prev&&cur&&prev.rhs-target<=0&&cur.rhs-target>=0) bracket=[prevD,d];
+      prevD=d;prev=cur;
+    }
+    if(!bracket) throw new Error('No increasing-capacity solution was found up to 60 inches (1,524 mm). Review the inputs; a very low traffic value may fall below the equation’s minimum capacity.');
+    let lo=bracket[0],hi=bracket[1],iterations=0;
+    for(let i=0;i<80;i++){
+      const mid=(lo+hi)/2,t=terms(mid,n);iterations=i+1;
+      if(!t) throw new Error('Invalid logarithm argument while solving.');
+      if(t.rhs<target) lo=mid;else hi=mid;
+      if(hi-lo<1e-11) break;
+    }
+    const d=(lo+hi)/2,t=terms(d,n),mm=d*MM_PER_IN;
+    if(!(slope(d,n)>0)) throw new Error('The solution is on a descending-capacity branch. Review inputs.');
+    const roundedMm=Math.ceil(mm/p.roundStep)*p.roundStep;
+    const residual=t.rhs-target;
+    if(!Number.isFinite(residual)||Math.abs(residual)>1e-8) throw new Error('Solver did not converge to the required accuracy.');
+    return {dIn:d,dMm:mm,dM:mm/1000,roundedMm:roundedMm,roundedIn:roundedMm/MM_PER_IN,target:target,terms:t,residual:residual,iterations:iterations,z:n.z,n:n};
+  }
+  function checkThickness(mm,result){
+    if(!Number.isFinite(mm)||mm<=0) return {ok:false,message:'Enter a positive proposed thickness in mm.'};
+    const d=mm/MM_PER_IN,t=terms(d,result.n);
+    if(!t) return {ok:false,message:'This thickness gives an invalid logarithm argument. Increase D or review Ec and k.'};
+    if(!(slope(d,result.n)>0)) return {ok:false,message:'This thickness is on the descending-capacity branch near the equation singularity. Increase D.'};
+    const ratio=Math.pow(10,t.rhs-result.target),capacity=Math.pow(10,t.rhs);
+    if(!Number.isFinite(capacity)||!Number.isFinite(ratio)) return {ok:false,message:'Proposed thickness capacity exceeds the numerical range.'};
+    return {ok:true,mm:mm,capacity:capacity,ratio:ratio,meets:t.rhs>=result.target-1e-10};
+  }
+  function readCase(value){
+    if(!value||value.app!=='aashto93-rigid-local'||![1,2].includes(value.version)||!value.inputs||typeof value.inputs!=='object') throw new Error('Choose a case JSON saved by this app.');
+    const p=Object.assign({},DEFAULTS);
+    p.legacyConcrete=value.version===1&&value.inputs.fcMPa===undefined;
+    NUMERIC_KEYS.forEach(function(key){if(key==='p0'&&value.inputs[key]===undefined){p.p0=value.inputs.pt+value.inputs.dpsi;return;}if(key==='fcMPa'&&value.version===1&&value.inputs[key]===undefined)return;if(typeof value.inputs[key]!=='number'||!Number.isFinite(value.inputs[key])) throw new Error('The case has an invalid '+LABELS[key]+'.');p[key]=value.inputs[key];});
+    p.roundStep=value.inputs.roundStep;
+    p.lookupSource=value.inputs.lookupSource;
+    p.trialMm=value.inputs.trialMm===null?null:value.inputs.trialMm;
+    p.foundation=value.inputs.foundation||{mode:'manual',dsb:(Number.isFinite(value.illustration?.baseMm)?value.illustration.baseMm:200)/25.4};
+    p.designYears=Number.isInteger(value.inputs.designYears)&&value.inputs.designYears>=1&&value.inputs.designYears<=100?value.inputs.designYears:20;
+    p.designYearsManual=value.inputs.designYearsManual===true;
+    p.jCondition=typeof value.inputs.jCondition==='string'?value.inputs.jCondition:(p.j===3.8?'undoweled-aggregate':'project');
+    p.jImage=value.inputs.jImage;
+    const errors=validate(p);if(errors.length) throw new Error(errors[0].message);
+    if(p.trialMm!==null&&(!Number.isFinite(p.trialMm)||p.trialMm<=0)) throw new Error('The proposed thickness in this case is invalid.');
+    if(value.equationConstant!==CONSTANT) throw new Error('This case uses a different equation constant.');
+    return p;
+  }
+  root.PavementCalc=Object.freeze({CONSTANT:CONSTANT,MM_PER_IN:MM_PER_IN,DEFAULTS:DEFAULTS,DEFAULT_INPUTS:DEFAULT_INPUTS,NUMERIC_KEYS:NUMERIC_KEYS,LABELS:LABELS,table:table,reliability:reliability,concreteProperties:concreteProperties,validate:validate,normalized:normalized,terms:terms,slope:slope,solve:solve,checkThickness:checkThickness,readCase:readCase});
+})(globalThis);
+</script>
+<script id="pavement-illustration">
+(function(root){
+  'use strict';
+  const C=root.PavementCalc,$=function(id){return document.getElementById(id);};
+  const DEFAULTS={thicknessMode:'rounded',baseMm:200};
+  let state=Object.assign({},DEFAULTS),inputs=null,result=null,onChange=function(){};
+  function set(id,value){$(id).textContent=value;}
+  function attr(id,values){Object.keys(values).forEach(function(key){$(id).setAttribute(key,String(values[key]));});}
+  function visible(id,show){$(id).setAttribute('display',show?'inline':'none');}
+  function format(v,digits){return Number.isFinite(v)?v.toLocaleString('en-US',{maximumFractionDigits:digits,minimumFractionDigits:digits}):'—';}
+  function geometry(dMm,baseMm){
+    const scale=Math.min(0.38,210/(dMm+baseMm));
+    const slabTop=40,slabHeight=dMm*scale,slabBottom=slabTop+slabHeight;
+    const baseTop=slabBottom,baseHeight=baseMm*scale,baseBottom=baseTop+baseHeight;
+    return {scale:scale,slabTop:slabTop,slabHeight:slabHeight,slabBottom:slabBottom,baseTop:baseTop,baseHeight:baseHeight,baseBottom:baseBottom,soilTop:baseBottom,soilBottom:baseBottom+65};
+  }
+  function readControls(){
+    state.thicknessMode=$('figureThickness').checked?'rounded':'exact';$('roundStep').disabled=state.thicknessMode==='exact';
+    const raw=$('foundationDsb').value.trim(),base=raw===''?null:Number(raw);
+    if(base!==null&&(!Number.isFinite(base)||base<0||base>1000))return false;
+    state.baseMm=base;return true;
+  }
+  function empty(message){
+    $('figureViewport').hidden=true;$('figureEmpty').hidden=false;set('figureEmpty',message);
+    set('dMm','—');set('dConversions','Enter valid design inputs');set('roundedMm','—');set('roundedConversions','Enter valid design inputs');
+    ['structurePeriod','structureTraffic','structureReliability','structureZ','structureSo','structureServiceability','structurePt','structureDelta','structureSc','structureCoefficients','structureJ','structureEc','structureMr','structureSupport'].forEach(id=>set(id,'—'));
+  }
+  function draw(){
+    const controlsValid=readControls();
+    if(!result){empty('Enter valid design inputs to display the pavement.');return;}
+    if(!controlsValid){empty('Enter a valid Foundation Support subbase thickness from 0 to 1,000 mm.');return;}
+    let dMm=result.roundedMm,label='Rounded required D',digits=0;
+    if(state.thicknessMode==='exact'){dMm=result.dMm;label='Exact required D';digits=2;}
+    if(state.thicknessMode==='proposed'){
+      dMm=inputs.trialMm===null?result.roundedMm:inputs.trialMm;label=inputs.trialMm===null?'Proposed D · rounded default':'Proposed D';digits=2;
+    }
+    const check=C.checkThickness(dMm,result);
+    if(!check.ok){empty('Proposed thickness: '+check.message);return;}
+    set('dMm',format(result.dMm,2));set('dConversions',format(result.dM,5)+' m / '+format(result.dIn,4)+' in');
+    set('roundedMm',format(result.roundedMm,0));set('roundedConversions',format(result.roundedMm/1000,5)+' m / '+format(result.roundedIn,4)+' in');
+    const g=geometry(dMm,state.baseMm??0);
+    $('figureViewport').hidden=false;$('figureEmpty').hidden=true;
+    attr('pavementSvg',{'aria-label':label+' '+format(dMm,digits)+' millimetres, subbase illustration depth '+(state.baseMm===null?'not specified':format(state.baseMm,1)+' millimetres')+'.'});
+    attr('slabShape',{y:g.slabTop,height:g.slabHeight});
+    attr('baseShape',{y:g.baseTop,height:g.baseHeight});
+    const bottom=g.soilBottom;
+    attr('soilShape',{d:'M110 '+g.soilTop+'H760V'+bottom+'H462l-8-6-9 12-8-6H110Z'});
+    attr('slabLabel',{y:g.slabTop+g.slabHeight/2+(g.slabHeight>65?-5:6)});visible('slabLabel',g.slabHeight>30);
+    attr('slabSmallLabel',{y:g.slabTop+g.slabHeight/2+17});visible('slabSmallLabel',g.slabHeight>65);
+    set('slabSmallLabel','f′c = '+format(inputs.fcMPa,2)+' MPa · S′c = '+format(inputs.sc*0.006894757293168,2)+' MPa');
+    const foundation=inputs.foundation||{};
+    attr('baseLabel',{y:g.baseTop+g.baseHeight/2+(g.baseHeight>65?-5:5)});visible('baseLabel',g.baseHeight>26);
+    attr('baseSmallLabel',{y:g.baseTop+g.baseHeight/2+17});visible('baseSmallLabel',g.baseHeight>65&&Number.isFinite(foundation.esb));
+    set('baseSmallLabel','ESB = '+format(foundation.esb*0.006894757293168,2)+' MPa');
+    attr('soilLabel',{y:g.soilTop+29});attr('soilSmallLabel',{y:g.soilTop+47});
+    set('soilSmallLabel','kcorr = '+format(inputs.k,2)+' pci · '+format(inputs.k*0.271447138,2)+' MN/m³');
+    set('structurePeriod',format(inputs.designYears??20,0));
+    set('structureTraffic',format(inputs.wMillion*1e6,2));
+    set('structureReliability',format(inputs.r,2));
+    set('structureZ',format(result.z,3));set('structureSo',format(inputs.so,2));
+    set('structureServiceability',format(inputs.p0,2));set('structurePt',format(inputs.pt,2));set('structureDelta',format(inputs.dpsi,2));
+    set('structureSc',format(inputs.sc,2));set('structureEc',format(inputs.ecMillion*1e6,2));
+    set('structureCoefficients',format(inputs.cd,2));set('structureJ',format(inputs.j,2));
+    set('structureMr',format(foundation.mr,2));set('structureSupport',format(inputs.k,2));
+    visible('layerSubbase',state.baseMm>0);visible('baseDimensionGroup',state.baseMm>0);
+    attr('slabExtension',{d:'M766 '+g.slabTop+'H830M766 '+g.slabBottom+'H830'});
+    attr('slabDimension',{y1:g.slabTop,y2:g.slabBottom});
+    const slabLabelY=g.slabTop+g.slabHeight/2;
+    attr('slabDimensionLabel',{y:slabLabelY-1});set('slabDimensionLabel','D = '+format(dMm,digits)+' mm');
+    attr('slabDimensionMetres',{y:slabLabelY+17});set('slabDimensionMetres',format(dMm/1000,3)+' m');
+    attr('baseExtension',{d:'M766 '+g.baseTop+'H830M766 '+g.baseBottom+'H830'});
+    attr('baseDimension',{y1:g.baseTop,y2:g.baseBottom});
+    const baseCentre=g.baseTop+g.baseHeight/2;
+    const baseLabelY=Math.max(baseCentre-1,slabLabelY+48);
+    attr('baseDimensionLabel',{y:baseLabelY});set('baseDimensionLabel',format(state.baseMm,state.baseMm%1===0?0:1)+' mm');
+    attr('baseDimensionLeader',{d:'M824 '+baseCentre+'H833L838 '+(baseLabelY-5)});
+    attr('baseDimension',{'marker-start':g.baseHeight>=14?'url(#dimensionArrow)':'none','marker-end':g.baseHeight>=14?'url(#dimensionArrow)':'none'});
+    attr('baseDimensionNote',{y:baseLabelY+17});
+    const soilLabelY=state.baseMm>0?Math.max(g.soilTop+24,baseLabelY+46):g.soilTop+24;
+    attr('soilDepthLabel',{y:soilLabelY});attr('soilDepthNote',{y:soilLabelY+17});
+  }
+  function changed(){draw();onChange();}
+  function restoreSettings(value){
+    state=Object.assign({},DEFAULTS);
+    if(value&&typeof value==='object'){
+      if(['rounded','exact','proposed'].includes(value.thicknessMode))state.thicknessMode=value.thicknessMode==='proposed'?'rounded':value.thicknessMode;
+    }
+    $('figureThickness').checked=state.thicknessMode==='rounded';draw();
+  }
+  $('figureThickness').addEventListener('change',changed);
+  root.PavementIllustration=Object.freeze({
+    update:function(p,r){inputs=p;result=r;draw();},
+    getSettings:function(){return Object.assign({},state);},
+    restoreSettings:restoreSettings,
+    reset:function(){restoreSettings(DEFAULTS);},
+    onSettingsChange:function(fn){onChange=fn;},
+    geometry:geometry
+  });
+})(globalThis);
+</script>
+<script id="app-interface">
+(function(){
+  'use strict';
+  const C=globalThis.PavementCalc,V=globalThis.PavementIllustration,$=function(id){return document.getElementById(id);};
+  const STORAGE_KEY='aashto93-rigid-local-v1';
+
+  let result=null,lookupSource=C.DEFAULTS.lookupSource,trafficPrecision=null,trafficEditing=false,jImage=null,jUploadVersion=0;
+  function validJointImage(value){return value&&typeof value.data==='string'&&value.data.length<=2800000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/.test(value.data);}
+  function number(id){const raw=$(id).value.trim();if(id==='wMillion'&&trafficEditing)return raw===''?NaN:Number(raw)/1e6;if(id==='wMillion'&&trafficPrecision!==null&&raw===trafficPrecision.toFixed(2))return trafficPrecision;return raw===''?NaN:Number(raw);}
+  function formatTraffic(){const value=number('wMillion');trafficEditing=false;trafficPrecision=Number.isFinite(value)?value:null;$('trafficUnit').textContent='× 10⁶ ESAL';if(trafficPrecision!==null)$('wMillion').value=value.toFixed(2);}
+  function inputs(){const p={};C.NUMERIC_KEYS.forEach(function(key){p[key]=number(key);});p.jImage=jImage;p.jCondition=document.getElementById('jCondition').value;p.designYears=number('rigidDesignYears');p.designYearsManual=document.getElementById('rigidDesignYears').manualPeriod===true;p.dpsi=Number.isFinite(p.p0)&&Number.isFinite(p.pt)?p.p0-p.pt:NaN;p.roundStep=number('roundStep');p.lookupSource=lookupSource;p.trialMm=null;if(window.RigidFoundation)p.foundation=window.RigidFoundation.getState();try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource);p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;}catch{p.sc=NaN;p.ecMillion=NaN;}return p;}
+  function write(p){jUploadVersion++;jImage=validJointImage(p.jImage)?{data:p.jImage.data,name:String(p.jImage.name||'Project illustration').slice(0,180)}:null;document.getElementById('jImageFile').value='';document.getElementById('jUploadStatus').textContent=jImage?jImage.name:'';document.getElementById('jCondition').value=p.jCondition||'project';document.getElementById('rigidDesignYears').manualPeriod=p.designYearsManual===true;trafficPrecision=null;trafficEditing=false;$('rigidDesignYears').value=String(p.designYears??20);C.NUMERIC_KEYS.forEach(function(key){$(key).value=p[key]==null?'':String(p[key]);});if(window.RigidFoundation)window.RigidFoundation.restore(p.foundation||(Number.isFinite(p.k)?{mode:'manual'}:{mode:'auto'}),p.k);formatTraffic();$('roundStep').value=String(p.roundStep);lookupSource=p.lookupSource;$('legacyConcreteNotice').hidden=!p.legacyConcrete;}
+  function fmt(value,digits){return Number.isFinite(value)?value.toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits}):'—';}
+  function set(id,value){$(id).textContent=value;}
+  const loadConditions={
+    'undoweled-aggregate':{name:'Undoweled PCC on crushed aggregate surfacing',min:3.8,range:'3.8',figure:'undoweled'},
+    'doweled-aggregate':{name:'Doweled PCC on crushed aggregate surfacing',min:3.2,range:'3.2',figure:'doweled'},
+    'doweled-hma':{name:'Doweled PCC on HMA (without widened outside lane)',min:2.7,range:'2.7',figure:'doweled'},
+    'crcp-hma':{name:'CRCP with HMA shoulders',min:2.9,range:'2.9–3.2',figure:'crcp-hma'},
+    'crcp-pcc':{name:'CRCP with tied PCC shoulders',min:2.3,range:'2.3–2.9',figure:'crcp-pcc'}
+  };
+  function updateLoadTransfer(assignDefault=false){
+    const condition=loadConditions[$('jCondition').value],figure=condition?.figure,uploaded=!condition&&jImage,hasFigure=!!figure||!!uploaded;
+    $('j').readOnly=false;
+    if(assignDefault&&condition)$('j').value=condition.min.toFixed(2);
+    $('jUploadControls').hidden=!!condition;$('jRemoveImage').hidden=!jImage;
+    $('jFigure').hidden=!hasFigure;$('jNoFigure').hidden=hasFigure;
+    if(uploaded){$('jFigure').src=jImage.data;$('jFigure').alt=jImage.name||'Uploaded project joint layout';}
+    else if(figure){$('jFigure').src='./assets/load-transfer/'+figure+'.svg';$('jFigure').alt=condition.name+' · Schematic plan';}
+    else $('jFigure').removeAttribute('src');
+  }
+  function message(value,error=false){set('message',error?value:'');$('message').hidden=!error;}
+  function updateLookup(p){
+    try {
+      const info=C.reliability(p.r,p.lookupSource);
+      $('zr').value=info.z.toFixed(3);
+      set('zrHelp',info.exact?'Exact table entry · Read only.':'Interpolated · calculation uses '+info.z.toFixed(6)+'.');
+    } catch {
+      $('zr').value='—';set('zrHelp','Enter R between 50% and 99.99%.');
+    }
+  }
+  function clearErrors(){
+    C.NUMERIC_KEYS.forEach(function(key){$(key).removeAttribute('aria-invalid');$(key).closest('.entry').classList.remove('invalid');$(key+'Help').classList.remove('error');});
+    $('errors').hidden=true;$('errors').replaceChildren();
+  }
+  function showErrors(errors){
+    const title=document.createElement('strong');title.textContent='Check these inputs';$('errors').append(title);
+    const ul=document.createElement('ul');
+    errors.forEach(function(e){
+      const li=document.createElement('li');li.textContent=e.message;ul.append(li);
+      if(C.NUMERIC_KEYS.includes(e.key)){$(e.key).setAttribute('aria-invalid','true');$(e.key).closest('.entry').classList.add('invalid');$(e.key+'Help').textContent=e.message;$(e.key+'Help').classList.add('error');}
+    });
+    $('errors').append(ul);$('errors').hidden=false;
+  }
+  function helpers(p){
+    set('rHelp','Supported table range: 50–99.99%.');set('soHelp','Default 0.30 · Supplied rigid range 0.30–0.40.');
+    set('wMillionHelp',(Number.isFinite(p.wMillion)?fmt(p.wMillion,2)+' × 10⁶ ESAL = '+fmt(p.wMillion*1e6,0)+' ESAL. ':'')+'Enter total ESALs while editing; conversion is automatic.');
+    set('ptHelp','Present serviceability index.');
+    set('p0Help','Enter the adopted initial serviceability (maximum 5).');
+    set('dpsiHelp',Number.isFinite(p.dpsi)?'Automatic: '+fmt(p.p0,2)+' − '+fmt(p.pt,2)+' = '+fmt(p.dpsi,2)+'.':'Automatic: enter initial and terminal serviceability.');
+    set('fcMPaHelp','Enter f′c in MPa. S′c and Ec are automatic.');
+    set('scHelp','Automatic mean flexural strength from f′c, |ZR| and its associated PS.');
+    set('ecMillionHelp',Number.isFinite(p.ecMillion)?fmt(p.ecMillion*1e6,0)+' psi.':'Enter Ec in millions of psi.');
+    set('cdHelp',Number.isFinite(p.cd)&&p.cd<1?'DPWH Manual §1.7 requires Cd ≥1; revise drainage/design conditions.':'DPWH Manual §1.7: Cd ≥1; select for project drainage.');set('jHelp',loadConditions[p.jCondition]?'Joint layout default J = '+fmt(loadConditions[p.jCondition].min,2)+' · Table range '+loadConditions[p.jCondition].range+'. Adopted J is editable.':'Enter the project-specific J. Select a joint layout to use its automatic minimum.');set('kHelp',$('foundationMode').checked===false?'Enter the verified corrected foundation support value.':'Automatic whole-pci chart result · Calculation steps and nomographs below.');
+  }
+  function empty(){
+    result=null;
+  }
+  function processSteps(p,solved){
+    set('stepTraffic',fmt(p.wMillion,2)+' million × 1,000,000 = '+fmt(p.wMillion*1e6,0)+' design-lane ESAL over '+p.designYears+' years.');
+    try{const z=C.reliability(p.r,p.lookupSource).z;set('stepReliability','R = '+fmt(p.r,2)+'%; ZR = '+fmt(z,3)+'; So = '+fmt(p.so,2)+'; ZR × So = '+fmt(z*p.so,6)+'.');}catch{set('stepReliability','Enter valid Reliability and Overall Standard Deviation.');}
+    set('stepServiceability',fmt(p.p0,2)+' − '+fmt(p.pt,2)+' = '+fmt(p.dpsi,2)+'.');
+    try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource);set('stepConcrete','f′c = '+fmt(p.fcMPa,2)+' MPa; Sc = '+fmt(concrete.specificationMPa,3)+' MPa = '+fmt(concrete.specificationPsi,2)+' psi; PS = '+fmt(concrete.ps,2)+'%; SDs = '+fmt(concrete.sdPsi,2)+' psi; S′c = '+fmt(p.sc,2)+' psi; Ec = '+fmt(p.ecMillion*1e6,2)+' psi.');}catch{set('stepConcrete','Enter valid concrete strength and Reliability to calculate properties.');}
+    set('stepFactors','Cd = '+fmt(p.cd,2)+'; J = '+fmt(p.j,2)+'; adopted kcorr = '+fmt(p.k,0)+' pci.');
+    set('stepEquationTerms',solved?'Reliability '+fmt(solved.terms.reliability,6)+' + Thickness '+fmt(solved.terms.thickness,6)+' + Serviceability '+fmt(solved.terms.serviceability,6)+' + Strength/Support '+fmt(solved.terms.strength,6)+' = '+fmt(solved.terms.rhs,6)+'; target log10(W18) = '+fmt(solved.target,6)+'.':'Complete valid design inputs to evaluate the slab equation.');
+    set('stepSolve',solved?'Calculated D = '+fmt(solved.dIn,4)+' in = '+fmt(solved.dMm,2)+' mm. Residual = '+solved.residual.toExponential(3)+' after '+solved.iterations+' iterations.':'Thickness calculation pending.');
+    const check=solved?C.checkThickness(solved.roundedMm,solved):null;
+    set('stepRounding',solved?'Increment '+p.roundStep+' mm → rounded thickness '+fmt(solved.roundedMm,0)+' mm. '+(check.ok?'Capacity '+fmt(check.capacity,0)+' ESAL; capacity / traffic = '+fmt(check.ratio,3)+'. '+(check.meets?'Meets entered design traffic.':'Does not meet entered design traffic.'):'Capacity check unavailable.'):'Rounding and capacity check pending.');
+  }
+  function saveLocal(p){
+    if(C.validate(p).length||p.trialMm!==null&&(!Number.isFinite(p.trialMm)||p.trialMm<=0)) return;
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(makeCase(p)));}catch(e){}
+  }
+  function render(){
+    updateLoadTransfer();
+    if(window.RigidFoundation)window.RigidFoundation.update();
+    const p=inputs();$('dpsi').value=Number.isFinite(p.dpsi)?p.dpsi.toFixed(2):'';clearErrors();helpers(p);updateLookup(p);
+    let concreteError=null;
+    try{
+      const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource);
+      p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;
+      $('sc').value=p.sc.toFixed(2);$('ecMillion').value=p.ecMillion.toFixed(2);
+      set('scHelp','PS = '+fmt(concrete.ps,2)+'% · |ZR| = '+fmt(concrete.z,3)+' · Sc = '+fmt(concrete.specificationPsi,3)+' psi · SDs = '+fmt(concrete.sdPsi,3)+' psi.');
+      set('ecMillionHelp','Automatic: 57,000√f′c(psi) = '+fmt(p.ecMillion*1e6,0)+' psi.');
+    }catch(e){
+      concreteError=e.message;
+      p.sc=NaN;p.ecMillion=NaN;$('sc').value='';$('ecMillion').value='';
+    }
+    processSteps(p,null);
+    if(window.SIEquivalents)window.SIEquivalents.update();
+    const errors=C.validate(p).filter(function(e){return e.key!=='sc'&&e.key!=='ecMillion';});
+    if(concreteError&&!errors.length)errors.push({key:'fcMPa',message:concreteError});
+    if(errors.length){empty();const enteredErrors=errors.filter(function(e){return !C.NUMERIC_KEYS.includes(e.key)||$(e.key).value.trim()!==''||$(e.key).validity?.badInput;});if(enteredErrors.length)showErrors(enteredErrors);if(V)V.update(p,null);return;}
+    try{result=C.solve(p);}catch(e){empty();showErrors([{key:null,message:e.message}]);if(V)V.update(p,null);return;}
+    processSteps(p,result);
+    if(V)V.update(p,result);
+    saveLocal(p);
+  }
+  function makeCase(p){
+    return {app:'aashto93-rigid-local',version:2,equationConstant:C.CONSTANT,concreteMethod:'AUTO_FROM_FC_AND_PAVEMENT_Z',units:{fcMPa:'MPa',wMillion:'million ESAL',ecMillion:'million psi',sc:'psi',k:'pci',trialMm:'mm'},inputs:p,illustration:V?V.getSettings():undefined};
+  }
+  $('designForm').addEventListener('submit',function(e){e.preventDefault();render();});
+  $('designForm').addEventListener('input',render);
+  $('foundationMode').addEventListener('change',render);
+  $('foundationMaterial').addEventListener('change',function(){window.RigidFoundation.selectMaterial();render();});
+  $('jCondition').addEventListener('change',function(){updateLoadTransfer(true);render();});
+  $('rigidDesignYears').addEventListener('input',function(e){if(e.isTrusted)this.manualPeriod=true;});
+  $('jUploadButton').addEventListener('click',function(){$('jImageFile').click();});
+  $('jRemoveImage').addEventListener('click',function(){jUploadVersion++;jImage=null;$('jImageFile').value='';set('jUploadStatus','Illustration removed.');render();});
+  $('jImageFile').addEventListener('change',function(){
+    const file=this.files?.[0];if(!file)return;
+    const version=++jUploadVersion;this.value='';
+    if(!['image/png','image/jpeg','image/webp'].includes(file.type)){set('jUploadStatus','Choose a PNG, JPG or WebP image.');return;}
+    if(file.size>2*1024*1024){set('jUploadStatus','Choose an image up to 2 MB.');return;}
+    set('jUploadStatus','Loading illustration…');
+    const reader=new FileReader();
+    reader.onerror=function(){if(version===jUploadVersion)set('jUploadStatus','Could not read this image. Choose another file.');};
+    reader.onload=function(){
+      if(version!==jUploadVersion)return;
+      const candidate={data:reader.result,name:file.name.slice(0,180)};
+      if(!validJointImage(candidate)){set('jUploadStatus','Could not read this image. Choose another file.');return;}
+      const preview=new Image();
+      preview.onerror=function(){if(version===jUploadVersion)set('jUploadStatus','This file could not be displayed as an image.');};
+      preview.onload=function(){if(version!==jUploadVersion)return;jImage=candidate;set('jUploadStatus',candidate.name);render();};
+      preview.src=candidate.data;
+    };
+    reader.readAsDataURL(file);
+  });
+  $('wMillion').addEventListener('focus',function(){if(trafficEditing)return;const value=number('wMillion');trafficEditing=true;if(Number.isFinite(value))this.value=String(value*1e6);trafficPrecision=null;$('trafficUnit').textContent='ESAL';});
+  $('wMillion').addEventListener('blur',function(){formatTraffic();render();});
+  $('roundStep').addEventListener('change',render);
+  if(V)V.onSettingsChange(function(){saveLocal(inputs());});
+  $('resetInputs').addEventListener('click',function(){write(Object.assign({},C.DEFAULT_INPUTS));if(V)V.reset();try{localStorage.removeItem(STORAGE_KEY);}catch(e){}render();message('Recommended defaults restored. Enter project-specific design values.');});
+  let restored=false;
+  try{const saved=localStorage.getItem(STORAGE_KEY);if(saved){const data=JSON.parse(saved);write(C.readCase(data));if(V)V.restoreSettings(data.illustration);restored=true;}}catch(e){}
+  if(!restored)write(Object.assign({},C.DEFAULT_INPUTS));
+  render();
+  if(restored)message('Latest inputs restored from this browser.');
+})();
+</script>
+</body>
+</html>
+
+
+
+

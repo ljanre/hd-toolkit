@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAGASA Rainfall Station Locator | Road Drainage & Stormwater Design Reference Tool</title>
+<meta name="description" content="Identify nearby PAGASA rainfall and climate stations for preliminary hydrologic data screening in road drainage and stormwater design.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<link rel="stylesheet" href="./rainfall.css">
+<link rel="stylesheet" href="../tool-theme.css">
+<link rel="stylesheet" href="../workspace-layout.css"></head>
+<body>
+
+<header class="app-header">
+  <div class="wrap">
+    <h1>PAGASA Rainfall Station Locator</h1>
+    <p class="subtitle">Road Drainage &amp; Stormwater Design Reference Tool</p>
+    <p class="secondary">Identify nearby PAGASA rainfall and climate stations for preliminary hydrologic data screening. This tool locates candidate stations to investigate — it does not select a design station or produce rainfall values automatically.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ ENGINEERING DISCLAIMER (prominent on screen; merged into the closing disclaimer for print) ============ -->
+  <div class="notice no-print">
+    <h2>Engineering Use Notice</h2>
+    <p>This application is an engineering reference and station-location tool only. The geographically nearest PAGASA station is <strong>not automatically</strong> the appropriate station for hydrologic or drainage design. Final rainfall-station selection must consider record length, data quality, elevation, topography, watershed characteristics, climatic representativeness, and applicable PAGASA, DPWH, NHRC, LGU, or project-specific requirements.</p>
+    <p>Rainfall intensity, IDF values, design storm depths, discharges, and drainage structure dimensions must be verified and calculated by a qualified engineer using authoritative data and applicable design standards. Station locations and metadata should be verified against current PAGASA records before final design.</p>
+    <p class="tag-official">Not an official PAGASA or DPWH application.</p>
+  </div>
+
+  <!-- print-only report header: real map + real table are printed via CSS below; this adds a title block and project meta -->
+  <div id="reportSummary">
+    <div class="rp-kicker">PAGASA Rainfall Station Locator</div>
+    <h1>Rainfall Station Screening Report</h1>
+    <div class="rp-sub">Road Drainage &amp; Stormwater Design Reference Tool</div>
+    <div class="rp-meta">Report generated: <span id="rpGenerated"></span> &middot; Straight-line distances shown &middot; Not an official PAGASA or DPWH application</div>
+    <div class="rp-project">
+      <p><strong>Project:</strong> <span id="rpLocation"></span></p>
+      <p><strong>Coordinates:</strong> <span id="rpCoords"></span></p>
+      <p><strong>Nearest Rainfall Monitoring Station (ARG/AWS):</strong> <span id="rpNearestGauge"></span></p>
+      <p><strong>Nearest Long-Term Climate Station:</strong> <span id="rpNearestClimate"></span></p>
+      <p><strong>Potential Design-Rainfall Reference:</strong> <span id="rpDesignRef"></span></p>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="left-col">
+
+      <!-- ============ PROJECT LOCATION INPUT ============ -->
+      <div class="card no-print">
+        <h2>Project Location</h2>
+        <p class="card-desc">Search by administrative location, enter exact coordinates, use your current position, or click the map.</p>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="tab-search" type="button">Search Location</button>
+          <button class="tab-btn" data-tab="tab-coords" type="button">Exact Coordinates</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-search">
+          <div class="form-row two">
+            <div>
+              <label for="province">Province</label>
+              <select id="province"></select>
+            </div>
+            <div>
+              <label for="city">Municipality / City</label>
+              <select id="city" disabled><option value="">Select a province first</option></select>
+              <div id="cityManualWrap" style="display:none;margin-top:6px;">
+                <input type="text" id="cityManual" placeholder="Type municipality/city name">
+              </div>
+              <button type="button" class="btn-link" id="cityManualToggle" style="margin-top:6px;">Can't find it? Enter manually</button>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" id="searchBtn" type="button">Search Location</button>
+            <button class="btn-secondary" id="geoBtn" type="button">Use My Current Location</button>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-coords">
+          <div class="form-row two">
+            <div>
+              <label for="latIn">Latitude</label>
+              <input type="number" step="0.000001" id="latIn" placeholder="e.g., 15.632451">
+            </div>
+            <div>
+              <label for="lonIn">Longitude</label>
+              <input type="number" step="0.000001" id="lonIn" placeholder="e.g., 121.145621">
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" id="coordBtn" type="button">Set Location from Coordinates</button>
+          </div>
+        </div>
+
+        <div id="status" class="status"></div>
+        <div id="candidates" class="candidates"></div>
+        <div id="locSummary" class="loc-summary"></div>
+      </div>
+
+      <!-- ============ FILTERS ============ -->
+      <div class="card no-print">
+        <h2>Filters</h2>
+        <div class="form-row">
+          <div>
+            <label for="filterType">Station Type</label>
+            <select id="filterType">
+              <option value="ALL">All Types</option>
+              <option value="ARG">Automatic Rain Gauge (ARG)</option>
+              <option value="AWS">Automatic Weather Station (AWS)</option>
+              <option value="Climate/Synoptic">Climate / Synoptic Station</option>
+            </select>
+          </div>
+          <div>
+            <label for="filterRadius">Maximum Distance</label>
+            <select id="filterRadius">
+              <option value="0">No limit</option>
+              <option value="25">25 km</option>
+              <option value="50">50 km</option>
+              <option value="100" selected>100 km</option>
+              <option value="150">150 km</option>
+              <option value="250">250 km</option>
+            </select>
+          </div>
+          <div>
+            <label for="resultCount">Results to Show</label>
+            <select id="resultCount">
+              <option value="5" selected>Top 5</option>
+              <option value="10">Top 10</option>
+              <option value="ALL">All within radius</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ RESULTS: SUMMARY CARDS (screen only — condensed into the report title block for print) ============ -->
+      <div id="resultsSection" style="display:none;">
+        <div class="card no-print">
+          <h2>Screening Summary</h2>
+          <div class="summary-grid" id="summaryGrid"></div>
+          <div class="warning-banner" id="terrainWarning">
+            <strong>Terrain / Orographic Notice:</strong>
+            <span id="terrainWarningText"></span>
+          </div>
+        </div>
+
+        <!-- ============ DETAILED STATION TABLE ============ -->
+        <div class="card">
+          <h2>Candidate Stations</h2>
+          <p class="card-desc no-print">Straight-line distance only — not road-travel distance. Click a row for full station details. Proximity alone does not establish design suitability. Numbers match the markers on the map.</p>
+          <div class="table-scroll">
+            <table id="resultsTable">
+              <thead>
+                <tr>
+                  <th>#</th><th>Station</th><th>Type</th><th>Distance</th><th>Province</th>
+                  <th>Municipality</th><th>Lat</th><th>Lon</th><th>Elev. (m)</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody"></tbody>
+            </table>
+          </div>
+          <div class="btn-row no-print" style="margin-top:14px;">
+            <button class="btn-secondary btn-small" id="copyBtn" type="button">Copy Results</button>
+            <button class="btn-secondary btn-small" id="csvBtn" type="button">Export CSV</button>
+            <button class="btn-secondary btn-small" id="printBtn" type="button">Print / Save PDF Report</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ DATA QUALITY / STATION DATABASE STATUS ============ -->
+      <div class="card no-print">
+        <h2>Station Database</h2>
+        <div class="dq-grid">
+          <div class="dq-box"><div class="dq-num" id="dqClimate">0</div><div class="dq-lbl">Climate/Synoptic</div></div>
+          <div class="dq-box"><div class="dq-num" id="dqArg">0</div><div class="dq-lbl">ARG Stations</div></div>
+          <div class="dq-box"><div class="dq-num" id="dqAws">0</div><div class="dq-lbl">AWS Stations</div></div>
+          <div class="dq-box"><div class="dq-num" id="dqReviewed">—</div><div class="dq-lbl">Last Reviewed</div></div>
+        </div>
+        <div class="verify-legend">
+          <div class="vl-item"><span class="vl-dot" style="background:var(--good);"></span> Cross-verified against 2+ independent sources — <span id="dqCross">0</span> stations</div>
+          <div class="vl-item"><span class="vl-dot" style="background:var(--warn);"></span> Published coordinates, single-source in this build — recommend verification — <span id="dqPub">0</span> stations</div>
+        </div>
+        <p class="card-desc" style="margin-top:12px;">This build ships zero independently-verified ARG records distinct from the stations listed above. See <code>data-sources.md</code> for why, and how to extend the database responsibly.</p>
+      </div>
+
+    </div>
+
+    <!-- ============ MAP (sticky right column on desktop; also prints) ============ -->
+    <div class="right-col">
+      <div class="map-sticky">
+        <div class="card">
+          <h2>Map</h2>
+          <p class="card-desc no-print">Click or drag the project marker to set the location. Station numbers match the table.</p>
+          <div class="map-wrap">
+            <div id="map"></div>
+            <div class="north-arrow">N<br>&uarr;</div>
+          </div>
+          <div class="map-legend">
+            <span><span class="legend-dot" style="background:#c0392b;"></span> Project Site</span>
+            <span><span class="legend-dot" style="background:var(--arg);"></span> ARG</span>
+            <span><span class="legend-dot" style="background:var(--aws);"></span> AWS</span>
+            <span><span class="legend-dot" style="background:var(--climate);"></span> Climate/Synoptic</span>
+          </div>
+          <div class="map-legend-note">Numbers and name labels on the map correspond to the rank (#) column in the Candidate Stations table. Scale bar shown bottom-left (labels for the closest 15 results only, to avoid clutter).</div>
+          <div class="map-toggle-row no-print">
+            <input type="checkbox" id="toggleLines">
+            <label for="toggleLines" style="margin:0;font-weight:500;color:var(--text);">Show connection lines to Top 5 stations</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT / DATA SOURCES ============ -->
+  <div class="card no-print">
+    <h2>About This Tool &amp; Data Sources</h2>
+    <p class="card-desc" style="margin-bottom:10px;">
+      Climate/Synoptic station list (55 stations) compiled from PAGASA's Climatology and Agrometeorology Division
+      published <em>Climatological Normals (1991&ndash;2020)</em> station index, cross-checked where possible against
+      PAGASA's automated network coordinate exports and the PANaHON hydromet portal. Location search uses OpenStreetMap
+      Nominatim (free public geocoder) for coordinates, and a PSGC-based public dataset for the province/municipality
+      dropdowns — nothing is sent anywhere except those lookups. Full source-by-source documentation is in
+      <code>data-sources.md</code>.
+    </p>
+  </div>
+
+  <div class="card disclaimer no-print">
+    <strong>Reminder:</strong> Station locations and metadata should be verified against current PAGASA records before
+    final design. Rainfall intensity, IDF values, design storm depths, discharges, and drainage structure dimensions
+    must be verified and calculated by a qualified engineer using authoritative data and applicable design standards.
+    <div class="not-official">Not an official PAGASA or DPWH application.</div>
+  </div>
+
+  <!-- print-only closing disclaimer: merges the Engineering Use Notice, the Terrain/Orographic Notice
+       (only when applicable to this project location — populated by JS), and the screening-result-specific
+       verification requirement into a single block, to keep the printed report to about one page. -->
+  <div id="reportClosing" class="rp-closing">
+    <p><strong>Disclaimer.</strong> This report is an engineering reference and station-screening result only —
+    it identifies candidate PAGASA stations to investigate, not a final design-station selection, and contains no
+    rainfall intensity, IDF, or design-storm values. The geographically nearest station is not automatically
+    appropriate for hydrologic or drainage design; final selection must consider record length, data quality,
+    elevation, topography, watershed characteristics, climatic representativeness, and applicable PAGASA, DPWH,
+    NHRC, LGU, or project-specific requirements.</p>
+    <p id="rpTerrainNote" style="display:none;"></p>
+    <p>Station identity, coordinates, elevation, and period of record must be verified against current PAGASA
+    records. Rainfall intensity, IDF values, design storm depths, discharges, and drainage structure dimensions
+    must be verified and calculated by a qualified engineer using authoritative data and applicable design
+    standards. <strong>Not an official PAGASA or DPWH application.</strong></p>
+  </div>
+
+</main>
+
+<footer class="app-footer">
+  PAGASA Rainfall Station Locator &middot; Engineering reference / station-location tool only &middot; Not an official PAGASA or DPWH product &middot; Verify all data before engineering use
+</footer>
+
+<!-- ============ STATION DETAIL PANEL ============ -->
+<div class="detail-overlay" id="detailOverlay"></div>
+<div class="detail-panel" id="detailPanel">
+  <button class="detail-close" id="detailClose" type="button" aria-label="Close">&times;</button>
+  <h3 id="dpName"></h3>
+  <div class="dp-type"><span class="type-pill" id="dpTypePill"></span></div>
+  <div id="dpRows"></div>
+  <div class="dp-actions">
+    <button class="btn-secondary" id="dpSourceBtn" type="button">View Official PAGASA Source</button>
+    <button class="btn-secondary" id="dpNormalsBtn" type="button">View Climatological Normals</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="stations.js"></script>
+<script src="./rainfall.js"></script>
+</body>
+</html>

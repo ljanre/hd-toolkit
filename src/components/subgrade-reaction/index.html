@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Corrected Subgrade Reaction | HD Toolkit</title>
+  <link rel="stylesheet" href="../tool-theme.css">
+  <link rel="stylesheet" href="subgrade.css">
+<link rel="stylesheet" href="../workspace-layout.css"></head>
+<body>
+  <header>
+    <div><p class="eyebrow">AASHTO 1993 · Figures 3.3 &amp; 3.6</p><h1>Corrected Subgrade Reaction</h1><p class="subtitle">Composite reaction → Effective k → Loss-of-support correction.</p></div>
+    <a class="back" href="../../index.html#pavementTool" target="_parent">← Pavement Design</a>
+  </header>
+  <main>
+    <section class="scope" aria-label="Calculation scope">Use Figure 3.3 directly where seasonal and shallow-foundation adjustments do not change k; otherwise enter the adjusted effective k in Step 2. Figure 3.6 then corrects for loss of support.</section>
+    <div class="workspace">
+      <section class="card inputs" aria-labelledby="inputTitle">
+        <div class="card-heading"><h2 id="inputTitle">1 · Composite Reaction</h2><button id="reset" type="button" class="quiet">Clear</button></div>
+        <form id="inputForm" novalidate>
+          <div class="field"><div class="label"><label for="dsb">Subbase Thickness <span>D<sub>SB</sub></span></label><button type="button" class="help" data-guide="DSB" aria-label="Guide to Subbase Thickness">?</button></div><div class="entry"><input id="dsb" data-si-factor="25.4" data-si-unit="mm" type="number" step="any" min="4" max="20" inputmode="decimal" required aria-describedby="dsbRange dsbError"><span>in</span></div><small id="dsbRange">4–20 in · 101.6–508 mm</small><p id="dsbError" class="error" hidden></p></div>
+          <div class="field"><div class="label"><label for="esb">Subbase Elastic Modulus <span>E<sub>SB</sub></span></label><button type="button" class="help" data-guide="ESB" aria-label="Guide to Subbase Elastic Modulus">?</button></div><div class="entry"><input id="esb" data-si-factor="0.006894757293168" data-si-unit="MPa" type="number" step="any" min="15000" max="1000000" inputmode="decimal" required aria-describedby="esbRange esbError"><span>psi</span></div><small id="esbRange">15,000–1,000,000 psi</small><p id="esbError" class="error" hidden></p></div>
+          <div class="field"><div class="label"><label for="mr">Subgrade Resilient Modulus <span>M<sub>R</sub></span></label><button type="button" class="help" data-guide="MR" aria-label="Guide to Subgrade Resilient Modulus">?</button></div><div class="entry"><input id="mr" data-si-factor="0.006894757293168" data-si-unit="MPa" type="number" step="any" min="1000" max="20000" inputmode="decimal" required aria-describedby="mrRange mrError"><span>psi</span></div><small id="mrRange">1,000–20,000 psi</small><p id="mrError" class="error" hidden></p></div>
+        </form>
+        <section class="result" aria-labelledby="resultTitle">
+          <p id="resultTitle">Composite Subgrade Reaction · k∞</p>
+          <div class="value"><output id="result">—</output><span>pci</span></div>
+          <p id="metric">— MN/m³</p>
+          <p id="status" role="status" aria-live="polite">Enter all three inputs to calculate.</p>
+          <p id="allowance" hidden></p>
+        </section>
+        <section class="correction" aria-labelledby="correctionTitle">
+          <h2 id="correctionTitle">2 · Loss of Support</h2>
+          <label for="kSource">Effective k Source</label>
+          <select id="kSource"><option value="composite">Use Figure 3.3 Result</option><option value="manual">Enter Adjusted Effective k</option></select>
+          <div id="effectiveField" class="field" hidden><label for="effectiveK">Effective k Before Loss of Support</label><div class="entry"><input id="effectiveK" data-si-factor="0.271447138" data-si-unit="MN/m³" type="number" min="1" max="2000" step="any" inputmode="decimal" aria-describedby="effectiveRange effectiveError"><span>pci</span></div><small id="effectiveRange">1–2,000 pci · After applicable seasonal/foundation adjustments</small><p id="effectiveError" class="error" hidden></p></div>
+          <p id="effectiveSummary" class="source">Effective k: — pci</p>
+          <div class="field"><div class="label"><label for="ls">Loss of Support Factor <span>LS</span></label><button type="button" class="help" data-guide="LS" aria-label="Guide to Loss of Support Factor">?</button></div><input id="ls" type="number" min="0" max="3" step="any" inputmode="decimal" aria-describedby="lsRange lsError"><small id="lsRange">0–3 · Select for your material and erosion potential</small><p id="lsError" class="error" hidden></p></div>
+          <section class="result final-result" aria-labelledby="correctedTitle"><p id="correctedTitle">Corrected Subgrade Reaction · kcorr</p><div class="value"><output id="corrected">—</output><span>pci</span></div><p id="correctedMetric">— MN/m³</p><p id="correctionStatus" role="status" aria-live="polite">Enter effective k and LS to calculate.</p><small>Approximate Figure 3.6 reading. Fractional LS uses interpolation between printed lines.</small></section>
+        </section>
+        <button id="apply" type="button" class="primary" disabled>Use kcorr in Pavement Design</button>
+        <button id="export" type="button" class="quiet export" disabled>Export Calculation</button>
+        <p class="source">Model v0.4.0 · Dataset 1.1.0<br>Supplied package v1.4.0 · Validated With Limitations</p>
+      </section>
+      <section class="card figure-card" aria-labelledby="figureTitle">
+        <div class="card-heading"><h2 id="figureTitle">Figure 3.3 Nomograph</h2><label class="path-switch"><input id="showPath" type="checkbox" checked> Show Path</label></div>
+        <div class="nomograph">
+          <img src="figure-3-3.png" width="1086" height="1046" alt="Supplied AASHTO 1993 Figure 3.3 nomograph for composite modulus of subgrade reaction, with subbase thickness, subbase modulus, and subgrade resilient modulus scales.">
+          <svg id="overlay" viewBox="0 0 1086 1046" aria-hidden="true"><polyline id="path" points=""/><g id="points"></g></svg>
+        </div>
+        <p class="figure-note">The red path follows the supplied digital nomograph. Interpolation stays within its printed ranges; inputs are never clamped or extrapolated.</p>
+        <h2 class="correction-chart-title">Figure 3.6 · Loss-of-Support Correction</h2>
+        <div class="nomograph correction-chart"><img src="figure-3-6.png" width="1241" height="1082" alt="Figure 3.6 log-log chart correcting effective subgrade reaction for loss of support, showing LS lines 0, 1, 2, and 3."><svg id="lossOverlay" viewBox="0 0 1241 1082" aria-hidden="true"><polyline id="lossPath" points=""/><circle id="lossPoint" r="6" hidden/><g id="lossLabels"></g></svg></div>
+        <p class="figure-note">From effective k on the horizontal axis, go up to the selected LS line, then left to read kcorr. <a href="https://www.fhwa.dot.gov/engineering/geotech/pubs/05037/05c.cfm#:~:text=Table%205-45" target="_blank" rel="noopener">FHWA · LS selection guidance</a></p>
+      </section>
+    </div>
+  </main>
+  <dialog id="guide" aria-labelledby="guideTitle"><div class="card-heading"><h2 id="guideTitle"></h2><button id="closeGuide" class="quiet" type="button" aria-label="Close input guide">✕</button></div><p id="guideBody"></p><p id="guideRange"></p><div id="modulusGuideTable" class="guide-materials" hidden>
+  <table>
+    <caption>Table 5-45 · Typical Loss of Support Factors by Material (AASHTO, 1993)</caption>
+    <thead><tr><th scope="col">Type of Material · Elastic Modulus E</th><th scope="col">Loss of Support (LS)</th></tr></thead>
+    <tbody>
+      <tr><td>Cement Treated Granular Base<span>E = 1,000,000–2,000,000 psi</span></td><td>0.0–1.0</td></tr>
+      <tr><td>Cement Aggregate Mixtures<span>E = 500,000–1,000,000 psi</span></td><td>0.0–1.0</td></tr>
+      <tr><td>Asphalt Treated Base<span>E = 350,000–1,000,000 psi</span></td><td>0.0–1.0</td></tr>
+      <tr><td>Bituminous Stabilized Mixtures<span>E = 40,000–300,000 psi</span></td><td>0.0–1.0</td></tr>
+      <tr><td>Lime Stabilized<span>E = 20,000–70,000 psi</span></td><td>1.0–3.0</td></tr>
+      <tr><td>Unbound Granular Materials<span>E = 15,000–45,000 psi</span></td><td>1.0–3.0</td></tr>
+      <tr><td>Fine Grained or Natural Subgrade Materials<span>E = 3,000–40,000 psi</span></td><td>2.0–3.0</td></tr>
+    </tbody>
+  </table>
+  <p class="source">Transcribed from your supplied table. These are typical material modulus and LS ranges; choose project-specific values. Figure 3.3 supports E<sub>SB</sub> from 15,000 to 1,000,000 psi only. Subgrade material values belong to the subgrade assessment, not automatically to the subbase input.</p>
+</div><p class="source">Figure 3.3 model and Figure 3.6 chart supplied by the user. LS material ranges: <a href="https://www.fhwa.dot.gov/engineering/geotech/pubs/05037/05c.cfm#:~:text=Table%205-45" target="_blank" rel="noopener">FHWA Table 5-45</a>. Select project-specific values using the applicable material investigation and design criteria.</p></dialog>
+  <details class="card"><summary>DPWH Manual · Subgrade Reaction Process &amp; Illustrations</summary><p class="manual-note">§§1.9.1–1.9.4, pp.15–16: determine Design CBR, roadbed MR, subbase modulus and thickness; use Figure 1 for composite k, then Figure 2 for loss-of-support correction. The charts are approximate readings. Complete any applicable seasonal or foundation adjustments before using effective k.</p><figure class="manual-figure"><a href="../../assets/dpwh-manual/composite-k.png" target="_blank" rel="noopener"><img src="../../assets/dpwh-manual/composite-k.png" loading="lazy" alt="Figure 1 · Composite k · p.136"></a><figcaption>DPWH Design Procedure Manual for Roads (2017) · Figure 1 · Composite k · p.136 · Click to enlarge.</figcaption></figure><figure class="manual-figure"><a href="../../assets/dpwh-manual/loss-support.png" target="_blank" rel="noopener"><img src="../../assets/dpwh-manual/loss-support.png" loading="lazy" alt="Figure 2 · Loss-of-Support Correction · p.137"></a><figcaption>DPWH Design Procedure Manual for Roads (2017) · Figure 2 · Loss-of-Support Correction · p.137 · Click to enlarge.</figcaption></figure><p class="manual-note">The source Figure 2 includes a 227 pci annotation; the numeric correction remains based on the existing digitized chart curves, not that annotation.</p><figure class="manual-figure"><a href="../../assets/dpwh-manual/subbase-modulus.png" target="_blank" rel="noopener"><img src="../../assets/dpwh-manual/subbase-modulus.png" loading="lazy" alt="Figure 8 · Granular Subbase Modulus · p.143"></a><figcaption>DPWH Design Procedure Manual for Roads (2017) · Figure 8 · Granular Subbase Modulus · p.143 · Click to enlarge.</figcaption></figure><p class="manual-note">Figure 8 is an empirical granular-material correlation; select the appropriate material investigation and modulus. Its structural coefficient a3 is a flexible-pavement parameter and is not an input to the rigid slab equation.</p><figure class="manual-figure"><a href="../../assets/dpwh-manual/loss-support-materials.png" target="_blank" rel="noopener"><img src="../../assets/dpwh-manual/loss-support-materials.png" loading="lazy" alt="Table 10 · Material Modulus and LS · p.128"></a><figcaption>DPWH Design Procedure Manual for Roads (2017) · Table 10 · Material Modulus and LS · p.128 · Click to enlarge.</figcaption></figure></details><script src="model-data.js"></script>
+  <script src="engine.js"></script>
+  <script src="loss-support.js"></script>
+  <script src="nomograph-labels.js"></script><script src="../si-equivalents.js"></script><script src="subgrade.js"></script>
+</body>
+</html>
+
+

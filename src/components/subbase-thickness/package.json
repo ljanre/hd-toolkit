@@ -1,0 +1,10 @@
+{
+  "name": "rn29-figure6-local-calculator",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Standalone local browser calculator for Road Note 29 Figure 6.",
+  "scripts": {
+    "check": "node --check dist/model-data.js && node --check dist/engine.js && node --check dist/app.js && node --check dist/qa.js",
+    "test": "node tests/run-tests.js"
+  }
+}

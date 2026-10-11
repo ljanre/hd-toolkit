@@ -1,0 +1,16 @@
+# Input Defaults
+
+HD Toolkit uses the lower end of a documented recommended range only when the input does not require choosing a project condition. Numerical validation limits and chart boundaries are not recommendations.
+
+| Tool | Starting values and basis |
+| --- | --- |
+| Rigid Pavement | User-requested **rural lower-volume collector, two lanes total** starting case: R=85%, So=0.30, p₀=4.5, pₜ=2.0, traffic=1.00 million ESAL, f′c=24 MPa, Cd=1.00, J=3.8. R is the requested reliability default; So is the supplied rigid-range lower value. Traffic and material/configuration values are explicit assumptions, not universal recommended minima. Foundation mode is automatic: DSB=200 mm (7.87 in), ESB=15,000 psi, MR=1,000 psi (moduli use Figure 3.3 lower plotted bounds), LS=1 for assumed unbound granular material; kcorr rounds to 34 pci. These are a starting chart case, not measured foundation properties. S′c, Ec, ZR and ΔPSI calculate automatically. |
+| Pavement Illustration | Uses Foundation Support Subbase Thickness directly (default 200 mm). Auto mode uses the same thickness for kcorr; with auto-calculate off, thickness remains editable for drawing while kcorr is entered independently. |
+| Concrete Modulus of Rupture | Reliability and concrete strength start blank. Manual PS and z also start blank; reliability-linked PS and z remain automatic. |
+| Corrected Subgrade Reaction | Soil strength, subbase depth/modulus, effective k and loss of support start blank. Chart-domain lower bounds do not select a material or foundation condition. |
+| Determining Subbase Thickness | Traffic and Design CBR start blank; chart limits are not project recommendations. |
+| Determining Design CBR | Measured CBR rows start blank. The fine-grained, soaked CBR confirmation remains checked as requested and must match the actual test conditions. |
+| Coordinate Converter | Coordinates, province and source PTM zone start blank. A selected province can determine its zone; the reverse conversion retains its location-based auto-zone option. |
+| Rainfall Station Locator | Project coordinates start blank. Search radius and result-count settings remain search preferences. |
+
+Rounding increments and tool/method selections remain interface preferences. Existing saved rigid pavement cases still restore their entered values. **Reset to Defaults** replaces the prior rigid case with the collector assumption preset. Other tools retain project-input blanks unless separately documented; Design Traffic retains its requested two-lane defaults of 20 years, DD=0.50, DL=1.00 and example growth 5%. Legacy case migration retains its explicitly documented 24 MPa fallback.

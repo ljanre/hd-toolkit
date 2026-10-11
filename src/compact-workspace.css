@@ -1,0 +1,73 @@
+/* Compact worksheet: one parameter per row, aligned with the illustration. */
+#designForm .field{padding-right:28px}
+#designForm .input-guide-button{position:absolute;right:0;top:50%;transform:translateY(-50%);width:22px;height:22px;min-height:0;padding:0;border:1px solid #b8ccca;border-radius:50%;background:#f5faf8;color:#21675c;font-size:12px;line-height:20px;font-weight:700}
+#designForm .input-guide-button:hover{background:#dcefe7;border-color:#619d8c}
+.input-guide-dialog{width:min(440px,calc(100vw - 32px));max-height:calc(100dvh - 48px);padding:24px;border:1px solid #d3e2de;border-radius:16px;color:var(--ink);background:white;box-shadow:0 20px 80px #142b3b30;overflow:auto}
+.input-guide-dialog::backdrop{background:#102d3c45}
+.input-guide-dialog .guide-reliability-note{padding:10px 12px;margin-bottom:12px;border-radius:7px;background:#edf7f3;color:#185649;font-size:12px;font-weight:600}.guide-deviation-table tbody th{background:white;font-weight:500}.guide-deviation-table tbody td{font-variant-numeric:tabular-nums}
+.guide-deviation-table{margin-top:16px}.guide-deviation-table table{width:100%;border-collapse:collapse;font-size:12px}.guide-deviation-table caption{text-align:left;margin-bottom:8px;font-size:12px;font-weight:600;color:var(--ink)}.guide-deviation-table th,.guide-deviation-table td{border:1px solid #d3e2de;padding:9px 12px;text-align:left}.guide-deviation-table th{background:#f5f8fa;text-transform:none;letter-spacing:0;font-size:12px}.guide-deviation-table .rigid-range td{background:#edf7f3;color:#185649;font-weight:600}.input-guide-dialog .guide-table-note{font-size:10px;line-height:1.5;margin-top:8px;color:var(--muted)}
+.guide-heading{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.guide-close{width:32px;height:32px;padding:0;border:1px solid var(--line);background:#f5f8fa;border-radius:8px;font-size:22px;font-weight:400}
+.input-guide-dialog h2{font-size:20px;line-height:1.35;margin:0 0 8px}.guide-units{display:inline-block;padding:4px 8px;background:#eef7f2;border-radius:5px;color:#246354;font-size:11px}.input-guide-dialog h3{font-size:12px;margin:20px 0 6px}.input-guide-dialog p{font-size:13px;line-height:1.7;margin:0;color:#425b69}.guide-source{display:block;margin-top:22px;font-size:11px}
+@media(max-width:760px){#designForm .input-guide-button{width:26px;height:26px;line-height:24px}#designForm .field{padding-right:32px}}
+@media print{#designForm .input-guide-button,.input-guide-dialog{display:none}}
+.thickness-results{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:#edf7f3;border-bottom:1px solid #d3e7de}
+.thickness-summary{padding:18px;min-width:0}.thickness-summary h3{font-size:12px;font-weight:600;color:#32665b;margin:0 0 10px}.rounded-summary{border-left:1px solid #d3e7de;background:#f6fbf8}.thickness-value{display:flex;align-items:baseline;gap:7px}.thickness-value strong{font-size:36px;letter-spacing:-.04em;color:#124e47;font-variant-numeric:tabular-nums}.thickness-value span{font-size:12px;color:#32665b}.thickness-summary .thickness-conversion{font:10px/1.5 var(--mono);color:var(--muted);margin-top:4px;overflow-wrap:anywhere}
+.rounded-controls{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:12px;padding-top:10px;border-top:1px solid #d3e7de}.rounded-controls .round-toggle{font-size:11px;min-height:28px}.rounded-controls .round-increment{font-size:10px}.rounded-controls .round-select{min-height:32px;padding:5px 7px;font-size:11px}.rounded-controls small{flex-basis:100%;font-size:10px;color:var(--muted);line-height:1.4}
+@media(max-width:430px){.thickness-summary{padding:12px 10px}.thickness-value strong{font-size:28px}.thickness-summary h3{font-size:11px}.rounded-controls .round-increment{flex-wrap:wrap;gap:4px}}
+@media print{.thickness-summary{padding:10px}.thickness-value strong{font-size:24px}}
+#pavementTool.wrap{padding:18px 24px 20px;max-width:1560px}
+#pavementTool .heading{margin-bottom:12px}
+#pavementTool .layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:stretch}
+#pavementTool .card-head{padding:12px 16px;min-height:50px}
+#pavementTool .form-body{padding:10px 16px}
+#designForm .field-grid{grid-template-columns:1fr;gap:4px}
+#designForm .field{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(155px,1fr);align-items:center;gap:12px;position:relative}
+#designForm .field.full{grid-column:auto}
+#designForm .field label{margin:0;min-height:0;font-size:12px;line-height:1.35;gap:8px}
+#designForm .symbol{font-size:13px;flex-shrink:0}
+#designForm .entry input{min-height:28px;padding:3px 8px;font-size:13px}
+#designForm .entry .unit{font-size:10px;padding-right:8px}
+#designForm .field small:not(.error){position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+#designForm .field:focus-within small:not(.error){left:0;top:calc(100% + 4px);width:auto;max-width:100%;height:auto;margin:0;padding:7px 10px;overflow:visible;clip-path:none;white-space:normal;border:1px solid var(--line);border-radius:7px;background:white;box-shadow:0 3px 12px #17384715;z-index:5;font-size:11px}
+#designForm .field small.error{grid-column:1/-1;margin:0;font-size:11px}
+#designForm .group-title{font-size:10px;margin-bottom:6px;letter-spacing:.03em;text-transform:none}
+#designForm .group+.group{padding-top:8px;margin-top:8px}
+#designForm .subbase-input .field{max-width:none}
+#designForm .subbase-input{padding-top:8px;padding-bottom:8px}
+#designForm .form-foot{padding:8px 16px;font-size:10px;line-height:1.4}
+#pavementTool .results{position:static;display:flex;flex-direction:column;min-width:0}
+#pavementSection{flex:1;display:flex;flex-direction:column}
+#pavementSection .pavement-head{flex-direction:row;align-items:center;gap:10px}
+#pavementSection .pavement-head p{display:none}
+#pavementSection .pavement-content{padding:14px;display:flex;flex-direction:column;flex:1}
+#pavementSection .figure-stage{display:flex;flex-direction:column;flex:1}
+#pavementSection .illustration-result{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 16px;padding:18px 20px}
+#pavementSection .illustration-result-label{grid-column:1;align-self:end}
+#pavementSection .illustration-result>div{grid-column:2;grid-row:1/3}
+#pavementSection .illustration-result strong{font-size:42px}
+#pavementSection #dConversions{grid-column:1;align-self:start;font-size:11px}
+#pavementSection .illustration-options{padding:10px 16px;gap:6px 20px}
+#pavementSection .illustration-options small{font-size:10px}
+#pavementSection .figure-topline{padding:9px 16px}
+#pavementSection .figure-viewport{flex:1;display:flex;align-items:center;min-height:230px;padding:16px 0}
+#pavementSection .pavement-svg{min-width:0;width:100%;max-height:none;flex-shrink:0}
+#pavementTool .footer{margin-top:14px;font-size:10px}
+@media(min-width:761px) and (max-width:1100px){#pavementTool.wrap{padding:16px}#pavementTool .layout{gap:12px}#designForm .field{grid-template-columns:minmax(0,1fr) minmax(120px,.9fr);gap:8px}#designForm .field label{font-size:11px}#designForm .entry input{font-size:13px}#pavementSection .illustration-result{grid-template-columns:1fr;padding:14px}#pavementSection .illustration-result>div{grid-column:1;grid-row:2}#pavementSection #dConversions{grid-row:3}#pavementSection .pavement-head{flex-wrap:wrap}}
+@media(max-width:760px){#pavementTool.wrap{padding:16px}#pavementTool .layout{grid-template-columns:1fr}#designForm .entry input{min-height:40px}#designForm .field-grid{gap:9px}#pavementSection .figure-viewport{min-height:200px}#pavementSection .pavement-head{flex-wrap:wrap}}
+@media(max-width:430px){#designForm .field{grid-template-columns:minmax(0,1fr) minmax(130px,1fr);gap:8px}#designForm .field label{font-size:11px}#pavementSection .illustration-result{padding:14px;gap:5px 8px}#pavementSection .illustration-result strong{font-size:34px}#pavementSection .illustration-unit{font-size:12px}#pavementSection #dConversions{font-size:10px}#pavementSection .pavement-svg{min-width:480px}}
+@media print{#pavementTool.wrap{padding:0}#pavementTool .layout{grid-template-columns:1fr 1fr;gap:12px}#designForm .entry input{min-height:0}#designForm .field label{font-size:9px}#designForm .field{grid-template-columns:minmax(0,1fr) minmax(100px,1fr)}#designForm .field:focus-within small:not(.error){display:none}#pavementSection .pavement-svg{min-width:0}#pavementSection .figure-viewport{min-height:0}}
+#designForm .field.has-si{row-gap:2px}#designForm .has-si>label{grid-row:1/3}#designForm .has-si>.entry{grid-column:2;grid-row:1}#designForm .si-equivalent{grid-column:2;grid-row:2;font-size:10px;color:#21675c;line-height:1.4;font-variant-numeric:tabular-nums;white-space:normal;padding:1px 0 2px}#designForm .has-si .input-guide-button{top:15px}
+@media(max-width:430px){#pavementSection .pavement-svg{min-width:0}#pavementSection .figure-viewport{overflow-x:hidden}}@media print{#pavementSection .pavement-svg{min-width:0}}
+.concrete-auto-summary{margin:0;padding:7px 16px;border-top:1px solid var(--line);background:#edf7f3;font-size:10px;color:#21675c;line-height:1.5}
+.input-guide-dialog.drainage-guide{width:min(650px,calc(100vw - 32px))}.guide-table-scroll{overflow-x:auto}.guide-drainage-table table{min-width:490px;font-variant-numeric:tabular-nums}.guide-drainage-table td{white-space:nowrap;text-align:center}.guide-drainage-table thead th{text-align:center}.guide-drainage-table tbody tr:nth-child(even){background:#f7fafb}
+.foundation-inputs{margin:14px 0}.foundation-status{font-size:11px;line-height:1.6;color:var(--muted)}.foundation-steps{margin-top:22px}.foundation-steps>summary{padding:18px 22px;font-size:14px;font-weight:600;cursor:pointer}.foundation-steps-body{padding:0 22px 22px}.foundation-steps-body ol{padding-left:22px}.foundation-steps-body li{padding:12px 0 24px}.foundation-steps-body p{font-size:12px;line-height:1.7}.foundation-steps-body h3{font-size:14px}.foundation-steps-body output{font-family:var(--mono);font-weight:600;color:var(--dark)}.foundation-nomograph{position:relative;max-width:720px;margin:16px auto;border:1px solid var(--line);background:#fff}.foundation-nomograph img{display:block;width:100%;height:auto}.foundation-nomograph svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.foundation-nomograph polyline{fill:none;stroke:#c43127;stroke-width:4;stroke-linejoin:round}.foundation-nomograph circle{fill:#c43127;stroke:#fff;stroke-width:2}
+.collector-preset-note{margin:0 18px 12px;border:1px solid #dce5eb;border-radius:8px;background:#f8fafb;padding:10px 12px}.collector-preset-note summary{font-size:11px;font-weight:600;cursor:pointer;color:#29495e}.collector-preset-note p{font-size:11px;line-height:1.6;color:var(--muted);margin:9px 0}
+.foundation-auto-toggle{margin:4px 0 6px;width:fit-content}.foundation-mode-hint{display:block;font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.pavement-nomographs{margin-top:20px}.pavement-nomograph-body{padding:16px 20px}.pavement-nomograph-body figure{margin:0 0 20px}.pavement-nomograph-body figcaption{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:600;flex-wrap:wrap}.pavement-nomograph-body output{color:var(--dark);font-family:var(--mono)}.rigid-equation{background:#f5f8fa;border:1px solid var(--line);border-radius:8px;padding:14px;font:12px/1.8 var(--mono);overflow-x:auto}.foundation-steps-body>ol+ol{margin-top:0}.foundation-steps-body .equation{flex-wrap:wrap}
+.nomograph-callout rect{fill:#fff;fill-opacity:.96;stroke:#c43127;stroke-width:1.5}.nomograph-callout text{font:600 22px Segoe UI,Arial,sans-serif;fill:#8c211b;stroke:none}.nomograph-callout path{fill:none;stroke:#c43127;stroke-width:1.5}.nomograph-callout circle{fill:#c43127;stroke:#fff;stroke-width:2}
+.load-transfer-figure{grid-column:1/-1;min-width:0;margin:8px 0 0;padding:6px;border:1px solid #cbdcdd;border-radius:9px;background:#fff}
+.load-transfer-figure figcaption{font-size:13px;font-weight:600;color:#213e4d;margin-bottom:8px}
+.load-transfer-figure img{display:block;width:100%;height:auto}
+.load-transfer-figure #jNoFigure{padding:22px;text-align:center;border:1px dashed #cbdcdd;border-radius:6px;color:#57717e;font-size:13px}
+#jCondition{margin-bottom:8px}

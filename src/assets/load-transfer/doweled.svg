@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 350" role="img" aria-labelledby="title desc">
+<title id="title">Two-lane doweled PCC pavement — schematic plan</title><desc id="desc">Dowel bars span transverse joints and transfer load between slabs. Tie bars span the longitudinal joint between lanes.</desc>
+<defs><pattern id="pcc" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#f3f6f7"/><path d="M5 8l4-3 3 5zM17 18h2" fill="none" stroke="#d0d9dd"/></pattern><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#176d77"/></marker></defs>
+<rect width="860" height="350" rx="10" fill="white"/>
+<g font-family="Segoe UI,Arial,sans-serif" fill="#213e4d"><text x="28" y="30" font-size="18" font-weight="700">DOWELED PCC · TWO-LANE PLAN</text><text x="28" y="52" font-size="13" fill="#57717e">Concept redrawn from the supplied typical pavement plan · Not to scale</text>
+<rect x="85" y="85" width="555" height="150" fill="url(#pcc)" stroke="#344f5c" stroke-width="2"/>
+<path d="M85 160H640" stroke="#176d77" stroke-width="2" stroke-dasharray="10 5"/>
+<path d="M225 85V235M365 85V235M505 85V235" stroke="#344f5c" stroke-width="2"/>
+<path d="M140 146V174M175 146V174M280 146V174M315 146V174M420 146V174M455 146V174M560 146V174M595 146V174" stroke="#176d77" stroke-width="4"/>
+<g stroke="#ae6528" stroke-width="4"><path d="M211 101H239M211 117H239M211 133H239M211 185H239M211 201H239M211 217H239M351 101H379M351 117H379M351 133H379M351 185H379M351 201H379M351 217H379M491 101H519M491 117H519M491 133H519M491 185H519M491 201H519M491 217H519"/></g>
+<text x="103" y="119" font-size="15">Lane 1</text><text x="103" y="210" font-size="15">Lane 2</text>
+<g fill="none" stroke="#176d77" stroke-width="1.5" marker-end="url(#arrow)"><path d="M685 100H665L505 86"/><path d="M685 157H652L600 160"/><path d="M685 212H665L519 201"/><path d="M210 284H165L140 175"/></g>
+<text x="687" y="93" font-size="14">Transverse joint</text><text x="687" y="112" font-size="12" fill="#57717e">Doweled connection</text>
+<text x="687" y="149" font-size="14">Longitudinal joint</text><text x="687" y="168" font-size="12" fill="#57717e">Between lanes</text>
+<text x="687" y="204" font-size="14">Dowel bars</text><text x="687" y="223" font-size="12" fill="#57717e">Transfer load across joint</text>
+<text x="216" y="280" font-size="14">Tie bars at longitudinal joint</text><text x="216" y="301" font-size="12" fill="#57717e">Brown: dowel bars · Teal: tie bars · Details are schematic.</text>
+<path d="M28 326H832" stroke="#d0d9dd"/><text x="28" y="345" font-size="12" fill="#57717e">Bar sizes, spacing and joint details must follow the approved project drawings.</text></g></svg>

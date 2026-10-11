@@ -1,0 +1,52 @@
+import {readFile} from 'node:fs/promises';
+import {runInNewContext} from 'node:vm';
+import assert from 'node:assert/strict';
+const base=new URL('../src/components/flexible-pavement/',import.meta.url);
+const code=await readFile(new URL('engine.js',base),'utf8'),context={};runInNewContext(code,context);const C=context.FlexibleCalc;
+const fhwa={w:11600000,r:90,so:.45,p0:4.2,pt:2.5,mr:7500};
+assert.ok(Math.abs(C.solve(fhwa)-5.07)<.01,'FHWA Appendix C example: required SN 5.07');
+// Appendix C's printed SN1=2.62 does not reproduce C.2 with its stated inputs.
+// Verify the support-layer solution by substitution rather than matching that rounded value.
+const surfaceSN=C.solve(fhwa,40000);
+const surfaceLog=-1.282*.45+9.36*Math.log10(surfaceSN+1)-.20+Math.log10(1.7/2.7)/(.40+1094/(surfaceSN+1)**5.19)+2.32*Math.log10(40000)-8.07;
+assert.ok(Math.abs(surfaceLog-Math.log10(11600000))<1e-10);
+const dpwh={w:3510000,r:85,so:.45,p0:4.2,pt:2.5,mr:9000};
+assert.ok(Math.abs(C.solve(dpwh)-3.8165)<.001,'DPWH page 27: SN 3.8165');
+const p={...dpwh,w:3513898.37,baseMr:30000,subMr:15000,years:20,a1:.38,a2:.14,a3:.11,m2:1,m3:1,d2:250,d3:250,increment:25,auto:true};
+const result=C.calculate(p);assert.equal(result.errors.length,0);assert.equal(result.pass,true);assert.equal(result.d1%25,0);
+assert.ok(result.capacity>=p.w);assert.ok(result.surface>=result.sn1);assert.ok(result.surface+result.base>=result.sn2);assert.ok(result.sn>=result.required);
+assert.equal(C.calculate({...p,auto:false,d1:result.d1}).pass,true);
+assert.equal(C.calculate({...p,auto:false,d1:1}).pass,false);
+assert.ok(C.solve({...dpwh,w:dpwh.w*2})>C.solve(dpwh));assert.ok(C.solve({...dpwh,mr:18000})<C.solve(dpwh));
+for(const patch of [{w:NaN},{p0:2,pt:2},{r:100},{m2:.9},{baseMr:10000},{a3:.5},{d2:-1},{mr:Infinity},{years:20.5}])assert.ok(C.calculate({...p,...patch}).errors.length);
+assert.equal(C.z(85),-1.037);assert.equal(C.z(97),-1.881);assert.ok(Math.abs(C.z(87.5)+1.1595)<1e-10);
+const html=await readFile(new URL('index.html',base),'utf8'),nodes=new Map(),stored=new Map();
+function node(){return {value:'',checked:false,readOnly:false,innerHTML:'',textContent:'',events:{},classList:{toggle(){}},setAttribute(){},removeAttribute(){},closest(){return this;},addEventListener(type,fn){this.events[type]=fn;}};}
+for(const match of html.matchAll(/\bid="([^"]+)"/g))nodes.set(match[1],node());
+context.document={getElementById:id=>nodes.get(id),querySelectorAll:()=>[]};context.localStorage={getItem:key=>stored.get(key),setItem:(key,value)=>stored.set(key,value)};
+runInNewContext(await readFile(new URL('flexible.js',base),'utf8'),context);
+assert.equal(nodes.get('r').value,'85');assert.equal(nodes.get('so').value,'0.4');assert.equal(nodes.get('w').value,'1.00');assert.notEqual(nodes.get('required').textContent,'—');assert.equal(nodes.get('d1').readOnly,true);
+for(const [key,value] of Object.entries({years:20,mr:9000,baseMr:30000,subMr:15000,d2:200,d3:200}))assert.equal(Number(nodes.get(key).value),value);
+assert.ok(nodes.get('status').textContent.includes('Sample collector road'));assert.ok(nodes.get('checkRows').innerHTML.includes('data-check="true"'));
+for(const [key,value] of Object.entries(p))if(nodes.has(key)&&typeof value==='number')nodes.get(key).value=String(value);
+nodes.get('w').value=String(p.w);nodes.get('w').events.input();nodes.get('w').events.blur();
+assert.equal(nodes.get('w').value,'3.51');assert.ok(!nodes.get('required').textContent.includes('—'));assert.ok(nodes.get('curve').innerHTML.includes('polyline'));
+assert.equal(nodes.get('adoptedThickness').textContent,String(result.d1));assert.ok(nodes.get('rawConversion').textContent.includes(' in'));assert.ok(nodes.get('checkRows').innerHTML.includes('data-check="true"'));
+nodes.get('w').events.focus();assert.equal(nodes.get('w').value,'3513898.37');assert.equal(JSON.parse(stored.get('hd-flexible-pavement-v1')).w,3513898.37);
+const automaticThickness=nodes.get('d1').value;nodes.get('auto').checked=false;nodes.get('auto').events.change();assert.equal(nodes.get('d1').value,automaticThickness);assert.equal(nodes.get('d1').readOnly,false);
+assert.equal(nodes.get('increment').disabled,true);
+nodes.get('d1').value='1';nodes.get('designForm').events.input({target:{id:'d1'}});assert.ok(nodes.get('status').textContent.includes('fails'));
+nodes.get('auto').checked=true;nodes.get('auto').events.change();assert.equal(nodes.get('d1').value,automaticThickness);assert.equal(nodes.get('d1').readOnly,true);
+assert.equal(nodes.get('increment').disabled,false);
+nodes.get('mr').value='';nodes.get('designForm').events.input({target:{id:'mr'}});assert.equal(nodes.get('adopted').textContent,'—');assert.equal(nodes.get('d1').value,'');assert.ok(!nodes.get('curve').innerHTML.includes('polyline'));assert.ok(nodes.get('checkRows').innerHTML.includes('Pending'));
+// Refresh preserves project edits; reset restores the complete sample.
+const ui=await readFile(new URL('flexible.js',base),'utf8');runInNewContext(ui,context);assert.equal(nodes.get('mr').value,'');
+nodes.get('reset').events.click();assert.equal(nodes.get('mr').value,'9000');assert.equal(nodes.get('w').value,'1.00');assert.notEqual(nodes.get('adopted').textContent,'—');
+const oldDefaults={r:85,so:.40,p0:4.2,pt:2,years:20,mr:null,baseMr:null,subMr:null,a1:.38,a2:.15,a3:.11,m2:1,m3:1,d1:null,d2:null,d3:null,increment:25,auto:true,w:null};
+stored.set('hd-flexible-pavement-v1',JSON.stringify(oldDefaults));runInNewContext(ui,context);assert.equal(nodes.get('mr').value,'9000');assert.equal(nodes.get('w').value,'1.00','Untouched earlier defaults migrate to the sample');
+const parentMessages=[],events={};context.window={parent:{postMessage:message=>parentMessages.push(message)},addEventListener:(type,fn)=>events[type]=fn};nodes.get('calculationSteps').hidden=true;
+runInNewContext(ui,context);assert.equal(parentMessages[0].type,'hd-toolkit-flexible-ready');
+events.message({source:{},data:{type:'hd-toolkit-admin-state',enabled:true}});assert.equal(nodes.get('calculationSteps').hidden,true);
+events.message({source:context.window.parent,data:{type:'hd-toolkit-admin-state',enabled:true}});assert.equal(nodes.get('calculationSteps').hidden,false);nodes.get('calculationSteps').open=true;
+events.message({source:context.window.parent,data:{type:'hd-toolkit-admin-state',enabled:false}});assert.equal(nodes.get('calculationSteps').hidden,true);assert.equal(nodes.get('calculationSteps').open,false);
+console.log('Flexible pavement: DPWH/FHWA reference solutions, layer checks, limits, monotonicity, precision and UI invalidation passed.');

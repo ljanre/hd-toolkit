@@ -1,0 +1,11 @@
+dist/
+node_modules/
+.DS_Store
+Thumbs.db
+tmp/
+Local Archive/
+GitHub-Upload/
+GitHub-Upload.zip
+.env
+.env.*
+*.log

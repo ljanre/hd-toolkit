@@ -1,0 +1,13 @@
+{
+  "name": "hd-toolkit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Highways Design Toolkit website",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/test.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

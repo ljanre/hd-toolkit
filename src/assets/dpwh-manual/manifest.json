@@ -1,0 +1,160 @@
+{
+  "source": "DESIGN PROCEDURE MANUAL FOR ROADS.pdf",
+  "sourceSha256": "90930f71c09ec9ac7acc034009cfe959dd1b9db1bd7ef12bd4827f592475babc",
+  "edition": "2017 (preface, page 1)",
+  "assets": {
+    "axle-loads-2-and-3": {
+      "page": 18,
+      "cropNormalized": [
+        0.17,
+        0.11,
+        0.88,
+        0.89
+      ]
+    },
+    "axle-loads-4": {
+      "page": 19,
+      "cropNormalized": [
+        0.17,
+        0.11,
+        0.89,
+        0.4
+      ]
+    },
+    "lane-distribution": {
+      "page": 124,
+      "cropNormalized": [
+        0.25,
+        0.1,
+        0.78,
+        0.3
+      ]
+    },
+    "reliability": {
+      "page": 124,
+      "cropNormalized": [
+        0.17,
+        0.3,
+        0.88,
+        0.52
+      ]
+    },
+    "reliability-z": {
+      "page": 125,
+      "cropNormalized": [
+        0.14,
+        0.1,
+        0.88,
+        0.67
+      ]
+    },
+    "standard-deviation": {
+      "page": 125,
+      "cropNormalized": [
+        0.29,
+        0.68,
+        0.73,
+        0.81
+      ]
+    },
+    "strength-percentiles": {
+      "page": 126,
+      "cropNormalized": [
+        0.3,
+        0.1,
+        0.72,
+        0.34
+      ]
+    },
+    "load-transfer": {
+      "page": 126,
+      "cropNormalized": [
+        0.29,
+        0.35,
+        0.75,
+        0.61
+      ]
+    },
+    "drainage-quality": {
+      "page": 126,
+      "cropNormalized": [
+        0.23,
+        0.64,
+        0.8,
+        0.85
+      ]
+    },
+    "drainage-coefficient": {
+      "page": 127,
+      "cropNormalized": [
+        0.16,
+        0.1,
+        0.84,
+        0.37
+      ]
+    },
+    "cbr-sample-count": {
+      "page": 127,
+      "cropNormalized": [
+        0.26,
+        0.37,
+        0.75,
+        0.87
+      ]
+    },
+    "cbr-procedure": {
+      "page": 15,
+      "cropNormalized": [
+        0.14,
+        0.33,
+        0.9,
+        0.66
+      ]
+    },
+    "composite-k": {
+      "page": 136,
+      "cropNormalized": [
+        0.11,
+        0.1,
+        0.9,
+        0.65
+      ]
+    },
+    "loss-support": {
+      "page": 137,
+      "cropNormalized": [
+        0.11,
+        0.1,
+        0.92,
+        0.62
+      ]
+    },
+    "subbase-thickness": {
+      "page": 146,
+      "cropNormalized": [
+        0.09,
+        0.12,
+        0.91,
+        0.86
+      ]
+    },
+    "subbase-modulus": {
+      "page": 143,
+      "cropNormalized": [
+        0.11,
+        0.1,
+        0.92,
+        0.82
+      ]
+    },
+    "loss-support-materials": {
+      "page": 128,
+      "cropNormalized": [
+        0.12,
+        0.1,
+        0.94,
+        0.55
+      ]
+    }
+  }
+}
