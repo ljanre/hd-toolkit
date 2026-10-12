@@ -23,21 +23,21 @@ function mount(saved){
 }
 const app=mount();
 assert.equal(app.nodes.get('fcUnitMPa').checked,false);
-assert.equal(Number(app.nodes.get('fcMPa').value),3480.912);
+assert.equal(Number(app.nodes.get('fcMPa').value),3500);
 const initialConcreteEc=app.result().n.ec;
 app.nodes.get('fcUnitMPa').checked=true;app.nodes.get('fcUnitMPa').events.change.call(app.nodes.get('fcUnitMPa'));
-assert.equal(Number(app.nodes.get('fcMPa').value),24);
+assert.ok(Math.abs(Number(app.nodes.get('fcMPa').value)-3500/145.038)<1e-12);
 assert.ok(Math.abs(app.result().n.ec-initialConcreteEc)<1e-8,'Unit conversion must preserve Ec');
-const mpaRestored=mount(app.saved());assert.equal(mpaRestored.nodes.get('fcUnitMPa').checked,true);assert.equal(Number(mpaRestored.nodes.get('fcMPa').value),24);
+const mpaRestored=mount(app.saved());assert.equal(mpaRestored.nodes.get('fcUnitMPa').checked,true);assert.ok(Math.abs(Number(mpaRestored.nodes.get('fcMPa').value)-3500/145.038)<1e-12);
 app.nodes.get('fcUnitMPa').checked=false;app.nodes.get('fcUnitMPa').events.change.call(app.nodes.get('fcUnitMPa'));
-assert.equal(Number(app.nodes.get('fcMPa').value),3480.912);
+assert.equal(Number(app.nodes.get('fcMPa').value),3500);
 app.nodes.get('fcMPa').value='';app.nodes.get('designForm').events.input();
 app.nodes.get('fcUnitMPa').checked=true;app.nodes.get('fcUnitMPa').events.change.call(app.nodes.get('fcUnitMPa'));
 assert.equal(app.nodes.get('fcMPa').value,'','Changing units must preserve a blank input');
 app.nodes.get('resetInputs').events.click();assert.equal(app.nodes.get('fcUnitMPa').checked,false);
 assert.equal(app.nodes.get('scStandard').checked,true);
 assert.ok(Math.abs(app.result().n.sc-635.5525)<1e-8);
-assert.ok(Math.abs(app.result().n.ec/1e6-3.362957491)<1e-9);
+assert.ok(Math.abs(app.result().n.ec/1e6-57000*Math.sqrt(3500)/1e6)<1e-9);
 app.nodes.get('fcMPa').value=String(30*145.038);app.nodes.get('designForm').events.input();
 assert.ok(Math.abs(app.result().n.sc-635.5525)<1e-8,'Specified Sc is independent of compressive strength');
 app.nodes.get('scStandard').checked=false;app.nodes.get('scStandard').events.change();
@@ -110,7 +110,7 @@ assert.ok(Math.abs(app.result().n.w-38151550.46)<1e-7,'Display rounding must pre
 traffic.events.focus.call(traffic);traffic.value='';app.nodes.get('designForm').events.input();assert.equal(app.result(),null);traffic.events.blur.call(traffic);
 app.nodes.get('resetInputs').events.click();
 const projectKeys=['r','wMillion','p0','pt','dpsi','fcMPa','sc','ecMillion','cd','j','k'];
-const collector={r:85,so:0.30,wMillion:1,p0:4.5,pt:2,dpsi:2.5,fcMPa:24,cd:1,j:3.8,k:34};
+const collector={r:85,so:0.30,wMillion:1,p0:4.5,pt:2,dpsi:2.5,fcMPa:3500/145.038,cd:1,j:3.8,k:34};
 for(const [key,value] of Object.entries(collector)){assert.equal(Number(app.nodes.get(key).value),key==='fcMPa'?Number((value*145.038).toPrecision(15)):value,key);assert.equal(app.context.PavementCalc.DEFAULT_INPUTS[key],value,key);}
 assert.ok(app.result()?.dMm>0,'Collector assumptions calculate on startup');
 assert.equal(app.nodes.get('errors').hidden,true);

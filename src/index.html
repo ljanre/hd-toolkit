@@ -353,7 +353,7 @@
   const MAX_IN = 60;
   const TABLE = [[50,0],[60,-0.253],[70,-0.524],[75,-0.674],[80,-0.841],[85,-1.037],[90,-1.282],[91,-1.340],[92,-1.405],[93,-1.476],[94,-1.555],[95,-1.645],[96,-1.751],[97,-1.881],[98,-2.045],[99,-2.327],[99.9,-3.090],[99.99,-3.750]];
   const DEFAULTS = {r:92,so:0.35,wMillion:42.23,p0:4.5,pt:2.5,dpsi:2,fcMPa:24,sc:600,ecMillion:3.372,cd:1,j:3.8,k:215,roundStep:10,trialMm:null,lookupSource:'supplied'};
-  const DEFAULT_INPUTS={...DEFAULTS,r:85,so:0.30,wMillion:1,p0:4.5,pt:2,dpsi:2.5,fcMPa:24,scStandard:true,scSpecified:550,cd:1,j:3.8,jCondition:'undoweled-aggregate',k:34,foundation:{mode:'auto',source:'composite',material:'unbound',dsb:200/25.4,esb:15000,mr:1000,ls:1,adjusted:null}};
+  const DEFAULT_INPUTS={...DEFAULTS,r:85,so:0.30,wMillion:1,p0:4.5,pt:2,dpsi:2.5,fcMPa:3500/145.038,scStandard:true,scSpecified:550,cd:1,j:3.8,jCondition:'undoweled-aggregate',k:34,foundation:{mode:'auto',source:'composite',material:'unbound',dsb:200/25.4,esb:15000,mr:1000,ls:1,adjusted:null}};
   const NUMERIC_KEYS = ['r','so','wMillion','p0','pt','dpsi','fcMPa','sc','ecMillion','cd','j','k'];
   const LABELS = {r:'Reliability R',so:'Standard deviation So',wMillion:'Design traffic W18',p0:'Initial serviceability p₀',pt:'Terminal serviceability pt',dpsi:'Serviceability loss ΔPSI',fcMPa:'Concrete compressive strength f′c',sc:'Modulus of rupture Sc',ecMillion:'Concrete elastic modulus Ec',cd:'Drainage coefficient Cd',j:'Load transfer coefficient J',k:'Corrected k'};
   function table(source){return TABLE.map(function(row){return [row[0],row[0]===98&&source==='fhwa'?-2.054:row[1]];});}
