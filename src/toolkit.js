@@ -46,6 +46,13 @@
       link.classList.toggle('nav-current', selected);
       if (selected) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
+      if (selected) {
+        const group = link.closest('.tool-group');
+        if (group) group.open = true;
+      }
+    });
+    document.querySelectorAll('.tool-group').forEach(group => {
+      group.classList.toggle('has-current', Boolean(group.querySelector('[aria-current="page"]')));
     });
     document.title = 'HD Toolkit | ' + tools[active].title;
     const skip = document.querySelector('.skip-link');

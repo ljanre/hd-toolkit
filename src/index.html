@@ -31,7 +31,7 @@
     @media(max-width:400px){.figure-controls{grid-template-columns:1fr}}
     @media print{.pavement-card{break-inside:avoid;margin-top:14px}.pavement-content{padding:10px 13px}.pavement-head p{font-size:9px}.pavement-svg{min-width:0;width:100%;max-height:310px}.figure-topline{font-size:8px;padding:7px 9px}.figure-topline strong{font-size:9px}.figure-controls{display:none!important}.pavement-head .pill{font-size:8px}.section-link{display:none}}
   </style>
-  <link rel="stylesheet" href="./toolkit.css">
+  <link rel="stylesheet" href="./toolkit.css?v=grouped-navigation-1">
   <link rel="stylesheet" href="./ui-refinement.css">
   <link rel="stylesheet" href="./compact-workspace.css">
   <link rel="stylesheet" href="./engineering-section.css">
@@ -42,17 +42,30 @@
 <aside class="toolkit-sidebar" id="toolkitSidebar" aria-label="Toolkit navigation">
   <a class="toolkit-brand" href="./"><span class="toolkit-mark">HD</span><span class="brand-label">HD Toolkit<small>Highways Design Toolkit</small></span></a>
   <p class="nav-caption">DESIGN WORKSPACE</p>
-  <nav>
-    <a data-tool="traffic" hidden href="#trafficTool" title="Design Traffic"><span aria-hidden="true">⇄</span><span class="nav-label">Design Traffic</span></a>
-    <a data-tool="cbr" href="#cbrTool" title="Design CBR"><span aria-hidden="true">◫</span><span class="nav-label">Design CBR</span></a>
-    <a class="nav-current" data-tool="pavement" href="#pavementTool" aria-current="page" title="Rigid Pavement Design"><span aria-hidden="true">▤</span><span class="nav-label">Rigid Pavement Design</span></a>
-    <a data-tool="flexible" hidden href="#flexibleTool" title="Flexible Pavement Design"><span aria-hidden="true">▥</span><span class="nav-label">Flexible Pavement Design</span></a>
-    <a data-tool="subgrade" hidden href="#subgradeTool" title="Corrected Subgrade Reaction"><span aria-hidden="true">▱</span><span class="nav-label">Corrected Subgrade Reaction</span></a>
-    <a data-tool="subbase" href="#subbaseTool" title="Subbase Thickness Design"><span aria-hidden="true">▰</span><span class="nav-label">Subbase Thickness Design</span></a>
-    <a data-tool="strength" hidden href="#strengthTool" title="Concrete Modulus of Rupture"><span aria-hidden="true">◇</span><span class="nav-label">Concrete Modulus of Rupture</span></a>
-    <a data-tool="rainfall" hidden href="#rainfallTool" title="Rainfall station locator"><span aria-hidden="true">☂</span><span class="nav-label">Rainfall Station Locator</span></a>
-    <a data-tool="culvert" href="#culvertTool" title="Culvert Hydraulics" hidden><span aria-hidden="true">▱</span><span class="nav-label">Culvert Hydraulics</span></a>
-    <a data-tool="coordinates" href="#coordinatesTool" title="PRS92 ⇄ WGS 84"><span aria-hidden="true">⌖</span><span class="nav-label">PRS92 ⇄ WGS 84</span></a>
+  <nav aria-label="Tools">
+    <details class="tool-group" data-tool-group="pavement" open>
+      <summary title="Pavement"><span class="group-icon" aria-hidden="true">▤</span><span class="group-label">Pavement</span></summary>
+      <div class="tool-group-items">
+        <a data-tool="traffic" hidden href="#trafficTool" title="Design Traffic"><span aria-hidden="true">⇄</span><span class="nav-label">Design Traffic</span></a>
+        <a data-tool="cbr" href="#cbrTool" title="Design CBR"><span aria-hidden="true">◫</span><span class="nav-label">Design CBR</span></a>
+        <a class="nav-current" data-tool="pavement" href="#pavementTool" aria-current="page" title="Rigid Pavement Design"><span aria-hidden="true">▤</span><span class="nav-label">Rigid Pavement Design</span></a>
+        <a data-tool="flexible" hidden href="#flexibleTool" title="Flexible Pavement Design"><span aria-hidden="true">▥</span><span class="nav-label">Flexible Pavement Design</span></a>
+        <a data-tool="subbase" href="#subbaseTool" title="Subbase Thickness"><span aria-hidden="true">▰</span><span class="nav-label">Subbase Thickness</span></a>
+      </div>
+    </details>
+    <details class="tool-group" data-tool-group="hydraulics" >
+      <summary title="Hydraulics"><span class="group-icon" aria-hidden="true">≈</span><span class="group-label">Hydraulics</span></summary>
+      <div class="tool-group-items">
+        <span class="tool-unavailable" aria-disabled="true"><span aria-hidden="true">▱</span><span class="nav-label">Culvert <small>TBD</small></span></span>
+      </div>
+    </details>
+    <details class="tool-group" data-tool-group="others" >
+      <summary title="Others"><span class="group-icon" aria-hidden="true">⌖</span><span class="group-label">Others</span></summary>
+      <div class="tool-group-items">
+        <a data-tool="coordinates" href="#coordinatesTool" title="PRS92"><span aria-hidden="true">⌖</span><span class="nav-label">PRS92</span></a>
+        <a data-tool="rainfall" hidden href="#rainfallTool" title="Rainfall"><span aria-hidden="true">☂</span><span class="nav-label">Rainfall</span></a>
+      </div>
+    </details>
   </nav>
   <div class="sidebar-bottom">
   <div class="sidebar-note"><span class="sidebar-dot"></span> Browser-based workspace<p>Your design inputs are saved in this browser on this device.</p></div>
@@ -338,7 +351,7 @@
 <script src="./components/design-traffic/component.js"></script>
 <script src="./components/design-cbr/component.js?v=pit-plan-2"></script>
 <script src="./admin-mode.js"></script>
-<script src="./toolkit.js"></script>
+<script src="./toolkit.js?v=grouped-navigation-1"></script>
 <script src="./components/input-guide.js?v=stable-chart-3"></script>
 <script src="./components/si-equivalents.js"></script>
 <script src="./components/subgrade-reaction/model-data.js"></script>
