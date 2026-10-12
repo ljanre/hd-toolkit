@@ -10,3 +10,5 @@
 .sample-input-row .sample-station[aria-invalid=true]{border-color:#b42318;background:#fff0ed}
 
 #pitLengthField{grid-column:1/-1}.pit-entry.pit-calculated{background:#fff9df;border-color:#ead998}.pit-calculated output{flex:1;min-height:36px;box-sizing:border-box;padding:7px 9px;font-size:15px;font-weight:650;color:#294b59}.pit-plan-meta{font-size:11px;line-height:1.5;margin:4px 0;color:#536977}.pit-plan-meta output{font-variant-numeric:tabular-nums}.pit-plan-meta span{padding:0 5px}@media(max-width:450px){.pit-fields{grid-template-columns:1fr 1fr}.pit-calculated output{min-height:42px;padding-top:10px}}
+
+.sample-warning-impact{margin-top:10px;padding-top:9px;border-top:1px solid #e7cba6}.sample-warning-impact>strong{font-size:12px}.sample-warning-impact ul{padding-left:17px;margin:6px 0;line-height:1.6;font-size:12px}.sample-warning-impact li+li{margin-top:5px}.sample-warning .sample-warning-adoption{margin-top:9px;padding-top:8px;border-top:1px solid #e7cba6;line-height:1.6}.sample-warning-impact b,.sample-warning-adoption b{font-weight:650}
