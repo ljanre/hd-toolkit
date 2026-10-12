@@ -15,7 +15,13 @@ for(const key of ['DSB','ESB','MR'])for(const value of [0,-1,Infinity])assert.eq
 assert.equal(context.NomographExtension.calculate({DSB:8,ESB:50000,MR:7000}).result,calculate({DSB:8,ESB:50000,MR:7000}).result);
 assert.match(context.NomographExtension.plot({DSB:8,ESB:50000,MR:30000},'figure-3-3.png'),/30,000 psi/);
 assert.match(context.NomographExtension.plot({DSB:8,ESB:50000,MR:30000},'figure-3-3.png'),/Turning Point/);
-assert.equal(context.NomographExtension.plot({DSB:8,ESB:50000,MR:7000},'figure-3-3.png'),'','Within-range chart must not show a second plot');
+assert.match(context.NomographExtension.plot({DSB:8,ESB:50000,MR:7000},'figure-3-3.png'),/viewBox="-40 -30 1420 1230"/);
+assert.match(context.NomographExtension.plot({DSB:8,ESB:50000,MR:30000},'figure-3-3.png'),/viewBox="-40 -30 1420 1230"/);
+assert.match(context.NomographExtension.plot({DSB:null,ESB:null,MR:null},'figure-3-3.png'),/viewBox="-40 -30 1420 1230"/);
+const stableTrace={innerHTML:''},stableContainer={innerHTML:'retained background',querySelector:()=>stableTrace};
+context.NomographExtension.updatePlot(stableContainer,context.NomographExtension.plot({DSB:8,ESB:50000,MR:30000},'figure-3-3.png'));
+assert.equal(stableContainer.innerHTML,'retained background','Updates must preserve the background image node');
+assert.match(stableTrace.innerHTML,/Turning Point/);
 for(const boundary of [1000,20000]){
   const mr=boundary===1000?boundary-.001:boundary+.001;
   const original=calculate({DSB:8,ESB:50000,MR:boundary}).result;

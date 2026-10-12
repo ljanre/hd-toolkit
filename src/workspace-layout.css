@@ -167,3 +167,5 @@ body:not(.admin-mode) #foundationSteps{display:none!important}
 }
 
 .nomograph-extension:has(svg)+.foundation-nomograph{display:none}
+
+.nomograph-extension-note{min-height:3.2em;margin:8px 0 0;color:#b42318!important;font-size:12px;line-height:1.6}.nomograph-extension svg{margin:0;aspect-ratio:1420/1230}

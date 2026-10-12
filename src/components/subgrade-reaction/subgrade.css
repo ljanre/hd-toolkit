@@ -8,3 +8,5 @@
 .nomograph-extension svg{display:block;width:100%;height:auto;border:1px solid #dce5eb;border-radius:8px;margin:12px 0}
 
 .nomograph-extension:has(svg)+.nomograph{display:none}
+
+.nomograph-extension-note{min-height:3.2em;margin:8px 0 0;color:#b42318;font-size:12px;line-height:1.6}.nomograph-extension svg{margin:0;aspect-ratio:1420/1230}

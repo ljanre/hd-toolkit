@@ -7,7 +7,7 @@
   const materialRanges={unbound:[15000,45000],lime:[20000,70000],bituminous:[40000,300000],asphalt:[350000,1000000],'cement-aggregate':[500000,1000000],'cement-treated':[1000000,2000000]};
   function selectMaterial(){const range=materialRanges[$('foundationMaterial').value];if(range)$('foundationEsb').value=String(range[0]);}
   function syncNomographs(){
-    $('pavementExtendedPlot').innerHTML=$('foundationExtendedPlot').innerHTML;
+    NomographExtension.updatePlot($('pavementExtendedPlot'),$('foundationExtendedPlot').innerHTML);$('pavementExtensionNote').textContent=$('foundationExtensionNote').textContent;
     $('pavementCompositePath').setAttribute('points',$('foundationCompositePath').getAttribute('points')||'');
     $('pavementCompositePoints').innerHTML=$('foundationCompositePoints').innerHTML;
     $('pavementLossPath').setAttribute('points',$('foundationLossPath').getAttribute('points')||'');
@@ -25,7 +25,7 @@
     if(previousMode==='manual')$('k').value=manualValue;
   }
   function update(){
-    $('foundationStatus').hidden=true;$('foundationExtendedPlot').innerHTML='';
+    $('foundationStatus').hidden=true;$('foundationExtensionNote').textContent='';NomographExtension.updatePlot($('foundationExtendedPlot'),NomographExtension.plot({DSB:null,ESB:null,MR:null},'./components/subgrade-reaction/figure-3-3.png'));
     const state=getState(),manual=state.mode==='manual';
     const range=materialRanges[state.material]||[Number.MIN_VALUE,Number.MAX_VALUE],minimum=range[0],maximum=range[1];
     $('foundationEsb').min=String(minimum);$('foundationEsb').max=String(maximum);
@@ -50,7 +50,7 @@
     }
     const composite=NomographExtension.calculate(Object.fromEntries(Object.entries(fields).map(([key,id])=>[key,number(id)])));
     Object.entries(fields).forEach(([key,id])=>{if(!['VALID','AT_BOUNDARY','INPUT_REQUIRED'].includes(composite.input_status[key]))$(id).setAttribute('aria-invalid','true');});
-    $('foundationExtendedPlot').innerHTML=NomographExtension.plot({DSB:state.dsb,ESB:state.esb,MR:state.mr},'./components/subgrade-reaction/figure-3-3.png');
+    NomographExtension.updatePlot($('foundationExtendedPlot'),NomographExtension.plot({DSB:state.dsb,ESB:state.esb,MR:state.mr},'./components/subgrade-reaction/figure-3-3.png'));
     const effective=composite.result,correction=LossSupportCalculation.calculate(effective,state.ls);
     $('foundationCompositeValue').textContent=fmt(composite.result)+' pci';$('foundationEffectiveValue').textContent=fmt(effective)+' pci';
     $('foundationCorrectedValue').textContent=correction.result===null?'—':Math.round(correction.result)+' pci';
@@ -63,7 +63,7 @@
     if(state.ls!==null&&(!Number.isFinite(state.ls)||state.ls<0||state.ls>3))$('foundationLs').setAttribute('aria-invalid','true');
     if(composite.result===null&&composite.range_status!=='INPUT_REQUIRED')$('foundationStatus').textContent='Enter finite positive MR, ESB and subbase thickness. Zero cannot be plotted on a logarithmic nomograph.';
     if(correction.status!=='INPUT_REQUIRED'&&correction.result===null||composite.result===null&&composite.range_status!=='INPUT_REQUIRED')$('foundationStatus').hidden=false;
-    if(composite.range_status==='EXTRAPOLATED_ESTIMATE'){$('foundationStatus').hidden=false;$('foundationStatus').textContent='Extrapolated nomograph estimate · Outside printed scales; result and uncertainty are unverified. '+(correction.result===null?'Loss-of-support correction is outside its supported range; enter verified kcorr in manual mode.':'Loss-of-support correction remains within its supported chart range.');}
+    if(composite.range_status==='EXTRAPOLATED_ESTIMATE'){$('foundationStatus').hidden=true;$('foundationExtensionNote').textContent='Extrapolated nomograph estimate · Outside printed scales; result and uncertainty are unverified. '+(correction.result===null?'Loss-of-support correction is outside its supported range; enter verified kcorr in manual mode.':'Loss-of-support correction remains within its supported chart range.');}
     syncNomographs();
   }
   window.RigidFoundation={update,restore,getState,selectMaterial};

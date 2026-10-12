@@ -14,7 +14,7 @@
   function update() {
     const inputs = Object.fromEntries(Object.entries(fields).map(([key, input]) => [key, input.value.trim() === '' ? null : input.valueAsNumber]));
     current = NomographExtension.calculate(inputs);
-    $('extendedPlot').innerHTML=NomographExtension.plot(inputs,'figure-3-3.png');
+    NomographExtension.updatePlot($('extendedPlot'),NomographExtension.plot(inputs,'figure-3-3.png'));$('extensionNote').textContent=current.range_status==='EXTRAPOLATED_ESTIMATE'?'Extrapolated nomograph estimate · Outside printed scales; result and uncertainty are unverified.':'';
     for (const [key, input] of Object.entries(fields)) {
       const status = current.input_status[key];
       const invalid = !['VALID', 'AT_BOUNDARY', 'INPUT_REQUIRED'].includes(status);

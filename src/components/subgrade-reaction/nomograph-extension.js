@@ -2,7 +2,7 @@
  * The calibrated engine remains unchanged. Extended results are unverified. */
 (() => {
   const model=SubgradeCalculation.model;
-  const fmt=n=>n.toLocaleString('en-US',{maximumFractionDigits:2});
+  const fmt=n=>Number.isFinite(n)?n.toLocaleString('en-US',{maximumFractionDigits:2}):'—';
   function curve(c,d){
     function inside(t){
       if(t<6||t>18){const edge=t<6?c.thinEdge:c.thickEdge,s=edge.sign*(t-edge.baseDsb);return (edge.b2*s+edge.b1)*s+edge.b0;}
@@ -41,13 +41,18 @@
       limitation:'Unverified extrapolated estimate beyond printed nomograph scales. No validated error allowance.'};
   }
   function plot(inputs,image){
-    const c=calculate(inputs);if(!c.extension)return '';
-    const p=c.extension.points;
-    const mrCurve=Array.from({length:33},(_,i)=>{const d=4+i/2;return {x_pixel:pixel((20-d)/32,'x'),y_pixel:pixel(family(inputs.MR,d,model.mrCurves),'y')};});
-    const all=p.concat(mrCurve),left=Math.min(-10,...all.map(p=>p.x_pixel))-20,top=Math.min(0,...all.map(p=>p.y_pixel))-100,right=Math.max(1086,...all.map(p=>p.x_pixel))+340,bottom=Math.max(1046,...all.map(p=>p.y_pixel))+60;
-    const lines=p.concat(p[0]).map(p=>p.x_pixel+','+p.y_pixel).join(' ');
+    const c=calculate(inputs),extended=!!c.extension;
+    const p=extended?c.extension.points:c.graphical_overlay?['ESB_POINT','OUTPUT_POINT','TURNING_POINT','MR_POINT'].map(id=>c.graphical_overlay.points[id]):[];
+    const mrCurve=extended?Array.from({length:33},(_,i)=>{const d=4+i/2;return {x_pixel:pixel((20-d)/32,'x'),y_pixel:pixel(family(inputs.MR,d,model.mrCurves),'y')};}):[];
+    const left=-40,top=-30,right=1380,bottom=1200; // Stable frame across input edits and range transitions.
+    const lines=(p.length?p.concat(p[0]):[]).map(p=>p.x_pixel+','+p.y_pixel).join(' ');
     const labels=['ESB = '+fmt(inputs.ESB)+' psi · DSB = '+fmt(inputs.DSB*25.4)+' mm','k∞ ≈ '+fmt(c.result)+' pci','Turning Point','MR = '+fmt(inputs.MR)+' psi'];
-    return '<svg viewBox="'+[left,top,right-left,bottom-top].join(' ')+'" role="img" aria-label="Extended composite-k nomograph with unverified edge-curve extrapolation"><rect x="'+left+'" y="'+top+'" width="'+(right-left)+'" height="'+(bottom-top)+'" fill="white"/><image href="'+image+'" width="1086" height="1046"/><text x="'+(left+20)+'" y="'+(top+35)+'" fill="#a34414" font-size="24">EXTRAPOLATED ESTIMATE · Not validated beyond printed scales</text><polyline points="'+mrCurve.map(p=>p.x_pixel+','+p.y_pixel).join(' ')+'" fill="none" stroke="#c77821" stroke-dasharray="12 8" stroke-width="4"/><polyline points="'+lines+'" fill="none" stroke="#bd2828" stroke-dasharray="9 5" stroke-width="3"/>'+p.map((p,i)=>'<circle cx="'+p.x_pixel+'" cy="'+p.y_pixel+'" r="6" fill="#bd2828"/><text x="'+(p.x_pixel+12)+'" y="'+(p.y_pixel+(i%2?28:-12))+'" font-size="20" fill="#a52222" paint-order="stroke" stroke="white" stroke-width="5">'+labels[i]+'</text>').join('')+'</svg>';
+    return '<svg viewBox="'+[left,top,right-left,bottom-top].join(' ')+'" role="img" aria-label="Extended composite-k nomograph with stable plotting frame"><rect x="'+left+'" y="'+top+'" width="'+(right-left)+'" height="'+(bottom-top)+'" fill="white"/><image href="'+image+'" width="1086" height="1046"/><g class="nomograph-trace"><polyline points="'+mrCurve.map(p=>p.x_pixel+','+p.y_pixel).join(' ')+'" fill="none" stroke="#c77821" stroke-dasharray="12 8" stroke-width="4"/><polyline points="'+lines+'" fill="none" stroke="#bd2828" stroke-dasharray="'+(extended?'9 5':'none')+'" stroke-width="3"/>'+p.map((p,i)=>'<circle cx="'+p.x_pixel+'" cy="'+p.y_pixel+'" r="6" fill="#bd2828"/><text x="'+(p.x_pixel+12)+'" y="'+(p.y_pixel+(i%2?28:-12))+'" font-size="20" fill="#a52222" paint-order="stroke" stroke="white" stroke-width="5">'+labels[i]+'</text>').join('')+'</g></svg>';
   }
-  globalThis.NomographExtension={calculate,plot};
+  function updatePlot(element,markup){
+    const trace=element.querySelector?.('.nomograph-trace');
+    if(trace){const marker='<g class="nomograph-trace">';trace.innerHTML=markup.slice(markup.indexOf(marker)+marker.length,markup.lastIndexOf('</g></svg>'));}
+    else element.innerHTML=markup;
+  }
+  globalThis.NomographExtension={calculate,plot,updatePlot};
 })();
