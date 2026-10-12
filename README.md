@@ -19,7 +19,7 @@ npm test
 npm run build
 ```
 
-The test command runs 15 regression suites. The build creates a clean production site in root `dist/`, excluding development notes, tests and QA pages. It compacts model tables without changing their values, uses pixel-identical WebP foundation charts, and versions local assets and calculator documents automatically. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
+The test command runs 16 regression suites. The build creates a clean production site in root `dist/`, excluding development notes, tests and QA pages. It compacts model tables without changing their values, uses pixel-identical WebP foundation charts, and versions local assets and calculator documents automatically. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
 
 ## Upload to GitHub
 
@@ -58,3 +58,9 @@ Edit `src/tool-registry.js` for tool order, category, title, access, custom elem
 Run `npm test` before publishing. Tests cover model values, lazy activation, stable cache versions, missing development files and clean rebuilds. `npm run build` produces `dist/build-manifest.json` with release identity and sizes. Copy source changes into the GitHub checkout before committing; GitHub Actions builds the same artifact. Do not edit generated files in root `dist/`.
 
 The original PNG charts remain source references. If those charts change, regenerate their exact WebP derivatives with `python scripts/optimize-reference-images.py` (Pillow with WebP support), then run the checks. Normal builds need only Node.js; Python is not required for deployment.
+
+## Project road details inventory
+
+The public Project Road Details tool under Others searches the supplied DPWH national-road CSV snapshot by identifiers, road names and location. It retains all 4,573 source records and 22 fields, including repeated section IDs; users choose a specific record. Project title and station limits are separate entered context, not verified inventory coverage. The snapshot contains no usable geometry or station limits and does not establish design traffic or local urban/rural classifications.
+
+Data is loaded only when opening this tool. `scripts/import-road-network.py <csv-path>` regenerates the compact dictionary-encoded `network-data.json`, preserves every CSV cell and records the source SHA-256. Run the regression checks and review inventory changes before publishing a replacement snapshot.

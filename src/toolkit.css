@@ -58,3 +58,5 @@ concrete-strength{display:block}concrete-strength iframe{display:block;width:100
 .tool-development-overlay{position:absolute;inset:65px 0 0;display:grid;place-items:center;padding:24px;background:repeating-linear-gradient(135deg,#f3f6f8,#f3f6f8 18px,#edf2f5 18px,#edf2f5 36px)}
 .tool-development-overlay p{margin:0;padding:20px 28px;border:1px solid #ccdcd7;border-radius:12px;background:#fff;color:#17665d;font-size:clamp(18px,4vw,28px);font-weight:700;letter-spacing:.08em;text-align:center;box-shadow:0 4px 20px #1738470d}
 @media(max-width:600px){.tool-development{min-height:300px}}
+
+project-details{display:block}project-details iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:1px solid var(--line);border-radius:14px;background:#f5f7fa}@media(max-width:760px){project-details iframe{height:calc(100dvh - 180px);min-height:650px}}

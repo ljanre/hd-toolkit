@@ -20,7 +20,7 @@ assert.match(html,new RegExp('hd-toolkit-build" content="'+manifest.version));
 assert.match(html,new RegExp('tool-registry.js\\?v='+manifest.version));
 assert.equal((html.match(/\/component\.js/g)||[]).length,0,'Individual registration scripts should not load in the main page');
 assert.ok(manifest.excludedFiles>=23);
-assert.ok(manifest.deployedBytes<5200000);
+assert.ok(manifest.deployedBytes<6200000);
 await writeFile(new URL('../dist/stale-build-artifact.txt',import.meta.url),'stale');
 await execute(process.execPath,['scripts/build.mjs'],{cwd:root,windowsHide:true});
 assert.equal(JSON.parse(await read('dist/build-manifest.json')).version,manifest.version,'Unchanged inputs have a stable cache version');
@@ -28,10 +28,10 @@ await assert.rejects(access(new URL('../dist/stale-build-artifact.txt',import.me
 const definitions=new Map();
 const context={document:{querySelector(){return {content:'release-test'};},createElement(){return {children:[],append(...items){this.children.push(...items);}};}},window:{location:{search:''}},URLSearchParams,customElements:{get:name=>definitions.get(name),define:(name,type)=>definitions.set(name,type)},HTMLElement:class{constructor(){this.frames=[];this.hidden=true;}closest(){return this.hidden?{}:null;}querySelector(selector){return this.frames.find(e=>selector==='iframe'?!!e.src:e.className==='tool-development');}append(frame){this.frames.push(frame);}}};
 runInNewContext(await read('src/tool-registry.js'),context);
-assert.equal(definitions.size,9);
+assert.equal(definitions.size,10);
 for(const [name,Type] of definitions){const tool=new Type();tool.connectedCallback();assert.equal(tool.frames.length,0);tool.hidden=false;tool.activate();tool.activate();assert.equal(tool.frames.length,1);if(['design-traffic','flexible-pavement'].includes(name)){assert.equal(tool.frames[0].className,'tool-development');assert.equal(tool.frames[0].children[1].children[0].textContent,'TO BE DEVELOPED');assert.equal(tool.querySelector('iframe'),undefined);continue;}assert.match(tool.frames[0].src,/\?v=release-test$/);assert.ok(tool.frames[0].title);}
 for(const key of ['flexible','traffic','rainfall'])assert.equal(context.ToolkitRegistry.tools[key].access,undefined,'Public tool: '+key);
 assert.equal(context.ToolkitRegistry.tools.flexible.title,'Flexible Pavement Design (TBD)');
 assert.equal(context.ToolkitRegistry.tools.traffic.title,'Design Traffic (TBD)');
 assert.equal(context.ToolkitRegistry.tools.culvert.access,'unavailable');
-console.log('Production build: exact data, optimized assets, stable cache versions, stale-file cleanup and nine lazy tool registrations verified.');
+console.log('Production build: exact data, optimized assets, stable cache versions, stale-file cleanup and ten lazy tool registrations verified.');

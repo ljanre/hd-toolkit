@@ -149,6 +149,7 @@ const listeners = {};
 const frame = { contentWindow: {} };
 const nodes = new Map();
 for (const id of ['flexibleTool','flexibleTool', 'sidebarToggle', 'pavementTool', 'rainfallTool', 'coordinatesTool', 'subgradeTool', 'subbaseTool', 'strengthTool','cbrTool','trafficTool', 'k']) nodes.set(id, element(id));
+nodes.set('projectTool',element('projectTool'));
 nodes.set('culvertTool', element('culvertTool'));
 nodes.get('k').dispatchEvent = event => { nodes.get('k').lastEvent = event; };
 nodes.get('k').focus = () => { assert.equal(nodes.get('pavementTool').hidden, false); };
