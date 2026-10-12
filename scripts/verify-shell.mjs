@@ -34,6 +34,9 @@ const shell={document:{getElementById:id=>nodes.get(id),querySelectorAll:selecto
 window:{addEventListener(type,fn){(events[type]??=[]).push(fn);},dispatchEvent(event){dispatch(event.type,event);}},location:{hash:'#strengthTool'},
 localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)},Event:class {constructor(type,opts){this.type=type;Object.assign(this,opts);}}};
 const dispatch=(type,event)=>events[type].forEach(fn=>fn(event));
+const registryContext={document:{querySelector(){return null;}},window:{location:{search:'?v=test-release'}},URLSearchParams,customElements:{get(){return true;}},HTMLElement:class {}};
+runInNewContext(await readFile(path.join(root,'tool-registry.js'),'utf8'),registryContext);
+shell.ToolkitRegistry=registryContext.ToolkitRegistry;
 runInNewContext(await readFile(path.join(root,'toolkit.js'),'utf8'),shell);
 assert.equal(activations,1);assert.equal(nodes.get('strengthTool').hidden,false);
 dispatch('message',{source:{},data:{type:'hd-toolkit-concrete-strength',fcMPa:24}});

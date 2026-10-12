@@ -19,7 +19,7 @@ npm test
 npm run build
 ```
 
-The test command runs 14 regression suites. The build copies the source and required assets into the root `dist/` folder. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
+The test command runs 15 regression suites. The build creates a clean production site in root `dist/`, excluding development notes, tests and QA pages. It compacts model tables without changing their values, uses pixel-identical WebP foundation charts, and versions local assets and calculator documents automatically. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
 
 ## Upload to GitHub
 
@@ -50,3 +50,11 @@ The current Admin switch is a client-side interface gate configured in `src/admi
 Component documentation remains beside its source. Rigid design incorporates the subgrade reaction engines; flexible design uses an AASHTO 1993 structural-number calculation. The subbase component offers rigid Table 5 and flexible Figure 6 modes, retaining the supplied flexible RN29 model and regression cases. Design CBR supports the statistical and coefficient-C methods with their sampling and correlation limits.
 
 Regression tests verify implemented behavior and numerical consistency. They do not independently certify engineering assumptions or project designs. Review the component references and use project-specific inputs before adopting results.
+
+## Adding and updating tools
+
+Edit `src/tool-registry.js` for tool order, category, title, access, custom element and document path. The sidebar and router use this registry. Add the tool's hidden host section in `src/index.html` and its calculator document, styles, engine and interface in `src/components/<tool-name>/`. The shared registration creates an iframe only when the tool is selected and retains it on revisits. Standalone engines remain isolated, so tools can be updated independently. Older component registration files are retained for compatibility and their regression checks; the main page loads only the shared registry.
+
+Run `npm test` before publishing. Tests cover model values, lazy activation, stable cache versions, missing development files and clean rebuilds. `npm run build` produces `dist/build-manifest.json` with release identity and sizes. Copy source changes into the GitHub checkout before committing; GitHub Actions builds the same artifact. Do not edit generated files in root `dist/`.
+
+The original PNG charts remain source references. If those charts change, regenerate their exact WebP derivatives with `python scripts/optimize-reference-images.py` (Pillow with WebP support), then run the checks. Normal builds need only Node.js; Python is not required for deployment.

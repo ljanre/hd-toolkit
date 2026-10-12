@@ -42,7 +42,7 @@
 <aside class="toolkit-sidebar" id="toolkitSidebar" aria-label="Toolkit navigation">
   <a class="toolkit-brand" href="./"><span class="toolkit-mark">HD</span><span class="brand-label">HD Toolkit<small>Highways Design Toolkit</small></span></a>
   <p class="nav-caption">DESIGN WORKSPACE</p>
-  <nav aria-label="Tools">
+  <nav id="toolNavigation" aria-label="Tools">
     <details class="tool-group" data-tool-group="pavement" open>
       <summary title="Pavement"><span class="group-icon" aria-hidden="true">▤</span><span class="group-label">Pavement</span></summary>
       <div class="tool-group-items">
@@ -341,15 +341,7 @@
 <section id="trafficTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Design Traffic"><design-traffic></design-traffic></section>
 <section id="cbrTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Design CBR"><design-cbr></design-cbr></section>
 <section id="flexibleTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Flexible Pavement Design"><flexible-pavement></flexible-pavement></section>
-<script src="./components/flexible-pavement/component.js"></script>
-<script src="./components/rainfall-locator/component.js"></script>
-<script src="./components/culvert-hydraulics/component.js"></script>
-<script src="./components/coordinate-converter/component.js"></script>
-<script src="./components/subgrade-reaction/component.js?v=nomograph-format-4"></script>
-<script src="./components/subbase-thickness/component.js?v=nomograph-format-4"></script>
-<script src="./components/concrete-strength/component.js"></script>
-<script src="./components/design-traffic/component.js"></script>
-<script src="./components/design-cbr/component.js?v=pit-plan-2"></script>
+<script src="./tool-registry.js?v=registry-1"></script>
 <script src="./admin-mode.js"></script>
 <script src="./toolkit.js?v=grouped-navigation-1"></script>
 <script src="./components/input-guide.js?v=stable-chart-3"></script>
