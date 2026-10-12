@@ -13,7 +13,7 @@
     if(sampleInputs.length>=1000)return;
     const row=document.createElement('div'),label=document.createElement('label'),input=document.createElement('input'),entryBox=document.createElement('div'),unit=document.createElement('span'),remove=document.createElement('button'),deviation=document.createElement('output'),square=document.createElement('output');
     row.className='sample-input-row';entryBox.className='sample-entry';unit.textContent='%';unit.setAttribute('aria-hidden','true');
-    input.id='cbrSample'+(++nextSampleId);input.type='number';input.min='0';input.step='any';input.inputMode='decimal';input.placeholder='0.00';input.value=String(value);input.setAttribute('aria-describedby','sampleHelp');label.htmlFor=input.id;
+    input.id='cbrSample'+(++nextSampleId);input.type='number';input.min='0';input.step='any';input.inputMode='decimal';input.placeholder='0.00';input.value=String(value);label.htmlFor=input.id;
     remove.type='button';remove.className='remove-test';remove.textContent='−';remove.title='Remove Test';
     deviation.className='sample-deviation';square.className='sample-square';deviation.textContent='—';square.textContent='—';
     const station=document.createElement('input'),include=document.createElement('input'),includeBox=document.createElement('label'),track=document.createElement('span');station.type='text';station.className='sample-station';station.placeholder='0+000';include.type='checkbox';include.checked=true;include.setAttribute('role','switch');includeBox.className='sample-include';track.className='pit-switch';track.setAttribute('aria-hidden','true');includeBox.append(include);includeBox.append(track);
@@ -48,10 +48,6 @@
     $('designFormula').textContent=$('method').value==='range'?'Design CBR = x̄ − (Maximum − Minimum) / C':'Design CBR = x̄ − ⅔s';
     $('designEquation').textContent=$('method').value==='range'?'Eq. (3b)':'Eq. (3a)';
     const rangeMethod=$('method').value==='range';
-    $('methodReference').hidden=false;
-    $('methodReferenceText').textContent=rangeMethod?'Reference: DGCS Volume 4, Section 6.11.5 · Table 6-22 (supplied excerpt). The same formula and C values are documented in the linked JICA report, Table 2.5.2.':'Reference: DPWH Design Procedure Manual for Roads (2017), §1.9.1, p.15; Table 9, p.127.';
-    if(rangeMethod)$('methodReferenceLink').href='https://openjicareport.jica.go.jp/pdf/10308765_02.pdf';else $('methodReferenceLink').href='../../assets/dpwh-manual/cbr-procedure.png';
-    $('methodReferenceLink').textContent=rangeMethod?'View JICA Coefficient Table (PDF)':'View Manual Procedure';
     $('designNotation').textContent=$('method').value==='range'?'x̄ = Mean CBR (%); Maximum / Minimum = Extreme test values (%); C = Dimensionless coefficient from Table 6-22, selected by n.':'x̄ = Mean CBR (%); s = Sample standard deviation (percentage points).';
     $('mrFormula').textContent=$('mrMethod').value==='power'?'MR (psi) = 2555 × (Design CBR)⁰·⁶⁴':'MR (psi) = 1500 × Design CBR';
     $('mrEquation').textContent=$('mrMethod').value==='power'?'Eq. (4b)':'Eq. (4a)';
