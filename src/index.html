@@ -130,9 +130,10 @@
               <div class="field-grid">
                 <div class="field">
                   <label for="fcMPa">Concrete Compressive Strength<span class="symbol">f′<sub>c</sub></span></label>
-                  <div class="entry"><input id="fcMPa" name="fcMPa" type="number" min="0" step="any" required aria-describedby="fcMPaHelp"><span class="unit">MPa</span></div>
+                  <div class="entry"><input id="fcMPa" name="fcMPa" type="number" min="0" step="any" required aria-describedby="fcMPaHelp"><span id="fcDisplayUnit" class="unit">psi</span></div>
                   <small id="fcMPaHelp">Equivalent compressive strength in psi is calculated automatically.</small>
                 </div>
+                <div class="concrete-spec-toggle"><label class="round-toggle" for="fcUnitMPa"><input id="fcUnitMPa" type="checkbox" role="switch"><span class="toggle-track" aria-hidden="true"></span>Use MPa</label></div>
                 <div class="field">
                   <label for="scSpecified">Specified Flexural Strength<span class="symbol">S<sub>c</sub></span></label>
                   <div class="entry auto" id="scSpecifiedEntry"><input id="scSpecified" type="number" min="0" step="any" value="550" readonly aria-describedby="scSpecifiedHelp"><span class="unit">psi</span></div>
@@ -479,6 +480,7 @@
     p.jImage=value.inputs.jImage;
     p.scStandard=value.inputs.scStandard!==false;
     p.scSpecified=p.scStandard?550:value.inputs.scSpecified;
+    p.fcUnitMPa=value.inputs.fcUnitMPa===true;
     const errors=validate(p);if(errors.length) throw new Error(errors[0].message);
     if(p.trialMm!==null&&(!Number.isFinite(p.trialMm)||p.trialMm<=0)) throw new Error('The proposed thickness in this case is invalid.');
     if(value.equationConstant!==CONSTANT) throw new Error('This case uses a different equation constant.');
@@ -593,12 +595,12 @@
   const C=globalThis.PavementCalc,V=globalThis.PavementIllustration,$=function(id){return document.getElementById(id);};
   const STORAGE_KEY='aashto93-rigid-local-v1';
 
-  let result=null,lookupSource=C.DEFAULTS.lookupSource,trafficPrecision=null,trafficEditing=false,jImage=null,jUploadVersion=0;
+  let result=null,lookupSource=C.DEFAULTS.lookupSource,trafficPrecision=null,trafficEditing=false,fcDisplayMPa=false,jImage=null,jUploadVersion=0;
   function validJointImage(value){return value&&typeof value.data==='string'&&value.data.length<=2800000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/.test(value.data);}
-  function number(id){const raw=$(id).value.trim();if(id==='wMillion'&&trafficEditing)return raw===''?NaN:Number(raw)/1e6;if(id==='wMillion'&&trafficPrecision!==null&&raw===trafficPrecision.toFixed(2))return trafficPrecision;return raw===''?NaN:Number(raw);}
+  function number(id){const raw=$(id).value.trim();if(id==='fcMPa')return raw===''?NaN:Number(raw)/(fcDisplayMPa?1:145.038);if(id==='wMillion'&&trafficEditing)return raw===''?NaN:Number(raw)/1e6;if(id==='wMillion'&&trafficPrecision!==null&&raw===trafficPrecision.toFixed(2))return trafficPrecision;return raw===''?NaN:Number(raw);}
   function formatTraffic(){const value=number('wMillion');trafficEditing=false;trafficPrecision=Number.isFinite(value)?value:null;$('trafficUnit').textContent='× 10⁶ ESAL';if(trafficPrecision!==null)$('wMillion').value=value.toFixed(2);}
-  function inputs(){const p={};p.scStandard=$('scStandard').checked;p.scSpecified=p.scStandard?550:number('scSpecified');C.NUMERIC_KEYS.forEach(function(key){p[key]=number(key);});p.jImage=jImage;p.jCondition=document.getElementById('jCondition').value;p.designYears=number('rigidDesignYears');p.designYearsManual=document.getElementById('rigidDesignYears').manualPeriod===true;p.dpsi=Number.isFinite(p.p0)&&Number.isFinite(p.pt)?p.p0-p.pt:NaN;p.roundStep=number('roundStep');p.lookupSource=lookupSource;p.trialMm=null;if(window.RigidFoundation)p.foundation=window.RigidFoundation.getState();try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;}catch{p.sc=NaN;p.ecMillion=NaN;}return p;}
-  function write(p){$('scStandard').checked=p.scStandard!==false;$('scSpecified').value=String(p.scStandard===false?(p.scSpecified??550):550);jUploadVersion++;jImage=validJointImage(p.jImage)?{data:p.jImage.data,name:String(p.jImage.name||'Project illustration').slice(0,180)}:null;document.getElementById('jImageFile').value='';document.getElementById('jUploadStatus').textContent=jImage?jImage.name:'';document.getElementById('jCondition').value=p.jCondition||'project';document.getElementById('rigidDesignYears').manualPeriod=p.designYearsManual===true;trafficPrecision=null;trafficEditing=false;$('rigidDesignYears').value=String(p.designYears??20);C.NUMERIC_KEYS.forEach(function(key){$(key).value=p[key]==null?'':String(p[key]);});if(window.RigidFoundation)window.RigidFoundation.restore(p.foundation||(Number.isFinite(p.k)?{mode:'manual'}:{mode:'auto'}),p.k);formatTraffic();$('roundStep').value=String(p.roundStep);lookupSource=p.lookupSource;$('legacyConcreteNotice').hidden=!p.legacyConcrete;}
+  function inputs(){const p={};p.fcUnitMPa=fcDisplayMPa;p.scStandard=$('scStandard').checked;p.scSpecified=p.scStandard?550:number('scSpecified');C.NUMERIC_KEYS.forEach(function(key){p[key]=number(key);});p.jImage=jImage;p.jCondition=document.getElementById('jCondition').value;p.designYears=number('rigidDesignYears');p.designYearsManual=document.getElementById('rigidDesignYears').manualPeriod===true;p.dpsi=Number.isFinite(p.p0)&&Number.isFinite(p.pt)?p.p0-p.pt:NaN;p.roundStep=number('roundStep');p.lookupSource=lookupSource;p.trialMm=null;if(window.RigidFoundation)p.foundation=window.RigidFoundation.getState();try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;}catch{p.sc=NaN;p.ecMillion=NaN;}return p;}
+  function write(p){fcDisplayMPa=p.fcUnitMPa===true;$('fcUnitMPa').checked=fcDisplayMPa;$('fcDisplayUnit').textContent=fcDisplayMPa?'MPa':'psi';$('scStandard').checked=p.scStandard!==false;$('scSpecified').value=String(p.scStandard===false?(p.scSpecified??550):550);jUploadVersion++;jImage=validJointImage(p.jImage)?{data:p.jImage.data,name:String(p.jImage.name||'Project illustration').slice(0,180)}:null;document.getElementById('jImageFile').value='';document.getElementById('jUploadStatus').textContent=jImage?jImage.name:'';document.getElementById('jCondition').value=p.jCondition||'project';document.getElementById('rigidDesignYears').manualPeriod=p.designYearsManual===true;trafficPrecision=null;trafficEditing=false;$('rigidDesignYears').value=String(p.designYears??20);C.NUMERIC_KEYS.forEach(function(key){$(key).value=p[key]==null?'':String(key==='fcMPa'?Number((fcDisplayMPa?p[key]:p[key]*145.038).toPrecision(15)):p[key]);});if(window.RigidFoundation)window.RigidFoundation.restore(p.foundation||(Number.isFinite(p.k)?{mode:'manual'}:{mode:'auto'}),p.k);formatTraffic();$('roundStep').value=String(p.roundStep);lookupSource=p.lookupSource;$('legacyConcreteNotice').hidden=!p.legacyConcrete;}
   function fmt(value,digits){return Number.isFinite(value)?value.toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits}):'—';}
   function set(id,value){$(id).textContent=value;}
   const loadConditions={
@@ -647,7 +649,7 @@
     set('ptHelp','Present serviceability index.');
     set('p0Help','Enter the adopted initial serviceability (maximum 5).');
     set('dpsiHelp',Number.isFinite(p.dpsi)?'Automatic: '+fmt(p.p0,2)+' − '+fmt(p.pt,2)+' = '+fmt(p.dpsi,2)+'.':'Automatic: enter initial and terminal serviceability.');
-    set('fcMPaHelp',Number.isFinite(p.fcMPa)?'Equivalent f′c = '+fmt(p.fcMPa*145.038,3)+' psi.':'Enter compressive strength in MPa.');
+    set('fcMPaHelp',Number.isFinite(p.fcMPa)?'Equivalent f′c = '+fmt(fcDisplayMPa?p.fcMPa*145.038:p.fcMPa,3)+(fcDisplayMPa?' psi.':' MPa.'):'Enter compressive strength in '+(fcDisplayMPa?'MPa.':'psi.'));
     set('scHelp','S′c = Sc + |ZR| × SDs; SDs = (PS/100) × Sc.');
     set('ecMillionHelp',Number.isFinite(p.ecMillion)?fmt(p.ecMillion*1e6,0)+' psi.':'Enter Ec in millions of psi.');
     set('cdHelp',Number.isFinite(p.cd)&&p.cd<1?'DPWH Manual §1.7 requires Cd ≥1; revise drainage/design conditions.':'DPWH Manual §1.7: Cd ≥1; select for project drainage.');set('jHelp',loadConditions[p.jCondition]?'Joint layout default J = '+fmt(loadConditions[p.jCondition].min,2)+' · Table range '+loadConditions[p.jCondition].range+'. Adopted J is editable.':'Enter the project-specific J. Select a joint layout to use its automatic minimum.');set('kHelp',$('foundationMode').checked===false?'Enter the verified corrected foundation support value.':'Automatic whole-pci chart result · Calculation steps and nomographs below.');
@@ -701,6 +703,7 @@
   }
   $('designForm').addEventListener('submit',function(e){e.preventDefault();render();});
   $('designForm').addEventListener('input',render);
+  $('fcUnitMPa').addEventListener('change',function(){const strength=number('fcMPa');fcDisplayMPa=this.checked;$('fcDisplayUnit').textContent=fcDisplayMPa?'MPa':'psi';if(Number.isFinite(strength))$('fcMPa').value=String(Number((fcDisplayMPa?strength:strength*145.038).toPrecision(15)));render();});
   $('scStandard').addEventListener('change',render);
   $('foundationMode').addEventListener('change',render);
   $('foundationMaterial').addEventListener('change',function(){window.RigidFoundation.selectMaterial();render();});

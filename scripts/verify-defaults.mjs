@@ -22,10 +22,23 @@ function mount(saved){
   return {nodes,context,result:()=>lastResult,saved:()=>JSON.parse(stored)};
 }
 const app=mount();
+assert.equal(app.nodes.get('fcUnitMPa').checked,false);
+assert.equal(Number(app.nodes.get('fcMPa').value),3480.912);
+const initialConcreteEc=app.result().n.ec;
+app.nodes.get('fcUnitMPa').checked=true;app.nodes.get('fcUnitMPa').events.change.call(app.nodes.get('fcUnitMPa'));
+assert.equal(Number(app.nodes.get('fcMPa').value),24);
+assert.ok(Math.abs(app.result().n.ec-initialConcreteEc)<1e-8,'Unit conversion must preserve Ec');
+const mpaRestored=mount(app.saved());assert.equal(mpaRestored.nodes.get('fcUnitMPa').checked,true);assert.equal(Number(mpaRestored.nodes.get('fcMPa').value),24);
+app.nodes.get('fcUnitMPa').checked=false;app.nodes.get('fcUnitMPa').events.change.call(app.nodes.get('fcUnitMPa'));
+assert.equal(Number(app.nodes.get('fcMPa').value),3480.912);
+app.nodes.get('fcMPa').value='';app.nodes.get('designForm').events.input();
+app.nodes.get('fcUnitMPa').checked=true;app.nodes.get('fcUnitMPa').events.change.call(app.nodes.get('fcUnitMPa'));
+assert.equal(app.nodes.get('fcMPa').value,'','Changing units must preserve a blank input');
+app.nodes.get('resetInputs').events.click();assert.equal(app.nodes.get('fcUnitMPa').checked,false);
 assert.equal(app.nodes.get('scStandard').checked,true);
 assert.ok(Math.abs(app.result().n.sc-635.5525)<1e-8);
 assert.ok(Math.abs(app.result().n.ec/1e6-3.362957491)<1e-9);
-app.nodes.get('fcMPa').value='30';app.nodes.get('designForm').events.input();
+app.nodes.get('fcMPa').value=String(30*145.038);app.nodes.get('designForm').events.input();
 assert.ok(Math.abs(app.result().n.sc-635.5525)<1e-8,'Specified Sc is independent of compressive strength');
 app.nodes.get('scStandard').checked=false;app.nodes.get('scStandard').events.change();
 assert.equal(app.nodes.get('scSpecified').readOnly,false);
@@ -98,14 +111,14 @@ traffic.events.focus.call(traffic);traffic.value='';app.nodes.get('designForm').
 app.nodes.get('resetInputs').events.click();
 const projectKeys=['r','wMillion','p0','pt','dpsi','fcMPa','sc','ecMillion','cd','j','k'];
 const collector={r:85,so:0.30,wMillion:1,p0:4.5,pt:2,dpsi:2.5,fcMPa:24,cd:1,j:3.8,k:34};
-for(const [key,value] of Object.entries(collector)){assert.equal(Number(app.nodes.get(key).value),value,key);assert.equal(app.context.PavementCalc.DEFAULT_INPUTS[key],value,key);}
+for(const [key,value] of Object.entries(collector)){assert.equal(Number(app.nodes.get(key).value),key==='fcMPa'?Number((value*145.038).toPrecision(15)):value,key);assert.equal(app.context.PavementCalc.DEFAULT_INPUTS[key],value,key);}
 assert.ok(app.result()?.dMm>0,'Collector assumptions calculate on startup');
 assert.equal(app.nodes.get('errors').hidden,true);
 assert.equal(app.nodes.has('saveCase'),false);
 assert.match(app.nodes.get('stepSolve').textContent,/Calculated D/);assert.match(app.nodes.get('stepRounding').textContent,/Meets entered design traffic/);
 assert.equal(app.nodes.get('foundationMode').checked,true);for(const [id,value] of Object.entries({foundationDsb:200,foundationEsb:15000,foundationMr:1000,foundationLs:1}))assert.equal(Number(app.nodes.get(id).value),value);
 const sample=app.context.PavementCalc.DEFAULTS;
-for(const key of app.context.PavementCalc.NUMERIC_KEYS)app.nodes.get(key).value=String(sample[key]);
+for(const key of app.context.PavementCalc.NUMERIC_KEYS)app.nodes.get(key).value=String(key==='fcMPa'?sample[key]*145.038:sample[key]);
 app.nodes.get('designForm').events.input();
 assert.ok(app.result()?.dMm>0,'Complete project inputs should calculate');
 assert.equal(app.nodes.get('dpsi').value,'2.00');
@@ -116,12 +129,12 @@ assert.equal(app.nodes.get('stepSolve').textContent,'Thickness calculation pendi
 app.nodes.get('p0').value='2.5';app.nodes.get('designForm').events.input();assert.equal(app.result(),null,'Initial below terminal must not calculate');
 app.nodes.get('resetInputs').events.click();
 assert.equal(app.nodes.get('so').value,'0.3');
-for(const [key,value] of Object.entries(collector))assert.equal(Number(app.nodes.get(key).value),value,key);
+for(const [key,value] of Object.entries(collector))assert.equal(Number(app.nodes.get(key).value),key==='fcMPa'?Number((value*145.038).toPrecision(15)):value,key);
 assert.ok(app.result()?.dMm>0);
 const restored=mount({app:'aashto93-rigid-local',version:2,equationConstant:app.context.PavementCalc.CONSTANT,inputs:sample});
 assert.equal(restored.nodes.get('jCondition').value,'undoweled-aggregate','Older cases with default J use the requested Undoweled default');
 const transferRestored=mount({app:'aashto93-rigid-local',version:2,equationConstant:app.context.PavementCalc.CONSTANT,inputs:{...sample,j:3.05,jCondition:'crcp-hma'}});assert.equal(transferRestored.nodes.get('j').value,'3.05');assert.equal(transferRestored.nodes.get('jNoFigure').hidden,true);
-assert.equal(restored.nodes.get('fcMPa').value,'24');
+assert.equal(Number(restored.nodes.get('fcMPa').value),3480.912);
 const periodRestored=mount({app:'aashto93-rigid-local',version:2,equationConstant:app.context.PavementCalc.CONSTANT,inputs:{...sample,designYears:25}});assert.equal(periodRestored.nodes.get('rigidDesignYears').value,'25');
 assert.ok(restored.result()?.dMm>0,'Saved project data must still restore');
 const legacyInputs={...sample};delete legacyInputs.p0;const legacyRestored=mount({app:'aashto93-rigid-local',version:2,equationConstant:app.context.PavementCalc.CONSTANT,inputs:legacyInputs});assert.equal(legacyRestored.nodes.get('p0').value,'4.5');assert.equal(legacyRestored.nodes.get('dpsi').value,'2.00');assert.ok(legacyRestored.result()?.dMm>0);
