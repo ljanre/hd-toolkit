@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Design CBR | HD Toolkit</title><link rel="stylesheet" href="../tool-theme.css"><link rel="stylesheet" href="cbr.css"><link rel="stylesheet" href="sample-inputs.css"><link rel="stylesheet" href="../workspace-layout.css"><link rel="stylesheet" href="design-layout.css"><link rel="stylesheet" href="sampling-plan.css?v=signed-stations-5"></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Design CBR | HD Toolkit</title><link rel="stylesheet" href="../tool-theme.css"><link rel="stylesheet" href="cbr.css"><link rel="stylesheet" href="sample-inputs.css"><link rel="stylesheet" href="../workspace-layout.css"><link rel="stylesheet" href="design-layout.css"><link rel="stylesheet" href="sampling-plan.css?v=pit-count-6"></head><body>
 <main class="workspace"><section class="card worksheet"><div class="panel-heading"><h2>Design Inputs</h2></div>
 <form id="cbrForm" novalidate>
 <section class="pit-plan" aria-labelledby="pitPlanTitle">
@@ -8,8 +8,9 @@
 <div id="pitLengthField"><label for="pitLength">Total Length · L</label><div class="pit-entry"><input id="pitLength" value="1000" type="number" min="0" step="any" placeholder="Enter road length"><span>m</span></div></div>
 <div id="pitStationFields" class="pit-station-fields" hidden><div><label for="pitStart">Start Station</label><div class="pit-entry"><input id="pitStart" type="text" value="0+000" placeholder="0+000"></div></div><div><label for="pitEnd">End Station</label><div class="pit-entry"><input id="pitEnd" type="text" value="1+000" placeholder="1+000"></div></div></div>
 <div><label for="pitInterval">Test Pit Interval · I</label><div class="pit-entry"><input id="pitInterval" type="number" min="0" step="any" value="500"><span>m</span></div></div>
+<div><label for="pitCount">Projected Test Pits</label><div class="pit-entry pit-calculated"><output id="pitCount">—</output><span>pits</span></div></div>
 </div>
-<div class="pit-summary"><div><span>Projected Test Pits</span><output id="pitCount">—</output></div><div><span>Total Length</span><output id="pitRoadLength">—</output><span>Count basis: <output id="pitInterior">—</output></span></div></div>
+<p class="pit-plan-meta">Total Length: <output id="pitRoadLength">—</output> <span>·</span> Count basis: <output id="pitInterior">—</output></p>
 <p id="pitPlanStatus" class="pit-plan-status" role="status" aria-live="polite"></p>
 
 <details><summary>Test Pit Stations</summary><div id="pitStations" class="pit-stations"></div></details>

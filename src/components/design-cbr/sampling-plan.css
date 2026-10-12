@@ -8,3 +8,5 @@
 .sample-columns,.sample-input-row{grid-template-columns:42px 94px minmax(86px,1fr) 66px 68px 42px 28px!important;gap:6px}.sample-inputs{overflow-x:hidden}.sample-entry input[type=number]{flex:1;width:0}.sample-entry span{flex:none}
 
 .sample-input-row .sample-station[aria-invalid=true]{border-color:#b42318;background:#fff0ed}
+
+#pitLengthField{grid-column:1/-1}.pit-entry.pit-calculated{background:#fff9df;border-color:#ead998}.pit-calculated output{flex:1;min-height:36px;box-sizing:border-box;padding:7px 9px;font-size:15px;font-weight:650;color:#294b59}.pit-plan-meta{font-size:11px;line-height:1.5;margin:4px 0;color:#536977}.pit-plan-meta output{font-variant-numeric:tabular-nums}.pit-plan-meta span{padding:0 5px}@media(max-width:450px){.pit-fields{grid-template-columns:1fr 1fr}.pit-calculated output{min-height:42px;padding-top:10px}}
