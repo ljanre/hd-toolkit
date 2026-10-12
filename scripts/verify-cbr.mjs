@@ -74,6 +74,19 @@ get('samples').children[0].children[2].handlers.click();assert.equal(inputs().le
 inputs()[0].validity={badInput:true};update();assert.equal(get('error').hidden,false,'An unfinished number is invalid, not an empty row');
 console.log('Design CBR supplied examples, alternative method, applicability, sampling and UI invalid-state checks passed.');
 
+const planContext={};runInNewContext(await readFile(new URL('../src/components/design-cbr/sampling-plan.js',import.meta.url),'utf8'),planContext);
+const P=planContext.CBRTestPitPlan;
+assert.equal(P.calculate(0,2000,500).count,5);
+assert.equal(P.calculate(0,2000,500).interior,3);
+assert.equal(P.calculate(0,2100,500).count,6);
+assert.equal(P.calculate(0,2100,500).lastInterval,100);
+assert.equal(P.calculate(0,100,500).count,2);
+const stationPlan=P.calculate(P.station('1+250'),P.station('3+350'),500);
+assert.equal(stationPlan.length,2100);assert.equal(stationPlan.at(0),1250);assert.equal(stationPlan.at(stationPlan.count-1),3350);
+assert.equal(P.chainage(1250),'1+250');assert.equal(P.chainage(1000.5),'1+000.5');
+assert.ok(Number.isNaN(P.station('1+1000')));
+for(const args of [[0,0,500],[2000,1000,500],[0,2000,0],[0,2000,-1],[0,Infinity,500]])assert.throws(()=>P.calculate(...args));
+
 assert.equal(fields.has('example'),false);assert.equal(fields.has('export'),false);
 
 const manualExample=C.calculate([9.2,5.3,8.2,3.5,7.9,9.5,6.4,7.5]);assert.equal(manualExample.n,8);near(manualExample.mean,7.1875);assert.equal(manualExample.sampleRequirement.minimum,8);assert.equal(manualExample.design.toFixed(2),'5.84');

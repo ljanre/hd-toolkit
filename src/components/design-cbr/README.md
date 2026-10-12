@@ -19,3 +19,5 @@ MR estimates: 1500 × CBR requires confirmation of fine-grained soil / soaked te
 All accepted samples are retained. No rounding before calculation; no zero clamping. JSON exports include full precision, selected methods, confirmation status and sample-count assessment. Blank/invalid or nonpositive design results disable export. An insufficient sample count allows export with a visible provisional result and unmet requirement metadata.
 
 Run `node scripts/verify-cbr.mjs` from the project root for numerical and UI state checks.
+
+Test Pitting Plan: enter total road length or toggle station limits (kilometre+metre or numeric metres). Interval defaults to 500 m. Pit count = ceil(length / interval) + 1, comprising interior interval stations plus two endpoints; an interval exactly at the end is not counted twice. The final spacing may be shorter. The projected count is a project spacing plan, independent of the statistical minimum sample check. Clear resets the plan to blank length and 500 m interval.
