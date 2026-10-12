@@ -40,9 +40,9 @@
   for(const x of [100,420,740])s+=`<line x1="${x}" x2="${x}" y1="65" y2="450" class="axis"/>`;
   for(let i=-4;i<=4;i++){const y=260-i*44,d=Math.exp(d0+(i*44-55)/(2*a*power)),q=q0*Math.exp(i*44/a),z=Math.exp(z0+(i*44+55)/(2*a));for(const [x,label] of [[100,f(val(d),3)],[420,f(qDisplay(q),3)],[740,f(ratio(z),3)]])s+=`<line x1="${x-6}" x2="${x+7}" y1="${y}" y2="${y}" class="axis"/><text x="${x+13}" y="${y+4}">${label}</text>`;}
   const yd=yD(p.D),yq=yQ(q0),yz=yZ(r.ic.z);
-  s+=`<path d="M100 ${yd}L420 ${yq}L740 ${yz}" fill="none" stroke="#159884" stroke-width="2.5"/>`;
-  for(const [x,y] of [[100,yd],[420,yq],[740,yz]])s+=`<circle cx="${x}" cy="${y}" r="5" fill="#159884" stroke="white" stroke-width="2"/>`;
-  s+=`<rect x="188" y="278" width="465" height="45" rx="7" fill="#edf8f3"/><text x="420" y="298" text-anchor="middle" style="fill:#176b55;font-weight:600">DESIGN POINT · HWᵢ / D = ${f(r.ic.hw/p.D)}</text><text x="420" y="314" text-anchor="middle" style="font-size:10px;fill:#648476">Green line aligns the three trial values.</text><text x="420" y="485" text-anchor="middle" style="font-size:11px">Equation-generated alignment chart · ${H.entrances[p.entrance].label} · S₀ = ${f(p.S*100,3)}%</text>`;
+  s+=`<path d="M100 ${yd}L420 ${yq}L740 ${yz}" class="nomograph-design-trace" fill="none" stroke="#c43127" stroke-width="3"/>`;
+  for(const [x,y] of [[100,yd],[420,yq],[740,yz]])s+=`<circle cx="${x}" cy="${y}" class="nomograph-design-point" r="5" fill="white" stroke="#c43127" stroke-width="3"/>`;
+  s+=`<rect x="188" y="278" width="465" height="45" rx="7" fill="#fff"/><text x="420" y="298" text-anchor="middle" style="fill:#8c211b;font-weight:600">DESIGN POINT · HWᵢ / D = ${f(r.ic.hw/p.D)}</text><text x="420" y="314" text-anchor="middle" style="font-size:10px;fill:#648476">Red line aligns the three trial values.</text><text x="420" y="485" text-anchor="middle" style="font-size:11px">Equation-generated alignment chart · ${H.entrances[p.entrance].label} · S₀ = ${f(p.S*100,3)}%</text>`;
   $('nomoChart').innerHTML=svg(s);$('chartMeta').textContent=`${p.N} barrel${p.N===1?'':'s'} · q = ${f(val(r.q,'Q'))} ${flow()} per barrel · ${H.entrances[p.entrance].label} · HWᵢ = ${depth(r.ic.hw)}`;
  }
  function performance(p,r){const samples=[];for(let i=1;i<=80;i++){const q=p.Q*i/50;const t=H.calculate({...p,Q:q});samples.push({q,ic:t.ic.hw,oc:t.oc});}const xmax=p.Q*1.6,ymax=Math.max(p.allowHW,...samples.flatMap(x=>[x.ic,x.oc]))*1.12,X=q=>70+q/xmax*705,Y=h=>340-h/ymax*285;

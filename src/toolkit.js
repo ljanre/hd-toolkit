@@ -1,6 +1,6 @@
 (() => {
   const toggle = document.getElementById('sidebarToggle');
-  const adminTools = new Set(['strength', 'subgrade', 'traffic', 'rainfall', 'flexible']);
+  const adminTools = new Set(['strength', 'subgrade']);
   const hiddenTools = new Set(['culvert']);
   function syncCalculationAccess(){
     const enabled=document.body.classList.contains('admin-mode');
@@ -23,14 +23,14 @@
     syncCalculationAccess();
     const tools = {
       pavement: { id: 'pavementTool', title: 'Rigid Pavement Design' },
-      flexible: { id: 'flexibleTool', title: 'Flexible Pavement Design' },
+      flexible: { id: 'flexibleTool', title: 'Flexible Pavement Design (TBD)' },
       subgrade: { id: 'subgradeTool', title: 'Corrected Subgrade Reaction' },
       subbase: { id: 'subbaseTool', title: 'Subbase Thickness Design' },
-      traffic: { id: 'trafficTool', title: 'Design Traffic' },
+      traffic: { id: 'trafficTool', title: 'Design Traffic (TBD)' },
       cbr: { id: 'cbrTool', title: 'Design CBR' },
       strength: { id: 'strengthTool', title: 'Concrete Modulus of Rupture' },
       rainfall: { id: 'rainfallTool', title: 'Rainfall Station Locator' },
-      coordinates: { id: 'coordinatesTool', title: 'PRS92 ⇄ WGS 84 Converter' },
+      coordinates: { id: 'coordinatesTool', title: 'PRS92 Converter' },
       culvert: { id: 'culvertTool', title: 'Culvert Hydraulics' }
     };
     const admin = document.body.classList.contains('admin-mode');

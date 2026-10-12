@@ -27,7 +27,7 @@ nodes.set('foundationSteps',create());
 let activations=0;nodes.get('strengthTool').firstElementChild={activate(){activations++;}};
 const strengthFrame={contentWindow:{}},subgradeFrame={contentWindow:{}},trafficFrame={contentWindow:{}},skip={};
 const strengthLink={...create(),dataset:{tool:'strength'},classList:{toggle(){}}};
-const adminLinks=['subgrade','traffic','rainfall','flexible'].map(tool=>({...create(),dataset:{tool},classList:{toggle(){}}}));
+const adminLinks=['subgrade'].map(tool=>({...create(),dataset:{tool},classList:{toggle(){}}}));
 const culvertLink={...create(),dataset:{tool:'culvert'},classList:{toggle(){}}};
 const shell={document:{getElementById:id=>nodes.get(id),querySelectorAll:()=>[strengthLink,...adminLinks,culvertLink],querySelector:selector=>selector==='concrete-strength iframe'?strengthFrame:selector==='subgrade-reaction iframe'?subgradeFrame:selector==='design-traffic iframe'?trafficFrame:skip,
   body:{classList:{toggle(k,v){if(v)classes.add(k);else classes.delete(k);},contains:k=>classes.has(k)}}},
@@ -56,6 +56,8 @@ nodes.get('rigidDesignYears').manualPeriod=true;nodes.get('rigidDesignYears').va
 for(const id of ['flexibleTool','pavementTool','subgradeTool','subbaseTool','strengthTool','trafficTool','cbrTool','rainfallTool','coordinatesTool']) {shell.location.hash='#'+id;dispatch('hashchange');assert.equal(nodes.get(id).hidden,false);}
 storage.set('hd-admin-mode','true');runInNewContext(await readFile(path.join(root,'admin-mode.js'),'utf8'),shell);
 assert.equal(nodes.get('foundationSteps').hidden,true);
+shell.location.hash='#rainfallTool';dispatch('hashchange');assert.equal(nodes.get('rainfallTool').hidden,false,'Rainfall remains public with Admin off');
+shell.location.hash='#coordinatesTool';dispatch('hashchange');assert.equal(shell.document.title,'HD Toolkit | PRS92 Converter');
 assert.equal(nodes.get('adminModeToggle').attributes['aria-checked'],'false','Stored On must not bypass the password after reload');
 nodes.get('adminModeToggle').handlers.click();assert.equal(nodes.get('adminPasswordDialog').open,true);assert.equal(strengthLink.hidden,true);
 const submitAdmin=()=>nodes.get('adminPasswordForm').handlers.submit({preventDefault(){}});
@@ -72,7 +74,7 @@ for(const link of adminLinks){assert.equal(link.hidden,true);shell.location.hash
 nodes.get('adminModeToggle').handlers.click();assert.equal(strengthLink.hidden,true);nodes.get('adminPassword').value='revilla123';submitAdmin();assert.equal(strengthLink.hidden,false);shell.location.hash='#strengthTool';dispatch('hashchange');assert.equal(nodes.get('strengthTool').hidden,false);
 for(const link of adminLinks){assert.equal(link.hidden,false);shell.location.hash='#'+link.dataset.tool+'Tool';dispatch('hashchange');assert.equal(nodes.get(link.dataset.tool+'Tool').hidden,false);}
 nodes.get('adminModeToggle').handlers.click();assert.equal(shell.location.hash,'#pavementTool');for(const link of adminLinks)assert.equal(link.hidden,true);
-shell.location.hash='#flexibleTool';dispatch('hashchange');assert.equal(nodes.get('flexibleTool').hidden,true);assert.equal(shell.location.hash,'#pavementTool');assert.equal(shell.document.title,'HD Toolkit | Rigid Pavement Design');
+for(const [id,title] of [['trafficTool','Design Traffic (TBD)'],['flexibleTool','Flexible Pavement Design (TBD)']]){shell.location.hash='#'+id;dispatch('hashchange');assert.equal(nodes.get(id).hidden,false,'TBD tools remain public with Admin off');assert.equal(shell.document.title,'HD Toolkit | '+title);}
 
 shell.location.hash='#culvertTool';dispatch('hashchange');
 assert.equal(nodes.get('culvertTool').hidden,true);assert.equal(nodes.get('pavementTool').hidden,false);

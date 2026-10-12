@@ -33,7 +33,7 @@ The upload folder is a snapshot. Later edits to the working project must be copi
 
 ## Tools and access
 
-Public tabs: Rigid Pavement Design, Design CBR, Subbase Thickness Design, and the coordinate converter. Admin mode enables additional tools: Flexible Pavement Design, Design Traffic, Corrected Subgrade Reaction, Concrete Modulus of Rupture, and Rainfall Station Locator. Calculation-step panels in the pavement, CBR, and subbase design workspaces are Admin-only. Generate Report and Save buttons in those design input panels are disabled placeholders.
+Public tabs: Rigid Pavement Design, Design CBR, Subbase Thickness Design, Rainfall Station Locator, PRS92 Converter, Design Traffic (TBD), and Flexible Pavement Design (TBD). Admin mode enables additional tools: Corrected Subgrade Reaction and Concrete Modulus of Rupture. Calculation-step panels in the pavement, CBR, and subbase design workspaces are Admin-only. Generate Report and Save buttons in those design input panels are disabled placeholders.
 
 The current Admin switch is a client-side interface gate configured in `src/admin-mode.js`. It is not authentication: publicly hosted source and assets remain accessible. Browser-local values and uploaded illustrations stay in the user's browser; there is no shared account database. The rainfall locator uses external map, geocoding, and municipality services and requires internet access.
 

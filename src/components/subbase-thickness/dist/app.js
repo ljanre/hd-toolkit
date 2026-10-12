@@ -63,6 +63,11 @@
     return fixed.includes(".") ? fixed.replace(/0+$/, "").replace(/\.$/, "") : fixed;
   }
 
+  // SVG elements do not reflect the HTML hidden property to the attribute.
+  function setHidden(element, hidden) {
+    element.toggleAttribute("hidden", hidden);
+  }
+
   function setLine(element, x1, y1, x2, y2) {
     element.setAttribute("x1", String(x1));
     element.setAttribute("y1", String(y1));
@@ -99,7 +104,7 @@
   }
 
   function hideOverlay() {
-    constructionLines.hidden = true;
+    setHidden(constructionLines, true);
     toggleOverlayButton.disabled = true;
     toggleOverlayButton.textContent = "Hide trace";
     overlayVisible = true;
@@ -197,11 +202,11 @@
       setLine(overlayVertical, rawPoint.x, chartBottom - 34, rawPoint.x, chartBottom);
       setLine(overlayHorizontal, chartLeft, chartBottom, rawPoint.x, chartBottom);
       setPoint(overlayRawPoint, rawPoint);
-      overlayMinimum.hidden = true;
-      overlayBracket.hidden = true;
-      overlayLowerPoint.hidden = true;
-      overlayUpperPoint.hidden = true;
-      overlayGoverningPoint.hidden = true;
+      setHidden(overlayMinimum, true);
+      setHidden(overlayBracket, true);
+      setHidden(overlayLowerPoint, true);
+      setHidden(overlayUpperPoint, true);
+      setHidden(overlayGoverningPoint, true);
       positionLabel(rawPoint.x, chartBottom - 8, "0 mm structural sub-base");
     } else if (rawPoint) {
       setLine(overlayVertical, rawPoint.x, chartBottom, rawPoint.x, rawPoint.y);
@@ -212,9 +217,9 @@
         result.trace.lowerPoint &&
         result.trace.upperPoint &&
         result.trace.lowerCbrCurve !== result.trace.upperCbrCurve;
-      overlayBracket.hidden = !hasBracket;
-      overlayLowerPoint.hidden = !hasBracket;
-      overlayUpperPoint.hidden = !hasBracket;
+      setHidden(overlayBracket, !hasBracket);
+      setHidden(overlayLowerPoint, !hasBracket);
+      setHidden(overlayUpperPoint, !hasBracket);
       if (hasBracket) {
         setLine(
           overlayBracket,
@@ -232,8 +237,8 @@
         ? engine.engineeringToPlot(traffic, result.correctedThicknessMm, model)
         : null;
       const showOutputRule = outputPoint && Math.abs(result.correctedThicknessMm - result.rawCurveMm) > 0.5;
-      overlayMinimum.hidden = !showOutputRule;
-      overlayGoverningPoint.hidden = !showOutputRule;
+      setHidden(overlayMinimum, !showOutputRule);
+      setHidden(overlayGoverningPoint, !showOutputRule);
       if (showOutputRule) {
         setLine(overlayMinimum, chartLeft, outputPoint.y, outputPoint.x, outputPoint.y);
         setPoint(overlayGoverningPoint, outputPoint);
@@ -247,7 +252,7 @@
       return;
     }
 
-    constructionLines.hidden = false;
+    setHidden(constructionLines, false);
     overlayVisible = true;
     toggleOverlayButton.disabled = false;
     toggleOverlayButton.textContent = "Hide trace";
@@ -369,7 +374,7 @@
   toggleOverlayButton.addEventListener("click", () => {
     if (!latestResult || latestResult.status !== "OK") return;
     overlayVisible = !overlayVisible;
-    constructionLines.hidden = !overlayVisible;
+    setHidden(constructionLines, !overlayVisible);
     toggleOverlayButton.textContent = overlayVisible ? "Hide trace" : "Show trace";
   });
 

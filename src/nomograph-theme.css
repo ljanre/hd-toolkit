@@ -1,0 +1,23 @@
+/* Shared nomograph presentation; chart coordinates and engineering models stay local. */
+:root{--nomograph-trace:#c43127;--nomograph-label:#8c211b;--nomograph-border:#dce5eb}
+.chart-stage,.foundation-nomograph,.nomograph,.nomograph-extension svg,#nomoChart{
+  background:#fff;border:1px solid var(--nomograph-border);border-radius:8px;box-shadow:none;
+}
+.construction-primary,.foundation-nomograph>svg>polyline,.nomograph>svg>polyline,
+.nomograph-trace>polyline:last-of-type,.nomograph-design-trace{
+  fill:none;stroke:var(--nomograph-trace);stroke-width:3;stroke-linecap:round;
+  stroke-linejoin:round;vector-effect:non-scaling-stroke;
+}
+.point-primary,.nomograph-callout circle,.nomograph-trace>circle,.nomograph-design-point{
+  fill:#fff;stroke:var(--nomograph-trace);stroke-width:3;vector-effect:non-scaling-stroke;
+}
+.nomograph-callout rect,#overlay-label-bg{
+  fill:#fff;fill-opacity:.96;stroke:var(--nomograph-trace);stroke-width:1.5;
+  vector-effect:non-scaling-stroke;
+}
+.nomograph-callout path{stroke:var(--nomograph-trace);vector-effect:non-scaling-stroke}
+.nomograph-callout text,#overlay-label,.nomograph-trace>text{
+  fill:var(--nomograph-label);font-family:'Segoe UI',Arial,sans-serif;font-weight:600;
+}
+#overlay-label{stroke:none}
+/* Keep gold minimum rules and dashed extrapolation distinct from the red construction. */
