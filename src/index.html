@@ -145,7 +145,6 @@
                   <div class="entry auto"><input id="sc" name="sc" type="number" readonly aria-describedby="scHelp" data-si-factor="0.006894757293168" data-si-unit="MPa"><span class="unit">psi · auto</span></div>
                   <small id="scHelp">Flexural strength, not compressive strength.</small>
                 </div>
-                <div class="concrete-distribution"><table aria-label="Concrete strength distribution"><thead><tr><th>z = |ZR|</th><th>PS</th><th>SDs</th></tr></thead><tbody><tr><td id="concreteZ">—</td><td id="concretePS">—</td><td id="concreteSD">—</td></tr></tbody></table></div>
                 <div class="field">
                   <label for="ecMillion">Concrete Elastic Modulus<span class="symbol">E<sub>c</sub></span></label>
                   <div class="entry auto"><input id="ecMillion" name="ecMillion" type="number" readonly aria-describedby="ecMillionHelp" data-si-factor="6.894757293168" data-si-unit="GPa"><span class="unit">× 10⁶ psi · auto</span></div>
@@ -682,10 +681,10 @@
       const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);
       p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;
       $('sc').value=p.sc.toFixed(2);$('ecMillion').value=p.ecMillion.toFixed(2);
-      set('scHelp','S′c = '+fmt(p.scSpecified,2)+' + '+fmt(concrete.z,3)+' × '+fmt(concrete.sdPsi,2)+' = '+fmt(p.sc,2)+' psi.');set('concreteZ',fmt(concrete.z,3));set('concretePS',fmt(concrete.ps,2)+'%');set('concreteSD',fmt(concrete.sdPsi,2)+' psi');$('scSpecified').removeAttribute('aria-invalid');
+      set('scHelp','S′c = '+fmt(p.scSpecified,2)+' + '+fmt(concrete.z,3)+' × '+fmt(concrete.sdPsi,2)+' = '+fmt(p.sc,2)+' psi.');$('scSpecified').removeAttribute('aria-invalid');
       set('ecMillionHelp','Automatic: 57,000√f′c(psi) = '+fmt(p.ecMillion*1e6,0)+' psi.');
     }catch(e){
-      concreteError=e.message;['concreteZ','concretePS','concreteSD'].forEach(id=>set(id,'—'));$('scSpecified').setAttribute('aria-invalid','true');
+      concreteError=e.message;$('scSpecified').setAttribute('aria-invalid','true');
       p.sc=NaN;p.ecMillion=NaN;$('sc').value='';$('ecMillion').value='';
     }
     processSteps(p,null);
