@@ -24,12 +24,12 @@
     return callouts([
       record('ESB_POINT',['ESB = '+fmt(input.ESB)+' psi','DSB = '+fmt(input.DSB*25.4)+' mm'],-270,-90),
       record('OUTPUT_POINT',['k∞ ≈ '+fmt(calculation.result)+' pci'],20,-60),
-      record('TURNING_POINT',['Transfer Point'],20,20),
+      record('TURNING_POINT',['Turning Point'],20,20),
       record('MR_POINT',['MR = '+fmt(input.MR)+' psi'],-270,20)
     ],1086,1046);
   }
   function loss(correction){
-    if(correction.result===null)return '';
+    if(correction.result===null||!correction.point)return '';
     const {x,y}=correction.point;
     return callouts([
       {x,y:905,lines:['Effective k = '+fmt(correction.inputK)+' pci'],dx:-140,dy:24},

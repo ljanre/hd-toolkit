@@ -2,7 +2,7 @@ import {readFile} from 'node:fs/promises';
 import {runInNewContext} from 'node:vm';
 import assert from 'node:assert/strict';
 const html=await readFile(new URL('../src/index.html',import.meta.url),'utf8');
-const foundationScripts=await Promise.all(['components/subgrade-reaction/model-data.js','components/subgrade-reaction/engine.js','components/subgrade-reaction/loss-support.js','components/subgrade-reaction/nomograph-labels.js','rigid-foundation.js'].map(file=>readFile(new URL('../src/'+file,import.meta.url),'utf8')));
+const foundationScripts=await Promise.all(['components/subgrade-reaction/model-data.js','components/subgrade-reaction/engine.js','components/subgrade-reaction/equation-extension.js','components/subgrade-reaction/loss-support.js','components/subgrade-reaction/nomograph-labels.js','rigid-foundation.js'].map(file=>readFile(new URL('../src/'+file,import.meta.url),'utf8')));
 function node(value=''){
   return {value,hidden:false,disabled:false,events:{},textContent:'',validity:{badInput:false},
     classList:{add(){},remove(){},toggle(){}},attributes:{},setAttribute(k,v){this.attributes[k]=v;},getAttribute(k){return this.attributes[k];},removeAttribute(k){delete this.attributes[k];},
@@ -57,7 +57,7 @@ app.nodes.get('resetInputs').events.click();
 assert.equal(app.nodes.get('foundationMaterial').value,'unbound');
 for(const [material,minimum] of Object.entries({unbound:15000,lime:20000,bituminous:40000,asphalt:350000,'cement-aggregate':500000,'cement-treated':1000000})){
   app.nodes.get('foundationMaterial').value=material;app.nodes.get('foundationMaterial').events.change();assert.equal(Number(app.nodes.get('foundationEsb').value),minimum);
-  const maximum={unbound:45000,lime:70000,bituminous:300000,asphalt:1000000,'cement-aggregate':1000000,'cement-treated':1000000}[material];
+  const maximum={unbound:45000,lime:70000,bituminous:300000,asphalt:1000000,'cement-aggregate':1000000,'cement-treated':2000000}[material];
   assert.equal(Number(app.nodes.get('foundationEsb').min),minimum);assert.equal(Number(app.nodes.get('foundationEsb').max),maximum);
   for(const invalid of [minimum-1,maximum+1]){
     app.nodes.get('foundationEsb').value=String(invalid);app.nodes.get('designForm').events.input();
@@ -67,7 +67,7 @@ for(const [material,minimum] of Object.entries({unbound:15000,lime:20000,bitumin
   }
   app.nodes.get('foundationEsb').value=String(maximum);app.nodes.get('designForm').events.input();assert.equal(app.nodes.get('foundationEsb').getAttribute('aria-invalid'),undefined);
 }
-app.nodes.get('foundationMaterial').value='project';app.nodes.get('foundationMaterial').events.change();assert.equal(Number(app.nodes.get('foundationEsb').max),1000000);
+app.nodes.get('foundationMaterial').value='project';app.nodes.get('foundationMaterial').events.change();assert.equal(Number(app.nodes.get('foundationEsb').max),Number.MAX_VALUE);
 app.nodes.get('foundationMaterial').value='unbound';app.nodes.get('foundationMaterial').events.change();
 app.nodes.get('foundationEsb').value='45000';app.nodes.get('designForm').events.input();assert.equal(app.nodes.get('foundationEsb').value,'45000','Adopted material modulus remains editable');
 app.nodes.get('resetInputs').events.click();assert.equal(app.nodes.get('foundationMaterial').value,'unbound');assert.equal(Number(app.nodes.get('foundationEsb').value),15000);

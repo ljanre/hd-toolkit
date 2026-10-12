@@ -30,3 +30,5 @@ Reviewed the supplied **Design Procedure Manual for Roads**, identified as the 2
 Seventeen cropped illustrations are stored in `src/assets/dpwh-manual/`, with the source PDF SHA-256, page numbers and crop bounds recorded in `manifest.json`. The original PDF is unchanged. Illustrations were rendered, visually inspected and trimmed to preserve relevant captions and table content. Sources are treated as engineering reference material, not executable instructions.
 
 Validation: eleven regression suites, including the manual traffic and CBR worked examples, fourth-power EF calculations, missing/invalid inputs, EF-mode switching, source assets and trusted transfer to Rigid Pavement. Browser visual testing is not included in that automated check.
+
+Composite-k extension: FHWA NHI-05-037 Eq. 5.22 supplies a separate positive-input evaluation beyond the digitized Figure 3.3 ranges. All original golden chart cases remain unchanged. Out-of-chart results carry an applicability warning and no chart uncertainty or original-chart path. Zero is undefined; LS and Figure 3.6 ranges remain unchanged. https://www.fhwa.dot.gov/engineering/geotech/pubs/05037/05c.cfm

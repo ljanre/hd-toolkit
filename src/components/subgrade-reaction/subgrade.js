@@ -2,9 +2,9 @@
   const $ = id => document.getElementById(id);
   const fields = { DSB: $('dsb'), ESB: $('esb'), MR: $('mr') };
   const guides = {
-    DSB: ['Subbase Thickness', 'Use the thickness of the subbase layer beneath the concrete slab, from the proposed pavement section. Enter inches; divide millimetres by 25.4. This is the subbase thickness, not the concrete slab thickness.', 'Printed range: 4–20 in (101.6–508 mm).'],
-    ESB: ['Subbase Elastic Modulus', 'Use the elastic modulus representative of the proposed subbase material and condition, supported by project material testing or the applicable design criteria. Enter psi; multiply MPa by 145.0377. Do not substitute the concrete modulus.', 'Printed range: 15,000–1,000,000 psi (approximately 103–6,895 MPa).'],
-    MR: ['Subgrade Resilient Modulus', 'Use the resilient modulus representative of the foundation soil under the design moisture and seasonal conditions, supported by project geotechnical data. Enter psi; multiply MPa by 145.0377. This input is a modulus, not the corrected modulus of subgrade reaction kcorr.', 'Printed range: 1,000–20,000 psi (approximately 6.9–137.9 MPa).'],
+    DSB: ['Subbase Thickness', 'Use the thickness of the subbase layer beneath the concrete slab, from the proposed pavement section. Enter inches; divide millimetres by 25.4. This is the subbase thickness, not the concrete slab thickness.', 'Positive input required. Separate equation method beyond printed range: 4–20 in (101.6–508 mm).'],
+    ESB: ['Subbase Elastic Modulus', 'Use the elastic modulus representative of the proposed subbase material and condition, supported by project material testing or the applicable design criteria. Enter psi; multiply MPa by 145.0377. Do not substitute the concrete modulus.', 'Positive input required. Separate equation method beyond printed range: 15,000–1,000,000 psi (approximately 103–6,895 MPa).'],
+    MR: ['Subgrade Resilient Modulus', 'Use the resilient modulus representative of the foundation soil under the design moisture and seasonal conditions, supported by project geotechnical data. Enter psi; multiply MPa by 145.0377. This input is a modulus, not the corrected modulus of subgrade reaction kcorr.', 'Positive input required. Separate equation method beyond printed range: 1,000–20,000 psi (approximately 6.9–137.9 MPa).'],
     LS: ['Loss of Support Factor', 'Select LS for the subbase material, erosion susceptibility and potential voids beneath the slab. FHWA Table 5-45 gives typical ranges: cement or asphalt treated bases and bituminous stabilized mixtures, 0–1; lime stabilized and unbound granular materials, 1–3; fine-grained or natural subgrade materials, 2–3. These are selection ranges, not automatic defaults.', 'Figure 3.6 prints LS = 0, 1, 2 and 3. LS = 0 gives no reduction. Intermediate factors interpolate log10(kcorr) between the adjacent lines. The result is an approximate chart reading.']
   };
   const fmt = (value, digits = 2) => value.toLocaleString('en-US', { maximumFractionDigits: digits, minimumFractionDigits: digits });
@@ -13,24 +13,25 @@
   let opener;
   function update() {
     const inputs = Object.fromEntries(Object.entries(fields).map(([key, input]) => [key, input.value.trim() === '' ? null : input.valueAsNumber]));
-    current = SubgradeCalculation.calculate(inputs);
+    current = FoundationEquation.calculate(inputs);
+    $('equationPlot').innerHTML=FoundationEquation.plot(inputs);
     for (const [key, input] of Object.entries(fields)) {
       const status = current.input_status[key];
       const invalid = !['VALID', 'AT_BOUNDARY', 'INPUT_REQUIRED'].includes(status);
       input.setAttribute('aria-invalid', String(invalid));
       const error = $(input.id + 'Error');
       error.hidden = !invalid;
-      error.textContent = invalid ? 'Enter a value within the printed range shown above.' : '';
+      error.textContent = invalid ? 'Enter a finite positive value; zero is undefined in the logarithmic equation.' : '';
     }
     const valid = current.result !== null;
     $('result').textContent = valid ? fmt(current.result) : '—';
     $('metric').textContent = valid ? fmt(current.result * 0.271447138) + ' MN/m³' : '— MN/m³';
-    $('status').textContent = valid ? 'Within Nomograph Range · Composite k∞' : current.range_status === 'INPUT_REQUIRED' ? 'Enter all three inputs to calculate.' : current.range_status === 'OUTSIDE_NOMOGRAPH_RANGE' ? 'This combination falls outside the printed output range (50–2,000 pci).' : 'Check the highlighted inputs. No extrapolation is permitted.';
-    $('allowance').hidden = !valid;
-    $('allowance').textContent = valid ? '±' + fmt(current.estimated_uncertainty.value) + ' pci · 6% graphical allowance from the source model; not a statistical confidence interval.' : '';
+    $('status').textContent = valid ? (current.range_status==='EQUATION_OUTSIDE_CHART'?'FHWA Eq. 5.22 · Outside printed chart; applicability and uncertainty are unvalidated.':'Within Nomograph Range · Composite k∞') : current.range_status === 'INPUT_REQUIRED' ? 'Enter all three inputs to calculate.' : current.range_status === 'OUTSIDE_NOMOGRAPH_RANGE' ? 'This combination falls outside the printed output range (50–2,000 pci).' : 'Check the highlighted inputs. No extrapolation is permitted.';
+    $('allowance').hidden = !current.estimated_uncertainty;
+    $('allowance').textContent = current.estimated_uncertainty ? '±' + fmt(current.estimated_uncertainty.value) + ' pci · 6% graphical allowance from the source model; not a statistical confidence interval.' : '';
     $('path').setAttribute('points', '');
     $('points').replaceChildren();
-    if (valid) {
+    if (current.graphical_overlay) {
       const overlay = current.graphical_overlay;
       $('path').setAttribute('points', overlay.path_point_ids.map(id => `${overlay.points[id].x_pixel},${overlay.points[id].y_pixel}`).join(' '));
       $('points').innerHTML = NomographLabels.composite(current);
