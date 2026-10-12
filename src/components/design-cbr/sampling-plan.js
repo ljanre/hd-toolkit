@@ -32,28 +32,28 @@
   }
   function update(){
     $('pitLengthField').hidden=stationMode;$('pitStationFields').hidden=!stationMode;
-    for(const id of ['pitCount','pitRoadLength','pitInterior'])$(id).textContent='—';
-    $('pitStations').replaceChildren();$('pitPlanStatus').classList.remove('invalid');
+    $('pitCount').textContent='—';$('pitPlanStatus').hidden=true;
+    $('pitPlanStatus').classList.remove('invalid');
     try{
       const pending=stationMode?(!$('pitStart').value.trim()||!$('pitEnd').value.trim()):!$('pitLength').value.trim();
       if(pending){activePlan=null;$('pitPlanStatus').textContent='Enter the road length or station limits to project test pits.';$('pitDiagram').innerHTML='';return;}
-      const plan=read();$('pitCount').textContent=fmt(plan.count);$('pitRoadLength').textContent=fmt(plan.length)+' m';$('pitInterior').textContent=fmt(plan.interior)+' + 2 endpoints';
+      const plan=read();$('pitCount').textContent=fmt(plan.count);
       $('pitPlanStatus').textContent='Start '+chainage(plan.start)+' → End '+chainage(plan.end)+'. Both endpoints are included once; final spacing '+fmt(plan.lastInterval)+' m.';
       $('pitDiagram').innerHTML=diagram(plan);
       activePlan=plan;window.CBRWorksheet?.setPlan(plan);refresh();
-    }catch(error){activePlan=null;$('pitPlanStatus').textContent=error.message;$('pitPlanStatus').classList.add('invalid');$('pitDiagram').innerHTML='';}
+    }catch(error){activePlan=null;$('pitPlanStatus').hidden=false;$('pitPlanStatus').textContent=error.message;$('pitPlanStatus').classList.add('invalid');$('pitDiagram').innerHTML='';}
   }
   function refresh(){
     if(!activePlan)return;
     $('pitDiagram').innerHTML=diagram(activePlan);
-    $('pitStations').replaceChildren();
-    const tests=window.CBRWorksheet?.getTests()||[],table=document.createElement('table');table.innerHTML='<thead><tr><th>TP</th><th>Station</th><th>Include</th></tr></thead>';
-    const body=document.createElement('tbody');for(const test of tests){const row=document.createElement('tr');for(const value of ['TP '+String(test.tp).padStart(2,'0'),test.station||'—',test.included?'On':'Off']){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}body.append(row);}table.append(body);$('pitStations').append(table);
+    
+    const tests=window.CBRWorksheet?.getTests()||[];
     const outside=tests.filter(t=>!Number.isFinite(station(t.station))||station(t.station)<activePlan.start||station(t.station)>activePlan.end).length;
-    $('pitPlanStatus').textContent='Start '+chainage(activePlan.start)+' → End '+chainage(activePlan.end)+'. Projected pits: '+activePlan.interior+' interior + 2 endpoints.'+(outside?' '+outside+' test stations are blank, invalid, or outside the limits and are not plotted.':'');
+    $('pitPlanStatus').textContent=outside?outside+' test stations are blank, invalid, or outside the limits and are not plotted.':'';
     if(activePlan.count>1000)$('pitPlanStatus').textContent+=' First 1,000 rows generated (worksheet limit); increase the interval for fewer pits.';
+    $('pitPlanStatus').hidden=!$('pitPlanStatus').textContent;
   }
-  window.CBRPitDiagram={refresh,bounds:()=>activePlan?{start:activePlan.start,end:activePlan.end}:null,notice:message=>{$('pitPlanStatus').textContent+=' '+message;}};
+  window.CBRPitDiagram={refresh,bounds:()=>activePlan?{start:activePlan.start,end:activePlan.end}:null,notice:message=>{$('pitPlanStatus').hidden=false;$('pitPlanStatus').textContent+=' '+message;}};
   $('pitStationMode').addEventListener('change',()=>{
     try{const plan=read();if(stationMode)$('pitLength').value=String(plan.length);else{$('pitStart').value='0+000';$('pitEnd').value=chainage(plan.end);}}catch{}
     stationMode=$('pitStationMode').checked;update();
