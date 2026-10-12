@@ -96,6 +96,16 @@ let planRefreshes=0;context.window.CBRPitDiagram={refresh:()=>planRefreshes++};
 const editedStation=get('samples').children[1].children[5];editedStation.value='0+600';editedStation.handlers.input();assert.equal(planRefreshes,1);
 context.window.CBRWorksheet.setPlan(P.calculate(0,2500,500));assert.equal(editedStation.value,'0+600','Manual station edits survive interval/length plan updates');
 assert.equal(inputs().length,6);
+assert.equal(P.station('-999'),-999);assert.equal(P.station('-0+999'),-999);assert.equal(P.station('-1+250'),-1250);
+assert.equal(P.chainage(-999),'-0+999');
+assert.equal(P.calculate(-1000,1000,500).count,5);
+assert.equal(P.normalize('999',0,1000).text,'0+999');
+assert.equal(P.normalize('1001',0,1000).text,'1+000');assert.equal(P.normalize('1001',0,1000).clamped,true);
+assert.equal(P.normalize('-999',0,1000).text,'0+000');assert.equal(P.normalize('-999',-1000,1000).text,'-0+999');
+context.window.CBRPitDiagram.bounds=()=>({start:0,end:1000});
+editedStation.value='999';editedStation.handlers.blur();assert.equal(editedStation.value,'0+999');
+editedStation.value='1500';editedStation.handlers.input();assert.equal(editedStation.attributes['aria-invalid'],'true');
+editedStation.handlers.blur();assert.equal(editedStation.value,'1+000');
 
 assert.equal(fields.has('example'),false);assert.equal(fields.has('export'),false);
 

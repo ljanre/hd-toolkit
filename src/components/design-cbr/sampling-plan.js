@@ -1,21 +1,22 @@
 /* Project-selected spacing plan; independent of the statistical CBR sample check. */
 (() => {
   function station(text){
-    const raw=String(text).trim(),match=raw.match(/^(\d+)\s*\+\s*(\d{1,3}(?:\.\d+)?)$/);
-    if(match){const metres=Number(match[2]);return metres<1000?Number(match[1])*1000+metres:NaN;}
-    return /^\d+(?:\.\d+)?$/.test(raw)?Number(raw):NaN;
+    const raw=String(text).trim().replace(/−/g,'-'),match=raw.match(/^([+-]?)(\d+)\s*\+\s*(\d{1,3}(?:\.\d+)?)$/);
+    if(match){const metres=Number(match[3]);return metres<1000?(match[1]==='-'?-1:1)*(Number(match[2])*1000+metres):NaN;}
+    return /^[+-]?\d+(?:\.\d+)?$/.test(raw)?Number(raw):NaN;
   }
   function chainage(value){
-    const rounded=Math.round(value*1000)/1000,km=Math.floor(rounded/1000),metres=(rounded-km*1000).toFixed(3).replace(/\.?0+$/,'');
-    const [whole,fraction]=metres.split('.');return km+'+'+whole.padStart(3,'0')+(fraction?'.'+fraction:'');
+    const sign=value<0?'-':'',rounded=Math.round(Math.abs(value)*1000)/1000,km=Math.floor(rounded/1000),metres=(rounded-km*1000).toFixed(3).replace(/\.?0+$/,'');
+    const [whole,fraction]=metres.split('.');return sign+km+'+'+whole.padStart(3,'0')+(fraction?'.'+fraction:'');
   }
   function calculate(start,end,interval){
-    if(![start,end,interval].every(Number.isFinite)||start<0||end<=start||interval<=0)throw new Error('Enter a positive road length and interval; end station must follow start station.');
+    if(![start,end,interval].every(Number.isFinite)||end<=start||interval<=0)throw new Error('Enter a positive road length and interval; end station must follow start station.');
     const length=end-start,ratio=length/interval,nearest=Math.round(ratio),segments=Math.max(1,Math.abs(ratio-nearest)<Number.EPSILON*8*Math.max(1,ratio)?nearest:Math.ceil(ratio)),count=segments+1;
     if(!Number.isSafeInteger(count)||count<2)throw new Error('The proposed interval produces too many test pits. Increase the interval.');
     return {start,end,length,interval,count,interior:count-2,lastInterval:length-(count-2)*interval,at:i=>i===count-1?end:start+i*interval};
   }
-  globalThis.CBRTestPitPlan={station,chainage,calculate};
+  function normalize(text,start=0,end=Infinity){const value=station(text);if(!Number.isFinite(value))return null;const limited=Math.max(start,Math.min(end,value));return {value:limited,text:chainage(limited),clamped:limited!==value};}
+  globalThis.CBRTestPitPlan={station,chainage,calculate,normalize};
   if(typeof document==='undefined')return;
   const $=id=>document.getElementById(id),fmt=n=>n.toLocaleString('en-US',{maximumFractionDigits:3});
   let stationMode=false,activePlan=null;
@@ -52,11 +53,12 @@
     $('pitPlanStatus').textContent='Start '+chainage(activePlan.start)+' → End '+chainage(activePlan.end)+'. Projected pits: '+activePlan.interior+' interior + 2 endpoints.'+(outside?' '+outside+' test stations are blank, invalid, or outside the limits and are not plotted.':'');
     if(activePlan.count>1000)$('pitPlanStatus').textContent+=' First 1,000 rows generated (worksheet limit); increase the interval for fewer pits.';
   }
-  window.CBRPitDiagram={refresh};
+  window.CBRPitDiagram={refresh,bounds:()=>activePlan?{start:activePlan.start,end:activePlan.end}:null,notice:message=>{$('pitPlanStatus').textContent+=' '+message;}};
   $('pitStationMode').addEventListener('change',()=>{
     try{const plan=read();if(stationMode)$('pitLength').value=String(plan.length);else{$('pitStart').value='0+000';$('pitEnd').value=chainage(plan.end);}}catch{}
     stationMode=$('pitStationMode').checked;update();
   });
+  for(const id of ['pitStart','pitEnd'])$(id).addEventListener('blur',()=>{const parsed=station($(id).value);if(Number.isFinite(parsed))$(id).value=chainage(parsed);update();});
   for(const id of ['pitLength','pitStart','pitEnd','pitInterval'])$(id).addEventListener('input',update);
   $('clear').addEventListener('click',()=>{stationMode=false;$('pitStationMode').checked=false;$('pitLength').value='1000';$('pitStart').value='0+000';$('pitEnd').value='1+000';$('pitInterval').value='500';update();});
   update();
