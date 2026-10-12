@@ -135,16 +135,16 @@
                 </div>
                 <div class="concrete-spec-toggle"><label class="round-toggle" for="fcUnitMPa"><input id="fcUnitMPa" type="checkbox" role="switch"><span class="toggle-track" aria-hidden="true"></span>Use MPa</label></div>
                 <div class="field">
+                  <label for="sc">Concrete Modulus of Rupture<span class="symbol">S′<sub>c</sub></span></label>
+                  <div class="entry auto"><input id="sc" name="sc" type="number" readonly aria-describedby="scHelp" data-si-factor="0.006894757293168" data-si-unit="MPa"><span class="unit">psi · auto</span></div>
+                  <small id="scHelp">Flexural strength, not compressive strength.</small>
+                </div>
+                <div class="field">
                   <label for="scSpecified">Specified Flexural Strength<span class="symbol">S<sub>c</sub></span></label>
                   <div class="entry auto" id="scSpecifiedEntry"><input id="scSpecified" type="number" min="0" step="any" value="550" readonly aria-describedby="scSpecifiedHelp"><span class="unit">psi</span></div>
                   <small id="scSpecifiedHelp">Project construction specification.</small>
                 </div>
                 <div class="concrete-spec-toggle"><label class="round-toggle" for="scStandard"><input id="scStandard" type="checkbox" role="switch" checked><span class="toggle-track" aria-hidden="true"></span>Use DPWH Specification · 550 psi</label><small>Toggle off if project requirements differ from the DPWH specification.</small></div>
-                <div class="field">
-                  <label for="sc">Concrete Modulus of Rupture<span class="symbol">S′<sub>c</sub></span></label>
-                  <div class="entry auto"><input id="sc" name="sc" type="number" readonly aria-describedby="scHelp" data-si-factor="0.006894757293168" data-si-unit="MPa"><span class="unit">psi · auto</span></div>
-                  <small id="scHelp">Flexural strength, not compressive strength.</small>
-                </div>
                 <div class="field">
                   <label for="ecMillion">Concrete Elastic Modulus<span class="symbol">E<sub>c</sub></span></label>
                   <div class="entry auto"><input id="ecMillion" name="ecMillion" type="number" readonly aria-describedby="ecMillionHelp" data-si-factor="6.894757293168" data-si-unit="GPa"><span class="unit">× 10⁶ psi · auto</span></div>
