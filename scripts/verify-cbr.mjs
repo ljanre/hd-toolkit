@@ -58,7 +58,7 @@ get('method').value='statistical';update();assert.equal(get('sampleWarning').hid
 assert.equal(get('samples').children[0].children[3].textContent,'2.8900');assert.equal(get('samples').children[0].children[4].textContent,'8.3521','Show squared deviation beside its input');
 get('fineSoaked').checked=false;update();assert.equal(get('mrPsi').textContent,'—');get('fineSoaked').checked=true;update();assert.equal(get('mrPsi').textContent,'9,455.54');assert.equal(get('mrSI').textContent,'65.19 MPa');
 get('addTest').handlers.click();assert.equal(get('n').textContent,4,'Blank extra row must not become a zero sample');
-get('samples').children[0].children[2].handlers.click();assert.equal(inputs().length,4);assert.equal(get('n').textContent,3);assert.equal(get('samples').children[0].children[0].textContent,'Test 1');
+get('samples').children[0].children[2].handlers.click();assert.equal(inputs().length,4);assert.equal(get('n').textContent,3);assert.equal(get('samples').children[0].children[0].textContent,'TP 01');
 inputs()[0].value='invalid';update();assert.equal(get('design').textContent,'—');assert.equal(get('mrPsi').textContent,'—');assert.equal(get('error').hidden,false);assert.equal(inputs()[0].attributes['aria-invalid'],'true');
 assert.ok(get('samples').children.every(row=>row.children[3].textContent==='—'&&row.children[4].textContent==='—'),'Invalid samples clear all row calculations');
 assert.equal(get('sampleWarning').hidden,true,'Invalid input must clear the previous count warning');
@@ -86,6 +86,16 @@ assert.equal(stationPlan.length,2100);assert.equal(stationPlan.at(0),1250);asser
 assert.equal(P.chainage(1250),'1+250');assert.equal(P.chainage(1000.5),'1+000.5');
 assert.ok(Number.isNaN(P.station('1+1000')));
 for(const args of [[0,0,500],[2000,1000,500],[0,2000,0],[0,2000,-1],[0,Infinity,500]])assert.throws(()=>P.calculate(...args));
+fill([6,6,6,100]);const excluded=get('samples').children[3].children[6].children[0];excluded.checked=false;excluded.handlers.change();
+assert.equal(get('n').textContent,3);assert.equal(get('mean').textContent,'6.00');assert.equal(get('design').textContent,'6.00');
+assert.equal(inputs()[3].value,'100','Exclusion must retain the entered value');
+inputs()[3].value='invalid';update();assert.equal(get('error').hidden,true,'Excluded invalid values do not block included tests');
+context.CBRTestPitPlan=P;get('clear').handlers.click();context.window.CBRWorksheet.setPlan(P.calculate(0,2000,500));
+assert.equal(inputs().length,5);assert.equal(get('samples').children[0].children[5].value,'0+000');assert.equal(get('samples').children[4].children[5].value,'2+000');
+let planRefreshes=0;context.window.CBRPitDiagram={refresh:()=>planRefreshes++};
+const editedStation=get('samples').children[1].children[5];editedStation.value='0+600';editedStation.handlers.input();assert.equal(planRefreshes,1);
+context.window.CBRWorksheet.setPlan(P.calculate(0,2500,500));assert.equal(editedStation.value,'0+600','Manual station edits survive interval/length plan updates');
+assert.equal(inputs().length,6);
 
 assert.equal(fields.has('example'),false);assert.equal(fields.has('export'),false);
 

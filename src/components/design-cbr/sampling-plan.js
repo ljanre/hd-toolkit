@@ -18,13 +18,16 @@
   globalThis.CBRTestPitPlan={station,chainage,calculate};
   if(typeof document==='undefined')return;
   const $=id=>document.getElementById(id),fmt=n=>n.toLocaleString('en-US',{maximumFractionDigits:3});
-  let stationMode=false;
+  let stationMode=false,activePlan=null;
   function read(){const start=stationMode?station($('pitStart').value):0,end=stationMode?station($('pitEnd').value):Number($('pitLength').value);return calculate(start,end,Number($('pitInterval').value));}
   function diagram(plan){
-    const x=value=>55+(value-plan.start)/plan.length*650,indices=plan.count<=80?Array.from({length:plan.count},(_,i)=>i):Array.from({length:41},(_,i)=>Math.round(i*(plan.count-1)/40)),labelEvery=Math.max(1,Math.ceil((plan.count-1)/9));
-    const marks=indices.map(i=>{const xx=x(plan.at(i)),endpoint=i===0||i===plan.count-1,label=endpoint||i%labelEvery===0;return '<line x1="'+xx+'" y1="58" x2="'+xx+'" y2="119" stroke="#647b85"/><circle cx="'+xx+'" cy="88" r="'+(endpoint?7:5)+'" fill="'+(endpoint?'#155f58':'white')+'" stroke="#155f58" stroke-width="2"/>'+(label?'<text x="'+xx+'" y="48">TP '+String(i+1).padStart(2,'0')+'</text><text x="'+xx+'" y="139">'+chainage(plan.at(i))+'</text>':'');}).join('');
-    let dims='';if(plan.count<=11)for(let i=1;i<plan.count;i++){const a=x(plan.at(i-1)),b=x(plan.at(i));dims+='<path d="M'+a+' 151V177M'+b+' 151V177M'+a+' 169H'+b+'" stroke="#708693" fill="none"/><text x="'+((a+b)/2)+'" y="163">'+fmt(plan.at(i)-plan.at(i-1))+' m</text>';}
-    return '<svg viewBox="0 0 760 210" role="img" aria-label="Test-pit plan with start and end pits and interior interval stations"><style>text{font:11px Segoe UI,Arial;fill:#294b59;text-anchor:middle}</style><text x="380" y="18" style="font-size:10px;letter-spacing:1px">TEST-PIT STATIONING PLAN · SCHEMATIC</text><rect x="55" y="65" width="650" height="46" fill="#eef4f6" stroke="#637985"/><path d="M55 88H705" stroke="#8b9ca5" stroke-dasharray="10 6"/>'+marks+dims+'<text x="380" y="199">L = '+fmt(plan.length)+' m · Interval = '+fmt(plan.interval)+' m · '+plan.interior+' interior + 2 endpoint pits</text></svg>';
+    const x=value=>55+(value-plan.start)/plan.length*650;
+    const tests=window.CBRWorksheet?.getTests()||Array.from({length:Math.min(plan.count,1000)},(_,i)=>({tp:i+1,station:chainage(plan.at(i)),included:true}));
+    const valid=tests.map(test=>({...test,metres:station(test.station)})).filter(test=>Number.isFinite(test.metres)&&test.metres>=plan.start&&test.metres<=plan.end).sort((a,b)=>a.metres-b.metres);
+    const display=valid.length<=80?valid:valid.filter((test,i)=>i===0||i===valid.length-1||i%Math.ceil(valid.length/40)===0),labelEvery=Math.max(1,Math.ceil((display.length-1)/9));
+    const marks=display.map((test,i)=>{const xx=x(test.metres),endpoint=test.metres===plan.start||test.metres===plan.end,label=i===0||i===display.length-1||i%labelEvery===0,color=test.included?'#155f58':'#a94442';return '<line x1="'+xx+'" y1="58" x2="'+xx+'" y2="119" stroke="#647b85"/><circle cx="'+xx+'" cy="88" r="'+(endpoint?7:5)+'" fill="'+(test.included&&endpoint?'#155f58':'white')+'" stroke="'+color+'" stroke-width="2"/>'+(!test.included?'<path d="M'+(xx-5)+' 83l10 10m-10 0l10-10" stroke="'+color+'" stroke-width="2"/>':'')+(label?'<text x="'+xx+'" y="48">TP '+String(test.tp).padStart(2,'0')+(test.included?'':' (off)')+'</text><text x="'+xx+'" y="139">'+chainage(test.metres)+'</text>':'');}).join('');
+    let dims='';if(valid.length<=11)for(let i=1;i<valid.length;i++){const a=x(valid[i-1].metres),b=x(valid[i].metres);dims+='<path d="M'+a+' 151V177M'+b+' 151V177M'+a+' 169H'+b+'" stroke="#708693" fill="none"/><text x="'+((a+b)/2)+'" y="163">'+fmt(valid[i].metres-valid[i-1].metres)+' m</text>';}
+    return '<svg viewBox="0 0 760 210" role="img" aria-label="Test-pit plan with start and end pits and interior interval stations"><style>text{font:11px Segoe UI,Arial;fill:#294b59;text-anchor:middle}</style><text x="380" y="18" style="font-size:10px;letter-spacing:1px">TEST-PIT STATIONING PLAN · SCHEMATIC</text><rect x="55" y="65" width="650" height="46" fill="#eef4f6" stroke="#637985"/><path d="M55 88H705" stroke="#8b9ca5" stroke-dasharray="10 6"/>'+marks+dims+'<text x="380" y="199">L = '+fmt(plan.length)+' m · Interval = '+fmt(plan.interval)+' m · '+valid.filter(t=>t.included).length+' included / '+valid.length+' located tests</text></svg>';
   }
   function update(){
     $('pitLengthField').hidden=stationMode;$('pitStationFields').hidden=!stationMode;
@@ -32,15 +35,24 @@
     $('pitStations').replaceChildren();$('pitPlanStatus').classList.remove('invalid');
     try{
       const pending=stationMode?(!$('pitStart').value.trim()||!$('pitEnd').value.trim()):!$('pitLength').value.trim();
-      if(pending){$('pitPlanStatus').textContent='Enter the road length or station limits to project test pits.';$('pitDiagram').innerHTML='';return;}
+      if(pending){activePlan=null;$('pitPlanStatus').textContent='Enter the road length or station limits to project test pits.';$('pitDiagram').innerHTML='';return;}
       const plan=read();$('pitCount').textContent=fmt(plan.count);$('pitRoadLength').textContent=fmt(plan.length)+' m';$('pitInterior').textContent=fmt(plan.interior)+' + 2 endpoints';
       $('pitPlanStatus').textContent='Start '+chainage(plan.start)+' → End '+chainage(plan.end)+'. Both endpoints are included once; final spacing '+fmt(plan.lastInterval)+' m.';
       $('pitDiagram').innerHTML=diagram(plan);
-      const table=document.createElement('table');table.innerHTML='<thead><tr><th>Test Pit</th><th>Station</th><th>Spacing (m)</th></tr></thead>';
-      const body=document.createElement('tbody');for(let i=0;i<Math.min(plan.count,500);i++){const row=document.createElement('tr');for(const value of ['TP '+String(i+1).padStart(2,'0'),chainage(plan.at(i)),i?fmt(plan.at(i)-plan.at(i-1)):'Start']){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}body.append(row);}table.append(body);$('pitStations').append(table);
-      if(plan.count>500){const note=document.createElement('p');note.textContent='First 500 stations listed; projected total includes all '+fmt(plan.count)+' pits.';$('pitStations').append(note);}
-    }catch(error){$('pitPlanStatus').textContent=error.message;$('pitPlanStatus').classList.add('invalid');$('pitDiagram').innerHTML='';}
+      activePlan=plan;window.CBRWorksheet?.setPlan(plan);refresh();
+    }catch(error){activePlan=null;$('pitPlanStatus').textContent=error.message;$('pitPlanStatus').classList.add('invalid');$('pitDiagram').innerHTML='';}
   }
+  function refresh(){
+    if(!activePlan)return;
+    $('pitDiagram').innerHTML=diagram(activePlan);
+    $('pitStations').replaceChildren();
+    const tests=window.CBRWorksheet?.getTests()||[],table=document.createElement('table');table.innerHTML='<thead><tr><th>TP</th><th>Station</th><th>Include</th></tr></thead>';
+    const body=document.createElement('tbody');for(const test of tests){const row=document.createElement('tr');for(const value of ['TP '+String(test.tp).padStart(2,'0'),test.station||'—',test.included?'On':'Off']){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}body.append(row);}table.append(body);$('pitStations').append(table);
+    const outside=tests.filter(t=>!Number.isFinite(station(t.station))||station(t.station)<activePlan.start||station(t.station)>activePlan.end).length;
+    $('pitPlanStatus').textContent='Start '+chainage(activePlan.start)+' → End '+chainage(activePlan.end)+'. Projected pits: '+activePlan.interior+' interior + 2 endpoints.'+(outside?' '+outside+' test stations are blank, invalid, or outside the limits and are not plotted.':'');
+    if(activePlan.count>1000)$('pitPlanStatus').textContent+=' First 1,000 rows generated (worksheet limit); increase the interval for fewer pits.';
+  }
+  window.CBRPitDiagram={refresh};
   $('pitStationMode').addEventListener('change',()=>{
     try{const plan=read();if(stationMode)$('pitLength').value=String(plan.length);else{$('pitStart').value='0+000';$('pitEnd').value=chainage(plan.end);}}catch{}
     stationMode=$('pitStationMode').checked;update();

@@ -2,11 +2,13 @@
   const $=id=>document.getElementById(id), C=DesignCBRCalculation;
   const format=(value,places=2)=>value.toLocaleString('en-US',{minimumFractionDigits:places,maximumFractionDigits:places});
   let current=null, values=[], mr=null, guideOpener;
-  let sampleInputs=[],sampleNumbers=[],nextSampleId=0;
+  let sampleInputs=[],sampleNumbers=[],nextSampleId=0,applyingPlan=false;
   function numberRows(){
-    sampleInputs.forEach((entry,i)=>{entry.label.textContent='Test '+(i+1);entry.remove.setAttribute('aria-label','Remove Test '+(i+1));entry.remove.disabled=sampleInputs.length===1;entry.deviation.setAttribute('aria-label','Test '+(i+1)+' deviation from mean');entry.square.setAttribute('aria-label','Test '+(i+1)+' squared deviation');});
+    sampleInputs.forEach((entry,i)=>{entry.label.textContent='TP '+String(i+1).padStart(2,'0');entry.station.setAttribute('aria-label','Station for TP '+String(i+1).padStart(2,'0'));entry.include.setAttribute('aria-label','Include TP '+String(i+1).padStart(2,'0'));inputLabel(entry,i);entry.remove.setAttribute('aria-label','Remove Test '+(i+1));entry.remove.disabled=sampleInputs.length===1;entry.deviation.setAttribute('aria-label','Test '+(i+1)+' deviation from mean');entry.square.setAttribute('aria-label','Test '+(i+1)+' squared deviation');});
     $('addTest').disabled=sampleInputs.length>=1000;
   }
+  function inputLabel(entry,i){entry.input.setAttribute('aria-label','CBR for TP '+String(i+1).padStart(2,'0'));}
+  function refreshPlan(){if(!applyingPlan)window.CBRPitDiagram?.refresh();}
   function addSample(value='',focus=false){
     if(sampleInputs.length>=1000)return;
     const row=document.createElement('div'),label=document.createElement('label'),input=document.createElement('input'),entryBox=document.createElement('div'),unit=document.createElement('span'),remove=document.createElement('button'),deviation=document.createElement('output'),square=document.createElement('output');
@@ -14,15 +16,18 @@
     input.id='cbrSample'+(++nextSampleId);input.type='number';input.min='0';input.step='any';input.inputMode='decimal';input.placeholder='0.00';input.value=String(value);input.setAttribute('aria-describedby','sampleHelp');label.htmlFor=input.id;
     remove.type='button';remove.className='remove-test';remove.textContent='−';remove.title='Remove Test';
     deviation.className='sample-deviation';square.className='sample-square';deviation.textContent='—';square.textContent='—';
-    const entry={row,label,input,remove,deviation,square};
-    remove.addEventListener('click',()=>{const index=sampleInputs.indexOf(entry);if(sampleInputs.length<=1)return;sampleInputs.splice(index,1);row.remove();numberRows();update();sampleInputs[Math.min(index,sampleInputs.length-1)].input.focus();});
-    entryBox.append(input);entryBox.append(unit);row.append(label);row.append(entryBox);row.append(remove);row.append(deviation);row.append(square);$('samples').append(row);sampleInputs.push(entry);numberRows();if(focus)input.focus();
+    const station=document.createElement('input'),include=document.createElement('input'),includeBox=document.createElement('label'),track=document.createElement('span');station.type='text';station.className='sample-station';station.placeholder='0+000';include.type='checkbox';include.checked=true;include.setAttribute('role','switch');includeBox.className='sample-include';track.className='pit-switch';track.setAttribute('aria-hidden','true');includeBox.append(include);includeBox.append(track);
+    const entry={row,label,input,remove,deviation,square,station,include,stationCustom:false};
+    station.addEventListener('input',()=>{entry.stationCustom=true;refreshPlan();});include.addEventListener('change',()=>{update();refreshPlan();});
+    remove.addEventListener('click',()=>{const index=sampleInputs.indexOf(entry);if(sampleInputs.length<=1)return;sampleInputs.splice(index,1);row.remove();numberRows();update();refreshPlan();sampleInputs[Math.min(index,sampleInputs.length-1)].input.focus();});
+    entryBox.append(input);entryBox.append(unit);row.append(label);row.append(entryBox);row.append(remove);row.append(deviation);row.append(square);row.append(station);row.append(includeBox);$('samples').append(row);sampleInputs.push(entry);numberRows();refreshPlan();if(focus)input.focus();
   }
   function setSamples(values){$('samples').replaceChildren();sampleInputs=[];values.forEach(value=>addSample(value));}
   function readSamples(){
     const accepted=[];sampleNumbers=[];
     sampleInputs.forEach(entry=>entry.input.removeAttribute('aria-invalid'));
     sampleInputs.forEach((entry,i)=>{
+      entry.row.setAttribute('data-included',String(entry.include.checked));if(!entry.include.checked)return;
       const raw=entry.input.value.trim();
       if(raw===''&&!entry.input.validity?.badInput)return;
       try{const parsed=C.parse(raw);if(entry.input.validity?.badInput||parsed.length!==1)throw new Error();accepted.push(parsed[0]);sampleNumbers.push(i+1);}
@@ -106,5 +111,6 @@
     });
     if(window.parent!==window)window.parent.postMessage({type:'hd-toolkit-cbr-ready'},'*');
   }
+  window.CBRWorksheet={getTests:()=>sampleInputs.map((entry,i)=>({tp:i+1,station:entry.station.value,included:entry.include.checked})),setPlan(plan){applyingPlan=true;const target=Math.min(plan.count,1000);while(sampleInputs.length<target)addSample();while(sampleInputs.length>target&&!sampleInputs.at(-1).input.value.trim()){sampleInputs.pop().row.remove();}sampleInputs.forEach((entry,i)=>{if(i<target&&!entry.stationCustom)entry.station.value=CBRTestPitPlan.chainage(plan.at(i));});numberRows();applyingPlan=false;update();}};
   setSamples(['','']);update();
 })();
