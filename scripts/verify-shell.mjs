@@ -9,12 +9,13 @@ for (const component of ['rainfall-locator','coordinate-converter','subgrade-rea
   const context = {customElements:{define:(_,definition)=>{Registered=definition;}},HTMLElement:class {
     constructor(){this.frames=[];this.hidden=true;}
     closest(){return this.hidden?{}:null;} querySelector(){return this.frames[0];} append(frame){this.frames.push(frame);}
-  },document:{createElement:()=>({})}};
+  },document:{createElement:()=>({})},URLSearchParams,window:{location:{search:'?v=planner-release'}}};
   runInNewContext(await readFile(path.join(root,'components',component,'component.js'),'utf8'),context);
   const host = new Registered();host.connectedCallback();assert.equal(host.frames.length,0);
   host.hidden=false;host.activate();assert.equal(host.frames.length,1);
   host.hidden=true;host.hidden=false;host.activate();assert.equal(host.frames.length,1,'Revisit must retain tool document');
   assert.equal(host.frames[0].loading,'eager');assert.ok(host.frames[0].title);
+  if(component==='design-cbr')assert.match(host.frames[0].src,/v=planner-release/);
 }
 const events={},nodes=new Map(),classes=new Set(),storage=new Map();
 classes.add('admin-mode');
