@@ -22,6 +22,25 @@ function mount(saved){
   return {nodes,context,result:()=>lastResult,saved:()=>JSON.parse(stored)};
 }
 const app=mount();
+assert.equal(app.nodes.get('scStandard').checked,true);
+assert.ok(Math.abs(app.result().n.sc-635.5525)<1e-8);
+assert.ok(Math.abs(app.result().n.ec/1e6-3.362957491)<1e-9);
+app.nodes.get('fcMPa').value='30';app.nodes.get('designForm').events.input();
+assert.ok(Math.abs(app.result().n.sc-635.5525)<1e-8,'Specified Sc is independent of compressive strength');
+app.nodes.get('scStandard').checked=false;app.nodes.get('scStandard').events.change();
+assert.equal(app.nodes.get('scSpecified').readOnly,false);
+app.nodes.get('scSpecified').value='600';app.nodes.get('designForm').events.input();
+assert.ok(Math.abs(app.result().n.sc-693.33)<1e-8);
+const restoredStrength=mount(app.saved());
+assert.equal(restoredStrength.nodes.get('scStandard').checked,false);
+assert.equal(restoredStrength.nodes.get('scSpecified').value,'600');
+assert.ok(Math.abs(restoredStrength.result().n.sc-693.33)<1e-8);
+app.nodes.get('scSpecified').value='';app.nodes.get('designForm').events.input();
+assert.equal(app.nodes.get('sc').value,'');
+assert.equal(app.nodes.get('scSpecified').getAttribute('aria-invalid'),'true');
+app.nodes.get('scStandard').checked=true;app.nodes.get('scStandard').events.change();
+assert.equal(app.nodes.get('scSpecified').value,'550');
+app.nodes.get('resetInputs').events.click();
 assert.equal(app.nodes.get('foundationMaterial').value,'unbound');
 for(const [material,minimum] of Object.entries({unbound:15000,lime:20000,bituminous:40000,asphalt:350000,'cement-aggregate':500000,'cement-treated':1000000})){
   app.nodes.get('foundationMaterial').value=material;app.nodes.get('foundationMaterial').events.change();assert.equal(Number(app.nodes.get('foundationEsb').value),minimum);

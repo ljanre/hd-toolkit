@@ -131,13 +131,20 @@
                 <div class="field">
                   <label for="fcMPa">Concrete Compressive Strength<span class="symbol">f′<sub>c</sub></span></label>
                   <div class="entry"><input id="fcMPa" name="fcMPa" type="number" min="0" step="any" required aria-describedby="fcMPaHelp"><span class="unit">MPa</span></div>
-                  <small id="fcMPaHelp">Enter f′c in MPa. S′c and Ec are calculated automatically.</small>
+                  <small id="fcMPaHelp">Equivalent compressive strength in psi is calculated automatically.</small>
                 </div>
+                <div class="field">
+                  <label for="scSpecified">Specified Flexural Strength<span class="symbol">S<sub>c</sub></span></label>
+                  <div class="entry auto" id="scSpecifiedEntry"><input id="scSpecified" type="number" min="0" step="any" value="550" readonly aria-describedby="scSpecifiedHelp"><span class="unit">psi</span></div>
+                  <small id="scSpecifiedHelp">Project construction specification.</small>
+                </div>
+                <div class="concrete-spec-toggle"><label class="round-toggle"><input id="scStandard" type="checkbox" role="switch" checked><span>Use 550 psi specification</span></label><small>14-day strength · turn off to enter the project value.</small></div>
                 <div class="field">
                   <label for="sc">Concrete Modulus of Rupture<span class="symbol">S′<sub>c</sub></span></label>
                   <div class="entry auto"><input id="sc" name="sc" type="number" readonly aria-describedby="scHelp" data-si-factor="0.006894757293168" data-si-unit="MPa"><span class="unit">psi · auto</span></div>
                   <small id="scHelp">Flexural strength, not compressive strength.</small>
                 </div>
+                <div class="concrete-distribution"><table aria-label="Concrete strength distribution"><thead><tr><th>z = |ZR|</th><th>PS</th><th>SDs</th></tr></thead><tbody><tr><td id="concreteZ">—</td><td id="concretePS">—</td><td id="concreteSD">—</td></tr></tbody></table></div>
                 <div class="field">
                   <label for="ecMillion">Concrete Elastic Modulus<span class="symbol">E<sub>c</sub></span></label>
                   <div class="entry auto"><input id="ecMillion" name="ecMillion" type="number" readonly aria-describedby="ecMillionHelp" data-si-factor="6.894757293168" data-si-unit="GPa"><span class="unit">× 10⁶ psi · auto</span></div>
@@ -299,7 +306,7 @@
       <ol><li><h3>Establish Design Traffic · W18</h3><p>Use cumulative 18-kip ESALs in the design lane over the design period. The Design Traffic tab uses Ni = 365 × AADTopening,i × Gi × DD × DL, then W18 = Σ(Ni × EFi). Transfer a complete result or enter the adopted design traffic in millions.</p><p class="equation">W18 = Design Traffic (million) × 1,000,000 <span>Eq. (1)</span></p><p id="stepTraffic"></p><small>Two lanes total means one per direction: assumed DD = 0.50 and DL = 1.00. AADT, growth and axle factors remain project inputs.</small></li>
       <li><h3>Determine Reliability and Variability</h3><p>Look up or interpolate ZR from the active R–ZR table. So represents the adopted overall standard deviation for rigid pavement.</p><p class="equation">Reliability Term = ZR × So <span>Eq. (2)</span></p><p id="stepReliability"></p></li>
       <li><h3>Calculate Serviceability Loss</h3><p class="equation">ΔPSI = p₀ − pₜ <span>Eq. (3)</span></p><p id="stepServiceability"></p><small>Initial serviceability must exceed terminal. Both are serviceability indices, not pressure units.</small></li>
-      <li><h3>Calculate Concrete Properties</h3><p class="equation">Sc(MPa) = 0.78√f′c(MPa); Sc(psi) = Sc(MPa) × 145.038 <span>Eq. (4)</span></p><p class="equation">SDs = (PS/100) × Sc; S′c = Sc + |ZR| × SDs <span>Eq. (5)</span></p><p class="equation">Ec(psi) = 57,000√[f′c(MPa) × 145.038] <span>Eq. (6)</span></p><p id="stepConcrete"></p><small>This toolkit uses the requested coupling of concrete PS to pavement ZR. The DPWH manual’s strength example uses independently selected PS/z; the coupling is a worksheet assumption.</small></li></ol>
+      <li><h3>Calculate Concrete Properties</h3><p class="equation">Sc(psi) = 550 (standard toggle) or entered project specification <span>Eq. (4)</span></p><p class="equation">SDs = (PS/100) × Sc; S′c = Sc + |ZR| × SDs <span>Eq. (5)</span></p><p class="equation">Ec(psi) = 57,000√[f′c(MPa) × 145.038] <span>Eq. (6)</span></p><p id="stepConcrete"></p><table aria-label="Table 5 strength distribution"><caption>Table 5 · Strength Distribution</caption><thead><tr><th>Standard normal deviate z</th><th>PS (%)</th></tr></thead><tbody><tr><td>0.841</td><td>20</td></tr><tr><td>1.037</td><td>15</td></tr><tr><td>1.282</td><td>10</td></tr><tr><td>1.645</td><td>5</td></tr><tr><td>2.327</td><td>1</td></tr></tbody></table><small>This toolkit uses the requested coupling of concrete PS to pavement ZR. The DPWH manual’s strength example uses independently selected PS/z; the coupling is a worksheet assumption.</small></li></ol>
       <ol start="5"><li><h3>Determine Composite Subgrade Reaction · Figure 3.3</h3><p>Enter subbase thickness DSB, subbase elastic modulus ESB and roadbed resilient modulus MR. The digital nomograph follows the plotted scales without extrapolation.</p><p>Composite k∞: <output id="foundationCompositeValue">— pci</output></p><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-3.png" loading="lazy" alt="AASHTO Figure 3.3 composite subgrade reaction nomograph"><svg viewBox="0 0 1086 1046" aria-hidden="true"><polyline id="foundationCompositePath" points=""/><g id="foundationCompositePoints"></g></svg></div><small>Figure 3.3 graphical model allowance: ±6%; this is not a statistical confidence interval.</small></li>
       <li><h3>Determine Effective k</h3><p>Use the composite result only when seasonal and shallow-foundation adjustments do not change k. Otherwise select Adjusted Effective k and enter the value after those project-specific adjustments.</p><p>Effective k before loss of support: <output id="foundationEffectiveValue">— pci</output></p></li>
       <li><h3>Correct for Loss of Support · Figure 3.6</h3><p>From effective k on the horizontal axis, move upward to the selected LS line, then left to read kcorr. LS = 0 leaves k unchanged; fractional LS interpolates log10(kcorr) between adjacent printed lines.</p><p>Corrected kcorr: <output id="foundationCorrectedValue">—</output></p><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-6.png" loading="lazy" alt="AASHTO Figure 3.6 loss-of-support correction nomograph"><svg viewBox="0 0 1241 1082" aria-hidden="true"><polyline id="foundationLossPath" points=""/><g id="foundationLossPoints"></g></svg></div><p>Printed correction range: effective k 1–2,000 pci, LS 0–3, corrected k 1–1,000 pci. The result is an approximate chart reading, rounded to whole pci for slab design.</p></li></ol>
@@ -346,7 +353,7 @@
   const MAX_IN = 60;
   const TABLE = [[50,0],[60,-0.253],[70,-0.524],[75,-0.674],[80,-0.841],[85,-1.037],[90,-1.282],[91,-1.340],[92,-1.405],[93,-1.476],[94,-1.555],[95,-1.645],[96,-1.751],[97,-1.881],[98,-2.045],[99,-2.327],[99.9,-3.090],[99.99,-3.750]];
   const DEFAULTS = {r:92,so:0.35,wMillion:42.23,p0:4.5,pt:2.5,dpsi:2,fcMPa:24,sc:600,ecMillion:3.372,cd:1,j:3.8,k:215,roundStep:10,trialMm:null,lookupSource:'supplied'};
-  const DEFAULT_INPUTS={...DEFAULTS,r:85,so:0.30,wMillion:1,p0:4.5,pt:2,dpsi:2.5,fcMPa:24,cd:1,j:3.8,jCondition:'undoweled-aggregate',k:34,foundation:{mode:'auto',source:'composite',material:'unbound',dsb:200/25.4,esb:15000,mr:1000,ls:1,adjusted:null}};
+  const DEFAULT_INPUTS={...DEFAULTS,r:85,so:0.30,wMillion:1,p0:4.5,pt:2,dpsi:2.5,fcMPa:24,scStandard:true,scSpecified:550,cd:1,j:3.8,jCondition:'undoweled-aggregate',k:34,foundation:{mode:'auto',source:'composite',material:'unbound',dsb:200/25.4,esb:15000,mr:1000,ls:1,adjusted:null}};
   const NUMERIC_KEYS = ['r','so','wMillion','p0','pt','dpsi','fcMPa','sc','ecMillion','cd','j','k'];
   const LABELS = {r:'Reliability R',so:'Standard deviation So',wMillion:'Design traffic W18',p0:'Initial serviceability p₀',pt:'Terminal serviceability pt',dpsi:'Serviceability loss ΔPSI',fcMPa:'Concrete compressive strength f′c',sc:'Modulus of rupture Sc',ecMillion:'Concrete elastic modulus Ec',cd:'Drainage coefficient Cd',j:'Load transfer coefficient J',k:'Corrected k'};
   function table(source){return TABLE.map(function(row){return [row[0],row[0]===98&&source==='fhwa'?-2.054:row[1]];});}
@@ -362,7 +369,7 @@
     }
     throw new Error('Reliability lookup failed.');
   }
-  function concreteProperties(fc,z,source){
+  function concreteProperties(fc,z,source,specifiedPsi){
     if(!Number.isFinite(fc)||fc<=0||!Number.isFinite(z)) throw new Error('Enter valid f′c and Reliability to determine concrete properties.');
     const magnitude=Math.abs(z),rows=table(source);
     let ps=null;
@@ -372,7 +379,8 @@
       if(i>0&&magnitude<high){const lo=rows[i-1],low=Math.abs(lo[1]);ps=100-(lo[0]+(magnitude-low)/(high-low)*(rows[i][0]-lo[0]));break;}
     }
     if(ps===null) throw new Error('z is outside the selected reliability table.');
-    const specificationMPa=.78*Math.sqrt(fc),specificationPsi=specificationMPa*145.038;
+    const specificationPsi=specifiedPsi===undefined?.78*Math.sqrt(fc)*145.038:specifiedPsi,specificationMPa=specificationPsi/145.038;
+    if(!Number.isFinite(specificationPsi)||specificationPsi<=0) throw new Error('Specified flexural strength Sc must be greater than zero.');
     const sdPsi=ps/100*specificationPsi,meanPsi=specificationPsi+magnitude*sdPsi;
     const ecMillion=57000*Math.sqrt(fc*145.038)/1e6;
     if(!Number.isFinite(meanPsi)||!Number.isFinite(ecMillion)) throw new Error('Concrete strength is too large to calculate.');
@@ -469,6 +477,8 @@
     p.designYearsManual=value.inputs.designYearsManual===true;
     p.jCondition=typeof value.inputs.jCondition==='string'?value.inputs.jCondition:(p.j===3.8?'undoweled-aggregate':'project');
     p.jImage=value.inputs.jImage;
+    p.scStandard=value.inputs.scStandard!==false;
+    p.scSpecified=p.scStandard?550:value.inputs.scSpecified;
     const errors=validate(p);if(errors.length) throw new Error(errors[0].message);
     if(p.trialMm!==null&&(!Number.isFinite(p.trialMm)||p.trialMm<=0)) throw new Error('The proposed thickness in this case is invalid.');
     if(value.equationConstant!==CONSTANT) throw new Error('This case uses a different equation constant.');
@@ -587,8 +597,8 @@
   function validJointImage(value){return value&&typeof value.data==='string'&&value.data.length<=2800000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/.test(value.data);}
   function number(id){const raw=$(id).value.trim();if(id==='wMillion'&&trafficEditing)return raw===''?NaN:Number(raw)/1e6;if(id==='wMillion'&&trafficPrecision!==null&&raw===trafficPrecision.toFixed(2))return trafficPrecision;return raw===''?NaN:Number(raw);}
   function formatTraffic(){const value=number('wMillion');trafficEditing=false;trafficPrecision=Number.isFinite(value)?value:null;$('trafficUnit').textContent='× 10⁶ ESAL';if(trafficPrecision!==null)$('wMillion').value=value.toFixed(2);}
-  function inputs(){const p={};C.NUMERIC_KEYS.forEach(function(key){p[key]=number(key);});p.jImage=jImage;p.jCondition=document.getElementById('jCondition').value;p.designYears=number('rigidDesignYears');p.designYearsManual=document.getElementById('rigidDesignYears').manualPeriod===true;p.dpsi=Number.isFinite(p.p0)&&Number.isFinite(p.pt)?p.p0-p.pt:NaN;p.roundStep=number('roundStep');p.lookupSource=lookupSource;p.trialMm=null;if(window.RigidFoundation)p.foundation=window.RigidFoundation.getState();try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource);p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;}catch{p.sc=NaN;p.ecMillion=NaN;}return p;}
-  function write(p){jUploadVersion++;jImage=validJointImage(p.jImage)?{data:p.jImage.data,name:String(p.jImage.name||'Project illustration').slice(0,180)}:null;document.getElementById('jImageFile').value='';document.getElementById('jUploadStatus').textContent=jImage?jImage.name:'';document.getElementById('jCondition').value=p.jCondition||'project';document.getElementById('rigidDesignYears').manualPeriod=p.designYearsManual===true;trafficPrecision=null;trafficEditing=false;$('rigidDesignYears').value=String(p.designYears??20);C.NUMERIC_KEYS.forEach(function(key){$(key).value=p[key]==null?'':String(p[key]);});if(window.RigidFoundation)window.RigidFoundation.restore(p.foundation||(Number.isFinite(p.k)?{mode:'manual'}:{mode:'auto'}),p.k);formatTraffic();$('roundStep').value=String(p.roundStep);lookupSource=p.lookupSource;$('legacyConcreteNotice').hidden=!p.legacyConcrete;}
+  function inputs(){const p={};p.scStandard=$('scStandard').checked;p.scSpecified=p.scStandard?550:number('scSpecified');C.NUMERIC_KEYS.forEach(function(key){p[key]=number(key);});p.jImage=jImage;p.jCondition=document.getElementById('jCondition').value;p.designYears=number('rigidDesignYears');p.designYearsManual=document.getElementById('rigidDesignYears').manualPeriod===true;p.dpsi=Number.isFinite(p.p0)&&Number.isFinite(p.pt)?p.p0-p.pt:NaN;p.roundStep=number('roundStep');p.lookupSource=lookupSource;p.trialMm=null;if(window.RigidFoundation)p.foundation=window.RigidFoundation.getState();try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;}catch{p.sc=NaN;p.ecMillion=NaN;}return p;}
+  function write(p){$('scStandard').checked=p.scStandard!==false;$('scSpecified').value=String(p.scStandard===false?(p.scSpecified??550):550);jUploadVersion++;jImage=validJointImage(p.jImage)?{data:p.jImage.data,name:String(p.jImage.name||'Project illustration').slice(0,180)}:null;document.getElementById('jImageFile').value='';document.getElementById('jUploadStatus').textContent=jImage?jImage.name:'';document.getElementById('jCondition').value=p.jCondition||'project';document.getElementById('rigidDesignYears').manualPeriod=p.designYearsManual===true;trafficPrecision=null;trafficEditing=false;$('rigidDesignYears').value=String(p.designYears??20);C.NUMERIC_KEYS.forEach(function(key){$(key).value=p[key]==null?'':String(p[key]);});if(window.RigidFoundation)window.RigidFoundation.restore(p.foundation||(Number.isFinite(p.k)?{mode:'manual'}:{mode:'auto'}),p.k);formatTraffic();$('roundStep').value=String(p.roundStep);lookupSource=p.lookupSource;$('legacyConcreteNotice').hidden=!p.legacyConcrete;}
   function fmt(value,digits){return Number.isFinite(value)?value.toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits}):'—';}
   function set(id,value){$(id).textContent=value;}
   const loadConditions={
@@ -637,8 +647,8 @@
     set('ptHelp','Present serviceability index.');
     set('p0Help','Enter the adopted initial serviceability (maximum 5).');
     set('dpsiHelp',Number.isFinite(p.dpsi)?'Automatic: '+fmt(p.p0,2)+' − '+fmt(p.pt,2)+' = '+fmt(p.dpsi,2)+'.':'Automatic: enter initial and terminal serviceability.');
-    set('fcMPaHelp','Enter f′c in MPa. S′c and Ec are automatic.');
-    set('scHelp','Automatic mean flexural strength from f′c, |ZR| and its associated PS.');
+    set('fcMPaHelp',Number.isFinite(p.fcMPa)?'Equivalent f′c = '+fmt(p.fcMPa*145.038,3)+' psi.':'Enter compressive strength in MPa.');
+    set('scHelp','S′c = Sc + |ZR| × SDs; SDs = (PS/100) × Sc.');
     set('ecMillionHelp',Number.isFinite(p.ecMillion)?fmt(p.ecMillion*1e6,0)+' psi.':'Enter Ec in millions of psi.');
     set('cdHelp',Number.isFinite(p.cd)&&p.cd<1?'DPWH Manual §1.7 requires Cd ≥1; revise drainage/design conditions.':'DPWH Manual §1.7: Cd ≥1; select for project drainage.');set('jHelp',loadConditions[p.jCondition]?'Joint layout default J = '+fmt(loadConditions[p.jCondition].min,2)+' · Table range '+loadConditions[p.jCondition].range+'. Adopted J is editable.':'Enter the project-specific J. Select a joint layout to use its automatic minimum.');set('kHelp',$('foundationMode').checked===false?'Enter the verified corrected foundation support value.':'Automatic whole-pci chart result · Calculation steps and nomographs below.');
   }
@@ -649,7 +659,7 @@
     set('stepTraffic',fmt(p.wMillion,2)+' million × 1,000,000 = '+fmt(p.wMillion*1e6,0)+' design-lane ESAL over '+p.designYears+' years.');
     try{const z=C.reliability(p.r,p.lookupSource).z;set('stepReliability','R = '+fmt(p.r,2)+'%; ZR = '+fmt(z,3)+'; So = '+fmt(p.so,2)+'; ZR × So = '+fmt(z*p.so,6)+'.');}catch{set('stepReliability','Enter valid Reliability and Overall Standard Deviation.');}
     set('stepServiceability',fmt(p.p0,2)+' − '+fmt(p.pt,2)+' = '+fmt(p.dpsi,2)+'.');
-    try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource);set('stepConcrete','f′c = '+fmt(p.fcMPa,2)+' MPa; Sc = '+fmt(concrete.specificationMPa,3)+' MPa = '+fmt(concrete.specificationPsi,2)+' psi; PS = '+fmt(concrete.ps,2)+'%; SDs = '+fmt(concrete.sdPsi,2)+' psi; S′c = '+fmt(p.sc,2)+' psi; Ec = '+fmt(p.ecMillion*1e6,2)+' psi.');}catch{set('stepConcrete','Enter valid concrete strength and Reliability to calculate properties.');}
+    try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);set('stepConcrete','f′c = '+fmt(p.fcMPa,2)+' MPa; Sc = '+fmt(concrete.specificationMPa,3)+' MPa = '+fmt(concrete.specificationPsi,2)+' psi; PS = '+fmt(concrete.ps,2)+'%; SDs = '+fmt(concrete.sdPsi,2)+' psi; S′c = '+fmt(p.sc,2)+' psi; Ec = '+fmt(p.ecMillion*1e6,2)+' psi.');}catch{set('stepConcrete','Enter valid concrete strength and Reliability to calculate properties.');}
     set('stepFactors','Cd = '+fmt(p.cd,2)+'; J = '+fmt(p.j,2)+'; adopted kcorr = '+fmt(p.k,0)+' pci.');
     set('stepEquationTerms',solved?'Reliability '+fmt(solved.terms.reliability,6)+' + Thickness '+fmt(solved.terms.thickness,6)+' + Serviceability '+fmt(solved.terms.serviceability,6)+' + Strength/Support '+fmt(solved.terms.strength,6)+' = '+fmt(solved.terms.rhs,6)+'; target log10(W18) = '+fmt(solved.target,6)+'.':'Complete valid design inputs to evaluate the slab equation.');
     set('stepSolve',solved?'Calculated D = '+fmt(solved.dIn,4)+' in = '+fmt(solved.dMm,2)+' mm. Residual = '+solved.residual.toExponential(3)+' after '+solved.iterations+' iterations.':'Thickness calculation pending.');
@@ -662,23 +672,24 @@
   }
   function render(){
     updateLoadTransfer();
+    const standard=$('scStandard').checked;$('scSpecified').readOnly=standard;$('scSpecifiedEntry').classList.toggle('auto',standard);if(standard)$('scSpecified').value='550';
     if(window.RigidFoundation)window.RigidFoundation.update();
     const p=inputs();$('dpsi').value=Number.isFinite(p.dpsi)?p.dpsi.toFixed(2):'';clearErrors();helpers(p);updateLookup(p);
     let concreteError=null;
     try{
-      const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource);
+      const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);
       p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;
       $('sc').value=p.sc.toFixed(2);$('ecMillion').value=p.ecMillion.toFixed(2);
-      set('scHelp','PS = '+fmt(concrete.ps,2)+'% · |ZR| = '+fmt(concrete.z,3)+' · Sc = '+fmt(concrete.specificationPsi,3)+' psi · SDs = '+fmt(concrete.sdPsi,3)+' psi.');
+      set('scHelp','S′c = '+fmt(p.scSpecified,2)+' + '+fmt(concrete.z,3)+' × '+fmt(concrete.sdPsi,2)+' = '+fmt(p.sc,2)+' psi.');set('concreteZ',fmt(concrete.z,3));set('concretePS',fmt(concrete.ps,2)+'%');set('concreteSD',fmt(concrete.sdPsi,2)+' psi');$('scSpecified').removeAttribute('aria-invalid');
       set('ecMillionHelp','Automatic: 57,000√f′c(psi) = '+fmt(p.ecMillion*1e6,0)+' psi.');
     }catch(e){
-      concreteError=e.message;
+      concreteError=e.message;['concreteZ','concretePS','concreteSD'].forEach(id=>set(id,'—'));$('scSpecified').setAttribute('aria-invalid','true');
       p.sc=NaN;p.ecMillion=NaN;$('sc').value='';$('ecMillion').value='';
     }
     processSteps(p,null);
     if(window.SIEquivalents)window.SIEquivalents.update();
     const errors=C.validate(p).filter(function(e){return e.key!=='sc'&&e.key!=='ecMillion';});
-    if(concreteError&&!errors.length)errors.push({key:'fcMPa',message:concreteError});
+    if(concreteError&&!errors.length)errors.push({key:null,message:concreteError});
     if(errors.length){empty();const enteredErrors=errors.filter(function(e){return !C.NUMERIC_KEYS.includes(e.key)||$(e.key).value.trim()!==''||$(e.key).validity?.badInput;});if(enteredErrors.length)showErrors(enteredErrors);if(V)V.update(p,null);return;}
     try{result=C.solve(p);}catch(e){empty();showErrors([{key:null,message:e.message}]);if(V)V.update(p,null);return;}
     processSteps(p,result);
@@ -686,10 +697,11 @@
     saveLocal(p);
   }
   function makeCase(p){
-    return {app:'aashto93-rigid-local',version:2,equationConstant:C.CONSTANT,concreteMethod:'AUTO_FROM_FC_AND_PAVEMENT_Z',units:{fcMPa:'MPa',wMillion:'million ESAL',ecMillion:'million psi',sc:'psi',k:'pci',trialMm:'mm'},inputs:p,illustration:V?V.getSettings():undefined};
+    return {app:'aashto93-rigid-local',version:2,equationConstant:C.CONSTANT,concreteMethod:'SPECIFIED_SC_AND_PAVEMENT_Z',units:{fcMPa:'MPa',wMillion:'million ESAL',ecMillion:'million psi',sc:'psi',k:'pci',trialMm:'mm'},inputs:p,illustration:V?V.getSettings():undefined};
   }
   $('designForm').addEventListener('submit',function(e){e.preventDefault();render();});
   $('designForm').addEventListener('input',render);
+  $('scStandard').addEventListener('change',render);
   $('foundationMode').addEventListener('change',render);
   $('foundationMaterial').addEventListener('change',function(){window.RigidFoundation.selectMaterial();render();});
   $('jCondition').addEventListener('change',function(){updateLoadTransfer(true);render();});
