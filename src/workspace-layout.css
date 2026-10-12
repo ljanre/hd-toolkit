@@ -118,3 +118,49 @@ body:not(.admin-mode) #foundationSteps{display:none!important}
 
 #coordinatesTool coordinate-converter iframe{border:0;border-radius:0;box-shadow:none}
 .concrete-spec-toggle{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.concrete-spec-toggle small{font-size:11px;color:var(--muted)}
+
+/* Compact rigid design workspace. Retain larger touch controls on small screens. */
+@media screen{
+  #pavementTool.wrap{padding:16px clamp(12px,1.5vw,24px) 24px}
+  #pavementTool .layout,#pavementTool .results{gap:16px}
+  #pavementTool .card-head{padding:12px 16px;min-height:50px}
+  #pavementTool .card-head h2{font-size:16px}
+  #pavementTool .form-body{padding:14px 16px}
+  #designForm .field-grid{gap:8px}
+  #designForm .field{gap:4px 10px}
+  #designForm .field label{font-size:12px;line-height:1.4}
+  #designForm .entry input{min-height:34px;padding:5px 9px;font-size:13px}
+  #designForm .lookup-choice{min-height:34px;padding:5px 9px;font-size:12px}
+  #designForm .input-guide-button,#designForm .has-si .input-guide-button{top:17px}
+  #designForm .group-title{margin-bottom:10px;font-size:12px}
+  #designForm .group+.group{padding-top:14px;margin-top:14px}
+  #designForm .si-equivalent{padding-top:1px;line-height:1.35}
+  #designForm .concrete-spec-toggle{gap:4px 10px}
+  #designForm .concrete-spec-toggle .round-toggle{min-height:28px;font-size:11px}
+  #designForm .concrete-spec-toggle small{font-size:10px}
+  #designForm .load-transfer-block{gap:8px;margin-top:2px}
+  #designForm .load-transfer-figure{padding:8px}
+  #designForm .load-transfer-figure img{max-height:260px}
+  #designForm .foundation-inputs{margin:10px 0}
+  #designForm>.field{margin:0 16px 12px;padding-top:12px}
+  #designForm>.field .input-guide-button{top:29px}
+  #designForm>.design-input-actions{padding:12px 16px;gap:8px}
+  #designForm>.design-input-actions button{min-height:34px;padding:7px 14px;font-size:11px}
+  #pavementSection .pavement-content,.pavement-nomograph-body{padding:14px}
+  #pavementSection .figure-viewport{padding:12px 4px}
+  #pavementTool .thickness-summary{padding:14px}
+  #pavementTool .thickness-summary h3{min-height:0;margin-bottom:6px;font-size:12px}
+  #pavementTool .thickness-value strong{font-size:34px}
+  #pavementTool .rounded-controls{margin-top:10px}
+  #pavementTool .structure-table-wrap{margin-top:12px}
+  #pavementTool .structure-table-wrap>summary{padding:9px 12px;font-size:12px}
+  #pavementTool .foundation-steps{margin-top:16px}
+  #pavementTool .foundation-steps>summary{padding:12px 16px}
+}
+@media screen and (max-width:600px){
+  #designForm .entry input{min-height:42px;font-size:16px}
+  #designForm .lookup-choice{min-height:42px;font-size:14px}
+  #designForm .input-guide-button,#designForm .has-si .input-guide-button{top:9px}
+  #designForm .concrete-spec-toggle .round-toggle{min-height:36px;font-size:12px}
+  #designForm .concrete-spec-toggle small{font-size:11px}
+}
