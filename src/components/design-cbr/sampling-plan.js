@@ -58,6 +58,6 @@
     stationMode=$('pitStationMode').checked;update();
   });
   for(const id of ['pitLength','pitStart','pitEnd','pitInterval'])$(id).addEventListener('input',update);
-  $('clear').addEventListener('click',()=>{stationMode=false;$('pitStationMode').checked=false;$('pitLength').value='';$('pitStart').value='0+000';$('pitEnd').value='';$('pitInterval').value='500';update();});
+  $('clear').addEventListener('click',()=>{stationMode=false;$('pitStationMode').checked=false;$('pitLength').value='1000';$('pitStart').value='0+000';$('pitEnd').value='1+000';$('pitInterval').value='500';update();});
   update();
 })();
