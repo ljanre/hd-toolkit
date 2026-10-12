@@ -4,16 +4,24 @@ import assert from 'node:assert/strict';
 
 const base = new URL('../src/components/subgrade-reaction/', import.meta.url);
 const context = {};
-for (const name of ['model-data.js', 'engine.js', 'equation-extension.js', 'loss-support.js', 'nomograph-labels.js']) runInNewContext(await readFile(new URL(name, base), 'utf8'), context);
+for (const name of ['model-data.js', 'engine.js', 'nomograph-extension.js', 'loss-support.js', 'nomograph-labels.js']) runInNewContext(await readFile(new URL(name, base), 'utf8'), context);
 const { calculate, model } = context.SubgradeCalculation;
-const extended=context.FoundationEquation.calculate({DSB:8,ESB:50000,MR:30000});
-assert.equal(extended.range_status,'EQUATION_OUTSIDE_CHART');
-assert.ok(Math.abs(extended.result-1422.1887550361184)<1e-8);
-assert.equal(extended.graphical_overlay,null,'Equation values must not draw paths on the printed chart');
+const extended=context.NomographExtension.calculate({DSB:8,ESB:50000,MR:30000});
+assert.equal(extended.range_status,'EXTRAPOLATED_ESTIMATE');
+assert.ok(Number.isFinite(extended.result)&&extended.result>calculate({DSB:8,ESB:50000,MR:20000}).result);
+assert.equal(extended.graphical_overlay,null,'Original calibrated overlay is not used for an extended chart');
 assert.equal(extended.estimated_uncertainty,null,'Do not reuse the digitized chart uncertainty outside its range');
-for(const key of ['DSB','ESB','MR'])for(const value of [0,-1,Infinity])assert.equal(context.FoundationEquation.evaluate({DSB:8,ESB:50000,MR:30000,[key]:value}),null);
-assert.equal(context.FoundationEquation.calculate({DSB:8,ESB:50000,MR:7000}).result,calculate({DSB:8,ESB:50000,MR:7000}).result);
-assert.match(context.FoundationEquation.plot({DSB:8,ESB:50000,MR:30000}),/30,000 psi/);
+for(const key of ['DSB','ESB','MR'])for(const value of [0,-1,Infinity])assert.equal(context.NomographExtension.calculate({DSB:8,ESB:50000,MR:30000,[key]:value}).result,null);
+assert.equal(context.NomographExtension.calculate({DSB:8,ESB:50000,MR:7000}).result,calculate({DSB:8,ESB:50000,MR:7000}).result);
+assert.match(context.NomographExtension.plot({DSB:8,ESB:50000,MR:30000},'figure-3-3.png'),/30,000 psi/);
+assert.match(context.NomographExtension.plot({DSB:8,ESB:50000,MR:30000},'figure-3-3.png'),/Turning Point/);
+assert.equal(context.NomographExtension.plot({DSB:8,ESB:50000,MR:7000},'figure-3-3.png'),'','Within-range chart must not show a second plot');
+for(const boundary of [1000,20000]){
+  const mr=boundary===1000?boundary-.001:boundary+.001;
+  const original=calculate({DSB:8,ESB:50000,MR:boundary}).result;
+  const continued=context.NomographExtension.calculate({DSB:8,ESB:50000,MR:mr}).result;
+  assert.ok(Math.abs(continued-original)/original<.00001,'Edge continuation must join the calibrated boundary');
+}
 const cases = JSON.parse(await readFile(new URL('./subgrade-golden-tests.json', import.meta.url), 'utf8'));
 const numberOrNull = value => value === '' || value === undefined ? null : value;
 let maxError = 0;

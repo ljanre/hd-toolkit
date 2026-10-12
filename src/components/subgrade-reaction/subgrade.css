@@ -5,4 +5,6 @@
 .guide-materials{margin-top:16px}.guide-materials table{width:100%;border-collapse:collapse;font-size:12px;line-height:1.45}.guide-materials caption{text-align:left;font-weight:600;margin-bottom:8px}.guide-materials th,.guide-materials td{border:1px solid var(--border);padding:8px;text-align:left;vertical-align:top}.guide-materials th{background:#eef5f3;color:var(--accent-dark)}.guide-materials td span{display:block;font-size:11px;color:var(--muted);margin-top:3px}.guide-materials td:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}.guide-materials .source{font-size:11px}dialog{max-height:calc(100dvh - 32px);overflow:auto}
 .nomograph-callout rect{fill:#fff;fill-opacity:.96;stroke:#c43127;stroke-width:1.5}.nomograph-callout text{font:600 22px Segoe UI,Arial,sans-serif;fill:#8c211b;stroke:none}.nomograph-callout path{fill:none;stroke:#c43127;stroke-width:1.5}.nomograph-callout circle{fill:#c43127;stroke:#fff;stroke-width:2}
 
-.equation-extension svg{display:block;width:100%;height:auto;border:1px solid #dce5eb;border-radius:8px;margin:12px 0}
+.nomograph-extension svg{display:block;width:100%;height:auto;border:1px solid #dce5eb;border-radius:8px;margin:12px 0}
+
+.nomograph-extension:has(svg)+.nomograph{display:none}

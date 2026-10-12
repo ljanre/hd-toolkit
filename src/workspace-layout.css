@@ -118,7 +118,7 @@ body:not(.admin-mode) #foundationSteps{display:none!important}
 
 #coordinatesTool coordinate-converter iframe{border:0;border-radius:0;box-shadow:none}
 .concrete-spec-toggle{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.concrete-spec-toggle small{font-size:11px;color:var(--muted)}
-.equation-extension svg{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;margin:10px 0}
+.nomograph-extension svg{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;margin:10px 0}
 
 /* Compact rigid design workspace. Retain larger touch controls on small screens. */
 @media screen{
@@ -165,3 +165,5 @@ body:not(.admin-mode) #foundationSteps{display:none!important}
   #designForm .concrete-spec-toggle .round-toggle{min-height:36px;font-size:12px}
   #designForm .concrete-spec-toggle small{font-size:11px}
 }
+
+.nomograph-extension:has(svg)+.foundation-nomograph{display:none}

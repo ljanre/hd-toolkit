@@ -2,7 +2,7 @@ import {readFile} from 'node:fs/promises';
 import {runInNewContext} from 'node:vm';
 import assert from 'node:assert/strict';
 const html=await readFile(new URL('../src/index.html',import.meta.url),'utf8');
-const foundationScripts=await Promise.all(['components/subgrade-reaction/model-data.js','components/subgrade-reaction/engine.js','components/subgrade-reaction/equation-extension.js','components/subgrade-reaction/loss-support.js','components/subgrade-reaction/nomograph-labels.js','rigid-foundation.js'].map(file=>readFile(new URL('../src/'+file,import.meta.url),'utf8')));
+const foundationScripts=await Promise.all(['components/subgrade-reaction/model-data.js','components/subgrade-reaction/engine.js','components/subgrade-reaction/nomograph-extension.js','components/subgrade-reaction/loss-support.js','components/subgrade-reaction/nomograph-labels.js','rigid-foundation.js'].map(file=>readFile(new URL('../src/'+file,import.meta.url),'utf8')));
 function node(value=''){
   return {value,hidden:false,disabled:false,events:{},textContent:'',validity:{badInput:false},
     classList:{add(){},remove(){},toggle(){}},attributes:{},setAttribute(k,v){this.attributes[k]=v;},getAttribute(k){return this.attributes[k];},removeAttribute(k){delete this.attributes[k];},
