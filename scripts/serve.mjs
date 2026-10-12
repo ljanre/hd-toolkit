@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 
 const root = resolve('src');
-const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png' };
+const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.json': 'application/json' };
 createServer(async (request, response) => {
   try {
     const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
@@ -13,9 +13,9 @@ createServer(async (request, response) => {
       return;
     }
     const content = await readFile(file);
-    response.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream' });
+    response.writeHead(200, { 'Content-Type': mime[extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
     response.end(content);
   } catch {
-    response.writeHead(404).end('Page not found. Website implementation is pending the full Figma design.');
+    response.writeHead(404).end('File not found.');
   }
 }).listen(5173, '127.0.0.1', () => console.log('HD Toolkit preview: http://127.0.0.1:5173'));

@@ -160,6 +160,9 @@ const shell = {
   location: { hash: '#subgradeTool' }, localStorage: { getItem: () => null, setItem() {} },
   Event: class { constructor(type, options) { this.type = type; Object.assign(this, options); } }
 };
+const registryContext={document:{querySelector(){return null;}},window:{location:{search:''}},URLSearchParams,customElements:{get(){return true;}},HTMLElement:class {}};
+runInNewContext(await readFile(new URL('../src/tool-registry.js',import.meta.url),'utf8'),registryContext);
+shell.ToolkitRegistry=registryContext.ToolkitRegistry;
 runInNewContext(await readFile(new URL('../src/toolkit.js', import.meta.url), 'utf8'), shell);
 shell.location.hash = '#subbaseTool';
 listeners.hashchange.forEach(fn=>fn());

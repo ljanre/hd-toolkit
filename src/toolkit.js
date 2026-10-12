@@ -1,7 +1,19 @@
 (() => {
   const toggle = document.getElementById('sidebarToggle');
-  const adminTools = new Set(['strength', 'subgrade']);
-  const hiddenTools = new Set(['culvert']);
+  const { tools, groups } = ToolkitRegistry;
+  const adminTools = new Set(Object.keys(tools).filter(key => tools[key].access === 'admin'));
+  const hiddenTools = new Set(Object.keys(tools).filter(key => tools[key].access === 'unavailable'));
+  const navigation = document.getElementById('toolNavigation');
+  if (navigation) {
+    navigation.innerHTML = groups.map(group => {
+      const entries = Object.entries(tools).filter(([,tool]) => tool.group === group.id).map(([key,tool]) => {
+        const label = '<span aria-hidden="true">' + tool.icon + '</span><span class="nav-label">' + (tool.label || tool.title) + (tool.access === 'unavailable' ? ' <small>TBD</small>' : '') + '</span>';
+        return tool.access === 'unavailable' ? '<span class="tool-unavailable" aria-disabled="true">' + label + '</span>' : '<a data-tool="' + key + '" href="#' + tool.id + '" title="' + tool.title + '"' + (tool.access === 'admin' ? ' hidden' : '') + '>' + label + '</a>';
+      }).join('');
+      return '<details class="tool-group" data-tool-group="' + group.id + '"><summary title="' + group.title + '"><span class="group-icon" aria-hidden="true">' + group.icon + '</span><span class="group-label">' + group.title + '</span></summary><div class="tool-group-items">' + entries + '</div></details>';
+    }).join('');
+  }
+
   function syncCalculationAccess(){
     const enabled=document.body.classList.contains('admin-mode');
     const steps=document.getElementById('foundationSteps');
@@ -21,18 +33,6 @@
   toggle.addEventListener('click', () => collapse(!document.body.classList.contains('sidebar-collapsed')));
   function selectTool() {
     syncCalculationAccess();
-    const tools = {
-      pavement: { id: 'pavementTool', title: 'Rigid Pavement Design' },
-      flexible: { id: 'flexibleTool', title: 'Flexible Pavement Design (TBD)' },
-      subgrade: { id: 'subgradeTool', title: 'Corrected Subgrade Reaction' },
-      subbase: { id: 'subbaseTool', title: 'Subbase Thickness Design' },
-      traffic: { id: 'trafficTool', title: 'Design Traffic (TBD)' },
-      cbr: { id: 'cbrTool', title: 'Design CBR' },
-      strength: { id: 'strengthTool', title: 'Concrete Modulus of Rupture' },
-      rainfall: { id: 'rainfallTool', title: 'Rainfall Station Locator' },
-      coordinates: { id: 'coordinatesTool', title: 'PRS92 Converter' },
-      culvert: { id: 'culvertTool', title: 'Culvert Hydraulics' }
-    };
     const admin = document.body.classList.contains('admin-mode');
     let active = Object.keys(tools).find(key => location.hash === '#' + tools[key].id) || 'pavement';
     if (hiddenTools.has(active) || (adminTools.has(active) && !admin)) { active = 'pavement'; location.hash = '#pavementTool'; }
@@ -46,6 +46,13 @@
       link.classList.toggle('nav-current', selected);
       if (selected) link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
+      if (selected) {
+        const group = link.closest('.tool-group');
+        if (group) group.open = true;
+      }
+    });
+    document.querySelectorAll('.tool-group').forEach(group => {
+      group.classList.toggle('has-current', Boolean(group.querySelector('[aria-current="page"]')));
     });
     document.title = 'HD Toolkit | ' + tools[active].title;
     const skip = document.querySelector('.skip-link');

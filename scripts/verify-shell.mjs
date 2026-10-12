@@ -19,7 +19,7 @@ for (const component of ['rainfall-locator','coordinate-converter','subgrade-rea
 }
 const events={},nodes=new Map(),classes=new Set(),storage=new Map();
 classes.add('admin-mode');
-const create = () => ({value:'',handlers:{},attributes:{},setAttribute(k,v){this.attributes[k]=v;},removeAttribute(k){delete this.attributes[k];},addEventListener(k,f){this.handlers[k]=f;},dispatchEvent(e){this.lastEvent=e;},focus(){this.focused=true;}});
+const create = () => ({closest(){return null;},value:'',handlers:{},attributes:{},setAttribute(k,v){this.attributes[k]=v;},removeAttribute(k){delete this.attributes[k];},addEventListener(k,f){this.handlers[k]=f;},dispatchEvent(e){this.lastEvent=e;},focus(){this.focused=true;}});
 for (const id of ['flexibleTool','sidebarToggle','pavementTool','subgradeTool','subbaseTool','strengthTool','trafficTool','cbrTool','rainfallTool','coordinatesTool','k','sc','ecMillion','fcMPa','r','wMillion','rigidDesignYears','adminModeToggle','adminModeState','adminPasswordDialog','adminPasswordForm','adminPassword','adminPasswordError','adminPasswordCancel']) nodes.set(id,create());
 nodes.set('culvertTool',create());
 nodes.get('adminPasswordDialog').showModal=function(){this.open=true;};nodes.get('adminPasswordDialog').close=function(){this.open=false;this.handlers.close();};
@@ -29,11 +29,14 @@ const strengthFrame={contentWindow:{}},subgradeFrame={contentWindow:{}},trafficF
 const strengthLink={...create(),dataset:{tool:'strength'},classList:{toggle(){}}};
 const adminLinks=['subgrade'].map(tool=>({...create(),dataset:{tool},classList:{toggle(){}}}));
 const culvertLink={...create(),dataset:{tool:'culvert'},classList:{toggle(){}}};
-const shell={document:{getElementById:id=>nodes.get(id),querySelectorAll:()=>[strengthLink,...adminLinks,culvertLink],querySelector:selector=>selector==='concrete-strength iframe'?strengthFrame:selector==='subgrade-reaction iframe'?subgradeFrame:selector==='design-traffic iframe'?trafficFrame:skip,
+const shell={document:{getElementById:id=>nodes.get(id),querySelectorAll:selector=>selector==='.tool-group'?[]:[strengthLink,...adminLinks,culvertLink],querySelector:selector=>selector==='concrete-strength iframe'?strengthFrame:selector==='subgrade-reaction iframe'?subgradeFrame:selector==='design-traffic iframe'?trafficFrame:skip,
   body:{classList:{toggle(k,v){if(v)classes.add(k);else classes.delete(k);},contains:k=>classes.has(k)}}},
 window:{addEventListener(type,fn){(events[type]??=[]).push(fn);},dispatchEvent(event){dispatch(event.type,event);}},location:{hash:'#strengthTool'},
 localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)},Event:class {constructor(type,opts){this.type=type;Object.assign(this,opts);}}};
 const dispatch=(type,event)=>events[type].forEach(fn=>fn(event));
+const registryContext={document:{querySelector(){return null;}},window:{location:{search:'?v=test-release'}},URLSearchParams,customElements:{get(){return true;}},HTMLElement:class {}};
+runInNewContext(await readFile(path.join(root,'tool-registry.js'),'utf8'),registryContext);
+shell.ToolkitRegistry=registryContext.ToolkitRegistry;
 runInNewContext(await readFile(path.join(root,'toolkit.js'),'utf8'),shell);
 assert.equal(activations,1);assert.equal(nodes.get('strengthTool').hidden,false);
 dispatch('message',{source:{},data:{type:'hd-toolkit-concrete-strength',fcMPa:24}});

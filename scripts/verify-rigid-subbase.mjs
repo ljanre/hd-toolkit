@@ -37,3 +37,20 @@ get('calculationSteps').open=true;events.message({source:parent,data:{type:'hd-t
 get('rigid-clear').handlers.click();for(const id of ['rigid-cbr','construction','slab'])assert.equal(get(id).value,'','Clear restores blank inputs');
 assert.equal(get('frost').checked,false,'Clear resets frost to No');
 console.log('Rigid subbase classification boundaries, construction/frost governing cases, invalidation and Admin access passed.');
+
+// SVG visibility must use attributes, not the HTML-only hidden property.
+const flexibleHtml=await readFile(new URL('dist/index.html',root),'utf8'),svgNodes=new Map();
+for(const match of flexibleHtml.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)){
+  const attributes={};if(/\bhidden\b/.test(match[0]))attributes.hidden='';
+  svgNodes.set(match[1],{value:'',textContent:'',innerHTML:'',attributes,handlers:{},setAttribute(k,v){this.attributes[k]=String(v);},removeAttribute(k){delete this.attributes[k];},toggleAttribute(k,force){if(force)this.attributes[k]='';else delete this.attributes[k];},addEventListener(k,v){this.handlers[k]=v;},focus(){}});
+}
+const svgContext={document:{getElementById:id=>svgNodes.get(id),dispatchEvent(){}},CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}}};
+for(const file of ['dist/model-data.js','dist/engine.js','../subgrade-reaction/nomograph-labels.js','dist/app.js'])runInNewContext(await readFile(new URL(file,root),'utf8'),svgContext);
+const chartGroup=svgNodes.get('construction-lines');assert.ok('hidden' in chartGroup.attributes);
+const chartResult=svgContext.RN29App.calculateAndRender(1,5);assert.equal(chartResult.status,'OK');
+assert.equal('hidden' in chartGroup.attributes,false,'Valid calculation must reveal the red SVG construction');
+assert.ok(Number(svgNodes.get('overlay-vertical').attributes.x1)>0);
+assert.match(svgNodes.get('overlay-callouts').innerHTML,/CBR = 5%/);assert.match(svgNodes.get('overlay-callouts').innerHTML,/Adopted =/);
+svgNodes.get('toggle-overlay').handlers.click();assert.ok('hidden' in chartGroup.attributes);
+svgNodes.get('toggle-overlay').handlers.click();assert.equal('hidden' in chartGroup.attributes,false);
+svgContext.RN29App.calculateAndRender(1,null);assert.ok('hidden' in chartGroup.attributes,'Invalid inputs must hide a previous trace');

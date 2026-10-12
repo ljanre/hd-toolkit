@@ -31,29 +31,41 @@
     @media(max-width:400px){.figure-controls{grid-template-columns:1fr}}
     @media print{.pavement-card{break-inside:avoid;margin-top:14px}.pavement-content{padding:10px 13px}.pavement-head p{font-size:9px}.pavement-svg{min-width:0;width:100%;max-height:310px}.figure-topline{font-size:8px;padding:7px 9px}.figure-topline strong{font-size:9px}.figure-controls{display:none!important}.pavement-head .pill{font-size:8px}.section-link{display:none}}
   </style>
-  <link rel="stylesheet" href="./toolkit.css">
+  <link rel="stylesheet" href="./toolkit.css?v=grouped-navigation-1">
   <link rel="stylesheet" href="./ui-refinement.css">
   <link rel="stylesheet" href="./compact-workspace.css">
   <link rel="stylesheet" href="./engineering-section.css">
 <link rel="stylesheet" href="./workspace-layout.css?v=stable-chart-3">
-<link rel="stylesheet" href="./nomograph-theme.css" />
-</head>
+<link rel="stylesheet" href="./components/nomograph-theme.css?v=nomograph-format-4"></head>
 <body>
 <a class="skip-link" href="#designForm">Skip to design inputs</a>
 <aside class="toolkit-sidebar" id="toolkitSidebar" aria-label="Toolkit navigation">
   <a class="toolkit-brand" href="./"><span class="toolkit-mark">HD</span><span class="brand-label">HD Toolkit<small>Highways Design Toolkit</small></span></a>
   <p class="nav-caption">DESIGN WORKSPACE</p>
-  <nav>
-    <a data-tool="traffic" href="#trafficTool" title="Design Traffic (TBD)"><span aria-hidden="true">⇄</span><span class="nav-label">Design Traffic (TBD)</span></a>
-    <a data-tool="cbr" href="#cbrTool" title="Design CBR"><span aria-hidden="true">◫</span><span class="nav-label">Design CBR</span></a>
-    <a class="nav-current" data-tool="pavement" href="#pavementTool" aria-current="page" title="Rigid Pavement Design"><span aria-hidden="true">▤</span><span class="nav-label">Rigid Pavement Design</span></a>
-    <a data-tool="flexible" href="#flexibleTool" title="Flexible Pavement Design (TBD)"><span aria-hidden="true">▥</span><span class="nav-label">Flexible Pavement Design (TBD)</span></a>
-    <a data-tool="subgrade" hidden href="#subgradeTool" title="Corrected Subgrade Reaction"><span aria-hidden="true">▱</span><span class="nav-label">Corrected Subgrade Reaction</span></a>
-    <a data-tool="subbase" href="#subbaseTool" title="Subbase Thickness Design"><span aria-hidden="true">▰</span><span class="nav-label">Subbase Thickness Design</span></a>
-    <a data-tool="strength" hidden href="#strengthTool" title="Concrete Modulus of Rupture"><span aria-hidden="true">◇</span><span class="nav-label">Concrete Modulus of Rupture</span></a>
-    <a data-tool="rainfall" href="#rainfallTool" title="Rainfall station locator"><span aria-hidden="true">☂</span><span class="nav-label">Rainfall Station Locator</span></a>
-    <a data-tool="culvert" href="#culvertTool" title="Culvert Hydraulics" hidden><span aria-hidden="true">▱</span><span class="nav-label">Culvert Hydraulics</span></a>
-    <a data-tool="coordinates" href="#coordinatesTool" title="PRS92 Converter"><span aria-hidden="true">⌖</span><span class="nav-label">PRS92 Converter</span></a>
+  <nav id="toolNavigation" aria-label="Tools">
+    <details class="tool-group" data-tool-group="pavement" open>
+      <summary title="Pavement"><span class="group-icon" aria-hidden="true">▤</span><span class="group-label">Pavement</span></summary>
+      <div class="tool-group-items">
+        <a data-tool="traffic" href="#trafficTool" title="Design Traffic (TBD)"><span aria-hidden="true">⇄</span><span class="nav-label">Design Traffic (TBD)</span></a>
+        <a data-tool="cbr" href="#cbrTool" title="Design CBR"><span aria-hidden="true">◫</span><span class="nav-label">Design CBR</span></a>
+        <a class="nav-current" data-tool="pavement" href="#pavementTool" aria-current="page" title="Rigid Pavement Design"><span aria-hidden="true">▤</span><span class="nav-label">Rigid Pavement Design</span></a>
+        <a data-tool="flexible" href="#flexibleTool" title="Flexible Pavement Design (TBD)"><span aria-hidden="true">▥</span><span class="nav-label">Flexible Pavement Design (TBD)</span></a>
+        <a data-tool="subbase" href="#subbaseTool" title="Subbase Thickness"><span aria-hidden="true">▰</span><span class="nav-label">Subbase Thickness</span></a>
+      </div>
+    </details>
+    <details class="tool-group" data-tool-group="hydraulics" >
+      <summary title="Hydraulics"><span class="group-icon" aria-hidden="true">≈</span><span class="group-label">Hydraulics</span></summary>
+      <div class="tool-group-items">
+        <span class="tool-unavailable" aria-disabled="true"><span aria-hidden="true">▱</span><span class="nav-label">Culvert <small>TBD</small></span></span>
+      </div>
+    </details>
+    <details class="tool-group" data-tool-group="others" >
+      <summary title="Others"><span class="group-icon" aria-hidden="true">⌖</span><span class="group-label">Others</span></summary>
+      <div class="tool-group-items">
+        <a data-tool="coordinates" href="#coordinatesTool" title="PRS92"><span aria-hidden="true">⌖</span><span class="nav-label">PRS92</span></a>
+        <a data-tool="rainfall" href="#rainfallTool" title="Rainfall"><span aria-hidden="true">☂</span><span class="nav-label">Rainfall</span></a>
+      </div>
+    </details>
   </nav>
   <div class="sidebar-bottom">
   <div class="sidebar-note"><span class="sidebar-dot"></span> Browser-based workspace<p>Your design inputs are saved in this browser on this device.</p></div>
@@ -294,8 +306,8 @@
     </section>
 
         <section class="card pavement-nomographs" aria-labelledby="pavementNomographTitle"><div class="card-head"><h2 id="pavementNomographTitle">Subgrade Reaction Nomographs</h2></div><div class="pavement-nomograph-body">
-          <figure><figcaption>Figure 3.3 · Composite Subgrade Reaction <output id="pavementCompositeValue">— pci</output></figcaption><div class="nomograph-extension" id="pavementExtendedPlot"></div><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-3.png" loading="lazy" alt="Composite subgrade reaction nomograph beneath the pavement section"><svg viewBox="0 0 1086 1046" aria-hidden="true"><polyline id="pavementCompositePath" points=""/><g id="pavementCompositePoints"></g></svg></div><p id="pavementExtensionNote" class="nomograph-extension-note" role="status" aria-live="polite"></p></figure>
-          <figure><figcaption>Figure 3.6 · Loss-of-Support Correction <output id="pavementCorrectedValue">— pci</output></figcaption><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-6.png" loading="lazy" alt="Loss of support correction nomograph beneath the pavement section"><svg viewBox="0 0 1241 1082" aria-hidden="true"><polyline id="pavementLossPath" points=""/><g id="pavementLossPoints"></g></svg></div></figure>
+          <figure><figcaption>Figure 3.3 · Composite Subgrade Reaction <output id="pavementCompositeValue">— pci</output></figcaption><div class="nomograph-extension" id="pavementExtendedPlot"></div><div class="foundation-nomograph"><img width="1086" height="1046" src="./components/subgrade-reaction/figure-3-3.png" loading="lazy" alt="Composite subgrade reaction nomograph beneath the pavement section"><svg viewBox="0 0 1086 1046" aria-hidden="true"><polyline id="pavementCompositePath" points=""/><g id="pavementCompositePoints"></g></svg></div><p id="pavementExtensionNote" class="nomograph-extension-note" role="status" aria-live="polite"></p></figure>
+          <figure><figcaption>Figure 3.6 · Loss-of-Support Correction <output id="pavementCorrectedValue">— pci</output></figcaption><div class="foundation-nomograph"><img width="1241" height="1082" src="./components/subgrade-reaction/figure-3-6.png" loading="lazy" alt="Loss of support correction nomograph beneath the pavement section"><svg viewBox="0 0 1241 1082" aria-hidden="true"><polyline id="pavementLossPath" points=""/><g id="pavementLossPoints"></g></svg></div></figure>
           <small>Red paths follow the current foundation inputs. Manual kcorr mode shows reference charts without calculated paths.</small>
         </div></section>
         <div id="errors" class="error-panel" role="alert" hidden></div>
@@ -308,9 +320,9 @@
       <li><h3>Determine Reliability and Variability</h3><p>Look up or interpolate ZR from the active R–ZR table. So represents the adopted overall standard deviation for rigid pavement.</p><p class="equation">Reliability Term = ZR × So <span>Eq. (2)</span></p><p id="stepReliability"></p></li>
       <li><h3>Calculate Serviceability Loss</h3><p class="equation">ΔPSI = p₀ − pₜ <span>Eq. (3)</span></p><p id="stepServiceability"></p><small>Initial serviceability must exceed terminal. Both are serviceability indices, not pressure units.</small></li>
       <li><h3>Calculate Concrete Properties</h3><p class="equation">Sc(psi) = 550 (standard toggle) or entered project specification <span>Eq. (4)</span></p><p class="equation">SDs = (PS/100) × Sc; S′c = Sc + |ZR| × SDs <span>Eq. (5)</span></p><p class="equation">Ec(psi) = 57,000√[f′c(MPa) × 145.038] <span>Eq. (6)</span></p><p id="stepConcrete"></p><table aria-label="Table 5 strength distribution"><caption>Table 5 · Strength Distribution</caption><thead><tr><th>Standard normal deviate z</th><th>PS (%)</th></tr></thead><tbody><tr><td>0.841</td><td>20</td></tr><tr><td>1.037</td><td>15</td></tr><tr><td>1.282</td><td>10</td></tr><tr><td>1.645</td><td>5</td></tr><tr><td>2.327</td><td>1</td></tr></tbody></table><small>This toolkit uses the requested coupling of concrete PS to pavement ZR. The DPWH manual’s strength example uses independently selected PS/z; the coupling is a worksheet assumption.</small></li></ol>
-      <ol start="5"><li><h3>Determine Composite Subgrade Reaction · Figure 3.3</h3><p>Enter subbase thickness DSB, subbase elastic modulus ESB and roadbed resilient modulus MR. The digital nomograph follows the plotted scales without extrapolation.</p><p>Beyond the printed ranges, the nearest edge curves continue in logarithmic modulus space. Dashed paths indicate unverified extrapolation; no validated uncertainty is assigned. All inputs must be positive.</p><p>Composite k∞: <output id="foundationCompositeValue">— pci</output></p><div class="nomograph-extension" id="foundationExtendedPlot"></div><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-3.png" loading="lazy" alt="AASHTO Figure 3.3 composite subgrade reaction nomograph"><svg viewBox="0 0 1086 1046" aria-hidden="true"><polyline id="foundationCompositePath" points=""/><g id="foundationCompositePoints"></g></svg></div><p id="foundationExtensionNote" class="nomograph-extension-note"></p><small>Figure 3.3 graphical model allowance: ±6%; this is not a statistical confidence interval.</small></li>
+      <ol start="5"><li><h3>Determine Composite Subgrade Reaction · Figure 3.3</h3><p>Enter subbase thickness DSB, subbase elastic modulus ESB and roadbed resilient modulus MR. The digital nomograph follows the plotted scales without extrapolation.</p><p>Beyond the printed ranges, the nearest edge curves continue in logarithmic modulus space. Dashed paths indicate unverified extrapolation; no validated uncertainty is assigned. All inputs must be positive.</p><p>Composite k∞: <output id="foundationCompositeValue">— pci</output></p><div class="nomograph-extension" id="foundationExtendedPlot"></div><div class="foundation-nomograph"><img width="1086" height="1046" src="./components/subgrade-reaction/figure-3-3.png" loading="lazy" alt="AASHTO Figure 3.3 composite subgrade reaction nomograph"><svg viewBox="0 0 1086 1046" aria-hidden="true"><polyline id="foundationCompositePath" points=""/><g id="foundationCompositePoints"></g></svg></div><p id="foundationExtensionNote" class="nomograph-extension-note"></p><small>Figure 3.3 graphical model allowance: ±6%; this is not a statistical confidence interval.</small></li>
       <li><h3>Determine Effective k</h3><p>Use the composite result only when seasonal and shallow-foundation adjustments do not change k. Otherwise select Adjusted Effective k and enter the value after those project-specific adjustments.</p><p>Effective k before loss of support: <output id="foundationEffectiveValue">— pci</output></p></li>
-      <li><h3>Correct for Loss of Support · Figure 3.6</h3><p>From effective k on the horizontal axis, move upward to the selected LS line, then left to read kcorr. LS = 0 leaves k unchanged; fractional LS interpolates log10(kcorr) between adjacent printed lines.</p><p>Corrected kcorr: <output id="foundationCorrectedValue">—</output></p><div class="foundation-nomograph"><img src="./components/subgrade-reaction/figure-3-6.png" loading="lazy" alt="AASHTO Figure 3.6 loss-of-support correction nomograph"><svg viewBox="0 0 1241 1082" aria-hidden="true"><polyline id="foundationLossPath" points=""/><g id="foundationLossPoints"></g></svg></div><p>Printed correction range: effective k 1–2,000 pci, LS 0–3, corrected k 1–1,000 pci. The result is an approximate chart reading, rounded to whole pci for slab design.</p></li></ol>
+      <li><h3>Correct for Loss of Support · Figure 3.6</h3><p>From effective k on the horizontal axis, move upward to the selected LS line, then left to read kcorr. LS = 0 leaves k unchanged; fractional LS interpolates log10(kcorr) between adjacent printed lines.</p><p>Corrected kcorr: <output id="foundationCorrectedValue">—</output></p><div class="foundation-nomograph"><img width="1241" height="1082" src="./components/subgrade-reaction/figure-3-6.png" loading="lazy" alt="AASHTO Figure 3.6 loss-of-support correction nomograph"><svg viewBox="0 0 1241 1082" aria-hidden="true"><polyline id="foundationLossPath" points=""/><g id="foundationLossPoints"></g></svg></div><p>Printed correction range: effective k 1–2,000 pci, LS 0–3, corrected k 1–1,000 pci. The result is an approximate chart reading, rounded to whole pci for slab design.</p></li></ol>
       <ol start="8"><li><h3>Adopt Drainage and Load Transfer Coefficients</h3><p>Choose Cd for drainage quality and time near saturation; choose J for joints, load-transfer devices and shoulder conditions. The input guides contain the reference tables.</p><p id="stepFactors"></p></li><li><h3>Solve the AASHTO 1993 Rigid Slab Equation</h3><pre class="rigid-equation">log10(W18) = ZR × So + 7.35 log10(D + 1) − 0.06
   + log10(ΔPSI / 3) / [1 + 1.624 × 10⁷ / (D + 1)^8.46]
   + (4.22 − 0.32pt) × log10{S′c × Cd × (D^0.75 − 1.132)
@@ -329,23 +341,15 @@
 <section id="trafficTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Design Traffic"><design-traffic></design-traffic></section>
 <section id="cbrTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Design CBR"><design-cbr></design-cbr></section>
 <section id="flexibleTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Flexible Pavement Design"><flexible-pavement></flexible-pavement></section>
-<script src="./components/flexible-pavement/component.js"></script>
-<script src="./components/rainfall-locator/component.js"></script>
-<script src="./components/culvert-hydraulics/component.js"></script>
-<script src="./components/coordinate-converter/component.js"></script>
-<script src="./components/subgrade-reaction/component.js?v=stable-chart-3"></script>
-<script src="./components/subbase-thickness/component.js"></script>
-<script src="./components/concrete-strength/component.js"></script>
-<script src="./components/design-traffic/component.js"></script>
-<script src="./components/design-cbr/component.js?v=pit-plan-2"></script>
+<script src="./tool-registry.js?v=registry-1"></script>
 <script src="./admin-mode.js"></script>
-<script src="./toolkit.js"></script>
+<script src="./toolkit.js?v=grouped-navigation-1"></script>
 <script src="./components/input-guide.js?v=stable-chart-3"></script>
 <script src="./components/si-equivalents.js"></script>
 <script src="./components/subgrade-reaction/model-data.js"></script>
-<script src="./components/subgrade-reaction/engine.js"></script><script src="./components/subgrade-reaction/nomograph-extension.js?v=stable-chart-3"></script>
+<script src="./components/subgrade-reaction/engine.js"></script><script src="./components/subgrade-reaction/nomograph-extension.js?v=nomograph-format-4"></script>
 <script src="./components/subgrade-reaction/loss-support.js"></script>
-<script src="./components/subgrade-reaction/nomograph-labels.js?v=stable-chart-3"></script><script src="./rigid-foundation.js?v=stable-chart-3"></script>
+<script src="./components/subgrade-reaction/nomograph-labels.js?v=nomograph-format-4"></script><script src="./rigid-foundation.js?v=stable-chart-3"></script>
 <script id="calculation-core">
 (function(root){
   'use strict';

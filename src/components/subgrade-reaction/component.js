@@ -6,7 +6,7 @@ customElements.define('subgrade-reaction', class extends HTMLElement {
     if (this.querySelector('iframe')) return;
     const frame = document.createElement('iframe');
     frame.title = 'Subgrade reaction calculator — AASHTO 1993 Figure 3.3';
-    frame.src = './components/subgrade-reaction/index.html';
+    frame.src = './components/subgrade-reaction/index.html?v=nomograph-format-4';
     frame.loading = 'eager';
     this.append(frame);
   }

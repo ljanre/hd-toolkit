@@ -47,12 +47,15 @@
     const left=-40,top=-30,right=1380,bottom=1200; // Stable frame across input edits and range transitions.
     const lines=(p.length?p.concat(p[0]):[]).map(p=>p.x_pixel+','+p.y_pixel).join(' ');
     const labels=['ESB = '+fmt(inputs.ESB)+' psi · DSB = '+fmt(inputs.DSB*25.4)+' mm','k∞ ≈ '+fmt(c.result)+' pci','Turning Point','MR = '+fmt(inputs.MR)+' psi'];
-    return '<svg viewBox="'+[left,top,right-left,bottom-top].join(' ')+'" role="img" aria-label="Extended composite-k nomograph with stable plotting frame"><rect x="'+left+'" y="'+top+'" width="'+(right-left)+'" height="'+(bottom-top)+'" fill="white"/><image href="'+image+'" width="1086" height="1046"/><g class="nomograph-trace"><polyline points="'+mrCurve.map(p=>p.x_pixel+','+p.y_pixel).join(' ')+'" fill="none" stroke="#c77821" stroke-dasharray="12 8" stroke-width="4"/><polyline points="'+lines+'" fill="none" stroke="#bd2828" stroke-dasharray="'+(extended?'9 5':'none')+'" stroke-width="3"/>'+p.map((p,i)=>'<circle cx="'+p.x_pixel+'" cy="'+p.y_pixel+'" r="6" fill="#bd2828"/><text x="'+(p.x_pixel+12)+'" y="'+(p.y_pixel+(i%2?28:-12))+'" font-size="20" fill="#a52222" paint-order="stroke" stroke="white" stroke-width="5">'+labels[i]+'</text>').join('')+'</g></svg>';
+    return '<svg viewBox="'+[left,top,right-left,bottom-top].join(' ')+'" role="img" aria-label="Extended composite-k nomograph with stable plotting frame"><rect x="'+left+'" y="'+top+'" width="'+(right-left)+'" height="'+(bottom-top)+'" fill="white"/><image href="'+image+'" width="1086" height="1046"/><g class="nomograph-trace"><polyline points="'+mrCurve.map(p=>p.x_pixel+','+p.y_pixel).join(' ')+'" fill="none" stroke="#c77821" stroke-dasharray="12 8" stroke-width="4"/><polyline points="'+lines+'" fill="none" stroke="#bd2828" stroke-dasharray="'+(extended?'9 5':'none')+'" stroke-width="3"/>'+NomographLabels.callouts(p.map((point,i)=>({x:point.x_pixel,y:point.y_pixel,lines:labels[i].split(' · '),dx:i===0?-240:16,dy:i%2?18:-55})),right,bottom)+'</g></svg>';
   }
+  const renderedPlots=new WeakMap();
   function updatePlot(element,markup){
+    if(renderedPlots.get(element)===markup)return;
     const trace=element.querySelector?.('.nomograph-trace');
     if(trace){const marker='<g class="nomograph-trace">';trace.innerHTML=markup.slice(markup.indexOf(marker)+marker.length,markup.lastIndexOf('</g></svg>'));}
     else element.innerHTML=markup;
+    renderedPlots.set(element,markup);
   }
   globalThis.NomographExtension={calculate,plot,updatePlot};
 })();
