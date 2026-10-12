@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="styles.css" /><link rel="stylesheet" href="../../tool-theme.css" /><link rel="stylesheet" href="../toolkit-overrides.css" />
     <script defer src="model-data.js"></script>
     <script defer src="engine.js"></script>
-    <script defer src="../traffic-input.js"></script><script defer src="app.js"></script><script defer src="../toolkit-ui.js"></script>
-  </head>
+    <script defer src="../traffic-input.js"></script><script defer src="../../subgrade-reaction/nomograph-labels.js?v=nomograph-format-4"></script><script defer src="app.js?v=nomograph-format-4"></script><script defer src="../toolkit-ui.js"></script>
+  <link rel="stylesheet" href="../../nomograph-theme.css?v=nomograph-format-4"></head>
   <body>
 
 
@@ -124,7 +124,7 @@
                   <circle id="overlay-upper-point" class="point point-bracket" r="4.5" hidden />
                   <circle id="overlay-raw-point" class="point point-primary" r="5.5" />
                   <circle id="overlay-governing-point" class="point point-minimum" r="5.5" hidden />
-                  <g id="overlay-label-group">
+                  <g id="overlay-callouts"></g><g id="overlay-label-group">
                     <rect id="overlay-label-bg" rx="7" ry="7" />
                     <text id="overlay-label" text-anchor="middle"></text>
                   </g>
@@ -132,7 +132,7 @@
               </svg>
             </div>
             <figcaption>
-              Full nomograph supplied by the user and registered to the plotting frame. Red lines reproduce the chart construction; gold indicates the governing or reported result.
+              Full nomograph supplied by the user and registered to the plotting frame. Solid red lines show the chart construction; dashed red lines distinguish bracketing or adopted-thickness rules.
             </figcaption>
           </figure>
         </div>

@@ -84,3 +84,5 @@ Changes to the source edition, control points, coefficient data, scale mapping, 
 Application release: `1.1.0`  
 Model release: `1.0.0`  
 Numerical model basis: `0.3.0`
+
+Toolkit UI fix: SVG hidden attributes are now toggled explicitly so Figure 6 construction traces render and hide correctly. A shared Figure 3.6 visual theme provides red paths/markers and white, red-bordered value callouts, with distinct labels for raw chart and adopted thickness. Numerical model and domain rules remain unchanged.

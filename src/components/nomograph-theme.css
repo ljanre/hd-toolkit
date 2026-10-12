@@ -1,0 +1,14 @@
+/* Figure 3.6 visual standard for live engineering nomographs. */
+.nomograph-callout rect{fill:#fff;fill-opacity:.96;stroke:#c43127;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.nomograph-callout text{font:500 var(--nomograph-label-size,22px) 'Segoe UI',Arial,sans-serif;fill:#b42318;stroke:none;paint-order:normal}
+.nomograph-callout path{fill:none;stroke:#c43127;stroke-width:1.2;vector-effect:non-scaling-stroke}
+.nomograph-callout circle{fill:#c43127;stroke:#fff;stroke-width:1;vector-effect:non-scaling-stroke}
+.foundation-nomograph polyline,.nomograph-trace>polyline,.construction-primary{fill:none;stroke:#c43127;stroke-width:1.8;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.chart-stage img{filter:none}.chart-stage{box-shadow:none;background:white}
+#chart-overlay{--nomograph-label-size:15px}
+#chart-overlay [hidden]{display:none!important}
+#chart-overlay .construction-minimum,#chart-overlay .construction-bracket{stroke:#c43127;stroke-width:1.5;stroke-dasharray:6 4;vector-effect:non-scaling-stroke}
+#chart-overlay .point{fill:#c43127;stroke:white;stroke-width:1;vector-effect:non-scaling-stroke}
+#overlay-label-bg,#overlay-label{display:none}
+
+.legend-primary,.legend-bracket,.legend-minimum{border-color:#c43127!important}.legend-bracket,.legend-minimum{border-top-style:dashed}
