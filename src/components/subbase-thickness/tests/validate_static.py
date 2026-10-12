@@ -71,7 +71,6 @@ required_ids = {
     "calculator-form",
     "traffic-input",
     "cbr-input",
-    "calculate-button",
     "clear-button",
     "result-value",
     "status-pill",

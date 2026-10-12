@@ -8,7 +8,6 @@
   const form = byId("calculator-form");
   const trafficInput = byId("traffic-input");
   const cbrInput = byId("cbr-input");
-  const calculateButton = byId("calculate-button");
   const clearButton = byId("clear-button");
   const modelHealth = byId("model-health");
   const qaSummary = byId("qa-summary");
@@ -386,9 +385,7 @@
     if (!modelCheck?.ok) {
       modelHealth.textContent = "Model error";
       modelHealth.className = "health-badge is-fail";
-      qaSummary.textContent = "Model integrity check failed";
-      calculateButton.disabled = true;
-      renderResult(
+      qaSummary.textContent = "Model integrity check failed";      renderResult(
         engine.calculate(model, null, null),
       );
       return;
@@ -398,9 +395,7 @@
     modelReady = regression.failed === 0 && regression.total === 55;
     modelHealth.textContent = modelReady ? "Model verified" : "Verification failed";
     modelHealth.className = `health-badge ${modelReady ? "is-pass" : "is-fail"}`;
-    qaSummary.textContent = `${regression.passed}/${regression.total} Golden Tests ${modelReady ? "passed" : "checked"}`;
-    calculateButton.disabled = !modelReady;
-    renderEmpty();
+    qaSummary.textContent = `${regression.passed}/${regression.total} Golden Tests ${modelReady ? "passed" : "checked"}`;    renderEmpty();
 
     document.dispatchEvent(
       new CustomEvent("rn29-ready", {
