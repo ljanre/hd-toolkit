@@ -19,7 +19,7 @@ npm test
 npm run build
 ```
 
-The test command runs 16 regression suites. The build creates a clean production site in root `dist/`, excluding development notes, tests and QA pages. It compacts model tables without changing their values, uses pixel-identical WebP foundation charts, and versions local assets and calculator documents automatically. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
+The test command runs 17 regression suites. The build creates a clean production site in root `dist/`, excluding development notes, tests and QA pages. It compacts model tables without changing their values, uses pixel-identical WebP foundation charts, and versions local assets and calculator documents automatically. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
 
 ## Upload to GitHub
 
