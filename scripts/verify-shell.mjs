@@ -81,11 +81,10 @@ nodes.get('adminModeToggle').handlers.click();assert.equal(shell.location.hash,'
 for(const [id,title] of [['trafficTool','Design Traffic (TBD)'],['flexibleTool','Flexible Pavement Design (TBD)']]){shell.location.hash='#'+id;dispatch('hashchange');assert.equal(nodes.get(id).hidden,false,'TBD tools remain public with Admin off');assert.equal(shell.document.title,'HD Toolkit | '+title);}
 
 shell.location.hash='#culvertTool';dispatch('hashchange');
-assert.equal(nodes.get('culvertTool').hidden,true);assert.equal(nodes.get('pavementTool').hidden,false);
-assert.equal(culvertLink.hidden,true);assert.equal(shell.location.hash,'#pavementTool');
-assert.equal(shell.document.title,'HD Toolkit | Rigid Pavement Design');assert.equal(skip.href,'#designForm');
-classes.add('admin-mode');shell.location.hash='#culvertTool';dispatch('hashchange');
-assert.equal(culvertLink.hidden,true);assert.equal(nodes.get('culvertTool').hidden,true);assert.equal(shell.location.hash,'#pavementTool');classes.delete('admin-mode');
+assert.equal(nodes.get('culvertTool').hidden,false);assert.equal(nodes.get('pavementTool').hidden,true);
+assert.equal(culvertLink.hidden,false);assert.equal(shell.location.hash,'#culvertTool');
+assert.equal(shell.document.title,'HD Toolkit | Culvert (TBD)');assert.equal(skip.href,'#culvertTool');
+classes.add('admin-mode');dispatch('hashchange');assert.equal(nodes.get('culvertTool').hidden,false);classes.delete('admin-mode');
 shell.location.hash='#pavementTool';dispatch('hashchange');assert.equal(nodes.get('culvertTool').hidden,true);
 const uiContext={};runInNewContext(await readFile(path.join(root,'components/concrete-strength/engine.js'),'utf8'),uiContext);
 const html=await readFile(path.join(root,'components/concrete-strength/index.html'),'utf8');const fields=new Map([...html.matchAll(/id="([^"]+)"/g)].map(([,id])=>[id,create()]));
