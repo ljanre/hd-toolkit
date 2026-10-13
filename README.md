@@ -64,3 +64,6 @@ The original PNG charts remain source references. If those charts change, regene
 The public Project Road Details tool under Others searches the supplied DPWH national-road CSV snapshot by identifiers, road names and location. It retains all 4,573 source records and 22 fields, including repeated section IDs; users choose a specific record. Project title and station limits are separate entered context, not verified inventory coverage. The snapshot contains no usable geometry or station limits and does not establish design traffic or local urban/rural classifications.
 
 Data is loaded only when opening this tool. `scripts/import-road-network.py <csv-path>` regenerates the compact dictionary-encoded `network-data.json`, preserves every CSV cell and records the source SHA-256. Run the regression checks and review inventory changes before publishing a replacement snapshot.
+
+For Design Traffic, Flexible Pavement Design and Culvert, public mode shows the shared TO BE DEVELOPED panel. Admin Mode reveals the existing calculator and removes the TBD label. Returning to public mode hides the calculator without discarding its inputs.
+

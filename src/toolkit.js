@@ -34,6 +34,7 @@
   function selectTool() {
     syncCalculationAccess();
     const admin = document.body.classList.contains('admin-mode');
+    const displayTitle=tool=>admin&&tool.development==='tbd'?tool.title.replace(' (TBD)',''):tool.title;
     let active = Object.keys(tools).find(key => location.hash === '#' + tools[key].id) || 'pavement';
     if (hiddenTools.has(active) || (adminTools.has(active) && !admin)) { active = 'pavement'; location.hash = '#pavementTool'; }
     Object.entries(tools).forEach(([key, tool]) => {
@@ -41,6 +42,10 @@
       if (key === active) document.getElementById(tool.id).firstElementChild?.activate?.();
     });
     document.querySelectorAll('[data-tool]').forEach(link => {
+      const tool=tools[link.dataset.tool];
+      const label=link.querySelector?.('.nav-label');
+      if(label)label.textContent=tool.label||displayTitle(tool);
+      link.title=displayTitle(tool);
       link.hidden = hiddenTools.has(link.dataset.tool) || (adminTools.has(link.dataset.tool) && !admin);
       const selected = link.dataset.tool === active;
       link.classList.toggle('nav-current', selected);
@@ -54,10 +59,10 @@
     document.querySelectorAll('.tool-group').forEach(group => {
       group.classList.toggle('has-current', Boolean(group.querySelector('[aria-current="page"]')));
     });
-    document.title = 'HD Toolkit | ' + tools[active].title;
+    document.title = 'HD Toolkit | ' + displayTitle(tools[active]);
     const skip = document.querySelector('.skip-link');
     skip.href = '#' + (active === 'pavement' ? 'designForm' : tools[active].id);
-    skip.textContent = active === 'pavement' ? 'Skip to design inputs' : 'Skip to ' + tools[active].title;
+    skip.textContent = active === 'pavement' ? 'Skip to design inputs' : 'Skip to ' + displayTitle(tools[active]);
   }
   window.addEventListener('hashchange', selectTool);
   window.addEventListener('hd-admin-mode-change', selectTool);

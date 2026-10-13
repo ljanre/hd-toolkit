@@ -84,7 +84,7 @@ shell.location.hash='#culvertTool';dispatch('hashchange');
 assert.equal(nodes.get('culvertTool').hidden,false);assert.equal(nodes.get('pavementTool').hidden,true);
 assert.equal(culvertLink.hidden,false);assert.equal(shell.location.hash,'#culvertTool');
 assert.equal(shell.document.title,'HD Toolkit | Culvert (TBD)');assert.equal(skip.href,'#culvertTool');
-classes.add('admin-mode');dispatch('hashchange');assert.equal(nodes.get('culvertTool').hidden,false);classes.delete('admin-mode');
+classes.add('admin-mode');dispatch('hashchange');assert.equal(nodes.get('culvertTool').hidden,false);assert.equal(shell.document.title,'HD Toolkit | Culvert');classes.delete('admin-mode');dispatch('hashchange');assert.equal(shell.document.title,'HD Toolkit | Culvert (TBD)');
 shell.location.hash='#pavementTool';dispatch('hashchange');assert.equal(nodes.get('culvertTool').hidden,true);
 const uiContext={};runInNewContext(await readFile(path.join(root,'components/concrete-strength/engine.js'),'utf8'),uiContext);
 const html=await readFile(path.join(root,'components/concrete-strength/index.html'),'utf8');const fields=new Map([...html.matchAll(/id="([^"]+)"/g)].map(([,id])=>[id,create()]));

@@ -27,7 +27,13 @@
       connectedCallback() { if (!this.closest('[hidden]')) this.activate(); }
       activate() {
         if (tool.development === 'tbd') {
-          if (this.querySelector('.tool-development')) return;
+          const admin=document.body?.classList?.contains('admin-mode')===true;
+          const placeholder=this.querySelector('.tool-development');
+          const existingFrame=this.querySelector('iframe');
+          if(placeholder)placeholder.hidden=admin;
+          if(existingFrame)existingFrame.hidden=!admin;
+          if(!admin){
+          if (placeholder) return;
           const panel = document.createElement('div');
           panel.className = 'tool-development';
           const title = document.createElement('h2');
@@ -40,10 +46,11 @@
           panel.append(title, overlay);
           this.append(panel);
           return;
+          }
         }
         if (this.querySelector('iframe')) return;
         const frame = document.createElement('iframe');
-        frame.title = tool.title;
+        frame.title = tool.title.replace(' (TBD)', '');
         frame.src = './components/' + tool.element + '/' + tool.page + '?v=' + encodeURIComponent(version);
         frame.loading = 'eager';
         this.append(frame);
