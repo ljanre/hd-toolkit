@@ -17,7 +17,8 @@
       const cells=Array.from({length:5},()=>document.createElement('td'));cells[0].textContent=row.label;
       cells[1].textContent=(row.value==null?'':row.relation==='max'?'≤ ':row.relation==='min'?'≥ ':'')+format(row.value)+(row.value==null?'':' '+row.unit);
       const field=document.createElement('input');field.type='number';field.min='0';field.step='any';field.placeholder='—';field.setAttribute('aria-label','Project adopted '+row.label);field.value=adopted[row.id]??'';
-      field.addEventListener('input',()=>{adopted[row.id]=field.value;review();});cells[2].append(field);
+      if(row.id==='recommendedSpeed'){field.readOnly=true;field.value=result.speed??'';adopted[row.id]=field.value;field.title='Set the adopted design speed in Design Controls.';}
+      else field.addEventListener('input',()=>{adopted[row.id]=field.value;review();});cells[2].append(field);
       const state=()=>{const value=DesignCriteria.assess(row,adopted[row.id]);cells[3].textContent=value;cells[3].className=value==='Meets baseline'?'meets':'review';};
       cells[4].textContent=row.reference+(row.note?' · '+row.note:'');tr.append(...cells);body.append(tr);state();
     }
