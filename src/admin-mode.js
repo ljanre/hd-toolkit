@@ -11,7 +11,7 @@
     enabled = value;
     document.body.classList.toggle('admin-mode', enabled);
     toggle.setAttribute('aria-checked', String(enabled));
-    toggle.title = 'Admin Mode: ' + (enabled ? 'On' : 'Off');
+    toggle.title = 'Developer Mode: ' + (enabled ? 'On' : 'Off');
     state.textContent = enabled ? 'On' : 'Off';
     try { localStorage.setItem(storageKey, String(enabled)); } catch {}
     window.dispatchEvent(new Event('hd-admin-mode-change'));

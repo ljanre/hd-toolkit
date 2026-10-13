@@ -70,20 +70,20 @@
   <div class="sidebar-bottom">
   <div class="sidebar-note"><span class="sidebar-dot"></span> Browser-based workspace<p>Your design inputs are saved in this browser on this device.</p></div>
   <div class="sidebar-footer">HD Toolkit <span>v0.1</span></div>
-  <button id="adminModeToggle" class="admin-mode-toggle" type="button" role="switch" aria-checked="false" aria-label="Admin Mode" title="Admin Mode: Off" aria-controls="adminPasswordDialog" aria-haspopup="dialog">
-    <span class="admin-icon" aria-hidden="true">⚙</span><span class="admin-label">Admin Mode</span><span id="adminModeState" class="admin-state" aria-hidden="true">Off</span><span class="admin-switch" aria-hidden="true"></span>
+  <button id="adminModeToggle" class="admin-mode-toggle" type="button" role="switch" aria-checked="false" aria-label="Developer Mode" title="Developer Mode: Off" aria-controls="adminPasswordDialog" aria-haspopup="dialog">
+    <span class="admin-icon" aria-hidden="true">⚙</span><span class="admin-label">Developer Mode</span><span id="adminModeState" class="admin-state" aria-hidden="true">Off</span><span class="admin-switch" aria-hidden="true"></span>
   </button>
   </div>
 </aside>
 <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-controls="toolkitSidebar" aria-expanded="true" aria-label="Collapse sidebar" title="Collapse sidebar"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="m14 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 <dialog id="adminPasswordDialog" class="admin-password-dialog" aria-labelledby="adminPasswordTitle" aria-describedby="adminPasswordDescription">
   <form id="adminPasswordForm">
-    <h2 id="adminPasswordTitle">Enable Admin Mode</h2>
-    <p id="adminPasswordDescription">Enter the admin password to access additional tools.</p>
+    <h2 id="adminPasswordTitle">Enable Developer Mode</h2>
+    <p id="adminPasswordDescription">Enter the developer password to access additional tools.</p>
     <label for="adminPassword">Password</label>
     <input id="adminPassword" type="password" autocomplete="current-password" required aria-describedby="adminPasswordError">
     <p id="adminPasswordError" class="admin-password-error" role="alert" hidden></p>
-    <div class="admin-password-actions"><button id="adminPasswordCancel" type="button">Cancel</button><button type="submit" class="admin-unlock">Enable Admin Mode</button></div>
+    <div class="admin-password-actions"><button id="adminPasswordCancel" type="button">Cancel</button><button type="submit" class="admin-unlock">Enable Developer Mode</button></div>
   </form>
 </dialog>
 <div class="wrap" id="pavementTool">
