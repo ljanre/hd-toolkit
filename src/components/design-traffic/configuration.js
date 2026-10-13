@@ -20,6 +20,8 @@
     if(!row.fractions.value.trim())return NaN;
     const fractions=row.fractions.value.trim().split(/[\s,;]+/).map(Number),weight=n(row.weight);
     if(!Number.isFinite(weight)||weight<=0)throw new Error('Enter a positive GVW for '+row.select.value+'.');
+    const profile=V.profiles.find(item=>item.code===row.select.value),expected=profile.fractions?.length||5;
+    if(fractions.length!==expected)throw new Error('Code '+row.select.value+' requires '+expected+' physical axle fractions.');
     if(fractions.length>20||fractions.some(value=>!Number.isFinite(value)||value<0||value>1)||Math.abs(fractions.reduce((sum,value)=>sum+value,0)-1)>0.001)throw new Error('Axle fractions for '+row.select.value+' must be nonnegative shares totaling 1 (within 0.001 for printed rounding).');
     const sum=fractions.reduce((total,value)=>total+value,0);if(Math.abs(sum-1)>1e-6)row.note.textContent='Fractions sum to '+sum.toFixed(4)+'; used as entered without normalization.';
     return C.axleFactor(fractions.map(value=>weight*value/1000).join(','));
