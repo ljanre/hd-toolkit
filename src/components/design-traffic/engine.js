@@ -12,12 +12,12 @@
     if(!Number.isFinite(total))throw new Error('The combined traffic exceeds the numeric range.');
     return {totals,rowTotals,total};
   }
-  function cesal({aadt,rates,factors,years,delay,dd,dl,preview=false}){
-    calculate([aadt]);
+  function forecast({aadt,rates,factors,years,delay,dd,dl,preview=false}){
+    if(!Array.isArray(aadt)||!aadt.length||aadt.length>200||aadt.some(value=>!Number.isFinite(value)||value<0))throw new Error('Enter a nonnegative AADT for each included configuration.');
     if(!Number.isInteger(years)||years<1||years>100)throw new Error('Enter a design period from 1 to 100 whole years.');
     if(!Number.isInteger(delay)||delay<0||delay>100)throw new Error('Enter 0–100 whole years from the traffic survey to opening.');
     if(!Number.isFinite(dd)||dd<=0||dd>1||!Number.isFinite(dl)||dl<=0||dl>1)throw new Error('DD and DL must be fractions greater than 0 and at most 1.');
-    if(rates.length!==10||factors.length!==10)throw new Error('Provide ten growth rates and vehicle factors.');
+    if(rates.length!==aadt.length||factors.length!==aadt.length)throw new Error('Provide a growth rate and factor for each included configuration.');
     const detail=aadt.map((value,i)=>{
       if(value===0)return {opening:0,growth:null,vehicles:0,esal:0};
       if(!Number.isFinite(rates[i])||rates[i]<=-100)throw new Error('Enter annual growth greater than −100% for every class with traffic.');
@@ -34,6 +34,7 @@
     const completedClasses=detail.filter((item,i)=>aadt[i]>0&&item.esal!==null).length;
     return {detail,total:complete?sum:null,million:complete?sum/1e6:null,subtotal:sum,subtotalMillion:sum/1e6,pendingClasses,completedClasses,vehicles,complete};
   }
+  function cesal(options){calculate([options.aadt]);if(options.rates.length!==10||options.factors.length!==10)throw new Error('Provide ten growth rates and vehicle factors.');return forecast(options);}
   function axleFactor(text){
     if(!text.trim())return NaN;
     const loads=text.trim().split(/[\s,;]+/).map(Number);
@@ -42,5 +43,5 @@
     if(!Number.isFinite(factor))throw new Error('Axle loads exceed the numeric range.');
     return factor;
   }
-  globalThis.DesignTraffic={classes,suppliedGrowth,calculate,cesal,axleFactor};
+  globalThis.DesignTraffic={classes,suppliedGrowth,calculate,cesal,forecast,axleFactor};
 })();
