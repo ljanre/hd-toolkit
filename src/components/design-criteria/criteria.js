@@ -26,5 +26,5 @@
   }
   function review(){let count=0;for(const row of result.rows){const tr=$('criteria').querySelector(`[data-id="${row.id}"]`);const state=DesignCriteria.assess(row,adopted[row.id]);tr.children[3].textContent=state;tr.children[3].className=state==='Meets baseline'?'meets':'review';if(state==='Meets baseline')count++;}$('count').textContent=count+' / '+result.rows.length+' meet baseline';}
   $('controls').addEventListener('submit',e=>e.preventDefault());ids.forEach(id=>$(id).addEventListener(id==='adt'?'input':'change',update));
-  $('reset').addEventListener('click',()=>{$('controls').reset();adopted={};previous.clear();update();});$('print').addEventListener('click',()=>window.print());update();
+  $('reset').addEventListener('click',()=>{const defaults={classification:'primary',terrain:'level',otherClass:'functional',function:'collector',environment:'rural',adt:'',speed:''};ids.forEach(id=>$(id).value=defaults[id]);adopted={};previous.clear();update();});$('print').addEventListener('click',()=>window.print());update();
 })();
