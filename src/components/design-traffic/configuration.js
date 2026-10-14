@@ -31,6 +31,7 @@
     active.forEach((row,i)=>{const d=result.detail[i],tr=make('tr');const values=[row.select.value+' · '+fmt(n(row.weight))+' kg',fmt(n(row.count)),fmt(d.opening),fmt(row.ef),fmt(d.vehicles/(n($('sheetDD'))*n($('sheetDL')))),fmt(d.vehicles),d.esal===null?'Pending EF':fmt(d.esal)];values.forEach(value=>tr.append(make('td',value)));$('sheetSummary').append(tr);});
   }
   function update(){
+    TrafficTimeline.render({survey:$('sheetSurvey').value,opening:$('sheetOpening').value,years:$('sheetYears').value,growth:$('sheetGrowth').value,counts:rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput).map(row=>n(row.count))});
     result=null;active=[];$('sheetTotal').textContent='—';$('sheetMillion').textContent='— ×10⁶ ESAL';$('sheetAADT').textContent='—';$('sheetCompletion').textContent='Input Required';$('sheetError').textContent='';$('sheetTransfer').textContent='';['sheetApply','sheetExport','sheetPrint'].forEach(id=>$(id).disabled=true);
     $('sheetAuditTitle').textContent='Design Traffic Summary';
     $('sheetAuditParameters').textContent='Survey '+($('sheetSurvey').value||'—')+' · Opening '+($('sheetOpening').value||'—')+' · n = '+($('sheetYears').value||'—')+' years · r = '+($('sheetGrowth').value||'—')+'% · DD = '+($('sheetDD').value||'—')+' · DL = '+($('sheetDL').value||'—');
@@ -41,13 +42,13 @@
       result=C.forecast({aadt:active.map(row=>n(row.count)),rates:active.map(()=>n($('sheetGrowth'))),factors:active.map(row=>row.ef),years:n($('sheetYears')),delay:opening-survey,dd:n($('sheetDD')),dl:n($('sheetDL')),preview:true});
       $('sheetAADT').textContent=fmt(active.reduce((sum,row)=>sum+n(row.count),0));$('sheetTotal').textContent=fmt(result.complete?result.total:result.subtotal);$('sheetMillion').textContent=fmt(result.complete?result.million:result.subtotalMillion)+' ×10⁶ ESAL'+(result.complete?'':' · Partial subtotal');$('sheetCompletion').textContent=result.complete?'Complete':'Pending EF';
       if(!result.complete)$('sheetError').textContent=result.pendingClasses+' active loading cases have no EF. Their ESAL is excluded from the subtotal.';
-      $('sheetApply').disabled=!result.complete||result.total<=0||!$('sheetVerified').checked;
+      $('sheetApply').disabled=!result.complete||result.total<=0;
       $('sheetExport').disabled=!result.complete;$('sheetPrint').disabled=!result.complete;
-      $('sheetTransfer').textContent=$('sheetApply').disabled?'Complete all included loading cases and confirm traffic coverage and factor applicability before transfer.':'';
+      $('sheetTransfer').textContent=$('sheetApply').disabled?'Complete all included loading cases before transfer.':'';
     }catch(error){$('sheetError').textContent=error.message;result=null;}
     summary();
   }
-  function clear(){rows.splice(0);$('sheetRows').replaceChildren();V.profiles.forEach(profile=>add(profile));$('sheetSurvey').value='';$('sheetOpening').value='';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetDL:'1.00'}))$(id).value=value;$('sheetVerified').checked=false;update();}
+  function clear(){rows.splice(0);$('sheetRows').replaceChildren();V.profiles.forEach(profile=>add(profile));$('sheetSurvey').value='';$('sheetOpening').value='';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetDL:'1.00'}))$(id).value=value;update();}
   $('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
   $('sheetClear').addEventListener('click',clear);$('sheetAdd').addEventListener('click',()=>{add();update();});
   $('sheetSample').addEventListener('click',()=>{clear();$('sheetSurvey').value='2025';$('sheetOpening').value='2025';$('sheetGrowth').value='3.8';$('sheetDL').value='0.50';rows.find(row=>row.select.value==='1-2').count.value='2197';const trailer=rows.find(row=>row.select.value==='11-2');trailer.count.value='1865';trailer.fractions.value='0.168, 0.2981, 0.2793, 0.2538';update();});
