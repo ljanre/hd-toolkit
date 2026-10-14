@@ -10,3 +10,10 @@
 @media(max-width:1100px){.controls-landscape #controls{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:600px){.controls-landscape #controls{grid-template-columns:repeat(2,minmax(0,1fr))}.controls-landscape #functional-controls{grid-template-columns:1fr}.controls-landscape{padding:16px}.controls-landscape #reset{justify-self:stretch}}
 @media print{@page{size:A4 landscape;margin:12mm}.controls-landscape,.input-guide-button,dialog{display:none!important}}
+
+.project-controls{grid-column:1/-1;border-top:1px solid var(--line);padding-top:14px;margin-top:0}.project-controls summary{font-weight:600;color:var(--accent)}.project-controls-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:18px}.project-controls-grid input,.project-controls-grid select{font-size:12px}.project-controls-grid input::placeholder{font-size:10px;color:#647d89}.design-impact-card{margin-top:22px}#project-control-status{margin:12px 20px}.design-impact-card td:nth-child(3){min-width:260px}.design-impact-card td:nth-child(4){font-size:11px;color:var(--muted);min-width:180px}[aria-invalid=true]{border-color:#b42318;background:#fff4f2}
+@media(max-width:1100px){.project-controls-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.project-controls-grid{grid-template-columns:1fr}.design-impact-card td{padding:10px}}
+@media print{.design-impact-card{break-before:page}.design-impact-card td{min-width:0!important;font-size:10px}.design-impact-card th{font-size:10px}}
+
+@media(min-width:1101px){.controls-landscape #controls{grid-template-columns:repeat(6,minmax(0,1fr))}}

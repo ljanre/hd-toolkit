@@ -6,7 +6,7 @@
   function update(){
     const input=Object.fromEntries(ids.map(id=>[id,$(id).value]));
 
-    try{result=DesignCriteria.build(input);}catch(e){$('criteria').replaceChildren();$('status').textContent=e.message;$('section-drawing').replaceChildren();$('section-status').textContent=e.message;$('section-summary').textContent='';$('count').textContent='';$('context').textContent='';return;}
+    try{result=DesignCriteria.build(input);}catch(e){$('criteria').replaceChildren();$('status').textContent=e.message;$('section-drawing').replaceChildren();$('section-status').textContent=e.message;$('section-summary').textContent='';$('count').textContent='';$('context').textContent='';document.dispatchEvent(new CustomEvent('criteria-updated',{detail:null}));return;}
     $('other-controls').hidden=result.basis!=='functional';
     $('functional-controls').hidden=false;
     $('standardLevel').disabled=result.basis!=='table'||!['primary','secondary','expressway'].includes(input.classification);
@@ -29,7 +29,7 @@
     }
     previous=new Map(result.rows.map(r=>[r.id,r.value]));review();
   }
-  function review(){let count=0;for(const row of result.rows){const tr=$('criteria').querySelector(`[data-id="${row.id}"]`);const state=DesignCriteria.assess(row,adopted[row.id]);tr.children[3].textContent=state;tr.children[3].className=state==='Meets baseline'?'meets':'review';if(state==='Meets baseline')count++;}$('count').textContent=count+' / '+result.rows.length+' meet baseline';CriteriaSection.update(result,adopted);}
+  function review(){let count=0;for(const row of result.rows){const tr=$('criteria').querySelector(`[data-id="${row.id}"]`);const state=DesignCriteria.assess(row,adopted[row.id]);tr.children[3].textContent=state;tr.children[3].className=state==='Meets baseline'?'meets':'review';if(state==='Meets baseline')count++;}$('count').textContent=count+' / '+result.rows.length+' meet baseline';CriteriaSection.update(result,adopted);document.dispatchEvent(new CustomEvent('criteria-updated',{detail:result}));}
   $('controls').addEventListener('submit',e=>e.preventDefault());ids.forEach(id=>$(id).addEventListener(id==='adt'?'input':'change',update));
   $('reset').addEventListener('click',()=>{const defaults={classification:'primary',basis:'auto',standardLevel:'minimum',terrain:'level',otherClass:'functional',function:'collector',environment:'rural',adt:'',speed:''};ids.forEach(id=>$(id).value=defaults[id]);adopted={};previous.clear();CriteriaSection.reset();update();});$('print').addEventListener('click',()=>window.print());update();
 })();

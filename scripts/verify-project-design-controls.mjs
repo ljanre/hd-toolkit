@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {runInNewContext} from 'node:vm';
+const c={};runInNewContext(await readFile(new URL('../src/components/design-criteria/project-controls.js',import.meta.url),'utf8'),c);
+const {evaluate}=c.ProjectDesignControls;
+const empty=evaluate({});assert.equal(empty.ddhv,null);assert.ok(empty.groups.every(g=>g.status==='TO BE ESTABLISHED'));
+const input={adt:'10000',kFactor:'12',directionalSplit:'60',heavyVehicles:'15',designYear:'2045',targetLos:'C'};
+const r=evaluate(input);assert.equal(r.dhv,1200);assert.equal(r.ddhv,720);assert.equal(r.trucks,108);assert.equal(r.errors.length,0);
+const override=evaluate({...input,designDhv:'1400'});assert.equal(override.ddhv,840);assert.ok(override.issues.some(s=>s.includes('differs')));
+assert.equal(evaluate({...input,directionalSplit:''}).ddhv,null);
+assert.equal(evaluate({...input,heavyVehicles:''}).trucks,null);
+assert.equal(evaluate({...input,designDhv:'invalid'}).ddhv,null,'An invalid override must not silently use forecast demand');
+for(const [key,value] of [['kFactor','101'],['directionalSplit','49'],['heavyVehicles','-1'],['designYear','2040.5'],['floodReturn','0'],['rowAvailable','-2']])assert.ok(evaluate({...input,[key]:value}).errors.includes(key));
+const issues=evaluate({...input,operatingSpeed:'90',rowAvailable:'20'},{speed:80,rows:[{id:'row',value:30}]});assert.equal(issues.issues.length,2);
+assert.equal(evaluate({floodLevel:'-2',groundwater:'-3'}).errors.length,0,'Signed project elevations are valid');
+assert.equal(evaluate({...input,geotechStatus:'pending',groundwater:'1'}).groups.find(g=>g.title==='Ground and groundwater').status,'Investigation pending · design review required');
+console.log('Project design controls: demand arithmetic, precedence, missing values, validation and speed/ROW reviews passed.');
