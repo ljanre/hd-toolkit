@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {runInNewContext} from 'node:vm';const c={};for(const f of ['standards.js','engine.js'])runInNewContext(await readFile(new URL('../src/components/curve-widening/'+f,import.meta.url),'utf8'),c);
+const G=c.CurveGeometry,base={...G.presets['SU-9'],radius:100,laneWidth:3.3,clearance:0,angle:90};
+const r=G.calculate(base);assert.ok(Math.abs(r.rearRadius-Math.sqrt(10000-6.1**2))<1e-9);assert.ok(r.inner<r.outer);assert.ok(G.calculate({...base,radius:50}).offtracking>r.offtracking);assert.throws(()=>G.calculate({...base,radius:5}));
+const a=G.calculate({...base,...G.presets['WB-19']});assert.equal(a.bodies.length,2);assert.ok(a.offtracking>r.offtracking);
+for(const theta of [0,.5,1]){const b=a.bodies[1],angle=theta+b.phase,h=[b.radius*Math.cos(angle)-a.p.trailerWheelbase*Math.sin(angle),b.radius*Math.sin(angle)+a.p.trailerWheelbase*Math.cos(angle)],p=[a.rearRadius*Math.cos(theta),a.rearRadius*Math.sin(theta)];assert.ok(Math.hypot(h[0]-p[0],h[1]-p[1])<1e-8,'Articulated hitch closure');}
+for(const b of a.bodies)for(const point of G.corners(b,.4)){const radius=Math.hypot(...point);assert.ok(radius>=a.inner-1e-8&&radius<=a.outer+1e-8);}
+const table={vehicle:'SU-9',roadRadius:100,speed:60,roadWidth:6.6,lanes:2};assert.ok(Math.abs(G.standard(table).recommended-.9)<1e-9);assert.equal(G.standard({...table,vehicle:'WB-19'}).recommended,2.7);assert.equal(G.standard({...table,vehicle:'WB-19',lanes:4}).recommended,5.4);assert.equal(G.standard({...table,speed:80}),null);assert.equal(G.standard({...table,vehicle:'P'}),null);assert.equal(G.standard({...table,roadRadius:101}),null);
+assert.equal(G.standard({...table,vehicle:'WB-19',roadRadius:3000,roadWidth:7.2}).recommended,0);
+console.log('Curve geometry: rigid offtracking, articulated hitch closure, corner bounds, independent table values and unsupported cases passed.');

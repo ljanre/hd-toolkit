@@ -3,6 +3,7 @@
   const groups = [
     { id: 'pavement', title: 'Pavement', icon: '▤' },
     { id: 'hydraulics', title: 'Hydraulics', icon: '≈' },
+    { id: 'geometry', title: 'Geometry', icon: '⌁' },
     { id: 'others', title: 'Others', icon: '⌖' }
   ];
   const tools = {
@@ -13,6 +14,7 @@
     subbase: { id: 'subbaseTool', title: 'Subbase Thickness Design', label: 'Subbase Thickness', group: 'pavement', icon: '▰', element: 'subbase-thickness', page: 'rigid.html' },
     culvert: { id: 'culvertTool', title: 'Culvert (TBD)', development: 'tbd', group: 'hydraulics', icon: '▱', element: 'culvert-hydraulics', page: 'index.html' },
     coordinates: { id: 'coordinatesTool', title: 'PRS92 Converter', label: 'PRS92', group: 'others', icon: '⌖', element: 'coordinate-converter', page: 'index.html' },
+    geometry: { id: 'geometryTool', title: 'Curve Widening & Swept Path', group: 'geometry', icon: '⌁', element: 'curve-widening', page: 'index.html' },
     criteria: { id: 'criteriaTool', title: 'Design Criteria', group: 'others', icon: '▦', element: 'design-criteria', page: 'index.html' },
     project: { id: 'projectTool', title: 'Project Road Details', group: 'others', icon: '▧', element: 'project-details', page: 'index.html' },
     rainfall: { id: 'rainfallTool', title: 'Rainfall Station Locator', label: 'Rainfall', group: 'others', icon: '☂', element: 'rainfall-locator', page: 'index.html' },
