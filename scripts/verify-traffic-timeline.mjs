@@ -2,3 +2,5 @@ import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises
 const r=build({survey:2025,opening:2027,years:20,growth:2,counts:[100,200]});assert.equal(r.end,2047);assert.ok(Math.abs(r.openingAADT-300*1.02**2)<1e-9);assert.ok(Math.abs(r.endAADT-300*1.02**22)<1e-9);assert.equal(r.points.length,23);
 assert.equal(build({survey:2025,opening:2025,years:1,growth:0,counts:[100]}).endAADT,100);assert.equal(build({survey:'',opening:2025,years:20,growth:2,counts:[100]}),null);assert.throws(()=>build({survey:2026,opening:2025,years:20,growth:2,counts:[100]}));assert.throws(()=>build({survey:2025,opening:2027,years:20,growth:-100,counts:[100]}));
 console.log('Traffic timeline: survey/opening/end growth, zero growth, same-year opening and invalid input checks passed.');
+const target={};c.document={getElementById:()=>target};c.TrafficTimeline.render({survey:2025,opening:2027,years:20,growth:2,counts:[100,200]});
+assert.ok(target.innerHTML.includes('CALENDAR YEAR'));for(const label of ['Survey · measured base','Opening · start of service','Projected · design-period end','Year 2025','Year 2027','Year 2047'])assert.ok(target.innerHTML.includes(label));
