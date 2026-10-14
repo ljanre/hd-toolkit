@@ -62,11 +62,10 @@
     if(s.p.shoulder>0)svg+=dimension(-s.edge,-s.half,53,`[19] SHOULDER ${fmt(s.p.shoulder)} m`)+dimension(s.half,s.edge,53,`[19] SHOULDER ${fmt(s.p.shoulder)} m`);
     for(const d of [-1,1]){
       const x=d*s.half*.5,y=s.surface(x),arrowDirection=superMode?(values.direction==='right'?1:-1):d;
-      svg+=`<text x="${X(x)}" y="${Y(y)-25}" text-anchor="middle" class="dim-label">${superMode?'e = '+fmt(s.p.superelevation):'[13] '+fmt(s.p.crossfall)}%</text>`;
+      svg+=`<text x="${X(x)}" y="${Y(y)-25}" text-anchor="middle" class="dim-label">${superMode?'e = '+fmt(s.p.superelevation):'[13] CROWN '+fmt(s.p.crossfall)}%</text>`;
       svg+=`<line x1="${X(x-arrowDirection*.35)}" y1="${Y(y)-17}" x2="${X(x+arrowDirection*.35)}" y2="${Y(y)-13}" class="dimension" marker-end="url(#dim-arrow)"/>`;
-      if(s.p.shoulder>0){const xx=d*(s.half+s.p.shoulder*.5);svg+=`<text x="${X(xx)}" y="${Y(s.surface(xx))-12}" text-anchor="middle" class="dim-label">[17] ${fmt(superMode?s.p.superelevation:s.p.shoulderFall)}%</text>`;}
+      if(s.p.shoulder>0){const xx=d*(s.half+s.p.shoulder*.5);svg+=`<text x="${X(xx)}" y="${Y(s.surface(xx))-12}" text-anchor="middle" class="dim-label">SHOULDER SLOPE ${fmt(superMode?s.p.superelevation:s.p.shoulderFall)}%</text>`;}
     }
-    // Thickness dimension placed outside the road with a leader to the pavement layer.
     const thicknessX=s.half*.8, thicknessTop=s.surface(thicknessX);
     const ty=Y(thicknessTop-s.p.thickness/2000);
     svg+=`<line x1="${X(thicknessX)}" x2="${X(thicknessX)}" y1="${Y(thicknessTop)}" y2="${Y(thicknessTop-s.p.thickness/1000)}" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/>`;
@@ -88,26 +87,24 @@
       const pt=s[key].point;svg+=`<circle cx="${X(pt[0])}" cy="${Y(pt[1])}" r="3.5" class="survey-point"/>`;
       svg+=`<text x="${X(pt[0])+d*8}" y="${Y(pt[1])+45}" text-anchor="${d<0?'end':'start'}" class="drawing-note">${key==='left'?'L daylight':'R daylight'}</text>`;
     }
-    // Numbered callouts use the terminology supplied in Figure 1.1.
-    function numbered(id,point,bx,by){return `<path d="M${X(point[0])} ${Y(point[1])}L${bx} ${by}" class="term-leader"/><circle cx="${bx}" cy="${by}" r="11" class="term-bubble"/><text x="${bx}" y="${by+4}" text-anchor="middle" class="term-number">${id}</text>`;}
-    svg+=numbered(2,[-extent*.78,s.ground(-extent*.78)],80,170);
+    function numbered(id,point,bx,by,name){return `<path d="M${X(point[0])} ${Y(point[1])}L${bx} ${by}" class="term-leader"/><circle cx="${bx}" cy="${by}" r="11" class="term-bubble"/><text x="${bx}" y="${by+4}" text-anchor="middle" class="term-number">${id}</text>${name?label(bx+16,by+4,name):''}`;}
+    svg+=numbered(2,[-extent*.78,s.ground(-extent*.78)],80,170,'Original ground');
     const layerX=s.half*.25;
-    svg+=numbered(type==='pcc'?9:8,[layerX,s.surface(layerX)-s.p.thickness/2000],665,465);
-    if(s.p.baseThickness>0)svg+=numbered(7,[layerX,s.surface(layerX)-(s.p.thickness+s.p.baseThickness/2)/1000],715,490);
-    if(s.p.subbaseThickness>0)svg+=numbered(6,[layerX,s.surface(layerX)-(s.p.thickness+s.p.baseThickness+s.p.subbaseThickness/2)/1000],765,515);
-    svg+=numbered(type==='pcc'?14:5,[0,-s.p.totalThickness/1000],575,515);
+    svg+=numbered(type==='pcc'?9:8,[layerX,s.surface(layerX)-s.p.thickness/2000],665,465,type==='pcc'?'Pavement slab':'Surface course');
+    if(s.p.baseThickness>0)svg+=numbered(7,[layerX,s.surface(layerX)-(s.p.thickness+s.p.baseThickness/2)/1000],715,490,'Base course');
+    if(s.p.subbaseThickness>0)svg+=numbered(6,[layerX,s.surface(layerX)-(s.p.thickness+s.p.baseThickness+s.p.subbaseThickness/2)/1000],765,515,'Subbase');
+    svg+=numbered(type==='pcc'?14:5,[0,-s.p.totalThickness/1000],575,515,'Subgrade');
     if(s.complete){
       const left=s.left.point[0],right=s.right.point[0];
-      svg+=`<line x1="${X(left)}" x2="${X(right)}" y1="535" y2="535" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><text x="${X((left+right)/2)}" y="531" text-anchor="middle" class="drawing-note">[21] Daylight-to-daylight footprint ${fmt(right-left)} m</text>`;
+      svg+=`<line x1="${X(left)}" x2="${X(right)}" y1="535" y2="535" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><text x="${X((left+right)/2)}" y="531" text-anchor="middle" class="drawing-note">[21] ROADBED / grading footprint ${fmt(right-left)} m</text>`;
     }
-    // Datum and level register are separate from the geometry to keep leaders readable.
     svg+=`<line x1="${X(-s.edge)}" x2="${X(s.edge)}" y1="${Y(0)}" y2="${Y(0)}" class="datum-line"/>`;
     svg+=`<rect x="45" y="550" width="350" height="160" rx="4" class="drawing-panel"/><rect x="420" y="550" width="340" height="160" rx="4" class="drawing-panel"/><rect x="785" y="550" width="370" height="160" rx="4" class="drawing-panel"/>`;
     svg+=label(60,575,'OFFSET / FINISHED LEVEL (m)','drawing-heading');
     for(const [i,[name,x]] of [['L shoulder',-s.edge],['L lane edge',-s.half],['Centreline',0],['R lane edge',s.half],['R shoulder',s.edge]].entries()){
       svg+=label(60,600+i*21,name)+label(195,600+i*21,(x>0?'+':'')+fmt(x))+label(275,600+i*21,(s.surface(x)>0?'+':'')+fmt(s.surface(x)));
     }
-    svg+=label(435,575,'PAVEMENT / FOUNDATION','drawing-heading')+label(435,600,type.toUpperCase()+' surfacing: '+fmt(s.p.thickness)+' mm')+label(435,623,'Base: '+(values.baseThickness===''?'TO BE ESTABLISHED':fmt(s.p.baseThickness)+' mm'))+label(435,646,'Subbase: '+(values.subbaseThickness===''?'TO BE ESTABLISHED':fmt(s.p.subbaseThickness)+' mm'))+label(435,669,'CL formation level: −'+fmt(s.p.totalThickness/1000)+' m')+label(435,692,'Layer depths applied across platform');
+    svg+=label(435,575,'PAVEMENT / FOUNDATION','drawing-heading')+label(435,600,(type==='pcc'?'PCC pavement slab: ':'ACP surface course: ')+fmt(s.p.thickness)+' mm')+label(435,623,'Base: '+(values.baseThickness===''?'TO BE ESTABLISHED':fmt(s.p.baseThickness)+' mm'))+label(435,646,'Subbase: '+(values.subbaseThickness===''?'TO BE ESTABLISHED':fmt(s.p.subbaseThickness)+' mm'))+label(435,669,'CL formation level: −'+fmt(s.p.totalThickness/1000)+' m')+label(435,692,'Layer depths applied across platform');
     svg+=label(800,575,'EARTHWORK / OPTIONAL STRUCTURES','drawing-heading')+label(800,600,s.complete?'CUT '+fmt(s.cutArea)+' m²  /  FILL '+fmt(s.fillArea)+' m²':'Daylight tie-ins: TO BE ESTABLISHED')+label(800,623,'EG at L / R shoulder: '+fmt(s.p.leftGround)+' / '+fmt(s.p.rightGround)+' m')+label(800,646,'Drains '+(values.drainage?'ON · schematic':'OFF')+' / Barriers '+(values.barriers?'ON · schematic':'OFF'))+label(800,669,'Median '+(values.medianEnabled?(s.p.medianWidth>0?fmt(s.p.medianWidth)+' m · flush reserve':'ON · TBE'):'OFF')+' / dimensions require design')+label(800,692,'Ground profile requires surveyed section');
     svg+=`<rect x="45" y="730" width="1110" height="50" class="drawing-title-block"/>`;
     svg+=label(60,750,'TYPICAL SECTION · '+(superMode?'SUPERELEVATED · '+values.direction.toUpperCase()+' SIDE LOW':'NORMAL CROWN'),'drawing-heading');
@@ -118,7 +115,7 @@
     let ly=865;
     const detailLayer=(text,height,fill)=>{svg+=`<rect x="65" y="${ly}" width="115" height="${height}" fill="${fill}" stroke="#536977" stroke-width=".8"/><line x1="180" y1="${ly+height/2}" x2="195" y2="${ly+height/2}" class="term-leader"/>`;svg+=label(205,ly+height/2+4,text);ly+=height;};
     detailLayer((type==='pcc'?'[9] PCC slab ':'[8] ACP surface ')+fmt(s.p.thickness)+' mm',35,type==='pcc'?'url(#pcc-hatch)':'#536977');
-    if(values.baseThickness===''||s.p.baseThickness>0)detailLayer('[7] Base '+(values.baseThickness===''?'TBE':fmt(s.p.baseThickness)+' mm'),35,s.p.baseThickness>0?'url(#aggregate-hatch)':'#f3f6f8');else{svg+=label(205,ly+14,'[7] Base omitted (0 mm)');ly+=22;}
+    if(values.baseThickness===''||s.p.baseThickness>0)detailLayer('[7] Base course '+(values.baseThickness===''?'TBE':fmt(s.p.baseThickness)+' mm'),35,s.p.baseThickness>0?'url(#aggregate-hatch)':'#f3f6f8');else{svg+=label(205,ly+14,'[7] Base course omitted (0 mm)');ly+=22;}
     if(values.subbaseThickness===''||s.p.subbaseThickness>0)detailLayer('[6] Subbase '+(values.subbaseThickness===''?'TBE':fmt(s.p.subbaseThickness)+' mm'),35,s.p.subbaseThickness>0?'#ede5d6':'#f3f6f8');else{svg+=label(205,ly+14,'[6] Subbase omitted (0 mm)');ly+=22;}
     detailLayer('[5 / 14] Subgrade',40,'url(#fill-hatch)');
     svg+=label(60,1043,'[4] Selected material / prepared roadbed: TBE')+label(60,1066,'[12] Shoulder base: TO BE ESTABLISHED')+label(60,1089,'[3 / 10] Ditch / ditch slope: TBE')+label(60,1112,'TBE = TO BE ESTABLISHED; not dimensioned');
