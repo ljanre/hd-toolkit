@@ -21,7 +21,7 @@ assert.match(html,new RegExp('tool-registry.js\\?v='+manifest.version));
 assert.equal((html.match(/\/component\.js/g)||[]).length,0,'Individual registration scripts should not load in the main page');
 assert.ok(manifest.excludedFiles>=23);
 const orderBytes=(await readFile(new URL('../src/components/design-criteria/do-112-s2024-reference.pdf',import.meta.url))).length;
-assert.ok(manifest.deployedBytes-orderBytes<6200000,'Runtime budget excluding the intentionally added reference order');
+assert.ok(manifest.deployedBytes-orderBytes-(await readFile(new URL('../src/components/design-criteria/reference-excerpts.pdf',import.meta.url))).length<6200000,'Runtime budget excluding the two explicitly deployed reference PDFs');
 await writeFile(new URL('../dist/stale-build-artifact.txt',import.meta.url),'stale');
 await execute(process.execPath,['scripts/build.mjs'],{cwd:root,windowsHide:true});
 assert.equal(JSON.parse(await read('dist/build-manifest.json')).version,manifest.version,'Unchanged inputs have a stable cache version');
