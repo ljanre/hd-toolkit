@@ -15,3 +15,12 @@ assert.throws(()=>build({...base,width:null}));assert.throws(()=>build({...base,
 assert.equal(range('softClay',6),null);assert.deepEqual(Array.from(range('softClay',3)),[2.5,3]);assert.deepEqual(Array.from(range('strongRock',12)),[.75,1.2]);
 assert.ok(build({...base,leftGround:20,rightGround:-20}).warnings.length>0,'Impossible daylight intersections must warn');
 console.log('Typical section: mixed/cut/fill geometry, independent areas, dimensions, daylight, invalid inputs and material ranges passed.');
+
+const sup=build({...base,condition:'superelevated',superelevation:6,direction:'right'});
+assert.ok(Math.abs(sup.top[1][1]-.201)<1e-9);assert.ok(Math.abs(sup.top[3][1]+.201)<1e-9);
+assert.equal(sup.top[2][1],0);assert.ok(Math.abs(sup.top[4][1]+.351)<1e-9);
+for(const key of ['left','right'])assert.ok(Math.abs(sup[key].point[1]-sup.ground(sup[key].point[0]))<1e-9);
+const mirror=build({...base,condition:'superelevated',superelevation:6,direction:'left',leftGround:-1,rightGround:1});
+assert.ok(Math.abs(mirror.cutArea-sup.cutArea)<1e-9);assert.ok(Math.abs(mirror.fillArea-sup.fillArea)<1e-9);
+assert.throws(()=>build({...base,condition:'superelevated',superelevation:13}));
+console.log('Superelevation: 6% edge heights, centreline rotation, shoulder continuation, daylight and mirrored earthwork passed.');
