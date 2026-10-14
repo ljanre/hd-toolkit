@@ -1,6 +1,6 @@
 # Design Traffic — Truck Configuration Worksheet
 
-The Design Traffic page now contains only the truck-configuration worksheet. It replaces the former vehicle-class AADT interface and has no worksheet selector. Developer Mode reveals the calculator; public mode retains the TBD panel.
+The Design Traffic page now contains only the truck-configuration worksheet. It replaces the former vehicle-class AADT interface and has no worksheet selector. Developer Mode reveals the calculator; public mode retains the UD panel.
 
 Enter the traffic-survey/opening years, design period, annual growth, DD and DL. Enter two-way AADT separately for each included loading case. Blank count rows are excluded; zeros contribute zero. Repeated truck codes allow different adopted weights. Catalogue GVW/fractions remain reference loading cases, not verified legal limits or measured fleet averages. Active rows with unknown axle fractions or EF remain pending and cannot be transferred as a complete result.
 

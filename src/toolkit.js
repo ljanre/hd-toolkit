@@ -7,7 +7,7 @@
   if (navigation) {
     navigation.innerHTML = groups.map(group => {
       const entries = Object.entries(tools).filter(([,tool]) => tool.group === group.id).map(([key,tool]) => {
-        const label = '<span aria-hidden="true">' + tool.icon + '</span><span class="nav-label">' + (tool.label || tool.title) + (tool.access === 'unavailable' ? ' <small>TBD</small>' : '') + '</span>';
+        const label = '<span aria-hidden="true">' + tool.icon + '</span><span class="nav-label">' + (tool.label || tool.title) + (tool.access === 'unavailable' ? ' <small>UD</small>' : '') + '</span>';
         return tool.access === 'unavailable' ? '<span class="tool-unavailable" aria-disabled="true">' + label + '</span>' : '<a data-tool="' + key + '" href="#' + tool.id + '" title="' + tool.title + '"' + (tool.access === 'admin' ? ' hidden' : '') + '>' + label + '</a>';
       }).join('');
       return '<details class="tool-group" data-tool-group="' + group.id + '"><summary title="' + group.title + '"><span class="group-icon" aria-hidden="true">' + group.icon + '</span><span class="group-label">' + group.title + '</span></summary><div class="tool-group-items">' + entries + '</div></details>';
@@ -34,7 +34,7 @@
   function selectTool() {
     syncCalculationAccess();
     const admin = document.body.classList.contains('admin-mode');
-    const displayTitle=tool=>admin&&tool.development==='tbd'?tool.title.replace(' (TBD)',''):tool.title;
+    const displayTitle=tool=>admin&&tool.development==='ud'?tool.title.replace(' (UD)',''):tool.title;
     let active = Object.keys(tools).find(key => location.hash === '#' + tools[key].id) || 'pavement';
     if (hiddenTools.has(active) || (adminTools.has(active) && !admin)) { active = 'pavement'; location.hash = '#pavementTool'; }
     Object.entries(tools).forEach(([key, tool]) => {

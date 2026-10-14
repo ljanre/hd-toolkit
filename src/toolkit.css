@@ -52,7 +52,7 @@ concrete-strength{display:block}concrete-strength iframe{display:block;width:100
 @media(min-width:761px){.sidebar-collapsed .tool-group summary{justify-content:center;padding:10px 4px}.sidebar-collapsed .tool-group .group-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.sidebar-collapsed .tool-group summary::after{display:none}.sidebar-collapsed .tool-group-items{margin:2px 0 8px;padding:0;border:0}.sidebar-collapsed .tool-unavailable{justify-content:center;padding:10px 4px}}
 @media(max-width:760px){.toolkit-sidebar nav{display:grid;grid-template-columns:1fr;overflow:visible;gap:4px}.tool-group summary{padding:10px 12px}.tool-group-items{grid-template-columns:repeat(auto-fit,minmax(185px,1fr));margin-left:12px}.toolkit-sidebar nav .tool-group-items a{white-space:normal}.toolkit-sidebar nav .tool-group-items a>span:first-child{display:block}.toolkit-sidebar nav .tool-group-items a .nav-label{display:block}.sidebar-collapsed .toolkit-sidebar nav{display:none}}
 
-/* TBD tools remain navigable but never load interactive calculators. */
+/* UD tools remain navigable but never load interactive calculators. */
 .tool-development{position:relative;min-height:420px;border:1px solid #dce5eb;border-radius:16px;background:#fff;overflow:hidden}
 .tool-development h2{margin:0;padding:20px 24px;color:#294b59;font-size:18px;border-bottom:1px solid #dce5eb}
 .tool-development-overlay{position:absolute;inset:65px 0 0;display:grid;place-items:center;padding:24px;background:repeating-linear-gradient(135deg,#f3f6f8,#f3f6f8 18px,#edf2f5 18px,#edf2f5 36px)}

@@ -7,12 +7,12 @@
     { id: 'others', title: 'Others', icon: '⌖' }
   ];
   const tools = {
-    traffic: { id: 'trafficTool', title: 'Design Traffic (TBD)', development: 'tbd', group: 'pavement', icon: '⇄', element: 'design-traffic', page: 'index.html' },
+    traffic: { id: 'trafficTool', title: 'Design Traffic (UD)', development: 'ud', group: 'pavement', icon: '⇄', element: 'design-traffic', page: 'index.html' },
     cbr: { id: 'cbrTool', title: 'Design CBR', group: 'pavement', icon: '◫', element: 'design-cbr', page: 'index.html' },
     pavement: { id: 'pavementTool', title: 'Rigid Pavement Design', group: 'pavement', icon: '▤' },
-    flexible: { id: 'flexibleTool', title: 'Flexible Pavement Design (TBD)', development: 'tbd', group: 'pavement', icon: '▥', element: 'flexible-pavement', page: 'index.html' },
+    flexible: { id: 'flexibleTool', title: 'Flexible Pavement Design (UD)', development: 'ud', group: 'pavement', icon: '▥', element: 'flexible-pavement', page: 'index.html' },
     subbase: { id: 'subbaseTool', title: 'Subbase Thickness Design', label: 'Subbase Thickness', group: 'pavement', icon: '▰', element: 'subbase-thickness', page: 'rigid.html' },
-    culvert: { id: 'culvertTool', title: 'Culvert (TBD)', development: 'tbd', group: 'hydraulics', icon: '▱', element: 'culvert-hydraulics', page: 'index.html' },
+    culvert: { id: 'culvertTool', title: 'Culvert (UD)', development: 'ud', group: 'hydraulics', icon: '▱', element: 'culvert-hydraulics', page: 'index.html' },
     coordinates: { id: 'coordinatesTool', title: 'PRS92 Converter', label: 'PRS92', group: 'others', icon: '⌖', element: 'coordinate-converter', page: 'index.html' },
     widening: { id: 'wideningTool', title: 'Curve Widening', group: 'geometry', icon: '↗', element: 'road-widening', page: 'index.html' },
     geometry: { id: 'geometryTool', title: 'Swept Path Analysis', group: 'geometry', icon: '⌁', element: 'curve-widening', page: 'index.html' },
@@ -30,7 +30,7 @@
     customElements.define(tool.element, class extends HTMLElement {
       connectedCallback() { if (!this.closest('[hidden]')) this.activate(); }
       activate() {
-        if (tool.development === 'tbd') {
+        if (tool.development === 'ud') {
           const admin=document.body?.classList?.contains('admin-mode')===true;
           const placeholder=this.querySelector('.tool-development');
           const existingFrame=this.querySelector('iframe');
@@ -41,11 +41,11 @@
           const panel = document.createElement('div');
           panel.className = 'tool-development';
           const title = document.createElement('h2');
-          title.textContent = tool.title.replace(' (TBD)', '');
+          title.textContent = tool.title.replace(' (UD)', '');
           const overlay = document.createElement('div');
           overlay.className = 'tool-development-overlay';
           const message = document.createElement('p');
-          message.textContent = 'TO BE DEVELOPED';
+          message.textContent = 'Under Development';
           overlay.append(message);
           panel.append(title, overlay);
           this.append(panel);
@@ -54,7 +54,7 @@
         }
         if (this.querySelector('iframe')) return;
         const frame = document.createElement('iframe');
-        frame.title = tool.title.replace(' (TBD)', '');
+        frame.title = tool.title.replace(' (UD)', '');
         frame.src = './components/' + tool.element + '/' + tool.page + '?v=' + encodeURIComponent(version);
         frame.loading = 'eager';
         this.append(frame);
