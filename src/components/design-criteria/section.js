@@ -1,6 +1,6 @@
 (() => {
   const $=id=>document.getElementById(id),fmt=n=>(Math.abs(Number(n))<1e-9?0:Number(n)).toLocaleString('en-US',{maximumFractionDigits:2});
-  const names=['lanes','laneWidth','medianWidth','medianHeight','guardrailHeight','guardrailSetback','condition','superelevation','direction','pavementType','thickness','baseThickness','subbaseThickness','crossfall','shoulderFall','leftGround','rightGround','cutSlope','fillSlope','material'];
+  const names=['lanes','laneWidth','medianWidth','medianHeight','guardrailHeight','guardrailSetback','drainageType','drainageWidth','drainageDepth','drainageBottom','drainageLining','condition','superelevation','direction','pavementType','thickness','baseThickness','subbaseThickness','crossfall','shoulderFall','leftGround','rightGround','cutSlope','fillSlope','material'];
   let last;const touched=new Set();
   function render(){
     if(!last)return;
@@ -15,6 +15,10 @@
     values.drainage=$('section-drainage').checked;values.barriers=$('section-barriers').checked;
     for(const id of ['medianWidth','medianHeight'])$('section-'+id).disabled=!values.medianEnabled;
     for(const id of ['guardrailHeight','guardrailSetback'])$('section-'+id).disabled=!values.barriers;
+    for(const id of ['drainageType','drainageWidth','drainageDepth'])$('section-'+id).disabled=!values.drainage;
+    $('section-drainageBottom').disabled=!values.drainage||values.drainageType!=='trapezoidal';
+    $('section-drainageLining').disabled=!values.drainage||values.drainageType==='vditch';
+    let drain;
     const superMode=values.condition==='superelevated';
     for(const id of ['superelevation','direction'])$('section-'+id).disabled=!superMode;
     for(const id of ['crossfall','shoulderFall'])$('section-'+id).disabled=superMode;
@@ -23,7 +27,7 @@
     if(min!=null&&Number(values.thickness)<min)notes.push('Pavement thickness is below the tourism Table 3-2 requirement.');
     if(result.tourism&&!superMode&&Number(values.crossfall)!==(type==='pcc'?1.5:2))notes.push('Crossfall differs from tourism Table 3-2: PCC 1.5%, ACP 2%.');
     let s;
-    try{for(const id of ['medianHeight','guardrailHeight','guardrailSetback'])if((id==='medianHeight'?values.medianEnabled:values.barriers)&&values[id]!==''&&(!Number.isFinite(Number(values[id]))||Number(values[id])<0))throw Error('Enter nonnegative structure dimensions.');if(values.barriers&&values.guardrailHeight!==''&&Number(values.guardrailHeight)<=0)throw Error('Guardrail height must be positive.');if(values.barriers&&values.guardrailSetback!==''&&Number(values.guardrailSetback)>read('shoulder'))throw Error('Guardrail setback exceeds the shoulder; establish an engineered verge / support section.');if(!result.sectionApplicable)throw Error('Expressways require a divided multilane section: at least two 3.6 m lanes per direction (§3.1). This two-lane drawing is not applicable.');s=TypicalSection.build({...values,width:read('width'),shoulder:read('shoulder')});}
+    try{if(values.drainage)drain=DrainageDetail.build(values);for(const id of ['medianHeight','guardrailHeight','guardrailSetback'])if((id==='medianHeight'?values.medianEnabled:values.barriers)&&values[id]!==''&&(!Number.isFinite(Number(values[id]))||Number(values[id])<0))throw Error('Enter nonnegative structure dimensions.');if(values.barriers&&values.guardrailHeight!==''&&Number(values.guardrailHeight)<=0)throw Error('Guardrail height must be positive.');if(values.barriers&&values.guardrailSetback!==''&&Number(values.guardrailSetback)>read('shoulder'))throw Error('Guardrail setback exceeds the shoulder; establish an engineered verge / support section.');if(!result.sectionApplicable)throw Error('Expressways require a divided multilane section: at least two 3.6 m lanes per direction (§3.1). This two-lane drawing is not applicable.');s=TypicalSection.build({...values,width:read('width'),shoulder:read('shoulder')});}
     catch(e){$('section-drawing').replaceChildren();$('section-summary').textContent='';$('section-slope-guide').textContent='';$('section-status').textContent=e.message+' Adopt pavement and shoulder widths in the schedule when no baseline is available.';return;}
     const extent=Math.max(s.edge+3,...s.profile.map(p=>Math.abs(p[0])));
     const sx=460/extent,X=x=>600+x*sx;
@@ -32,7 +36,7 @@
     const coords=pts=>pts.map(([x,y])=>X(x)+','+Y(y)).join(' ');
     const line=(a,b,cl)=>`<line x1="${X(a[0])}" y1="${Y(a[1])}" x2="${X(b[0])}" y2="${Y(b[1])}" class="${cl}"/>`;
     function dimension(x1,x2,y,label){return `<path d="M${X(x1)} ${Y(s.surface(x1))-8}V${y-8}M${X(x2)} ${Y(s.surface(x2))-8}V${y-8}" class="extension"/><line x1="${X(x1)}" y1="${y}" x2="${X(x2)}" y2="${y}" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><text x="${X((x1+x2)/2)}" y="${y-9}" text-anchor="middle" class="dim-label">${label}</text>`;}
-    let svg=`<svg viewBox="0 0 1200 1510" role="img" aria-labelledby="section-svg-title section-svg-desc"><title id="section-svg-title">Typical ${s.p.lanes}-lane road section with cut and fill</title><desc id="section-svg-desc">Pavement ${fmt(s.p.width)} metres; shoulders ${fmt(s.p.shoulder)} metres each; ${superMode?'superelevation '+fmt(s.p.superelevation):'crossfall '+fmt(s.p.crossfall)} percent; pavement ${fmt(s.p.thickness)} millimetres. ${s.complete?'Cut area '+fmt(s.cutArea)+' and fill area '+fmt(s.fillArea)+' square metres.':'Side slopes need review.'}</desc><defs><marker id="dim-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#536977"/></marker><pattern id="cut-hatch" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#fce9dc"/><path d="M0 10L10 0" stroke="#b47b52" stroke-width=".6"/></pattern><pattern id="fill-hatch" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#e3f1e9"/><path d="M0 0L12 12M0 12L12 0" stroke="#83a792" stroke-width=".5"/></pattern><pattern id="aggregate-hatch" width="15" height="12" patternUnits="userSpaceOnUse"><path d="M2 3l3-2 3 4-4 3zM11 8l2-2 2 3" fill="none" stroke="#7b8b96" stroke-width=".7"/></pattern><pattern id="pcc-hatch" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 12L12 0" stroke="#71818b" stroke-width=".6"/></pattern></defs>`;
+    let svg=`<svg viewBox="0 0 1200 1850" role="img" aria-labelledby="section-svg-title section-svg-desc"><title id="section-svg-title">Typical ${s.p.lanes}-lane road section with cut and fill</title><desc id="section-svg-desc">Pavement ${fmt(s.p.width)} metres; shoulders ${fmt(s.p.shoulder)} metres each; ${superMode?'superelevation '+fmt(s.p.superelevation):'crossfall '+fmt(s.p.crossfall)} percent; pavement ${fmt(s.p.thickness)} millimetres. ${s.complete?'Cut area '+fmt(s.cutArea)+' and fill area '+fmt(s.fillArea)+' square metres.':'Side slopes need review.'}</desc><defs><marker id="dim-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#536977"/></marker><pattern id="cut-hatch" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#fce9dc"/><path d="M0 10L10 0" stroke="#b47b52" stroke-width=".6"/></pattern><pattern id="fill-hatch" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#e3f1e9"/><path d="M0 0L12 12M0 12L12 0" stroke="#83a792" stroke-width=".5"/></pattern><pattern id="aggregate-hatch" width="15" height="12" patternUnits="userSpaceOnUse"><path d="M2 3l3-2 3 4-4 3zM11 8l2-2 2 3" fill="none" stroke="#7b8b96" stroke-width=".7"/></pattern><pattern id="pcc-hatch" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 12L12 0" stroke="#71818b" stroke-width=".6"/></pattern></defs>`;
     for(const region of s.regions)svg+=`<polygon points="${coords(region.points)}" class="earth-${region.type}" style="fill:url(#${region.type}-hatch)"/>`;
     svg+=`<polygon points="${coords([...s.top,...s.pavementBottom.slice().reverse()])}" fill="${type==='pcc'?'url(#pcc-hatch)':'#536977'}"/>`;
     if(s.p.baseThickness>0)svg+=`<polygon points="${coords([...s.pavementBottom,...s.baseBottom.slice().reverse()])}" fill="#dae2e7"/><polygon points="${coords([...s.pavementBottom,...s.baseBottom.slice().reverse()])}" fill="url(#aggregate-hatch)"/>`;
@@ -63,7 +67,10 @@
         const setback=values.guardrailSetback===''?s.p.shoulder:Number(values.guardrailSetback),gx=X(d*(s.half+setback))+d*11,gy=Y(s.surface(d*(s.half+setback))),gh=values.guardrailHeight===''?28:Number(values.guardrailHeight)/1000*sy;
         svg+=`<g class="optional-barrier" aria-label="Guardrail with project height and setback"><path d="M${gx} ${gy}V${gy-gh}" stroke="#53616e" stroke-width="4"/><path d="M${gx-11} ${gy-gh+4}l6 -4 5 4 5 -4 6 4v10l-6 4 -5 -4 -5 4 -6 -4z" fill="#d8e1e8" stroke="#53616e"/><text x="${gx}" y="${gy-gh-10}" text-anchor="middle" class="drawing-note">GUARDRAIL</text></g>`;
       }
-      if(values.drainage)svg+=`<g class="optional-drainage" aria-label="Schematic side drainage"><path d="M${xx+d*35} ${yy+12}l${d*14} 18l${d*14} -18" fill="none" stroke="#3287a8" stroke-width="2" stroke-dasharray="4 2"/></g>`;
+      if(values.drainage){
+        const x=xx+d*48,y=yy+18,path=drain.type==='lined'?`M${x-14} ${y}v20h28v-20`:drain.type==='trapezoidal'?`M${x-20} ${y}l10 20h20l10 -20`:`M${x-18} ${y}l18 22l18 -22`;
+        svg+=`<g class="optional-drainage" aria-label="${drain.title}"><path d="${path}" fill="none" stroke="#3287a8" stroke-width="${drain.type==='vditch'?2:4}"/><text x="${x}" y="${y+40}" text-anchor="middle" class="drawing-note">${drain.type==='vditch'?'V-DITCH':'LINED CANAL'}</text></g>`;
+      }
     }
     if(s.p.shoulder>0)svg+=dimension(-s.edge,-s.half,53,`[19] SHOULDER ${fmt(s.p.shoulder)} m`)+dimension(s.half,s.edge,53,`[19] SHOULDER ${fmt(s.p.shoulder)} m`);
     for(const d of [-1,1]){
@@ -143,6 +150,17 @@
     }else svg+=label(620,1230,'Enable barriers to show guardrail height and setback.');
     svg+=label(60,1425,'Median detail not to scale; flush when H = 0.')+label(620,1425,'Detail not to scale; verify approved crashworthy system.');
     svg+=label(45,1470,'Structure heights are annotations only; foundations, raised-median fill and drainage are excluded from earthwork areas.');
+    svg+=`<rect x="45" y="1510" width="1110" height="285" rx="4" class="drawing-panel"/>`;
+    svg+=label(60,1536,'DRAINAGE DETAIL · '+(values.drainage?drain.title.toUpperCase():'OFF'),'drawing-heading');
+    if(values.drainage){
+      const a=180,b=520,yt=1605,yb=1730,ratio=drain.width!=null&&drain.bottom!=null?drain.bottom/drain.width:drain.type==='lined'?1:drain.type==='vditch'?0:.5,ba=350-170*ratio,bb=350+170*ratio;
+      svg+=`<path d="M${a} ${yt}L${ba} ${yb}H${bb}L${b} ${yt}" fill="none" stroke="#3287a8" stroke-width="${drain.type==='vditch'?2:7}"/><line x1="${a}" x2="${b}" y1="1575" y2="1575" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><line x1="570" x2="570" y1="${yt}" y2="${yb}" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/>`;
+      svg+=label(200,1570,'Clear top width = '+dimText(values.drainageWidth,'m'))+label(620,1612,'Clear depth = '+dimText(values.drainageDepth,'m'));
+      if(drain.type==='trapezoidal')svg+=label(220,1760,'Bottom width = '+dimText(values.drainageBottom,'m'));
+      svg+=label(620,1640,drain.type==='vditch'?'Unlined ditch; soil / erosion treatment: TBE':'Lining thickness = '+dimText(values.drainageLining,'mm'));
+      svg+=label(620,1668,'Full geometric area = '+(drain.area==null?'TO BE ESTABLISHED':fmt(drain.area)+' m²'))+label(620,1696,'Flow, grade, roughness, freeboard and outlet: TBE')+label(620,1724,'Capacity / lining design requires hydraulic assessment')+label(620,1752,'Not included in cross-section cut/fill areas');
+    }else svg+=label(60,1580,'Enable drainage and select a type to show its dimensions.');
+    svg+=label(60,1780,'Detail not to scale; dimensions are clear internal sizes. Symbols do not establish longitudinal drainage or excavation.');
     svg+='</svg>';
     $('section-drawing').innerHTML=svg;
     $('section-summary').textContent=s.complete?'Geometric areas to entered formation: Cut '+fmt(s.cutArea)+' m² · Fill '+fmt(s.fillArea)+' m². No volume, shrinkage or bulking allowance.':'Earthwork areas unavailable until both slopes meet the ground.';
