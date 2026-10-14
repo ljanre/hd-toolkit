@@ -18,6 +18,7 @@
   const inside=Math.max(0,p.radius-p.laneWidth/2-(inner-p.clearance)),outside=Math.max(0,outer+p.clearance-(p.radius+p.laneWidth/2));
   return {p,bodies,rearRadius,inner,outer,sweptWidth:outer-inner,offtracking:p.radius-Math.min(...bodies.map(b=>b.radius)),inside,outside,geometricExtra:inside+outside,articulation};
  }
+ function section(r){const laneInner=r.p.radius-r.p.laneWidth/2,laneOuter=r.p.radius+r.p.laneWidth/2,requiredInner=r.inner-r.p.clearance,requiredOuter=r.outer+r.p.clearance;return {laneInner,laneOuter,requiredInner,requiredOuter,insideMargin:requiredInner-laneInner,outsideMargin:laneOuter-requiredOuter,exceeds:r.inside>1e-9||r.outside>1e-9};}
  function standard(v){
   const t=globalThis.CurveWideningStandards,speed=t.speeds.indexOf(Number(v.speed)),width=t.widths.indexOf(Number(v.roadWidth)),row=t.widening[Number(v.roadRadius)],n=Number(v.lanes);
   if(![2,3,4].includes(n)||speed<0||width<0||!row||row[width*6+speed]==null)return null;
@@ -25,5 +26,5 @@
   const raw=Math.max(0,(row[width*6+speed]+adjustment)*n/2);return {base:row[width*6+speed],adjustment,raw,recommended:raw<.6?0:Math.round(raw*10)/10};
  }
  function corners(body,theta){const a=theta+body.phase,c=Math.cos(a),s=Math.sin(a);return [[-body.width/2,-body.rear],[body.width/2,-body.rear],[body.width/2,body.front],[-body.width/2,body.front]].map(([rad,tan])=>[(body.radius+rad)*c-tan*s,(body.radius+rad)*s+tan*c]);}
- globalThis.CurveGeometry=Object.freeze({presets,calculate,standard,corners});
+ globalThis.CurveGeometry=Object.freeze({presets,calculate,standard,corners,section});
 })();

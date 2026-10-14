@@ -7,3 +7,8 @@ for(const b of a.bodies)for(const point of G.corners(b,.4)){const radius=Math.hy
 const table={vehicle:'SU-9',roadRadius:100,speed:60,roadWidth:6.6,lanes:2};assert.ok(Math.abs(G.standard(table).recommended-.9)<1e-9);assert.equal(G.standard({...table,vehicle:'WB-19'}).recommended,2.7);assert.equal(G.standard({...table,vehicle:'WB-19',lanes:4}).recommended,5.4);assert.equal(G.standard({...table,speed:80}),null);assert.equal(G.standard({...table,vehicle:'P'}),null);assert.equal(G.standard({...table,roadRadius:101}),null);
 assert.equal(G.standard({...table,vehicle:'WB-19',roadRadius:3000,roadWidth:7.2}).recommended,0);
 console.log('Curve geometry: rigid offtracking, articulated hitch closure, corner bounds, independent table values and unsupported cases passed.');
+const section=G.section(r);assert.equal(section.exceeds,false);assert.ok(section.insideMargin>0&&section.outsideMargin>0);
+const tight=G.calculate({...base,radius:15}),tightSection=G.section(tight);assert.equal(tightSection.exceeds,true);assert.ok(tight.inside>0);
+const margin=G.calculate({...base,radius:15,clearance:.5});assert.ok(Math.abs(margin.inside-tight.inside-.5)<1e-9);
+assert.equal(G.section(G.calculate({...base,radius:15,laneWidth:10})).exceeds,false);
+assert.equal(G.calculate({...base,angle:45}).sweptWidth,r.sweptWidth,'Steady-turn envelope is independent of display arc angle');
