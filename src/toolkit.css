@@ -64,3 +64,5 @@ project-details{display:block}project-details iframe{display:block;width:100%;he
 design-criteria{display:block}design-criteria iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:1px solid var(--line);border-radius:14px;background:#f5f7fa}@media(max-width:760px){design-criteria iframe{height:calc(100dvh - 180px)}}
 
 curve-widening{display:block}curve-widening iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:1px solid var(--line);border-radius:12px;background:white}@media(max-width:760px){curve-widening iframe{height:calc(100dvh - 110px);min-height:600px}}@media print{curve-widening iframe{height:100vh;border:0}}
+
+road-widening{display:block}road-widening iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:1px solid var(--line);border-radius:12px;background:white}@media(max-width:760px){road-widening iframe{height:calc(100dvh - 110px)}}

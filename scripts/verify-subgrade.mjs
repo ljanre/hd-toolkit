@@ -149,7 +149,7 @@ const listeners = {};
 const frame = { contentWindow: {} };
 const nodes = new Map();
 for (const id of ['flexibleTool','flexibleTool', 'sidebarToggle', 'pavementTool', 'rainfallTool', 'coordinatesTool', 'subgradeTool', 'subbaseTool', 'strengthTool','cbrTool','trafficTool', 'k']) nodes.set(id, element(id));
-nodes.set('criteriaTool',element('criteriaTool'));nodes.set('geometryTool',element('geometryTool'));
+nodes.set('criteriaTool',element('criteriaTool'));nodes.set('geometryTool',element('geometryTool'));nodes.set('wideningTool',element('wideningTool'));
 nodes.set('projectTool',element('projectTool'));
 nodes.set('culvertTool', element('culvertTool'));
 nodes.get('k').dispatchEvent = event => { nodes.get('k').lastEvent = event; };
