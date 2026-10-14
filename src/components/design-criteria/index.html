@@ -19,12 +19,16 @@
 <label>Median width (m)<input id="section-medianWidth" type="number" min="0" max="50" step="0.1" placeholder="TO BE ESTABLISHED" disabled></label>
 <label>Median height above pavement (mm)<input id="section-medianHeight" type="number" min="0" max="2000" step="1" placeholder="TO BE ESTABLISHED" disabled></label>
 <label>Guardrail height to top of rail (mm)<input id="section-guardrailHeight" type="number" min="1" max="3000" step="1" placeholder="TO BE ESTABLISHED" disabled></label>
-<label>Guardrail setback from lane edge (m)<input id="section-guardrailSetback" type="number" min="0" step="0.05" placeholder="TO BE ESTABLISHED" disabled></label>
+<label>Guardrail horizontal offset (m)<input id="section-guardrailSetback" type="number" min="0" step="0.05" placeholder="TO BE ESTABLISHED" disabled></label>
 <label>Drainage type<select id="section-drainageType" disabled><option value="lined">Rectangular lined canal</option><option value="trapezoidal">Trapezoidal lined canal</option><option value="vditch">V-ditch (unlined)</option></select></label>
 <label>Drain clear top width (m)<input id="section-drainageWidth" type="number" min="0.01" step="0.05" placeholder="TO BE ESTABLISHED" disabled></label>
 <label>Drain clear depth (m)<input id="section-drainageDepth" type="number" min="0.01" step="0.05" placeholder="TO BE ESTABLISHED" disabled></label>
 <label>Trapezoidal bottom width (m)<input id="section-drainageBottom" type="number" min="0" step="0.05" placeholder="TO BE ESTABLISHED" disabled></label>
 <label>Canal lining thickness (mm)<input id="section-drainageLining" type="number" min="0" step="1" placeholder="TO BE ESTABLISHED" disabled></label>
+<label>Guardrail sides<select id="section-guardrailSide" disabled><option value="both">Both sides</option><option value="left">Left only</option><option value="right">Right only</option></select></label>
+<label>Guardrail offset reference<select id="section-guardrailReference" disabled><option value="lane">From lane edge · outward</option><option value="shoulder">From shoulder edge · inward</option></select></label>
+<label>Drainage sides<select id="section-drainageSide" disabled><option value="both">Both sides</option><option value="left">Left only</option><option value="right">Right only</option></select></label>
+<label>Drain near-lip offset from shoulder (m)<input id="section-drainageOffset" type="number" min="0" step="0.05" placeholder="TO BE ESTABLISHED" disabled></label>
 <label>Section condition<select id="section-condition"><option value="crowned">Normal crown</option><option value="superelevated">Superelevated curve</option></select></label>
 <label>Superelevation e (%)<input id="section-superelevation" type="number" min="0" max="12" step="0.1" value="6" disabled></label>
 <label>Low side<select id="section-direction" disabled><option value="right">Right side low</option><option value="left">Left side low</option></select></label>

@@ -1,6 +1,6 @@
 (() => {
   const $=id=>document.getElementById(id),fmt=n=>(Math.abs(Number(n))<1e-9?0:Number(n)).toLocaleString('en-US',{maximumFractionDigits:2});
-  const names=['lanes','laneWidth','medianWidth','medianHeight','guardrailHeight','guardrailSetback','drainageType','drainageWidth','drainageDepth','drainageBottom','drainageLining','condition','superelevation','direction','pavementType','thickness','baseThickness','subbaseThickness','crossfall','shoulderFall','leftGround','rightGround','cutSlope','fillSlope','material'];
+  const names=['lanes','laneWidth','medianWidth','medianHeight','guardrailHeight','guardrailSetback','guardrailSide','guardrailReference','drainageSide','drainageOffset','drainageType','drainageWidth','drainageDepth','drainageBottom','drainageLining','condition','superelevation','direction','pavementType','thickness','baseThickness','subbaseThickness','crossfall','shoulderFall','leftGround','rightGround','cutSlope','fillSlope','material'];
   let last;const touched=new Set();
   function render(){
     if(!last)return;
@@ -14,8 +14,8 @@
     values.medianEnabled=$('section-medianEnabled').checked;
     values.drainage=$('section-drainage').checked;values.barriers=$('section-barriers').checked;
     for(const id of ['medianWidth','medianHeight'])$('section-'+id).disabled=!values.medianEnabled;
-    for(const id of ['guardrailHeight','guardrailSetback'])$('section-'+id).disabled=!values.barriers;
-    for(const id of ['drainageType','drainageWidth','drainageDepth'])$('section-'+id).disabled=!values.drainage;
+    for(const id of ['guardrailHeight','guardrailSetback','guardrailSide','guardrailReference'])$('section-'+id).disabled=!values.barriers;
+    for(const id of ['drainageType','drainageWidth','drainageDepth','drainageSide','drainageOffset'])$('section-'+id).disabled=!values.drainage;
     $('section-drainageBottom').disabled=!values.drainage||values.drainageType!=='trapezoidal';
     $('section-drainageLining').disabled=!values.drainage||values.drainageType==='vditch';
     let drain;
@@ -27,9 +27,9 @@
     if(min!=null&&Number(values.thickness)<min)notes.push('Pavement thickness is below the tourism Table 3-2 requirement.');
     if(result.tourism&&!superMode&&Number(values.crossfall)!==(type==='pcc'?1.5:2))notes.push('Crossfall differs from tourism Table 3-2: PCC 1.5%, ACP 2%.');
     let s;
-    try{if(values.drainage)drain=DrainageDetail.build(values);for(const id of ['medianHeight','guardrailHeight','guardrailSetback'])if((id==='medianHeight'?values.medianEnabled:values.barriers)&&values[id]!==''&&(!Number.isFinite(Number(values[id]))||Number(values[id])<0))throw Error('Enter nonnegative structure dimensions.');if(values.barriers&&values.guardrailHeight!==''&&Number(values.guardrailHeight)<=0)throw Error('Guardrail height must be positive.');if(values.barriers&&values.guardrailSetback!==''&&Number(values.guardrailSetback)>read('shoulder'))throw Error('Guardrail setback exceeds the shoulder; establish an engineered verge / support section.');if(!result.sectionApplicable)throw Error('Expressways require a divided multilane section: at least two 3.6 m lanes per direction (§3.1). This two-lane drawing is not applicable.');s=TypicalSection.build({...values,width:read('width'),shoulder:read('shoulder')});}
+    try{if(values.drainage){drain=DrainageDetail.build(values);if(values.drainageOffset!==''&&(!Number.isFinite(Number(values.drainageOffset))||Number(values.drainageOffset)<0))throw Error('Drainage offset must be nonnegative.');}for(const id of ['medianHeight','guardrailHeight','guardrailSetback'])if((id==='medianHeight'?values.medianEnabled:values.barriers)&&values[id]!==''&&(!Number.isFinite(Number(values[id]))||Number(values[id])<0))throw Error('Enter nonnegative structure dimensions.');if(values.barriers&&values.guardrailHeight!==''&&Number(values.guardrailHeight)<=0)throw Error('Guardrail height must be positive.');if(values.barriers&&values.guardrailSetback!==''&&Number(values.guardrailSetback)>read('shoulder'))throw Error('Guardrail setback exceeds the shoulder; establish an engineered verge / support section.');if(!result.sectionApplicable)throw Error('Expressways require a divided multilane section: at least two 3.6 m lanes per direction (§3.1). This two-lane drawing is not applicable.');s=TypicalSection.build({...values,width:read('width'),shoulder:read('shoulder')});}
     catch(e){$('section-drawing').replaceChildren();$('section-summary').textContent='';$('section-slope-guide').textContent='';$('section-status').textContent=e.message+' Adopt pavement and shoulder widths in the schedule when no baseline is available.';return;}
-    const extent=Math.max(s.edge+3,...s.profile.map(p=>Math.abs(p[0])));
+    const extent=Math.max(s.edge+3,values.drainage?s.edge+(Number(values.drainageOffset)||0)+(drain.width||1)+2:0,...s.profile.map(p=>Math.abs(p[0])));
     const sx=460/extent,X=x=>600+x*sx;
     const allY=[...s.profile.map(p=>p[1]),s.ground(-extent),s.ground(extent),0];
     const ymin=Math.min(...allY),ymax=Math.max(...allY),sy=Math.min(70,220/Math.max(1,ymax-ymin)),Y=y=>315+(ymax+ymin)/2*sy-y*sy;
@@ -61,15 +61,23 @@
       svg+=`<g class="optional-median"><polygon points="${left},${yl} ${left},${yl-mh} ${right},${yr-mh} ${right},${yr}" fill="#ead8a7" stroke="#ad8734" stroke-dasharray="${values.medianHeight===''?'4 3':'none'}"/><text x="600" y="176" text-anchor="middle" class="dim-label">MEDIAN ${s.p.medianWidth>0?fmt(s.p.medianWidth)+' m':'TO BE ESTABLISHED'}</text><path d="M600 185V${Y(0)-mh-10}" class="term-leader"/></g>`;
       if(s.p.medianWidth>0)svg+=dimension(-s.p.medianWidth/2,s.p.medianWidth/2,145,fmt(s.p.medianWidth)+' m');
     }
+    const sideEnabled=(side,d)=>side==='both'||side===(d<0?'left':'right');
     for(const d of [-1,1]){
       const xx=X(d*s.edge),yy=Y(s.surface(d*s.edge));
-      if(values.barriers){
-        const setback=values.guardrailSetback===''?s.p.shoulder:Number(values.guardrailSetback),gx=X(d*(s.half+setback))+d*11,gy=Y(s.surface(d*(s.half+setback))),gh=values.guardrailHeight===''?28:Number(values.guardrailHeight)/1000*sy;
+      if(values.barriers&&sideEnabled(values.guardrailSide,d)){
+        const setback=values.guardrailSetback===''?0:Number(values.guardrailSetback),reference=values.guardrailReference==='lane'?s.half:s.edge,face=d*(values.guardrailReference==='lane'?reference+setback:reference-setback),gx=X(face)+d*11,gy=Y(s.surface((gx-600)/sx)),gh=values.guardrailHeight===''?28:Number(values.guardrailHeight)/1000*sy;
         svg+=`<g class="optional-barrier" aria-label="Guardrail with project height and setback"><path d="M${gx} ${gy}V${gy-gh}" stroke="#53616e" stroke-width="4"/><path d="M${gx-11} ${gy-gh+4}l6 -4 5 4 5 -4 6 4v10l-6 4 -5 -4 -5 4 -6 -4z" fill="#d8e1e8" stroke="#53616e"/><text x="${gx}" y="${gy-gh-10}" text-anchor="middle" class="drawing-note">GUARDRAIL</text></g>`;
+        const dy=gy-gh-35;svg+=`<g class="guardrail-offset"><path d="M${X(d*reference)} ${Y(s.surface(d*reference))-5}V${dy}M${X(face)} ${gy-gh-4}V${dy}" class="extension"/><line x1="${X(d*reference)}" x2="${X(face)}" y1="${dy}" y2="${dy}" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><text x="${(X(d*reference)+X(face))/2}" y="${dy-7}" text-anchor="middle" class="drawing-note">OFFSET ${values.guardrailSetback===''?'TBE':fmt(setback)+' m'}</text></g>`;
       }
-      if(values.drainage){
-        const x=xx+d*48,y=yy+18,path=drain.type==='lined'?`M${x-14} ${y}v20h28v-20`:drain.type==='trapezoidal'?`M${x-20} ${y}l10 20h20l10 -20`:`M${x-18} ${y}l18 22l18 -22`;
-        svg+=`<g class="optional-drainage" aria-label="${drain.title}"><path d="${path}" fill="none" stroke="#3287a8" stroke-width="${drain.type==='vditch'?2:4}"/><text x="${x}" y="${y+40}" text-anchor="middle" class="drawing-note">${drain.type==='vditch'?'V-DITCH':'LINED CANAL'}</text></g>`;
+      if(values.drainage&&sideEnabled(values.drainageSide,d)){
+        const offset=values.drainageOffset===''?0:Number(values.drainageOffset),w=drain.width??1,depth=drain.depth??.5,bottom=drain.bottom??(drain.type==='lined'?w:drain.type==='vditch'?0:w/2);
+        const near=d*(s.edge+offset),far=near+d*w,lip=s.surface(near),invert=lip-depth,bn=near+d*(w-bottom)/2,bf=bn+d*bottom;
+        const path=`M${X(near)} ${Y(lip)}L${X(bn)} ${Y(invert)}L${X(bf)} ${Y(invert)}L${X(far)} ${Y(lip)}`;
+        const unknown=drain.width==null||drain.depth==null||values.drainageOffset==='';
+        svg+=`<g class="optional-drainage" aria-label="${drain.title} connected to shoulder"><path d="M${xx} ${yy}L${X(near)} ${Y(lip)}" class="drain-connection"/><path d="${path}" fill="none" stroke="#3287a8" stroke-width="${drain.type==='vditch'?2:4}" stroke-dasharray="${unknown?'5 3':'none'}"/><text x="${X((near+far)/2)}" y="${Y(invert)+20}" text-anchor="middle" class="drawing-note">${drain.type==='vditch'?'V-DITCH':'LINED CANAL'}</text></g>`;
+        const dy=Y(lip)-24;
+        svg+=`<g class="drainage-offset"><line x1="${xx}" x2="${X(near)}" y1="${dy}" y2="${dy}" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><text x="${(xx+X(near))/2}" y="${dy-8}" text-anchor="middle" class="drawing-note">OFFSET ${values.drainageOffset===''?'TBE':fmt(offset)+' m'}</text><line x1="${X(near)}" x2="${X(far)}" y1="${dy-32}" y2="${dy-32}" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><text x="${X((near+far)/2)}" y="${dy-40}" text-anchor="middle" class="drawing-note">W ${drain.width==null?'TBE':fmt(w)+' m'}</text><line x1="${X(far)+d*15}" x2="${X(far)+d*15}" y1="${Y(lip)}" y2="${Y(invert)}" class="dimension"/><text x="${X(far)+d*20}" y="${Y(invert)}" text-anchor="${d<0?'end':'start'}" class="drawing-note">D ${drain.depth==null?'TBE':fmt(depth)+' m'}</text></g>`;
+
       }
     }
     if(s.p.shoulder>0)svg+=dimension(-s.edge,-s.half,53,`[19] SHOULDER ${fmt(s.p.shoulder)} m`)+dimension(s.half,s.edge,53,`[19] SHOULDER ${fmt(s.p.shoulder)} m`);
@@ -146,7 +154,7 @@
     }else svg+=label(60,1230,'Enable median to show its width and height dimensions.');
     if(values.barriers){
       svg+=`<path d="M650 1320H1100M700 1310V1330" class="surface"/><path d="M960 1320V1230" stroke="#53616e" stroke-width="6"/><path d="M940 1234l10 -4 10 4 10 -4 10 4v12l-10 4 -10 -4 -10 4 -10 -4z" fill="#d8e1e8" stroke="#53616e" stroke-width="2"/><line x1="1020" x2="1020" y1="1230" y2="1320" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><line x1="700" x2="940" y1="1350" y2="1350" class="dimension" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/>`;
-      svg+=label(650,1204,'Top-of-rail height = '+dimText(values.guardrailHeight,'mm'))+label(650,1372,'Lane edge to traffic face = '+dimText(values.guardrailSetback,'m'))+label(650,1396,'Beam/post profile indicative; embedment / working width: TBE');
+      svg+=label(650,1204,'Top-of-rail height = '+dimText(values.guardrailHeight,'mm'))+label(650,1372,(values.guardrailReference==='lane'?'Lane edge outward':'Shoulder edge inward')+' offset = '+dimText(values.guardrailSetback,'m'))+label(650,1396,'Beam/post profile indicative; embedment / working width: TBE');
     }else svg+=label(620,1230,'Enable barriers to show guardrail height and setback.');
     svg+=label(60,1425,'Median detail not to scale; flush when H = 0.')+label(620,1425,'Detail not to scale; verify approved crashworthy system.');
     svg+=label(45,1470,'Structure heights are annotations only; foundations, raised-median fill and drainage are excluded from earthwork areas.');
@@ -158,13 +166,14 @@
       svg+=label(200,1570,'Clear top width = '+dimText(values.drainageWidth,'m'))+label(620,1612,'Clear depth = '+dimText(values.drainageDepth,'m'));
       if(drain.type==='trapezoidal')svg+=label(220,1760,'Bottom width = '+dimText(values.drainageBottom,'m'));
       svg+=label(620,1640,drain.type==='vditch'?'Unlined ditch; soil / erosion treatment: TBE':'Lining thickness = '+dimText(values.drainageLining,'mm'));
-      svg+=label(620,1668,'Full geometric area = '+(drain.area==null?'TO BE ESTABLISHED':fmt(drain.area)+' m²'))+label(620,1696,'Flow, grade, roughness, freeboard and outlet: TBE')+label(620,1724,'Capacity / lining design requires hydraulic assessment')+label(620,1752,'Not included in cross-section cut/fill areas');
+      svg+=label(620,1668,'Full geometric area = '+(drain.area==null?'TO BE ESTABLISHED':fmt(drain.area)+' m²'))+label(620,1696,'Flow, grade, roughness, freeboard and outlet: TBE')+label(620,1724,'Near-lip offset from shoulder = '+dimText(values.drainageOffset,'m'))+label(620,1752,'Not included in cross-section cut/fill areas');
     }else svg+=label(60,1580,'Enable drainage and select a type to show its dimensions.');
     svg+=label(60,1780,'Detail not to scale; dimensions are clear internal sizes. Symbols do not establish longitudinal drainage or excavation.');
     svg+='</svg>';
     $('section-drawing').innerHTML=svg;
     $('section-summary').textContent=s.complete?'Geometric areas to entered formation: Cut '+fmt(s.cutArea)+' m² · Fill '+fmt(s.fillArea)+' m². No volume, shrinkage or bulking allowance.':'Earthwork areas unavailable until both slopes meet the ground.';
     if(values.baseThickness===''||values.subbaseThickness==='')notes.push('Base / subbase thickness is TO BE ESTABLISHED; unentered layers are omitted and earthwork areas are provisional.');
+    if(values.drainage&&(values.drainageOffset===''||drain.width==null||drain.depth==null))notes.push('Dashed drainage geometry is an unscaled placeholder where dimensions or offset are unknown.');
     if(values.drainage||values.barriers)notes.push('Drainage / barrier symbols are schematic; dimensions, location, foundations and earthworks are TO BE ESTABLISHED.');
     if(values.medianEnabled)notes.push('Median width and entered height are shown; structural design, foundations and median earthworks are TO BE ESTABLISHED. Areas remain provisional.'+(values.medianWidth===''?' Median width is omitted from calculated geometry.':''));
     if(s.p.lanes!==2)notes.push('Lane count describes layout, not capacity; default lane width is half the selected two-lane baseline.');
