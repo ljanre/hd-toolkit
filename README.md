@@ -67,3 +67,9 @@ Data is loaded only when opening this tool. `scripts/import-road-network.py <csv
 
 For Design Traffic, Flexible Pavement Design and Culvert, public mode shows the shared TO BE DEVELOPED panel. Developer Mode reveals the existing calculator and removes the TBD label. Returning to public mode hides the calculator without discarding its inputs.
 
+
+### Design Criteria typical section
+
+A dimensioned two-lane crowned road section appears above the criteria schedule. Pavement and shoulder widths use project-adopted schedule values, falling back to the selected baseline. Section controls adjust crossfall, pavement material/thickness, ground elevations and cut/fill H:V slopes. The supplied Tables 3-2 and 7-1 provide thickness/crossfall checks and material-height slope guidance. All drawing dimensions are metric.
+
+The initial +1 / −1 m shoulder-edge ground elevations are illustrative, relative to the finished centreline, and must be replaced with survey values. Ground is a straight-line profile; vertical scale is exaggerated. Cut/fill areas are geometric areas to the pavement underside, not quantities or approved slope designs. Separate base/subbase layers, drainage, ROW, berms, protection and surveyed terrain require project design. Table 7-1 conditions and rock-cut assessment remain applicable. `npm test` includes independent cut/fill geometry checks.

@@ -7,7 +7,7 @@
     const input=Object.fromEntries(ids.map(id=>[id,$(id).value]));
     $('other-controls').hidden=['primary','secondary'].includes(input.classification);
     $('functional-controls').hidden=input.otherClass!=='functional';
-    try{result=DesignCriteria.build(input);}catch(e){$('criteria').replaceChildren();$('status').textContent=e.message;return;}
+    try{result=DesignCriteria.build(input);}catch(e){$('criteria').replaceChildren();$('status').textContent=e.message;$('section-drawing').replaceChildren();$('section-status').textContent=e.message;$('section-summary').textContent='';return;}
     $('context').textContent=$('classification').selectedOptions[0].textContent+' · '+$('terrain').selectedOptions[0].textContent+' · Adopted speed '+(result.speed??'—')+' km/h';
     $('status').textContent=result.changedSpeed?'Adopted speed differs from the baseline. Review alignment criteria for that speed.':'Baseline criteria update as controls change. Enter project values beside each line to compare.';
     const body=$('criteria');body.replaceChildren();
@@ -24,7 +24,7 @@
     }
     previous=new Map(result.rows.map(r=>[r.id,r.value]));review();
   }
-  function review(){let count=0;for(const row of result.rows){const tr=$('criteria').querySelector(`[data-id="${row.id}"]`);const state=DesignCriteria.assess(row,adopted[row.id]);tr.children[3].textContent=state;tr.children[3].className=state==='Meets baseline'?'meets':'review';if(state==='Meets baseline')count++;}$('count').textContent=count+' / '+result.rows.length+' meet baseline';}
+  function review(){let count=0;for(const row of result.rows){const tr=$('criteria').querySelector(`[data-id="${row.id}"]`);const state=DesignCriteria.assess(row,adopted[row.id]);tr.children[3].textContent=state;tr.children[3].className=state==='Meets baseline'?'meets':'review';if(state==='Meets baseline')count++;}$('count').textContent=count+' / '+result.rows.length+' meet baseline';CriteriaSection.update(result,adopted);}
   $('controls').addEventListener('submit',e=>e.preventDefault());ids.forEach(id=>$(id).addEventListener(id==='adt'?'input':'change',update));
-  $('reset').addEventListener('click',()=>{const defaults={classification:'primary',terrain:'level',otherClass:'functional',function:'collector',environment:'rural',adt:'',speed:''};ids.forEach(id=>$(id).value=defaults[id]);adopted={};previous.clear();update();});$('print').addEventListener('click',()=>window.print());update();
+  $('reset').addEventListener('click',()=>{const defaults={classification:'primary',terrain:'level',otherClass:'functional',function:'collector',environment:'rural',adt:'',speed:''};ids.forEach(id=>$(id).value=defaults[id]);adopted={};previous.clear();CriteriaSection.reset();update();});$('print').addEventListener('click',()=>window.print());update();
 })();
