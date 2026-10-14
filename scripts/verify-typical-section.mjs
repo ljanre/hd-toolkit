@@ -24,3 +24,9 @@ const mirror=build({...base,condition:'superelevated',superelevation:6,direction
 assert.ok(Math.abs(mirror.cutArea-sup.cutArea)<1e-9);assert.ok(Math.abs(mirror.fillArea-sup.fillArea)<1e-9);
 assert.throws(()=>build({...base,condition:'superelevated',superelevation:13}));
 console.log('Superelevation: 6% edge heights, centreline rotation, shoulder continuation, daylight and mirrored earthwork passed.');
+
+const layers=build({...base,baseThickness:150,subbaseThickness:200});
+assert.equal(layers.p.totalThickness,550);assert.ok(Math.abs(layers.formation[2][1]+.55)<1e-9);assert.ok(Math.abs(layers.pavementBottom[2][1]+.2)<1e-9);assert.ok(Math.abs(layers.baseBottom[2][1]+.35)<1e-9);
+assert.ok(layers.cutArea>mixed.cutArea&&layers.fillArea<mixed.fillArea);
+assert.throws(()=>build({...base,baseThickness:-1}));assert.throws(()=>build({...base,subbaseThickness:'bad'}));
+console.log('Layered formation: independent pavement/base/subbase boundaries, earthwork changes and invalid thickness checks passed.');

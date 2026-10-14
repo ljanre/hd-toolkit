@@ -17,17 +17,21 @@
     return matches.length?[Math.min(...matches.map(r=>r[2])),Math.max(...matches.map(r=>r[3]))]:null;
   }
   function build(p){
+    const baseThickness=p.baseThickness==null||p.baseThickness===''?0:Number(p.baseThickness),subbaseThickness=p.subbaseThickness==null||p.subbaseThickness===''?0:Number(p.subbaseThickness);
+    if(!Number.isFinite(baseThickness)||!Number.isFinite(subbaseThickness)||baseThickness<0||subbaseThickness<0)throw Error('Base and subbase thickness must be nonnegative millimetres.');
     const condition=p.condition??'crowned',direction=p.direction??'right',e=Number(p.superelevation??6);
     if(!['crowned','superelevated'].includes(condition)||!['left','right'].includes(direction)||!Number.isFinite(e)||e<0||e>12)throw Error('Select a valid section condition, direction and superelevation (0–12%).');
     const keys=['width','shoulder','crossfall','shoulderFall','thickness','leftGround','rightGround','cutSlope','fillSlope'];
     if(keys.some(k=>p[k]==null||p[k]===''||!Number.isFinite(Number(p[k]))))throw Error('Enter valid section dimensions and ground levels.');
     p=Object.fromEntries(keys.map(k=>[k,Number(p[k])]));
     if(p.width<=0||p.shoulder<0||p.crossfall<0||p.crossfall>12||p.shoulderFall<0||p.shoulderFall>12||p.thickness<=0||p.cutSlope<=0||p.fillSlope<=0)throw Error('Widths, thickness and side slopes must be positive; crossfalls must be 0–12%.');
-    const half=p.width/2,edge=half+p.shoulder,t=p.thickness/1000;
-    Object.assign(p,{condition,direction,superelevation:e});
+    const half=p.width/2,edge=half+p.shoulder,t=(p.thickness+baseThickness+subbaseThickness)/1000;
+    Object.assign(p,{condition,direction,superelevation:e,baseThickness,subbaseThickness,totalThickness:p.thickness+baseThickness+subbaseThickness});
     const signedRate=(direction==='right'?-1:1)*e/100;
     const surface=x=>condition==='superelevated'?(x===0?0:x*signedRate):-Math.min(Math.abs(x),half)*p.crossfall/100-Math.max(0,Math.abs(x)-half)*p.shoulderFall/100;
     const top=[-edge,-half,0,half,edge].map(x=>[x,surface(x)]);
+    const pavementBottom=top.map(([x,y])=>[x,y-p.thickness/1000]);
+    const baseBottom=top.map(([x,y])=>[x,y-(p.thickness+baseThickness)/1000]);
     const formation=top.map(([x,y])=>[x,y-t]);
     const gradient=(p.rightGround-p.leftGround)/(2*edge),centre=(p.rightGround+p.leftGround)/2;
     const ground=x=>centre+gradient*x;
@@ -56,7 +60,7 @@
         if(type==='cut')cutArea+=area;else fillArea+=area;
       }
     }
-    return {p,half,edge,surface,top,formation,left,right,profile,regions,cutArea,fillArea,ground,warnings,complete:!!left&&!!right};
+    return {p,half,edge,surface,top,pavementBottom,baseBottom,formation,left,right,profile,regions,cutArea,fillArea,ground,warnings,complete:!!left&&!!right};
   }
   globalThis.TypicalSection=Object.freeze({build,range});
 })();
