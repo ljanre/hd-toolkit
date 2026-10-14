@@ -20,7 +20,8 @@ assert.match(html,new RegExp('hd-toolkit-build" content="'+manifest.version));
 assert.match(html,new RegExp('tool-registry.js\\?v='+manifest.version));
 assert.equal((html.match(/\/component\.js/g)||[]).length,0,'Individual registration scripts should not load in the main page');
 assert.ok(manifest.excludedFiles>=23);
-assert.ok(manifest.deployedBytes<6200000);
+const orderBytes=(await readFile(new URL('../src/components/design-criteria/do-112-s2024-reference.pdf',import.meta.url))).length;
+assert.ok(manifest.deployedBytes-orderBytes<6200000,'Runtime budget excluding the intentionally added reference order');
 await writeFile(new URL('../dist/stale-build-artifact.txt',import.meta.url),'stale');
 await execute(process.execPath,['scripts/build.mjs'],{cwd:root,windowsHide:true});
 assert.equal(JSON.parse(await read('dist/build-manifest.json')).version,manifest.version,'Unchanged inputs have a stable cache version');
@@ -37,3 +38,5 @@ assert.equal(context.ToolkitRegistry.tools.culvert.development,'tbd');
 console.log('Production build: exact data, optimized assets, stable cache versions, stale-file cleanup and eleven lazy tool registrations verified.');
 
 assert.deepEqual(await readFile(new URL('../dist/components/design-criteria/reference-excerpts.pdf',import.meta.url)),await readFile(new URL('../src/components/design-criteria/reference-excerpts.pdf',import.meta.url)),'Manual excerpts must be deployed unchanged');
+
+assert.deepEqual(await readFile(new URL('../dist/components/design-criteria/do-112-s2024-reference.pdf',import.meta.url)),await readFile(new URL('../src/components/design-criteria/do-112-s2024-reference.pdf',import.meta.url)),'The Department Order reference must be deployed unchanged');

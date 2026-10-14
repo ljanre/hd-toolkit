@@ -9,7 +9,7 @@ const source = resolve(project, 'src');
 const output = resolve(project, 'dist');
 const webExtensions = new Set(['.html','.js','.css','.png','.svg','.jpg','.jpeg','.webp','.ico','.json','.woff','.woff2']);
 export function isRuntimeFile(name) {
-  return (webExtensions.has(extname(name)) || name==='components/design-criteria/reference-excerpts.pdf') && !/(^|\/)tests\//.test(name) && !/(^|\/)qa\.(html|js)$/.test(name) && !/^components\/subbase-thickness\/[^/]+\.json$/.test(name) && !/^components\/subgrade-reaction\/figure-3-[36]\.png$/.test(name);
+  return (webExtensions.has(extname(name)) || ['components/design-criteria/reference-excerpts.pdf','components/design-criteria/do-112-s2024-reference.pdf'].includes(name)) && !/(^|\/)tests\//.test(name) && !/(^|\/)qa\.(html|js)$/.test(name) && !/^components\/subbase-thickness\/[^/]+\.json$/.test(name) && !/^components\/subgrade-reaction\/figure-3-[36]\.png$/.test(name);
 }
 async function filesIn(folder) {
   const entries = await readdir(folder, { withFileTypes: true });

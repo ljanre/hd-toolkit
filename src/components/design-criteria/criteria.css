@@ -19,3 +19,7 @@
 @media(min-width:1101px){.controls-landscape #controls{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .section-drawing .layer-boundary{fill:none;stroke:#7b8b96;stroke-width:.8}.section-drawing .datum-line{stroke:#98a8b1;stroke-width:.7;stroke-dasharray:3 5}.section-drawing .survey-point{fill:#193646;stroke:white;stroke-width:1}.section-drawing .drawing-panel{fill:#fafcfd;stroke:#ccd8df;stroke-width:1}.section-drawing .drawing-title-block{fill:#edf3f5;stroke:#a8bbc6;stroke-width:1}.section-drawing .drawing-note{font-size:13px;stroke:none}.section-drawing .drawing-heading{font-size:13px;font-weight:700;letter-spacing:.4px;stroke:none}.section-drawing svg{min-width:1050px}
 @media print{.section-drawing svg{min-width:0}}
+
+.classification-reference{grid-column:1/-1;padding:0 12px 12px;font-size:12px}.classification-reference summary{font-weight:600;color:var(--accent)}#input-guide-text{max-height:65vh;overflow:auto;padding-right:8px}
+
+#input-guide-text{white-space:pre-line}

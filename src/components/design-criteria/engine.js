@@ -20,30 +20,33 @@
     arterialUrban:{speeds:[50,60,70,80,90,100],values:[[8,7,6,6,5,5],[9,8,7,7,6,6],[11,10,9,9,8,8]],table:31},
     expressway:{speeds:[80,90,100,110,120,130],values:[[4,4,3,3,3,3],[5,5,4,4,4,4],[6,6,6,5,null,null]],table:32}
   };
-  const names={primary:'National Primary',secondary:'National Secondary',tertiary:'National Tertiary',provincial:'Provincial',city:'City',municipal:'Municipal',barangay:'Barangay',fmr:'Farm-to-Market',tourism:'Tourism',expressway:'Expressway',parkway:'Parkway',others:'Others / Project-specific'};
+  const names={primary:'National Primary',secondary:'National Secondary',tertiary:'National Tertiary',provincial:'Provincial',city:'City',municipal:'Municipal',barangay:'Barangay',fmr:'Farm-to-Market',tourism:'Tourism',expressway:'Expressway',parkway:'Parkway',unclassified:'Unclassified / conversion subject',others:'TO BE ESTABLISHED / verify classification'};
   function build(input){
     const terrain=['level','rolling','mountainous'].indexOf(input.terrain),classification=input.classification;
     if(terrain<0||!names[classification])throw Error('Select a road classification and terrain.');
     let basis=input.basis||'auto';
     if(!['auto','table','system','functional'].includes(basis))throw Error('Select a prescribed criteria basis.');
-    const legacy=classification==='others'&&['barangay','fmr'].includes(input.otherClass)?input.otherClass:classification;
-    if(basis==='auto')basis=table[legacy]||classification==='tourism'?'table':system[classification]&&classification!=='tertiary'?'system':'functional';
+    const family=input.designFamily||'auto';if(!['auto','tourism','fmr','parkway'].includes(family))throw Error('Select a valid design family.');
+    const designClass=family==='auto'?classification:family;
+    const legacy=designClass==='others'&&['barangay','fmr'].includes(input.otherClass)?input.otherClass:designClass;
+    if(basis==='auto')basis=designClass==='parkway'?'functional':table[legacy]||designClass==='tourism'?'table':system[classification]&&classification!=='tertiary'?'system':'functional';
     const level=input.standardLevel||'minimum';if(!['minimum','desirable'].includes(level))throw Error('Select minimum or desirable criteria.');
     const b=basis==='table'?(table[legacy]?.[level]||table[legacy]?.minimum):null;
-    const tourism=basis==='table'&&classification==='tourism';
+    const tourism=basis==='table'&&designClass==='tourism';
     if(basis==='table'&&!b&&!tourism)throw Error('This classification has no dedicated Table 3-1 or 3-2 column. Select road-system or functional criteria.');
     if(basis==='system'&&!system[classification])throw Error('No unambiguous road-system baseline is available for this selection; choose another basis.');
     const rows=[],warnings=[];
     const add=(id,label,value,unit,relation,reference,note='')=>rows.push({id,label,value,unit,relation,reference,note});
     const national=['primary','secondary','tertiary'].includes(classification);
-    if(national)warnings.push('National Primary/Secondary/Tertiary is an administrative classification, not an Arterial/Collector/Local function. §1.5.5.1 names Primary and Secondary only; Tertiary has no separate table column.');
+    if(family!=='auto')warnings.push('Selected '+family+' design family does not reclassify the road under D.O.112, s.2024.');
+    if(national)warnings.push('Classification definitions follow D.O.112, s.2024. DGCS geometric criteria remain a separate design basis; Tertiary has no dedicated Table 3-1 column.');
     if(basis==='system')warnings.push('Chapter 1 system values are shown explicitly. Table 3-1 gives different category values; confirm the governing project basis rather than combining them.');
     if(basis==='table'&&!tourism){const band={fmr:'under 200',barangay:'200–400',secondary:'400–1,000',primary:'1,000–2,000',expressway:'over 2,000'}[legacy];warnings.push('Table 3-1 selected column ADT: '+band+' vehicles/day. This older schedule reproduces 1984 standards and excludes tourism; the volume band does not reclassify a road automatically.');}
     if(b&&classification==='expressway')warnings.push('§3.1 requires at least two 3.6 m through lanes per direction with continuous paved shoulders. Table 3-1 widths are reproduced separately; do not interpret them as a complete divided-road section. §3.4 specifies expressway speed ≥80 km/h.');
     let recommendation=b?.speed[terrain]??(tourism?[60,40,30][terrain]:null),speedReference=tourism?'Table 3-2 · p. 3-3':'Table 3-1 · p. 3-2';
     const volumeMissing=input.adt===''||input.adt==null,volume=Number(input.adt);
     if(!volumeMissing&&(!Number.isFinite(volume)||volume<0))throw Error('Design-year ADT must be a nonnegative vehicle count.');
-    const fn=classification==='expressway'?'expressway':classification==='parkway'?'parkway':input.function;
+    const fn=classification==='expressway'?'expressway':designClass==='parkway'?'parkway':input.function;
     if(basis==='system')speedReference='§3.4 · p. 3-12';
     if(basis==='functional'){
       if(fn==='expressway')recommendation=80;
@@ -103,7 +106,7 @@
     }
     add('stopping','Stopping sight distance · level roadway',ssd.get(speed)??null,'m','min','Table 3-8 · p. 3-15',speed===95?'95 km/h is not tabulated; no interpolation is assumed. Table 3-1 non-passing value remains separately identified.':'Separate from Table 3-1 non-passing sight distance; graded-road checks use Table 3-9.');
     if(basis==='functional')add('passing','Passing sight distance · two-lane highway',psd.get(speed)??null,'m','min','Table 3-11 · p. 3-17','Not the older Table 3-1 passing-distance schedule.');
-    return {rows,speed,recommendation,source,classification,terrain:input.terrain,changedSpeed:speed!==recommendation,basis,tourism,standardLevel:level,warnings,sectionApplicable:classification!=='expressway'&&!(basis==='functional'&&fn==='expressway'),basisLabel:basis==='table'?(tourism?'Tourism · Table 3-2':'Table 3-1 · '+(table[legacy].desirable?level:'single column')):basis==='system'?'Road-system classification · §1.5.5':'Functional design · §§3.1–3.6'};
+    return {rows,speed,recommendation,source,classification,terrain:input.terrain,changedSpeed:speed!==recommendation,basis,tourism,designClass,standardLevel:level,warnings,sectionApplicable:classification!=='expressway'&&!(basis==='functional'&&fn==='expressway'),basisLabel:basis==='table'?(tourism?'Tourism · Table 3-2':'Table 3-1 · '+(table[legacy].desirable?level:'single column')):basis==='system'?'Road-system classification · §1.5.5':'Functional design · §§3.1–3.6'};
   }
   function assess(row,value){
     if(value===''||value==null)return 'Not adopted';const n=Number(value);if(!Number.isFinite(n)||n<0)return 'Invalid';

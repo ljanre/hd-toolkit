@@ -91,3 +91,9 @@ DHV = ADT × K/100; directional DHV = DHV × D/100. A separately entered DHV ove
 ### Engineering section illustration
 
 The section uses chained platform/shoulder/lane dimensions, layer and cut/fill hatching, centreline datum, slope/height annotations, daylight points, an offset/finished-level register and a drawing title block. Editable base/subbase depths move the formation and update geometric earthwork areas. Blank layer depths remain TO BE ESTABLISHED and are omitted; areas are provisional until layer design is established. Entered layers are illustrated across the platform; actual shoulder construction, drains and berms need project details. The section is not to scale and is not a construction drawing.
+
+### D.O.112, s.2024 road classification
+
+Road Classification now follows Section I of the supplied D.O.112: National Primary/Secondary/Tertiary; Local Provincial/City/Municipal/Barangay; and Expressway under Other Roads. Unclassified and TO BE ESTABLISHED are verification states, not additional classified road categories. Tourism, Farm-to-Market and Parkway are separate design-family choices and never change the selected legal road class. Dynamic input guides include each class definition, relevant Attachment 1 terms, Secondary connectivity/island conditions, Attachment 2 bypass/diversion requirements, and the conversion/documentation process. A readable reference PDF contains the four-page order plus Attachments 1–2.
+
+The order supersedes D.O.133, s.2018 and inconsistent issuances. Its 6.10 m carriageway/gravel/maintainable condition and acquired minimum 20 m RROW requirements concern conversion evaluation; they do not replace DGCS geometric design values. Official evaluation, certifications, local-board concurrence and environmental/ROW conditions remain necessary. Incomplete documentation leaves the SRC in its current local/unclassified status. The worksheet does not decide or approve road conversion.

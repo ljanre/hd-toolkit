@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {runInNewContext} from 'node:vm';
+const c={};for(const f of ['road-classification.js','engine.js'])runInNewContext(await readFile(new URL('../src/components/design-criteria/'+f,import.meta.url),'utf8'),c);
+const {entries,guide}=c.RoadClassification;
+assert.equal(Object.values(entries).filter(e=>e.group==='National roads').length,3);
+assert.equal(Object.values(entries).filter(e=>e.group==='Local roads').length,4);
+assert.equal(entries.expressway.group,'Other roads');assert.equal(entries.tourism,undefined);assert.equal(entries.fmr,undefined);
+assert.match(entries.primary.detail,/200,000/);assert.match(entries.tertiary.definition,/local function/);assert.match(entries.provincial.definition,/without traversing national roads/);
+assert.match(guide('secondary'),/greater than 25,000/);assert.match(guide('secondary'),/at least 20%/);assert.match(guide('secondary'),/30% shorter/);
+assert.match(guide('primary'),/6.10 m/);assert.match(guide('primary'),/conversion requirements, not universal/);assert.match(guide('others'),/TO BE ESTABLISHED/);
+const base={classification:'primary',terrain:'level',basis:'auto',standardLevel:'minimum',designFamily:'auto',speed:'',adt:'',function:'collector',environment:'rural'};
+const tourism=c.DesignCriteria.build({...base,classification:'secondary',designFamily:'tourism'});assert.equal(tourism.classification,'secondary');assert.equal(tourism.tourism,true);assert.equal(tourism.rows.find(r=>r.id==='pccThickness').value,230);
+const fmr=c.DesignCriteria.build({...base,classification:'barangay',designFamily:'fmr'});assert.equal(fmr.classification,'barangay');assert.equal(fmr.rows.find(r=>r.id==='width').value,4);
+assert.equal(c.DesignCriteria.build({...base,designFamily:'parkway'}).basis,'functional');
+assert.equal(c.DesignCriteria.build({...base,classification:'unclassified'}).basis,'functional');
+assert.throws(()=>c.DesignCriteria.build({...base,designFamily:'bad'}));
+console.log('D.O.112 classification groups, explicit tertiary definition, conversion guidance and independent design-family controls passed.');

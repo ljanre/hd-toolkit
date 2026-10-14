@@ -1,15 +1,17 @@
 (() => {
-  const $=id=>document.getElementById(id),ids=['classification','basis','standardLevel','terrain','otherClass','function','environment','adt','speed'];
+  const $=id=>document.getElementById(id),ids=['classification','designFamily','basis','standardLevel','terrain','otherClass','function','environment','adt','speed'];
   let adopted={},previous=new Map(),result;
   for(const v of DesignCriteria.speeds){const o=document.createElement('option');o.value=v;o.textContent=v;$('speed').append(o);}
   const format=n=>n==null?'TO BE ESTABLISHED':Number(n).toLocaleString('en-US',{maximumFractionDigits:2});
   function update(){
     const input=Object.fromEntries(ids.map(id=>[id,$(id).value]));
+    const definition=RoadClassification.entries[input.classification]||RoadClassification.entries.others;
+    $('classification-note').textContent=definition.group+' · '+definition.definition+' D.O.112, s.2024, '+definition.reference;
 
     try{result=DesignCriteria.build(input);}catch(e){$('criteria').replaceChildren();$('status').textContent=e.message;$('section-drawing').replaceChildren();$('section-status').textContent=e.message;$('section-summary').textContent='';$('count').textContent='';$('context').textContent='';document.dispatchEvent(new CustomEvent('criteria-updated',{detail:null}));return;}
     $('other-controls').hidden=result.basis!=='functional';
     $('functional-controls').hidden=false;
-    $('standardLevel').disabled=result.basis!=='table'||!['primary','secondary','expressway'].includes(input.classification);
+    $('standardLevel').disabled=result.basis!=='table'||!['primary','secondary','expressway'].includes(result.designClass);
     $('basis-help').textContent=result.basisLabel;
     $('context').textContent=$('classification').selectedOptions[0].textContent+' · '+$('terrain').selectedOptions[0].textContent+' · Adopted speed '+(result.speed??'—')+' km/h · '+result.basisLabel;
     $('status').textContent=result.changedSpeed?'Adopted speed differs from the baseline. Review alignment criteria for that speed.':'Baseline criteria update as controls change. Enter project values beside each line to compare.';
@@ -31,5 +33,5 @@
   }
   function review(){let count=0;for(const row of result.rows){const tr=$('criteria').querySelector(`[data-id="${row.id}"]`);const state=DesignCriteria.assess(row,adopted[row.id]);tr.children[3].textContent=state;tr.children[3].className=state==='Meets baseline'?'meets':'review';if(state==='Meets baseline')count++;}$('count').textContent=count+' / '+result.rows.length+' meet baseline';CriteriaSection.update(result,adopted);document.dispatchEvent(new CustomEvent('criteria-updated',{detail:result}));}
   $('controls').addEventListener('submit',e=>e.preventDefault());ids.forEach(id=>$(id).addEventListener(id==='adt'?'input':'change',update));
-  $('reset').addEventListener('click',()=>{const defaults={classification:'primary',basis:'auto',standardLevel:'minimum',terrain:'level',otherClass:'functional',function:'collector',environment:'rural',adt:'',speed:''};ids.forEach(id=>$(id).value=defaults[id]);adopted={};previous.clear();CriteriaSection.reset();update();});$('print').addEventListener('click',()=>window.print());update();
+  $('reset').addEventListener('click',()=>{const defaults={classification:'primary',designFamily:'auto',basis:'auto',standardLevel:'minimum',terrain:'level',otherClass:'functional',function:'collector',environment:'rural',adt:'',speed:''};ids.forEach(id=>$(id).value=defaults[id]);adopted={};previous.clear();CriteriaSection.reset();update();});$('print').addEventListener('click',()=>window.print());update();
 })();
