@@ -35,3 +35,5 @@ assert.equal(context.ToolkitRegistry.tools.flexible.title,'Flexible Pavement Des
 assert.equal(context.ToolkitRegistry.tools.traffic.title,'Design Traffic (TBD)');
 assert.equal(context.ToolkitRegistry.tools.culvert.development,'tbd');
 console.log('Production build: exact data, optimized assets, stable cache versions, stale-file cleanup and eleven lazy tool registrations verified.');
+
+assert.deepEqual(await readFile(new URL('../dist/components/design-criteria/reference-excerpts.pdf',import.meta.url)),await readFile(new URL('../src/components/design-criteria/reference-excerpts.pdf',import.meta.url)),'Manual excerpts must be deployed unchanged');

@@ -1,24 +1,25 @@
 (() => {
   const $=id=>document.getElementById(id),fmt=n=>Number(n).toLocaleString('en-US',{maximumFractionDigits:2});
   const names=['condition','superelevation','direction','pavementType','thickness','crossfall','shoulderFall','leftGround','rightGround','cutSlope','fillSlope','material'];
-  let last;
+  let last;const touched=new Set();
   function render(){
     if(!last)return;
     const {result,adopted}=last;
     const read=id=>adopted[id]!==undefined&&adopted[id]!==''?Number(adopted[id]):result.rows.find(r=>r.id===id)?.value;
     const type=$('section-pavementType').value;
+    const min=result.tourism?(type==='pcc'?230:50):null;
+    if(result.tourism){if(!touched.has('thickness'))$('section-thickness').value=min;if(!touched.has('crossfall'))$('section-crossfall').value=type==='pcc'?1.5:2;}
+    $('section-thickness-guide').textContent=result.tourism?'Tourism Table 3-2: PCC 230 mm / 1.5% cross slope; ACP 50 mm / 2%.':'Thickness and normal crossfall are illustrative project inputs; tourism Table 3-2 is not a general highway standard. Use the pavement design and selected surfacing figure.';
     const values=Object.fromEntries(names.map(id=>[id,$('section-'+id).value]));
-    const min=type==='pcc'?200:50;
-    $('section-thickness-guide').textContent=type==='pcc'?'Table 3-2: PCC ≥200 mm. Final thickness requires pavement design.':'Table 3-2: ACP ≥50 mm (15% of PCC thickness / 25% ACP provision also stated; confirm its application).';
     const superMode=values.condition==='superelevated';
     for(const id of ['superelevation','direction'])$('section-'+id).disabled=!superMode;
     for(const id of ['crossfall','shoulderFall'])$('section-'+id).disabled=superMode;
     const notes=[];
     if(superMode){const limit=read('superelevation');if(!Number.isFinite(limit))notes.push('Adopt a project maximum superelevation in the criteria schedule.');else if(Number(values.superelevation)>limit)notes.push('Superelevation exceeds the schedule maximum of '+fmt(limit)+'%.');if(Number(values.superelevation)===0)notes.push('Zero superelevation produces a level section; check drainage.');}
-    if(Number(values.thickness)<min)notes.push('Pavement thickness is below the Table 3-2 minimum.');
-    if(!superMode&&(Number(values.crossfall)<1.5||Number(values.crossfall)>2.5))notes.push('Table 3-2: cross slope ≥1.5%; paved-surface guidance 1.5–2.5%. Review the adopted crossfall.');
+    if(min!=null&&Number(values.thickness)<min)notes.push('Pavement thickness is below the tourism Table 3-2 requirement.');
+    if(result.tourism&&!superMode&&Number(values.crossfall)!==(type==='pcc'?1.5:2))notes.push('Crossfall differs from tourism Table 3-2: PCC 1.5%, ACP 2%.');
     let s;
-    try{s=TypicalSection.build({...values,width:read('width'),shoulder:read('shoulder')});}
+    try{if(!result.sectionApplicable)throw Error('Expressways require a divided multilane section: at least two 3.6 m lanes per direction (§3.1). This two-lane drawing is not applicable.');s=TypicalSection.build({...values,width:read('width'),shoulder:read('shoulder')});}
     catch(e){$('section-drawing').replaceChildren();$('section-summary').textContent='';$('section-slope-guide').textContent='';$('section-status').textContent=e.message+' Adopt pavement and shoulder widths in the schedule when no baseline is available.';return;}
     const extent=Math.max(s.edge+3,...s.profile.map(p=>Math.abs(p[0])));
     const sx=460/extent,X=x=>600+x*sx;
@@ -65,6 +66,6 @@
     $('section-status').textContent=[...s.warnings,...notes].join(' ')||'Section updates with adopted values, or the baseline where an adopted value is blank.';
     $('section-status').classList.toggle('section-warning',notes.length>0||s.warnings.length>0);
   }
-  names.forEach(id=>$('section-'+id).addEventListener('input',render));
-  globalThis.CriteriaSection={update(result,adopted){last={result,adopted};render();},reset(){ $('section-controls').reset(); }};
+  names.forEach(id=>$('section-'+id).addEventListener('input',()=>{touched.add(id);render();}));
+  globalThis.CriteriaSection={update(result,adopted){last={result,adopted};render();},reset(){ touched.clear();$('section-controls').reset(); }};
 })();
