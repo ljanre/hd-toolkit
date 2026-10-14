@@ -23,3 +23,6 @@
 .classification-reference{grid-column:1/-1;padding:0 12px 12px;font-size:12px}.classification-reference summary{font-weight:600;color:var(--accent)}#input-guide-text{max-height:65vh;overflow:auto;padding-right:8px}
 
 #input-guide-text{white-space:pre-line}
+
+.section-drawing .term-leader{fill:none;stroke:#536977;stroke-width:.9}.section-drawing .term-bubble{fill:white;stroke:#193646;stroke-width:1}.section-drawing .term-number{font-size:11px;font-weight:700;fill:#193646;stroke:none}.section-drawing .drawing-note{font-size:12px}
+.section-controls .feature-toggle{display:flex;align-items:center;justify-content:space-between;min-height:48px;gap:12px}.section-controls .feature-toggle input{width:20px;height:20px;min-height:20px;margin:0;accent-color:var(--accent)}.section-guide-field .feature-toggle input{width:20px}.optional-median,.optional-barrier,.optional-drainage{pointer-events:none}

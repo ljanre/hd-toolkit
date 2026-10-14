@@ -30,3 +30,10 @@ assert.equal(layers.p.totalThickness,550);assert.ok(Math.abs(layers.formation[2]
 assert.ok(layers.cutArea>mixed.cutArea&&layers.fillArea<mixed.fillArea);
 assert.throws(()=>build({...base,baseThickness:-1}));assert.throws(()=>build({...base,subbaseThickness:'bad'}));
 console.log('Layered formation: independent pavement/base/subbase boundaries, earthwork changes and invalid thickness checks passed.');
+
+const four=build({...base,lanes:4});assert.equal(four.p.width,13.4);assert.equal(four.p.laneWidth,3.35);
+const divided=build({...base,lanes:4,laneWidth:3.5,medianEnabled:true,medianWidth:2});assert.equal(divided.p.width,16);assert.equal(divided.edge,10.5);
+assert.equal(build({...base,lanes:4,laneWidth:3.5,medianEnabled:false,medianWidth:2}).p.width,14);
+assert.equal(build({...base,lanes:4,medianEnabled:true,medianWidth:''}).p.medianWidth,0);
+assert.throws(()=>build({...base,lanes:3,medianEnabled:true}));assert.throws(()=>build({...base,lanes:4,laneWidth:-1}));
+console.log('Lane/median layout: preserved lane width, actual platform span, disabled/unknown median and symmetric-layout validation passed.');

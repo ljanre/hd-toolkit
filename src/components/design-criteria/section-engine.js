@@ -17,6 +17,9 @@
     return matches.length?[Math.min(...matches.map(r=>r[2])),Math.max(...matches.map(r=>r[3]))]:null;
   }
   function build(p){
+    const lanes=Number(p.lanes??2),laneWidth=p.laneWidth==null||p.laneWidth===''?Number(p.width)/2:Number(p.laneWidth),medianEnabled=!!p.medianEnabled,medianWidth=medianEnabled&&p.medianWidth!==''&&p.medianWidth!=null?Number(p.medianWidth):0;
+    if(![2,3,4,6,8].includes(lanes)||!Number.isFinite(laneWidth)||laneWidth<=0||!Number.isFinite(medianWidth)||medianWidth<0)throw Error('Select a valid lane count and positive lane width; median width must be nonnegative.');
+    if(medianEnabled&&lanes%2)throw Error('This symmetric median section requires an even number of lanes. Select 2, 4, 6 or 8 lanes.');
     const baseThickness=p.baseThickness==null||p.baseThickness===''?0:Number(p.baseThickness),subbaseThickness=p.subbaseThickness==null||p.subbaseThickness===''?0:Number(p.subbaseThickness);
     if(!Number.isFinite(baseThickness)||!Number.isFinite(subbaseThickness)||baseThickness<0||subbaseThickness<0)throw Error('Base and subbase thickness must be nonnegative millimetres.');
     const condition=p.condition??'crowned',direction=p.direction??'right',e=Number(p.superelevation??6);
@@ -25,8 +28,9 @@
     if(keys.some(k=>p[k]==null||p[k]===''||!Number.isFinite(Number(p[k]))))throw Error('Enter valid section dimensions and ground levels.');
     p=Object.fromEntries(keys.map(k=>[k,Number(p[k])]));
     if(p.width<=0||p.shoulder<0||p.crossfall<0||p.crossfall>12||p.shoulderFall<0||p.shoulderFall>12||p.thickness<=0||p.cutSlope<=0||p.fillSlope<=0)throw Error('Widths, thickness and side slopes must be positive; crossfalls must be 0–12%.');
+    p.width=lanes*laneWidth+medianWidth;
     const half=p.width/2,edge=half+p.shoulder,t=(p.thickness+baseThickness+subbaseThickness)/1000;
-    Object.assign(p,{condition,direction,superelevation:e,baseThickness,subbaseThickness,totalThickness:p.thickness+baseThickness+subbaseThickness});
+    Object.assign(p,{lanes,laneWidth,medianEnabled,medianWidth,condition,direction,superelevation:e,baseThickness,subbaseThickness,totalThickness:p.thickness+baseThickness+subbaseThickness});
     const signedRate=(direction==='right'?-1:1)*e/100;
     const surface=x=>condition==='superelevated'?(x===0?0:x*signedRate):-Math.min(Math.abs(x),half)*p.crossfall/100-Math.max(0,Math.abs(x)-half)*p.shoulderFall/100;
     const top=[-edge,-half,0,half,edge].map(x=>[x,surface(x)]);
