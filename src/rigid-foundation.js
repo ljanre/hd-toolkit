@@ -7,6 +7,7 @@
   const materialRanges={unbound:[15000,45000],lime:[20000,70000],bituminous:[40000,300000],asphalt:[350000,1000000],'cement-aggregate':[500000,1000000],'cement-treated':[1000000,2000000]};
   function selectMaterial(){const range=materialRanges[$('foundationMaterial').value];if(range)$('foundationEsb').value=String(range[0]);}
   function syncNomographs(){
+    window.ManualNomographs?.setEnabled(!$('foundationMode').checked);
     NomographExtension.updatePlot($('pavementExtendedPlot'),$('foundationExtendedPlot').innerHTML);$('pavementExtensionNote').textContent=$('foundationExtensionNote').textContent;
     $('pavementCompositePath').setAttribute('points',$('foundationCompositePath').getAttribute('points')||'');
     $('pavementCompositePoints').innerHTML=$('foundationCompositePoints').innerHTML;
@@ -26,7 +27,7 @@
   }
   function update(){
     $('foundationStatus').hidden=true;$('foundationExtensionNote').textContent='';NomographExtension.updatePlot($('foundationExtendedPlot'),NomographExtension.plot({DSB:null,ESB:null,MR:null},'./components/subgrade-reaction/figure-3-3.png'));
-    const state=getState(),manual=state.mode==='manual';
+    const state=getState(),manual=state.mode==='manual';$('foundationManualNote').hidden=!manual;
     const range=materialRanges[state.material]||[Number.MIN_VALUE,Number.MAX_VALUE],minimum=range[0],maximum=range[1];
     $('foundationEsb').min=String(minimum);$('foundationEsb').max=String(maximum);
     const rangeText=range.map(value=>value.toLocaleString('en-US')).join('–')+' psi';
@@ -41,7 +42,7 @@
     $('foundationCompositePath').setAttribute('points','');$('foundationCompositePoints').innerHTML='';$('foundationLossPath').setAttribute('points','');
     $('foundationLossPoints').innerHTML='';
     for(const id of [...Object.values(fields),'foundationLs'])$(id).removeAttribute('aria-invalid');
-    if(manual){const thickness=number('foundationDsb');if(thickness!==null&&(!Number.isFinite(thickness)||thickness<0||thickness>1000/25.4))$('foundationDsb').setAttribute('aria-invalid','true');$('foundationStatus').textContent='Using entered, verified kcorr. Subbase Thickness remains editable and controls the pavement illustration. Nomographs are reference charts.';$('foundationCompositeValue').textContent='—';$('foundationEffectiveValue').textContent='—';$('foundationCorrectedValue').textContent=fmt(number('k'))+' pci';syncNomographs();return;}
+    if(manual){const thickness=number('foundationDsb');if(thickness!==null&&(!Number.isFinite(thickness)||thickness<0||thickness>1000/25.4))$('foundationDsb').setAttribute('aria-invalid','true');$('foundationStatus').textContent='Using entered, verified kcorr. Subbase Thickness remains editable and controls the pavement illustration. Nomograph automation is OFF: automatic red paths are hidden. Use blue draggable construction lines to read the charts, then enter verified kcorr.';$('foundationCompositeValue').textContent='—';$('foundationEffectiveValue').textContent='—';$('foundationCorrectedValue').textContent=fmt(number('k'))+' pci';syncNomographs();return;}
     if(state.esb!==null&&(!Number.isFinite(state.esb)||state.esb<minimum||state.esb>maximum)){
       $('foundationEsb').setAttribute('aria-invalid','true');$('k').value='';
       for(const id of ['foundationCompositeValue','foundationEffectiveValue','foundationCorrectedValue'])$(id).textContent='—';

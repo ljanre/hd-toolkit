@@ -192,7 +192,7 @@
             </div>
             <div class="group">
               <h3 class="group-title">Foundation Support</h3>
-              <label class="round-toggle foundation-auto-toggle" for="foundationMode"><input id="foundationMode" type="checkbox" role="switch" checked aria-controls="foundationInputs"><span class="toggle-track" aria-hidden="true"></span>Auto-Calculate kcorr</label>
+              <label class="round-toggle foundation-auto-toggle" for="foundationMode"><input id="foundationMode" type="checkbox" role="switch" checked aria-controls="foundationInputs"><span class="toggle-track" aria-hidden="true"></span>Corrected Subgrade Reaction · kcorr · Auto On/Off</label><p id="foundationManualNote" class="foundation-manual-note" role="status" hidden>kcorr automation is OFF. Automatic nomograph tracing will not work; red lines are hidden. Drag the blue manual construction lines or their handles, read the chart, and enter a verified kcorr below. Manual lines do not calculate or update kcorr.</p>
               <div id="foundationInputs" class="field-grid foundation-inputs">
                 <div class="field"><label for="foundationDsb">Subbase Thickness<span class="symbol">D<sub>SB</sub></span></label><div class="entry"><input id="foundationDsb" type="number" min="101.6" max="508" step="any"><span class="unit">mm</span></div><small id="foundationDsbHelp">Foundation calculation and pavement illustration use this thickness.</small></div>
                 <div class="field"><label for="foundationMaterial">Subbase Material</label><select id="foundationMaterial" class="lookup-choice" aria-describedby="foundationEsbHelp"><option value="unbound" selected>Unbound Granular Material</option><option value="lime">Lime Stabilized</option><option value="bituminous">Bituminous Stabilized Mixtures</option><option value="asphalt">Asphalt Treated Base</option><option value="cement-aggregate">Cement Aggregate Mixtures</option><option value="cement-treated">Cement Treated Granular Base</option><option value="project">Others / Project-Specific Modulus</option></select></div>
@@ -308,7 +308,7 @@
         <section class="card pavement-nomographs" aria-labelledby="pavementNomographTitle"><div class="card-head"><h2 id="pavementNomographTitle">Subgrade Reaction Nomographs</h2></div><div class="pavement-nomograph-body">
           <figure><figcaption>Figure 3.3 · Composite Subgrade Reaction <output id="pavementCompositeValue">— pci</output></figcaption><div class="nomograph-extension" id="pavementExtendedPlot"></div><div class="foundation-nomograph"><img width="1086" height="1046" src="./components/subgrade-reaction/figure-3-3.png" loading="lazy" alt="Composite subgrade reaction nomograph beneath the pavement section"><svg viewBox="0 0 1086 1046" aria-hidden="true"><polyline id="pavementCompositePath" points=""/><g id="pavementCompositePoints"></g></svg></div><p id="pavementExtensionNote" class="nomograph-extension-note" role="status" aria-live="polite"></p></figure>
           <figure><figcaption>Figure 3.6 · Loss-of-Support Correction <output id="pavementCorrectedValue">— pci</output></figcaption><div class="foundation-nomograph"><img width="1241" height="1082" src="./components/subgrade-reaction/figure-3-6.png" loading="lazy" alt="Loss of support correction nomograph beneath the pavement section"><svg viewBox="0 0 1241 1082" aria-hidden="true"><polyline id="pavementLossPath" points=""/><g id="pavementLossPoints"></g></svg></div></figure>
-          <small>Red paths follow the current foundation inputs. Manual kcorr mode shows reference charts without calculated paths.</small>
+          <div id="manualNomographControls" hidden><p>Manual nomograph reading: drag a blue line to move it, or drag its circular handles to change its construction. Keyboard: focus a handle and use arrow keys (Shift for larger steps). Both copies of each chart stay aligned. These are drawing aids; enter the verified chart reading in kcorr.</p><button id="resetManualNomographs" type="button">Reset Manual Lines</button></div><small>Auto ON: red paths follow foundation inputs. Auto OFF: red paths are hidden and blue manual drawing aids are available on both charts.</small>
         </div></section>
         <div id="errors" class="error-panel" role="alert" hidden></div>
       </aside>
@@ -353,7 +353,7 @@
 <script src="./components/subgrade-reaction/model-data.js"></script>
 <script src="./components/subgrade-reaction/engine.js"></script><script src="./components/subgrade-reaction/nomograph-extension.js?v=nomograph-format-4"></script>
 <script src="./components/subgrade-reaction/loss-support.js"></script>
-<script src="./components/subgrade-reaction/nomograph-labels.js?v=nomograph-format-4"></script><script src="./rigid-foundation.js?v=stable-chart-3"></script>
+<script src="./components/subgrade-reaction/nomograph-labels.js?v=nomograph-format-4"></script><script src="./manual-nomographs.js"></script><script src="./rigid-foundation.js?v=stable-chart-3"></script>
 <script id="calculation-core">
 (function(root){
   'use strict';
