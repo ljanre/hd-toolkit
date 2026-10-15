@@ -71,7 +71,4 @@ road-widening{display:block}road-widening iframe{display:block;width:100%;height
 
 .nomograph-extension:has(svg)+.foundation-nomograph:has(svg.manual-nomograph-active){display:block}
 
-.kcorr-input-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px}.kcorr-input-heading>label{margin:0}.kcorr-input-heading .foundation-auto-toggle{margin:0;min-height:30px;flex-shrink:0}.kcorr-input-heading .toggle-track{flex-shrink:0}.kcorr-input-heading #foundationModeLabel{font-size:11px;white-space:nowrap}
 
-.kcorr-toggle-row{display:flex;justify-content:flex-end;margin:8px 0}.kcorr-toggle-row .foundation-auto-toggle{margin:0;min-height:28px}.kcorr-toggle-row .toggle-track{flex-shrink:0}
-#designForm .field>.kcorr-toggle-row{grid-column:2;grid-row:3;margin:6px 0;justify-content:flex-end}#designForm .field>#foundationManualNote{grid-column:1/-1;margin:6px 0 0}#designForm .kcorr-toggle-row .round-toggle{position:relative;align-items:center}#designForm .kcorr-toggle-row input[type=checkbox]{top:50%;transform:translateY(-50%);height:20px;min-height:0;padding:0}@media(max-width:600px){#designForm .field>.kcorr-toggle-row{grid-column:1;grid-row:auto}}
