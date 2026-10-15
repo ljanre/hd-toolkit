@@ -70,5 +70,4 @@ road-widening{display:block}road-widening iframe{display:block;width:100%;height
 .foundation-manual-note{padding:10px 12px;background:#fff5db;border:1px solid #dfc174;border-radius:8px;font-size:12px;line-height:1.6;color:#735214}.foundation-nomograph svg.manual-nomograph-active{pointer-events:auto;touch-action:none}.foundation-nomograph .manual-nomograph-layer .manual-nomograph-line{fill:none;stroke:#1769aa;stroke-width:4;pointer-events:stroke;cursor:move;vector-effect:non-scaling-stroke}.foundation-nomograph .manual-nomograph-layer .manual-nomograph-handle{fill:white;stroke:#1769aa;stroke-width:3;pointer-events:all;cursor:grab;vector-effect:non-scaling-stroke}.manual-nomograph-handle:focus{fill:#ffe2a3;outline:none}#manualNomographControls{padding:10px;border:1px solid #b8d4eb;border-radius:8px;background:#f1f8fd;font-size:12px}#resetManualNomographs{padding:8px 12px;border:1px solid #b8d4eb;border-radius:6px;cursor:pointer;background:white;color:#1769aa}
 
 .nomograph-extension:has(svg)+.foundation-nomograph:has(svg.manual-nomograph-active){display:block}
-
-
+.foundation-nomograph .manual-nomograph-layer .manual-nomograph-line{pointer-events:none}.manual-nomograph-segment{stroke:transparent;stroke-width:20;pointer-events:stroke;vector-effect:non-scaling-stroke;touch-action:none}.manual-nomograph-segment:focus{stroke:#1769aa35;outline:none}
