@@ -31,7 +31,7 @@
   function update(){if(signature()===lastInputs)return;updateFoundation();lastInputs=signature();}
   function updateFoundation(){
     $('foundationStatus').hidden=true;$('foundationExtensionNote').textContent='';
-    const state=getState(),manual=state.mode==='manual';$('foundationManualNote').hidden=!manual;$('foundationModeLabel').textContent=manual?'Auto OFF · Manual':'Auto ON';
+    const state=getState(),manual=state.mode==='manual';$('foundationModeLabel').textContent=manual?'Auto OFF · Manual':'Auto ON';
     const range=materialRanges[state.material]||[Number.MIN_VALUE,Number.MAX_VALUE],minimum=range[0],maximum=range[1];
     $('foundationEsb').min=String(minimum);$('foundationEsb').max=String(maximum);
     const rangeText=range.map(value=>value.toLocaleString('en-US')).join('–')+' psi';
