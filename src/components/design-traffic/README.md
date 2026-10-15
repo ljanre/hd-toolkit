@@ -18,7 +18,7 @@ Annual growth defaults to 2% and Clear restores 2%. The attached example explici
 
 The configuration worksheet starts with three blank loading cases. Loading the attached example replaces these with its two positive-AADT cases. The summary table uses aligned numeric columns and explicit units; Total CESAL and CESAL W18 appear below it. W18 equals the completed total design-lane CESAL, with DD/DL already applied; incomplete EF inputs leave W18 pending. The growth chart follows the table/results and includes calendar-year ticks plus survey, opening and projected-end cards with years, AADT and forecast duration.
 
-Input guidance is visible below the project fields and above the loading-case table. The former question-mark buttons and modal guide have been removed; project inputs link to their help text with aria-describedby.
+Rigid-pavement-style question-mark guides are available beside project inputs, table headings and custom-editor fields. Each dialog shows units, How to Determine the Value and What to Enter. Existing inline hints remain available; project inputs link to them with aria-describedby. Escape and the close button dismiss the guide and return focus to its trigger. A guide opened from the custom editor preserves that editor and its draft.
 
 The chart legend lists total and individual included loading cases with survey/opening/projected AADT. “Show all vehicles + total” controls the per-case series and legend entries; switching it off keeps only the total and never changes CESAL/W18. Repeated vehicle codes remain distinct loading cases, identified by case number and GVW. On smaller screens the legend moves below the chart.
 
