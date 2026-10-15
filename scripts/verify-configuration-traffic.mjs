@@ -15,3 +15,6 @@ const partial=C.forecast({aadt:[100,50],rates:[0,0],factors:[2,NaN],years:20,del
 const byClass={aadt:Array(10).fill(100),rates:Array(10).fill(5),factors:Array(10).fill(1),years:20,delay:0,dd:.5,dl:1};assert.equal(C.cesal(byClass).total,C.forecast(byClass).total);
 assert.throws(()=>C.forecast({...byClass,aadt:[-1],rates:[0],factors:[1]}));assert.throws(()=>C.forecast({...byClass,dd:0}));assert.throws(()=>C.forecast({...byClass,years:1.5}));assert.throws(()=>C.forecast({...byClass,delay:-1}));
 console.log('Truck configuration forecast: supplied worksheet, zero growth, opening-year projection, partial EF, distribution and vehicle-class compatibility verified.');
+
+const worksheetHtml=await readFile(new URL('index.html',root),'utf8');for(const id of ['sheetApply','sheetExport','sheetPrint','sheetEquation'])assert.ok(!worksheetHtml.includes('id="'+id+'"'),'Removed traffic control/note: '+id);
+assert.match(worksheetHtml,/<details id="trafficCalculationSteps"[^>]*hidden/,'Calculation steps must start hidden');

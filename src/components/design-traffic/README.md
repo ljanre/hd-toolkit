@@ -2,7 +2,7 @@
 
 The Design Traffic page now contains only the truck-configuration worksheet. It replaces the former vehicle-class AADT interface and has no worksheet selector. Developer Mode reveals the calculator; public mode retains the UD panel.
 
-Enter the traffic-survey/opening years, design period, annual growth, DD and DL. Enter two-way AADT separately for each included loading case. Blank count rows are excluded; zeros contribute zero. Repeated truck codes allow different adopted weights. Catalogue GVW/fractions remain reference loading cases, not verified legal limits or measured fleet averages. Active rows with unknown axle fractions or EF remain pending and cannot be transferred as a complete result.
+Enter the traffic-survey/opening years, design period, annual growth, DD and DL. Enter two-way AADT separately for each included loading case. Blank count rows are excluded; zeros contribute zero. Repeated truck codes allow different adopted weights. Catalogue GVW/fractions remain reference loading cases, not verified legal limits or measured fleet averages. Active rows with unknown axle fractions or EF leave W18 pending.
 
 Axle EF = Σ(load in tonnes / 8.2)^4. Each adopted axle load = GVW in kg × fraction / 1,000. Axle count must match the selected code. Fractions must be nonnegative and sum to 1 within 0.001 for printed rounding; non-unity sums are flagged and used as entered without normalization. Entered EF is available for a verified factor. The original source catalogue is retained unchanged.
 
@@ -10,11 +10,11 @@ Opening AADT = survey AADT × (1+r)^delay. Growth sum = [(1+r)^n−1]/r, or n at
 
 Load Attached Example explicitly populates survey/opening 2025, n=20, growth=3.8%, DD=DL=0.5; code 1-2 AADT=2,197/GVW=33,300 kg; code 11-2 AADT=1,865/GVW=40,600 kg with fractions 0.168, 0.2981, 0.2793, 0.2538 (sum 0.9992). Total = 140,432,208.594 ESAL, rounded to 140,432,209 as in the attached worksheet. These example inputs are not project defaults.
 
-CSV and print summaries include project parameters and included cases. Rigid-pavement transfer requires a complete positive result and confirmation that the included configurations cover project traffic and their factors are appropriate for rigid pavement. Transfer sends unrounded million ESAL and the design period.
+The Apply to Rigid Pavement, Download Summary CSV and Print/PDF buttons are removed, along with the formula notes beneath the totals. Calculation Steps appear only after a trusted Developer Mode message from the parent toolkit. They show the project factors, substituted per-case growth/EF/CESAL calculations, missing EF status and total W18. Exiting Developer Mode hides and collapses the steps. Standalone pages keep the steps hidden.
 
 The shared engine retains compatibility helpers for prior class calculations, but the old vehicle-class interface and its scripts are removed. Run the traffic/configuration regression checks before updating formulas or catalogue data.
 
-Annual growth defaults to 2% and Clear restores 2%. The attached example explicitly uses 3.8% to reproduce its source result. Project Name is removed from inputs, summary heading and CSV export. Question-mark guides beside design parameters and loading-table headings explain units, calculation behavior and project applicability; native dialogs support Escape and return focus to the trigger.
+Annual growth defaults to 2% and Clear restores 2%. The attached example explicitly uses 3.8% to reproduce its source result. Project Name is removed from inputs and the summary heading.
 
 The configuration worksheet starts with three blank loading cases. Loading the attached example replaces these with its two positive-AADT cases. The summary table uses aligned numeric columns and explicit units; Total CESAL and Design Traffic W18 appear below it. W18 equals the completed total design-lane CESAL, with DD/DL already applied; incomplete EF inputs leave W18 pending. The growth chart follows the table/results and includes calendar-year ticks plus survey, opening and projected-end cards with years, AADT and forecast duration.
 

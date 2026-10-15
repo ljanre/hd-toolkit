@@ -26,13 +26,27 @@
     const sum=fractions.reduce((total,value)=>total+value,0);if(Math.abs(sum-1)>1e-6)row.note.textContent='Fractions sum to '+sum.toFixed(4)+'; used as entered without normalization.';
     return C.axleFactor(fractions.map(value=>weight*value/1000).join(','));
   }
+  function calculationSteps(){
+    const body=$('trafficCalculationBody');body.replaceChildren();
+    if(!result){body.append(make('p','Enter valid project years and included loading cases to show substituted calculation steps.'));return;}
+    const math=value=>Number.isFinite(value)?value.toLocaleString('en-US',{maximumFractionDigits:6}):'—',delay=n($('sheetOpening'))-n($('sheetSurvey')),years=n($('sheetYears')),rate=n($('sheetGrowth'))/100,dd=n($('sheetDD')),dl=n($('sheetDL'));
+    body.append(make('h3','1. Establish project factors'),make('p',`Survey ${$('sheetSurvey').value}; opening ${$('sheetOpening').value}; delay m = ${delay} years; design period n = ${years} years; annual r = ${math(rate)}; DD = ${math(dd)}; DL = ${math(dl)}.`));
+    body.append(make('h3','2. Calculate each included loading case'),make('p','Opening AADT = survey AADT × (1+r)^m. G = [(1+r)^n − 1] / r; G = n when r = 0. Axle load (tonnes) = GVW (kg) × fraction / 1,000. Automatic EF = Σ(axle load / 8.2)^4.'));
+    const list=make('ol');active.forEach((row,i)=>{const d=result.detail[i],item=make('li'),count=n(row.count);item.append(make('h4',`Case ${i+1} · ${row.select.value} · GVW ${math(n(row.weight))} kg`));
+      item.append(make('p',row.mode.value==='manual'?`Adopted entered EF = ${math(row.ef)} ESAL/vehicle.`:`Axle fractions: ${row.fractions.value||'not provided'}. Calculated EF = ${math(row.ef)} ESAL/vehicle${count===0?' (zero traffic; no loading contribution)':''}.`));
+      item.append(make('p',`Opening AADT = ${math(count)} × (1 + ${math(rate)})^${delay} = ${math(d.opening)} vehicles/day.`));
+      item.append(make('p',count===0?'Zero AADT: cumulative vehicles and CESAL = 0.':`G = ${math(d.growth)}; cumulative two-way vehicles = 365 × ${math(d.opening)} × ${math(d.growth)} = ${math(d.vehicles/(dd*dl))}.`));
+      item.append(make('p',`Design-lane vehicles = cumulative two-way vehicles × ${math(dd)} × ${math(dl)} = ${math(d.vehicles)}.`));
+      item.append(make('p',d.esal===null?'CESAL pending: enter a verified EF. This case is excluded from the partial subtotal.':`CESAL = ${math(d.vehicles)} × ${math(row.ef)} = ${math(d.esal)} ESAL.`));list.append(item);});body.append(list);
+    body.append(make('h3','3. Sum design traffic · W18'),make('p',result.complete?`W18 = ΣCESAL = ${math(result.total)} ESAL = ${math(result.million)} × 10⁶ ESAL.`:`Partial CESAL subtotal = ${math(result.subtotal)} ESAL; W18 is pending ${result.pendingClasses} missing EF case(s).`),make('p','DD and DL are applied once. Display values are rounded; the calculation uses full precision. Projected-end AADT is a boundary value, not an additional year of CESAL.'));
+  }
   function summary(){
-    $('sheetSummary').replaceChildren();if(!result)return;
+    $('sheetSummary').replaceChildren();calculationSteps();if(!result)return;
     active.forEach((row,i)=>{const d=result.detail[i],tr=make('tr');const values=[row.select.value+' · '+fmt(n(row.weight))+' kg',fmt(n(row.count)),fmt(d.opening),fmt(row.ef),fmt(d.vehicles/(n($('sheetDD'))*n($('sheetDL')))),fmt(d.vehicles),d.esal===null?'Pending EF':fmt(d.esal)];values.forEach(value=>tr.append(make('td',value)));$('sheetSummary').append(tr);});
   }
   function update(){
     TrafficTimeline.render({survey:$('sheetSurvey').value,opening:$('sheetOpening').value,years:$('sheetYears').value,growth:$('sheetGrowth').value,counts:rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput).map(row=>n(row.count)),labels:rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput).map((row,i)=>'Case '+(i+1)+' · '+row.select.value+' · '+fmt(n(row.weight))+' kg'),showVehicles:$('timelineVehicles').checked});
-    result=null;active=[];$('sheetTotal').textContent='—';$('sheetW18').textContent='—';$('sheetTotalNote').textContent='Cumulative equivalent standard axle loads';$('sheetMillion').textContent='— ×10⁶ ESAL';$('sheetAADT').textContent='—';$('sheetCompletion').textContent='Input Required';$('sheetError').textContent='';$('sheetTransfer').textContent='';['sheetApply','sheetExport','sheetPrint'].forEach(id=>$(id).disabled=true);
+    result=null;active=[];$('sheetTotal').textContent='—';$('sheetW18').textContent='—';$('sheetTotalNote').textContent='Cumulative equivalent standard axle loads';$('sheetMillion').textContent='— ×10⁶ ESAL';$('sheetAADT').textContent='—';$('sheetCompletion').textContent='Input Required';$('sheetError').textContent='';
     $('sheetAuditTitle').textContent='Design Traffic Summary';
     $('sheetAuditParameters').textContent='Survey '+($('sheetSurvey').value||'—')+' · Opening '+($('sheetOpening').value||'—')+' · n = '+($('sheetYears').value||'—')+' years · r = '+($('sheetGrowth').value||'—')+'% · DD = '+($('sheetDD').value||'—')+' · DL = '+($('sheetDL').value||'—');
     try{
@@ -42,9 +56,6 @@
       result=C.forecast({aadt:active.map(row=>n(row.count)),rates:active.map(()=>n($('sheetGrowth'))),factors:active.map(row=>row.ef),years:n($('sheetYears')),delay:opening-survey,dd:n($('sheetDD')),dl:n($('sheetDL')),preview:true});
       $('sheetAADT').textContent=fmt(active.reduce((sum,row)=>sum+n(row.count),0));$('sheetTotal').textContent=fmt(result.complete?result.total:result.subtotal);$('sheetMillion').textContent=fmt(result.complete?result.million:result.subtotalMillion)+' ×10⁶ ESAL'+(result.complete?'':' · Partial subtotal');$('sheetCompletion').textContent=result.complete?'Complete':'Pending EF';$('sheetW18').textContent=result.complete?fmt(result.total)+' ESAL':'Pending EF';$('sheetTotalNote').textContent=result.complete?'Total for all included loading cases':'Partial subtotal · missing EF excluded';
       if(!result.complete)$('sheetError').textContent=result.pendingClasses+' active loading cases have no EF. Their ESAL is excluded from the subtotal.';
-      $('sheetApply').disabled=!result.complete||result.total<=0;
-      $('sheetExport').disabled=!result.complete;$('sheetPrint').disabled=!result.complete;
-      $('sheetTransfer').textContent=$('sheetApply').disabled?'Complete all included loading cases before transfer.':'';
     }catch(error){$('sheetError').textContent=error.message;result=null;}
     summary();
   }
@@ -52,8 +63,7 @@
   $('timelineVehicles').addEventListener('change',update);$('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
   $('sheetClear').addEventListener('click',()=>clear());$('sheetAdd').addEventListener('click',()=>{add();update();});
   $('sheetSample').addEventListener('click',()=>{clear(0);add(V.profiles.find(p=>p.code==='1-2'));add(V.profiles.find(p=>p.code==='11-2'));$('sheetSurvey').value='2025';$('sheetOpening').value='2025';$('sheetGrowth').value='3.8';$('sheetDL').value='0.50';rows.find(row=>row.select.value==='1-2').count.value='2197';const trailer=rows.find(row=>row.select.value==='11-2');trailer.count.value='1865';trailer.fractions.value='0.168, 0.2981, 0.2793, 0.2538';update();});
-  $('sheetApply').addEventListener('click',()=>{update();if(!result||$('sheetApply').disabled)return;if(window.parent===window){$('sheetTransfer').textContent='Open this calculator in HD Toolkit to transfer traffic.';return;}window.parent.postMessage({type:'hd-toolkit-design-period',years:n($('sheetYears'))},'*');window.parent.postMessage({type:'hd-toolkit-cesal',million:result.million,rigidConfirmed:true},'*');});
-  $('sheetExport').addEventListener('click',()=>{update();if(!result?.complete)return;const lines=[['Survey Year',$('sheetSurvey').value],['Opening Year',$('sheetOpening').value],['Design Period',$('sheetYears').value],['Growth (%)',$('sheetGrowth').value],['DD',$('sheetDD').value],['DL',$('sheetDL').value],[],['Code','GVW kg','Axle Fractions','Survey AADT','Opening AADT','EF','Design-Lane Vehicles','CESAL']];active.forEach((row,i)=>{const d=result.detail[i];lines.push([row.select.value,row.weight.value,row.fractions.value,n(row.count),d.opening,row.ef,d.vehicles,d.esal]);});lines.push(['Total CESAL',result.total],['Million ESAL',result.million]);const text='\uFEFF'+lines.map(line=>line.map(value=>'"'+String(value).replaceAll('"','""')+'"').join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'})),link=make('a');link.href=url;link.download='Design-Traffic-Summary.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
-  $('sheetPrint').addEventListener('click',()=>window.print());
+  window.addEventListener('message',event=>{if(window.parent===window||event.source!==window.parent||event.data?.type!=='hd-toolkit-admin-state'||typeof event.data.enabled!=='boolean')return;const steps=$('trafficCalculationSteps');steps.hidden=!event.data.enabled;if(steps.hidden)steps.open=false;});
+  if(window.parent!==window)window.parent.postMessage({type:'hd-toolkit-traffic-ready'},'*');
   clear();
 })();

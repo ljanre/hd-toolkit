@@ -21,6 +21,7 @@
     document.querySelector('flexible-pavement iframe')?.contentWindow?.postMessage?.({type:'hd-toolkit-admin-state',enabled},'*');
     document.querySelector('subbase-thickness iframe')?.contentWindow?.postMessage?.({type:'hd-toolkit-admin-state',enabled},'*');
     document.querySelector('design-cbr iframe')?.contentWindow?.postMessage?.({type:'hd-toolkit-admin-state',enabled},'*');
+    document.querySelector('design-traffic iframe')?.contentWindow?.postMessage?.({type:'hd-toolkit-admin-state',enabled},'*');
   }
   function collapse(value) {
     document.body.classList.toggle('sidebar-collapsed', value);
@@ -73,6 +74,8 @@
     if(subbaseFrame&&event.source===subbaseFrame.contentWindow&&event.data?.type==='hd-toolkit-subbase-ready')syncCalculationAccess();
     const cbrFrame=document.querySelector('design-cbr iframe');
     if(cbrFrame&&event.source===cbrFrame.contentWindow&&event.data?.type==='hd-toolkit-cbr-ready')syncCalculationAccess();
+    const trafficFrame=document.querySelector('design-traffic iframe');
+    if(trafficFrame&&event.source===trafficFrame.contentWindow&&event.data?.type==='hd-toolkit-traffic-ready')syncCalculationAccess();
   });
   window.addEventListener('message', event => {
     const frame = document.querySelector('concrete-strength iframe');
