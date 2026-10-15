@@ -27,7 +27,7 @@
   }
   function update(){
     $('foundationStatus').hidden=true;$('foundationExtensionNote').textContent='';NomographExtension.updatePlot($('foundationExtendedPlot'),NomographExtension.plot({DSB:null,ESB:null,MR:null},'./components/subgrade-reaction/figure-3-3.png'));
-    const state=getState(),manual=state.mode==='manual';$('foundationManualNote').hidden=!manual;
+    const state=getState(),manual=state.mode==='manual';$('foundationManualNote').hidden=!manual;$('foundationModeLabel').textContent=manual?'Auto OFF · Manual':'Auto ON';
     const range=materialRanges[state.material]||[Number.MIN_VALUE,Number.MAX_VALUE],minimum=range[0],maximum=range[1];
     $('foundationEsb').min=String(minimum);$('foundationEsb').max=String(maximum);
     const rangeText=range.map(value=>value.toLocaleString('en-US')).join('–')+' psi';
