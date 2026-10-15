@@ -50,7 +50,7 @@
     <details class="tool-group" data-tool-group="pavement" open>
       <summary title="Pavement"><span class="group-icon" aria-hidden="true">▤</span><span class="group-label">Pavement</span></summary>
       <div class="tool-group-items">
-        <a data-tool="traffic" href="#trafficTool" title="Design Traffic (UD)"><span aria-hidden="true">⇄</span><span class="nav-label">Design Traffic (UD)</span></a>
+        <a data-tool="traffic" href="#trafficTool" title="CESAL, W18 (UD)"><span aria-hidden="true">⇄</span><span class="nav-label">CESAL, W18 (UD)</span></a>
         <a data-tool="cbr" href="#cbrTool" title="Design CBR"><span aria-hidden="true">◫</span><span class="nav-label">Design CBR</span></a>
         <a class="nav-current" data-tool="pavement" href="#pavementTool" aria-current="page" title="Rigid Pavement Design"><span aria-hidden="true">▤</span><span class="nav-label">Rigid Pavement Design</span></a>
         <a data-tool="flexible" href="#flexibleTool" title="Flexible Pavement Design (UD)"><span aria-hidden="true">▥</span><span class="nav-label">Flexible Pavement Design (UD)</span></a>
@@ -116,7 +116,7 @@
                   <small id="soHelp">Dimensionless · Allowed range: 0–1.</small>
                 </div>
                 <div class="field">
-                  <label for="wMillion">Design Traffic<span class="symbol">W<sub>18</sub></span></label>
+                  <label for="wMillion">CESAL<span class="symbol">W<sub>18</sub></span></label>
                   <div class="entry"><input id="wMillion" name="wMillion" type="number" min="0" step="any" required aria-describedby="wMillionHelp"><span id="trafficUnit" class="unit">× 10⁶ ESAL</span></div>
                   <small id="wMillionHelp">42,230,000 total 18-kip ESALs.</small>
                 </div>
@@ -292,7 +292,7 @@
         </div>
         <details class="structure-table-wrap"><summary>Design Parameters Summary</summary><table class="structure-parameters" aria-label="Design Parameters Summary"><thead><tr><th scope="col">Parameter</th><th scope="col">Value</th><th scope="col">Unit</th></tr></thead><tbody>
           <tr><th scope="row">Design Period · n</th><td id="structurePeriod">—</td><td>years</td></tr>
-          <tr><th scope="row">Design Traffic · W18</th><td id="structureTraffic">—</td><td>ESAL</td></tr>
+          <tr><th scope="row">CESAL · W18</th><td id="structureTraffic">—</td><td>ESAL</td></tr>
           <tr><th scope="row">Reliability · R</th><td id="structureReliability">—</td><td>%</td></tr>
           <tr><th scope="row">Standard Normal Deviate · ZR</th><td id="structureZ">—</td><td>—</td></tr>
           <tr><th scope="row">Overall Standard Deviation · So</th><td id="structureSo">—</td><td>—</td></tr>
@@ -321,7 +321,7 @@
 
 
     <details id="foundationSteps" class="card foundation-steps"><summary>Rigid Pavement Design · Calculation Steps &amp; Nomographs</summary><div class="foundation-steps-body">
-      <ol><li><h3>Establish Design Traffic · W18</h3><p>Use cumulative 18-kip ESALs in the design lane over the design period. The Design Traffic tab uses Ni = 365 × AADTopening,i × Gi × DD × DL, then W18 = Σ(Ni × EFi). Transfer a complete result or enter the adopted design traffic in millions.</p><p class="equation">W18 = Design Traffic (million) × 1,000,000 <span>Eq. (1)</span></p><p id="stepTraffic"></p><small>Two lanes total means one per direction: assumed DD = 0.50 and DL = 1.00. AADT, growth and axle factors remain project inputs.</small></li>
+      <ol><li><h3>Establish CESAL · W18</h3><p>Use cumulative 18-kip ESALs in the design lane over the design period. The CESAL, W18 tool first computes Design Trafficᵢ = 365 × AADTopening,ᵢ × Gᵢ, then CESALᵢ = Design Trafficᵢ × EFᵢ. W18 = ΣCESALᵢ × DD × DL. Enter the completed design-lane CESAL; DD and DL apply once.</p><p class="equation">W18 = CESAL (million ESAL) × 1,000,000 <span>Eq. (1)</span></p><p id="stepTraffic"></p><small>Two lanes total means one per direction: assumed DD = 0.50 and DL = 1.00. AADT, growth and axle factors remain project inputs.</small></li>
       <li><h3>Determine Reliability and Variability</h3><p>Look up or interpolate ZR from the active R–ZR table. So represents the adopted overall standard deviation for rigid pavement.</p><p class="equation">Reliability Term = ZR × So <span>Eq. (2)</span></p><p id="stepReliability"></p></li>
       <li><h3>Calculate Serviceability Loss</h3><p class="equation">ΔPSI = p₀ − pₜ <span>Eq. (3)</span></p><p id="stepServiceability"></p><small>Initial serviceability must exceed terminal. Both are serviceability indices, not pressure units.</small></li>
       <li><h3>Calculate Concrete Properties</h3><p class="equation">Sc(psi) = 550 (standard toggle) or entered project specification <span>Eq. (4)</span></p><p class="equation">SDs = (PS/100) × Sc; S′c = Sc + |ZR| × SDs <span>Eq. (5)</span></p><p class="equation">Ec(psi) = 57,000√[f′c(MPa) × 145.038] <span>Eq. (6)</span></p><p id="stepConcrete"></p><table aria-label="Table 5 strength distribution"><caption>Table 5 · Strength Distribution</caption><thead><tr><th>Standard normal deviate z</th><th>PS (%)</th></tr></thead><tbody><tr><td>0.841</td><td>20</td></tr><tr><td>1.037</td><td>15</td></tr><tr><td>1.282</td><td>10</td></tr><tr><td>1.645</td><td>5</td></tr><tr><td>2.327</td><td>1</td></tr></tbody></table><small>This toolkit uses the requested coupling of concrete PS to pavement ZR. The DPWH manual’s strength example uses independently selected PS/z; the coupling is a worksheet assumption.</small></li></ol>
@@ -343,7 +343,7 @@
 <section id="subgradeTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Corrected Subgrade Reaction"><subgrade-reaction></subgrade-reaction></section>
 <section id="subbaseTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Subbase Thickness Design"><subbase-thickness></subbase-thickness></section>
 <section id="strengthTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Concrete Modulus of Rupture"><concrete-strength></concrete-strength></section>
-<section id="trafficTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Design Traffic"><design-traffic></design-traffic></section>
+<section id="trafficTool" class="rainfall-tool" tabindex="-1" hidden aria-label="CESAL, W18"><design-traffic></design-traffic></section>
 <section id="wideningTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Curve Widening"><road-widening></road-widening></section>
 <section id="geometryTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Curve Widening and Swept Path"><curve-widening></curve-widening></section>
 <section id="criteriaTool" class="rainfall-tool" tabindex="-1" hidden aria-label="Design Criteria"><design-criteria></design-criteria></section>
@@ -606,6 +606,7 @@
 (function(){
   'use strict';
   const C=globalThis.PavementCalc,V=globalThis.PavementIllustration,$=function(id){return document.getElementById(id);};
+  C.LABELS.wMillion='CESAL W18';
   const STORAGE_KEY='aashto93-rigid-local-v1';
 
   let result=null,lookupSource=C.DEFAULTS.lookupSource,trafficPrecision=null,trafficEditing=false,fcDisplayMPa=false,fcPrecision=null,fcFormatted=null,jImage=null,jUploadVersion=0;
@@ -687,7 +688,7 @@
     set('stepEquationTerms',solved?'Reliability '+fmt(solved.terms.reliability,6)+' + Thickness '+fmt(solved.terms.thickness,6)+' + Serviceability '+fmt(solved.terms.serviceability,6)+' + Strength/Support '+fmt(solved.terms.strength,6)+' = '+fmt(solved.terms.rhs,6)+'; target log10(W18) = '+fmt(solved.target,6)+'.':'Complete valid design inputs to evaluate the slab equation.');
     set('stepSolve',solved?'Calculated D = '+fmt(solved.dIn,4)+' in = '+fmt(solved.dMm,2)+' mm. Residual = '+solved.residual.toExponential(3)+' after '+solved.iterations+' iterations.':'Thickness calculation pending.');
     const check=solved?C.checkThickness(solved.roundedMm,solved):null;
-    set('stepRounding',solved?'Increment '+p.roundStep+' mm → rounded thickness '+fmt(solved.roundedMm,0)+' mm. '+(check.ok?'Capacity '+fmt(check.capacity,0)+' ESAL; capacity / traffic = '+fmt(check.ratio,3)+'. '+(check.meets?'Meets entered design traffic.':'Does not meet entered design traffic.'):'Capacity check unavailable.'):'Rounding and capacity check pending.');
+    set('stepRounding',solved?'Increment '+p.roundStep+' mm → rounded thickness '+fmt(solved.roundedMm,0)+' mm. '+(check.ok?'Capacity '+fmt(check.capacity,0)+' ESAL; capacity / traffic = '+fmt(check.ratio,3)+'. '+(check.meets?'Meets entered CESAL.':'Does not meet entered CESAL.'):'Capacity check unavailable.'):'Rounding and capacity check pending.');
   }
   function saveLocal(p){
     if(C.validate(p).length||p.trialMm!==null&&(!Number.isFinite(p.trialMm)||p.trialMm<=0)) return;

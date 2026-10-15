@@ -37,7 +37,7 @@ assert.equal(definitions.size,13);
 for(const [name,Type] of definitions){const tool=new Type();tool.connectedCallback();assert.equal(tool.frames.length,0);tool.hidden=false;tool.activate();tool.activate();assert.equal(tool.frames.length,1);if(['design-traffic','flexible-pavement','culvert-hydraulics'].includes(name)){assert.equal(tool.frames[0].className,'tool-development');assert.equal(tool.frames[0].children[1].children[0].textContent,'Under Development');assert.equal(tool.querySelector('iframe'),undefined);admin=true;tool.activate();const frame=tool.querySelector('iframe');assert.ok(frame);assert.equal(tool.frames[0].hidden,true);frame.retainedInput='saved';admin=false;tool.activate();assert.equal(frame.hidden,true);assert.equal(tool.frames[0].hidden,false);admin=true;tool.activate();assert.equal(frame.hidden,false);assert.equal(frame.retainedInput,'saved');assert.equal(tool.frames.length,2);admin=false;continue;}assert.match(tool.frames[0].src,/\?v=release-test$/);assert.ok(tool.frames[0].title);}
 for(const key of ['flexible','traffic','rainfall'])assert.equal(context.ToolkitRegistry.tools[key].access,undefined,'Public tool: '+key);
 assert.equal(context.ToolkitRegistry.tools.flexible.title,'Flexible Pavement Design (UD)');
-assert.equal(context.ToolkitRegistry.tools.traffic.title,'Design Traffic (UD)');
+assert.equal(context.ToolkitRegistry.tools.traffic.title,'CESAL, W18 (UD)');
 assert.equal(context.ToolkitRegistry.tools.culvert.development,'ud');
 console.log('Production build: exact data, optimized assets, stable cache versions, stale-file cleanup and eleven lazy tool registrations verified.');
 

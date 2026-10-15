@@ -6,7 +6,7 @@
     else RN29App.clear();
   });
   const guides={
-    'traffic-input':['Design Traffic · W₁₈','Enter total design-lane ESALs, as in Rigid Pavement. Example: 1,000,000 displays as 1.00 ×10⁶ ESAL when you leave the field. On focus the full count returns for editing. The RN29 chart receives the full-precision value in MSA; supported traffic is 10,000–100,000,000 total ESALs (0.01–100 MSA).'],
+    'traffic-input':['CESAL · W₁₈','Enter total design-lane ESALs, as in Rigid Pavement. Example: 1,000,000 displays as 1.00 ×10⁶ ESAL when you leave the field. On focus the full count returns for editing. The RN29 chart receives the full-precision value in MSA; supported traffic is 10,000–100,000,000 total ESALs (0.01–100 MSA).'],
     'cbr-input':['Subgrade Design CBR','Enter the representative project design CBR in percent. The model selects or interpolates printed chart curves and applies the applicable minimum thickness. Values below 2% use the chart’s additional-thickness branch. Unsupported curve domains produce a limitation message; no extrapolation is performed.']
   };
   const dialog=document.createElement('dialog');dialog.className='subbase-guide';

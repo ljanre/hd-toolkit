@@ -33,7 +33,7 @@ The upload folder is a snapshot. Later edits to the working project must be copi
 
 ## Tools and access
 
-Public tabs: Rigid Pavement Design, Design CBR, Subbase Thickness Design, Rainfall Station Locator, PRS92 Converter, Design Traffic (UD), and Flexible Pavement Design (UD). Developer mode enables additional tools: Corrected Subgrade Reaction and Concrete Modulus of Rupture. Calculation-step panels in the pavement, CBR, and subbase design workspaces are Developer-only. Generate Report and Save buttons in those design input panels are disabled placeholders.
+Public tabs: Rigid Pavement Design, Design CBR, Subbase Thickness Design, Rainfall Station Locator, PRS92 Converter, CESAL, W18 (UD), and Flexible Pavement Design (UD). Developer mode enables additional tools: Corrected Subgrade Reaction and Concrete Modulus of Rupture. Calculation-step panels in the pavement, CBR, and subbase design workspaces are Developer-only. Generate Report and Save buttons in those design input panels are disabled placeholders.
 
 The current Developer switch is a client-side interface gate configured in `src/admin-mode.js`. It is not authentication: publicly hosted source and assets remain accessible. Browser-local values and uploaded illustrations stay in the user's browser; there is no shared account database. The rainfall locator uses external map, geocoding, and municipality services and requires internet access.
 
@@ -65,7 +65,7 @@ The public Project Road Details tool under Others searches the supplied DPWH nat
 
 Data is loaded only when opening this tool. `scripts/import-road-network.py <csv-path>` regenerates the compact dictionary-encoded `network-data.json`, preserves every CSV cell and records the source SHA-256. Run the regression checks and review inventory changes before publishing a replacement snapshot.
 
-For Design Traffic, Flexible Pavement Design and Culvert, public mode shows the shared Under Development panel. Developer Mode reveals the existing calculator and removes the UD label. Returning to public mode hides the calculator without discarding its inputs.
+For CESAL, W18, Flexible Pavement Design and Culvert, public mode shows the shared Under Development panel. Developer Mode reveals the existing calculator and removes the UD label. Returning to public mode hides the calculator without discarding its inputs.
 
 
 ### Design Criteria typical section
@@ -125,3 +125,5 @@ Editing the rigid pavement Load Transfer Coefficient J synchronizes the Joint La
 ### kcorr QA and page performance
 
 The [15 October 2026 QA report](docs/qa-kcorr-2026-10-15.md) documents the pre-feature numerical baseline, regression coverage, production browser checks and local performance measurements. `npm test` includes a comparison of 875 foundation/correction combinations and 45 slab results (with a bounded tolerance for Node/V8 floating-point roundoff and exact engine-source hashes) against the pre-manual-kcorr reference. Unchanged foundation inputs reuse existing output/rendering; dependency preloads retain execution order and share the same versioned URLs as their scripts.
+
+The CESAL, W18 terminology follows the supplied concept: Design Trafficᵢ denotes cumulative two-way vehicles, CESALᵢ denotes equivalent axle loads before directional/lane distribution, and total CESAL W18 = ΣCESALᵢ × DD × DL. Rigid/flexible pavement and flexible-subbase inputs refer to final design-lane CESAL, not cumulative vehicles. Internal route IDs and saved ESAL inputs are retained.

@@ -120,7 +120,7 @@ for(const [key,value] of Object.entries(collector)){assert.equal(Number(app.node
 assert.ok(app.result()?.dMm>0,'Collector assumptions calculate on startup');
 assert.equal(app.nodes.get('errors').hidden,true);
 assert.equal(app.nodes.has('saveCase'),false);
-assert.match(app.nodes.get('stepSolve').textContent,/Calculated D/);assert.match(app.nodes.get('stepRounding').textContent,/Meets entered design traffic/);
+assert.match(app.nodes.get('stepSolve').textContent,/Calculated D/);assert.match(app.nodes.get('stepRounding').textContent,/Meets entered CESAL/);
 assert.equal(app.nodes.get('foundationMode').checked,true);for(const [id,value] of Object.entries({foundationDsb:200,foundationEsb:15000,foundationMr:1000,foundationLs:1}))assert.equal(Number(app.nodes.get(id).value),value);
 const sample=app.context.PavementCalc.DEFAULTS;
 for(const key of app.context.PavementCalc.NUMERIC_KEYS)app.nodes.get(key).value=String(key==='fcMPa'?sample[key]*145.038:sample[key]);
