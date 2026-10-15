@@ -616,9 +616,16 @@
     'undoweled-aggregate':{name:'Undoweled PCC on crushed aggregate surfacing',min:3.8,range:'3.8',figure:'undoweled'},
     'doweled-aggregate':{name:'Doweled PCC on crushed aggregate surfacing',min:3.2,range:'3.2',figure:'doweled'},
     'doweled-hma':{name:'Doweled PCC on HMA (without widened outside lane)',min:2.7,range:'2.7',figure:'doweled'},
-    'crcp-hma':{name:'CRCP with HMA shoulders',min:2.9,range:'2.9–3.2',figure:'crcp-hma'},
-    'crcp-pcc':{name:'CRCP with tied PCC shoulders',min:2.3,range:'2.3–2.9',figure:'crcp-pcc'}
+    'crcp-hma':{name:'CRCP with HMA shoulders',min:2.9,max:3.2,range:'2.9–3.2',figure:'crcp-hma'},
+    'crcp-pcc':{name:'CRCP with tied PCC shoulders',min:2.3,max:2.9,range:'2.3–2.9',figure:'crcp-pcc'}
   };
+  function matchLoadTransfer(){
+    const value=number('j'),entries=Object.entries(loadConditions),within=condition=>Number.isFinite(value)&&value>=condition.min-1e-9&&value<=(condition.max??condition.min)+1e-9;
+    // Prefer an exact listed starting value; retain the current layout for other overlapping ranges.
+    const exact=entries.find(([,condition])=>Number.isFinite(value)&&Math.abs(value-condition.min)<1e-9),current=loadConditions[$('jCondition').value];
+    const match=exact?.[0]||(current&&within(current)?$('jCondition').value:entries.find(([,condition])=>within(condition))?.[0]);
+    $('jCondition').value=match||'project';updateLoadTransfer();
+  }
   function updateLoadTransfer(assignDefault=false){
     const condition=loadConditions[$('jCondition').value],figure=condition?.figure,uploaded=!condition&&jImage,hasFigure=!!figure||!!uploaded;
     $('j').readOnly=false;
@@ -718,6 +725,7 @@
   $('scStandard').addEventListener('change',render);
   $('foundationMode').addEventListener('change',render);
   $('foundationMaterial').addEventListener('change',function(){window.RigidFoundation.selectMaterial();render();});
+  $('j').addEventListener('input',matchLoadTransfer);
   $('jCondition').addEventListener('change',function(){updateLoadTransfer(true);render();});
   $('rigidDesignYears').addEventListener('input',function(e){if(e.isTrusted)this.manualPeriod=true;});
   $('jUploadButton').addEventListener('click',function(){$('jImageFile').click();});

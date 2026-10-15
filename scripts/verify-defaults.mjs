@@ -147,3 +147,5 @@ assert.match(html.match(/<input id="dpsi"[^>]*>/)[0],/readonly/);
 const strength=await readFile(new URL('../src/components/concrete-strength/index.html',import.meta.url),'utf8');
 for(const id of ['reliability','fc','ps','z'])assert.doesNotMatch(strength.match(new RegExp(`<input id="${id}"[^>]*>`))[0],/\bvalue=/);
 console.log('Recommended defaults, blank startup, calculation, reset and saved-case restoration passed.');
+
+for(const [j,layout,figure] of [[3.8,'undoweled-aggregate','undoweled'],[3.2,'doweled-aggregate','doweled'],[2.7,'doweled-hma','doweled'],[2.9,'crcp-hma','crcp-hma'],[2.3,'crcp-pcc','crcp-pcc'],[3.05,'crcp-hma','crcp-hma'],[2.8,'crcp-pcc','crcp-pcc'],[3.5,'project',null],[2.2,'project',null]]){app.nodes.get('j').value=String(j);app.nodes.get('j').events.input();app.nodes.get('designForm').events.input();assert.equal(app.nodes.get('jCondition').value,layout,'Editing J selects a matching prescribed joint layout or Others');assert.equal(Number(app.nodes.get('j').value),j,'Matching does not overwrite the adopted coefficient');if(figure)assert.equal(app.nodes.get('jFigure').src,'./assets/load-transfer/'+figure+'.svg');}
