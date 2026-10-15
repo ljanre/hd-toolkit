@@ -1,6 +1,6 @@
 {
   "referenceCommit": "0ec14af",
-  "description": "Pre-manual-kcorr calculation baseline, generated independently from git show; exact SHA-256 of ordered numerical results.",
+  "description": "Pre-manual-kcorr calculation baseline, generated independently from git show; reference outputs with bounded cross-runtime roundoff; exact source SHA-256 hashes.",
   "files": {
     "components/subgrade-reaction/model-data.js": "fd5bfe25a4744c0cda75493651817caa8c33fd91bbe4c4113a2da43a14c02310",
     "components/subgrade-reaction/engine.js": "80b0f28f2801bcc5b4d557fd5c316825f1421a0d8635dde4e25f2ec6bf4cb201",
@@ -44,7 +44,8759 @@
       3
     ],
     "cases": 875,
-    "hash": "f99ffb2904014d28b185d1b8107825b521bac851535dffc83c444fcef9640d89"
+    "hash": "f99ffb2904014d28b185d1b8107825b521bac851535dffc83c444fcef9640d89",
+    "expected": [
+      [
+        0,
+        15000,
+        1000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        1000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        1000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        1000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        1000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        3000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        3000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        3000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        3000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        3000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        7000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        7000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        7000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        7000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        7000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        20000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        20000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        20000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        20000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        20000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        30000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        30000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        30000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        30000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        15000,
+        30000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        1000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        1000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        1000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        1000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        1000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        3000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        3000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        3000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        3000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        3000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        7000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        7000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        7000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        7000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        7000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        20000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        20000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        20000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        20000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        20000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        30000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        30000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        30000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        30000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        45000,
+        30000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        1000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        1000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        1000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        1000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        1000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        3000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        3000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        3000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        3000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        3000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        7000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        7000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        7000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        7000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        7000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        20000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        20000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        20000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        20000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        20000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        30000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        30000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        30000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        30000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        100000,
+        30000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        1000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        1000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        1000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        1000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        1000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        3000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        3000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        3000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        3000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        3000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        7000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        7000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        7000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        7000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        7000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        20000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        20000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        20000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        20000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        20000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        30000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        30000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        30000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        30000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        1000000,
+        30000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        1000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        1000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        1000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        1000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        1000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        3000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        3000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        3000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        3000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        3000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        7000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        7000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        7000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        7000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        7000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        20000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        20000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        20000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        20000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        20000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        30000,
+        0,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        30000,
+        0.5,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        30000,
+        1,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        30000,
+        2,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        0,
+        2000000,
+        30000,
+        3,
+        null,
+        "BELOW_RANGE",
+        null,
+        "INPUT_REQUIRED"
+      ],
+      [
+        4,
+        15000,
+        1000,
+        0,
+        60.24582397741179,
+        "WITHIN_RANGE",
+        60.24582397741179,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        1000,
+        0.5,
+        60.24582397741179,
+        "WITHIN_RANGE",
+        40.254479166076806,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        1000,
+        1,
+        60.24582397741179,
+        "WITHIN_RANGE",
+        26.89685335766447,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        1000,
+        2,
+        60.24582397741179,
+        "WITHIN_RANGE",
+        11.168111294928112,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        1000,
+        3,
+        60.24582397741179,
+        "WITHIN_RANGE",
+        6.167040443759542,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        3000,
+        0,
+        156.92384330059338,
+        "WITHIN_RANGE",
+        156.92384330059338,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        3000,
+        0.5,
+        156.92384330059338,
+        "WITHIN_RANGE",
+        97.12577094038552,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        3000,
+        1,
+        156.92384330059338,
+        "WITHIN_RANGE",
+        60.11460834982345,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        3000,
+        2,
+        156.92384330059338,
+        "WITHIN_RANGE",
+        21.034245383080187,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        3000,
+        3,
+        156.92384330059338,
+        "WITHIN_RANGE",
+        10.377472481570058,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        7000,
+        0,
+        347.1331962372448,
+        "WITHIN_RANGE",
+        347.1331962372448,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        7000,
+        0.5,
+        347.1331962372448,
+        "WITHIN_RANGE",
+        201.63831913966337,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        7000,
+        1,
+        347.1331962372448,
+        "WITHIN_RANGE",
+        117.12510409889283,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        7000,
+        2,
+        347.1331962372448,
+        "WITHIN_RANGE",
+        35.559127516979636,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        7000,
+        3,
+        347.1331962372448,
+        "WITHIN_RANGE",
+        15.978435180771957,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        20000,
+        0,
+        878.0076410091257,
+        "WITHIN_RANGE",
+        878.0076410091257,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        20000,
+        0.5,
+        878.0076410091257,
+        "WITHIN_RANGE",
+        473.5367543753848,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        20000,
+        1,
+        878.0076410091257,
+        "WITHIN_RANGE",
+        255.39305954860492,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        20000,
+        2,
+        878.0076410091257,
+        "WITHIN_RANGE",
+        65.6840769250857,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        20000,
+        3,
+        878.0076410091257,
+        "WITHIN_RANGE",
+        26.46138603651335,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        30000,
+        0,
+        1264.893214238101,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        4,
+        15000,
+        30000,
+        0.5,
+        1264.893214238101,
+        "EXTRAPOLATED_ESTIMATE",
+        662.5705858917978,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        30000,
+        1,
+        1264.893214238101,
+        "EXTRAPOLATED_ESTIMATE",
+        347.06469791082594,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        30000,
+        2,
+        1264.893214238101,
+        "EXTRAPOLATED_ESTIMATE",
+        83.62080556474639,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        15000,
+        30000,
+        3,
+        1264.893214238101,
+        "EXTRAPOLATED_ESTIMATE",
+        32.27051552518763,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        1000,
+        0,
+        68.13290967506089,
+        "WITHIN_RANGE",
+        68.13290967506089,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        1000,
+        0.5,
+        68.13290967506089,
+        "WITHIN_RANGE",
+        45.0787923549004,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        1000,
+        1,
+        68.13290967506089,
+        "WITHIN_RANGE",
+        29.825491526307868,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        1000,
+        2,
+        68.13290967506089,
+        "WITHIN_RANGE",
+        12.1147225517565,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        1000,
+        3,
+        68.13290967506089,
+        "WITHIN_RANGE",
+        6.593593713912227,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        3000,
+        0,
+        176.82374484211667,
+        "WITHIN_RANGE",
+        176.82374484211667,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        3000,
+        0.5,
+        176.82374484211667,
+        "WITHIN_RANGE",
+        108.40277365333759,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        3000,
+        1,
+        176.82374484211667,
+        "WITHIN_RANGE",
+        66.45691926855861,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        3000,
+        2,
+        176.82374484211667,
+        "WITHIN_RANGE",
+        22.762339929996052,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        3000,
+        3,
+        176.82374484211667,
+        "WITHIN_RANGE",
+        11.073348455910303,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        7000,
+        0,
+        391.66850446072647,
+        "WITHIN_RANGE",
+        391.66850446072647,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        7000,
+        0.5,
+        391.66850446072647,
+        "WITHIN_RANGE",
+        225.32231086947456,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        7000,
+        1,
+        391.66850446072647,
+        "WITHIN_RANGE",
+        129.62529076843612,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        7000,
+        2,
+        391.66850446072647,
+        "WITHIN_RANGE",
+        38.51399562063231,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        7000,
+        3,
+        391.66850446072647,
+        "WITHIN_RANGE",
+        17.062078940449474,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        20000,
+        0,
+        983.8616548497872,
+        "WITHIN_RANGE",
+        983.8616548497872,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        20000,
+        0.5,
+        983.8616548497872,
+        "WITHIN_RANGE",
+        525.8197093624111,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        20000,
+        1,
+        983.8616548497872,
+        "WITHIN_RANGE",
+        281.0215901708087,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        20000,
+        2,
+        983.8616548497872,
+        "WITHIN_RANGE",
+        70.81942678934024,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        20000,
+        3,
+        983.8616548497872,
+        "WITHIN_RANGE",
+        28.15053406080083,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        30000,
+        0,
+        1423.013697172214,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        4,
+        45000,
+        30000,
+        0.5,
+        1423.013697172214,
+        "EXTRAPOLATED_ESTIMATE",
+        738.4095745403556,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        30000,
+        1,
+        1423.013697172214,
+        "EXTRAPOLATED_ESTIMATE",
+        383.1647586080004,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        30000,
+        2,
+        1423.013697172214,
+        "EXTRAPOLATED_ESTIMATE",
+        90.39486491170376,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        45000,
+        30000,
+        3,
+        1423.013697172214,
+        "EXTRAPOLATED_ESTIMATE",
+        34.40445550547043,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        1000,
+        0,
+        77.82591746083466,
+        "WITHIN_RANGE",
+        77.82591746083466,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        1000,
+        0.5,
+        77.82591746083466,
+        "WITHIN_RANGE",
+        50.9472648931602,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        1000,
+        1,
+        77.82591746083466,
+        "WITHIN_RANGE",
+        33.35166336330133,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        1000,
+        2,
+        77.82591746083466,
+        "WITHIN_RANGE",
+        13.228649950279172,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        1000,
+        3,
+        77.82591746083466,
+        "WITHIN_RANGE",
+        7.08802773585175,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        3000,
+        0,
+        201.21952309251924,
+        "WITHIN_RANGE",
+        201.21952309251924,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        3000,
+        0.5,
+        201.21952309251924,
+        "WITHIN_RANGE",
+        122.09058104077148,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        3000,
+        1,
+        201.21952309251924,
+        "WITHIN_RANGE",
+        74.07884558010541,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        3000,
+        2,
+        201.21952309251924,
+        "WITHIN_RANGE",
+        24.79338800258103,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        3000,
+        3,
+        201.21952309251924,
+        "WITHIN_RANGE",
+        11.879327833947608,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        7000,
+        0,
+        437.6353558569269,
+        "WITHIN_RANGE",
+        437.6353558569269,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        7000,
+        0.5,
+        437.6353558569269,
+        "WITHIN_RANGE",
+        249.54258961386458,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        7000,
+        1,
+        437.6353558569269,
+        "WITHIN_RANGE",
+        142.2908437305319,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        7000,
+        2,
+        437.6353558569269,
+        "WITHIN_RANGE",
+        41.44666060118421,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        7000,
+        3,
+        437.6353558569269,
+        "WITHIN_RANGE",
+        18.12303096286437,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        20000,
+        0,
+        1116.8533411233589,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        4,
+        100000,
+        20000,
+        0.5,
+        1116.8533411233589,
+        "WITHIN_RANGE",
+        590.8762754193845,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        20000,
+        1,
+        1116.8533411233589,
+        "WITHIN_RANGE",
+        312.60574687659124,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        20000,
+        2,
+        1116.8533411233589,
+        "WITHIN_RANGE",
+        77.01325616215382,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        20000,
+        3,
+        1116.8533411233589,
+        "WITHIN_RANGE",
+        30.159162292464046,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        30000,
+        0,
+        1618.243196708727,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        4,
+        100000,
+        30000,
+        0.5,
+        1618.243196708727,
+        "EXTRAPOLATED_ESTIMATE",
+        831.1278509237351,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        30000,
+        1,
+        1618.243196708727,
+        "EXTRAPOLATED_ESTIMATE",
+        426.8663115569032,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        30000,
+        2,
+        1618.243196708727,
+        "EXTRAPOLATED_ESTIMATE",
+        98.41646549591447,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        100000,
+        30000,
+        3,
+        1618.243196708727,
+        "EXTRAPOLATED_ESTIMATE",
+        36.89498349134022,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        1000,
+        0,
+        103.15561099269077,
+        "WITHIN_RANGE",
+        103.15561099269077,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        1000,
+        0.5,
+        103.15561099269077,
+        "WITHIN_RANGE",
+        66.02458107862269,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        1000,
+        1,
+        103.15561099269077,
+        "WITHIN_RANGE",
+        42.258925759418965,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        1000,
+        2,
+        103.15561099269077,
+        "WITHIN_RANGE",
+        15.938190105805653,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        1000,
+        3,
+        103.15561099269077,
+        "WITHIN_RANGE",
+        8.261271949254075,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        3000,
+        0,
+        266.68900858982664,
+        "WITHIN_RANGE",
+        266.68900858982664,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        3000,
+        0.5,
+        266.68900858982664,
+        "WITHIN_RANGE",
+        158.2107622131708,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        3000,
+        1,
+        266.68900858982664,
+        "WITHIN_RANGE",
+        93.85705624850165,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        3000,
+        2,
+        266.68900858982664,
+        "WITHIN_RANGE",
+        29.870131304599706,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        3000,
+        3,
+        266.68900858982664,
+        "WITHIN_RANGE",
+        13.845068535806686,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        7000,
+        0,
+        561.5218182911622,
+        "WITHIN_RANGE",
+        561.5218182911622,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        7000,
+        0.5,
+        561.5218182911622,
+        "WITHIN_RANGE",
+        313.8655016762441,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        7000,
+        1,
+        561.5218182911622,
+        "WITHIN_RANGE",
+        175.4367327030554,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        7000,
+        2,
+        561.5218182911622,
+        "WITHIN_RANGE",
+        48.874132278684975,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        7000,
+        3,
+        561.5218182911622,
+        "WITHIN_RANGE",
+        20.75293602088282,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        20000,
+        0,
+        1464.0239040836334,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        4,
+        1000000,
+        20000,
+        0.5,
+        1464.0239040836334,
+        "WITHIN_RANGE",
+        757.966219409501,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        20000,
+        1,
+        1464.0239040836334,
+        "WITHIN_RANGE",
+        392.42036155518394,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        20000,
+        2,
+        1464.0239040836334,
+        "WITHIN_RANGE",
+        92.10934868399988,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        20000,
+        3,
+        1464.0239040836334,
+        "WITHIN_RANGE",
+        34.93996069435504,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        30000,
+        0,
+        2130.6185438585726,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        30000,
+        0.5,
+        2130.6185438585726,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        30000,
+        1,
+        2130.6185438585726,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        30000,
+        2,
+        2130.6185438585726,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        4,
+        1000000,
+        30000,
+        3,
+        2130.6185438585726,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        1000,
+        0,
+        113.79303359737992,
+        "EXTRAPOLATED_ESTIMATE",
+        113.79303359737992,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        1000,
+        0.5,
+        113.79303359737992,
+        "EXTRAPOLATED_ESTIMATE",
+        72.2637709536607,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        1000,
+        1,
+        113.79303359737992,
+        "EXTRAPOLATED_ESTIMATE",
+        45.89079337597843,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        1000,
+        2,
+        113.79303359737992,
+        "EXTRAPOLATED_ESTIMATE",
+        17.006927600527884,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        1000,
+        3,
+        113.79303359737992,
+        "EXTRAPOLATED_ESTIMATE",
+        8.713996031466358,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        3000,
+        0,
+        294.96223403584173,
+        "EXTRAPOLATED_ESTIMATE",
+        294.96223403584173,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        3000,
+        0.5,
+        294.96223403584173,
+        "EXTRAPOLATED_ESTIMATE",
+        173.5795032230487,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        3000,
+        1,
+        294.96223403584173,
+        "EXTRAPOLATED_ESTIMATE",
+        102.14814122779946,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        3000,
+        2,
+        294.96223403584173,
+        "EXTRAPOLATED_ESTIMATE",
+        31.928379546677412,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        3000,
+        3,
+        294.96223403584173,
+        "EXTRAPOLATED_ESTIMATE",
+        14.624615047815675,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        7000,
+        0,
+        621.6237209942933,
+        "EXTRAPOLATED_ESTIMATE",
+        621.6237209942933,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        7000,
+        0.5,
+        621.6237209942933,
+        "EXTRAPOLATED_ESTIMATE",
+        344.64635847596753,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        7000,
+        1,
+        621.6237209942933,
+        "EXTRAPOLATED_ESTIMATE",
+        191.08201376349265,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        7000,
+        2,
+        621.6237209942933,
+        "EXTRAPOLATED_ESTIMATE",
+        52.273682433579005,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        7000,
+        3,
+        621.6237209942933,
+        "EXTRAPOLATED_ESTIMATE",
+        21.93239881469217,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        20000,
+        0,
+        1614.769049258624,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        4,
+        2000000,
+        20000,
+        0.5,
+        1614.769049258624,
+        "EXTRAPOLATED_ESTIMATE",
+        829.4860546574819,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        20000,
+        1,
+        1614.769049258624,
+        "EXTRAPOLATED_ESTIMATE",
+        426.0962985308228,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        20000,
+        2,
+        1614.769049258624,
+        "EXTRAPOLATED_ESTIMATE",
+        98.27668880263495,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        20000,
+        3,
+        1614.769049258624,
+        "EXTRAPOLATED_ESTIMATE",
+        36.851903382302176,
+        "WITHIN_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        30000,
+        0,
+        2350.9275597797564,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        30000,
+        0.5,
+        2350.9275597797564,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        30000,
+        1,
+        2350.9275597797564,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        30000,
+        2,
+        2350.9275597797564,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        4,
+        2000000,
+        30000,
+        3,
+        2350.9275597797564,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        15000,
+        1000,
+        0,
+        71.7369193032337,
+        "WITHIN_RANGE",
+        71.7369193032337,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        1000,
+        0.5,
+        71.7369193032337,
+        "WITHIN_RANGE",
+        47.2681093870982,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        1000,
+        1,
+        71.7369193032337,
+        "WITHIN_RANGE",
+        31.14538771293411,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        1000,
+        2,
+        71.7369193032337,
+        "WITHIN_RANGE",
+        12.534799666731935,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        1000,
+        3,
+        71.7369193032337,
+        "WITHIN_RANGE",
+        6.780964184603317,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        3000,
+        0,
+        176.5419762422594,
+        "WITHIN_RANGE",
+        176.5419762422594,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        3000,
+        0.5,
+        176.5419762422594,
+        "WITHIN_RANGE",
+        108.24383491700158,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        3000,
+        1,
+        176.5419762422594,
+        "WITHIN_RANGE",
+        66.3679428934274,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        3000,
+        2,
+        176.5419762422594,
+        "WITHIN_RANGE",
+        22.73834659027417,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        3000,
+        3,
+        176.5419762422594,
+        "WITHIN_RANGE",
+        11.06375265835782,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        7000,
+        0,
+        365.8571580463393,
+        "WITHIN_RANGE",
+        365.8571580463393,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        7000,
+        0.5,
+        365.8571580463393,
+        "WITHIN_RANGE",
+        211.62369883402047,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        7000,
+        1,
+        365.8571580463393,
+        "WITHIN_RANGE",
+        122.4100415236916,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        7000,
+        2,
+        365.8571580463393,
+        "WITHIN_RANGE",
+        36.81621481132267,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        7000,
+        3,
+        365.8571580463393,
+        "WITHIN_RANGE",
+        16.44133440610191,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        20000,
+        0,
+        854.7373956467278,
+        "WITHIN_RANGE",
+        854.7373956467278,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        20000,
+        0.5,
+        854.7373956467278,
+        "WITHIN_RANGE",
+        461.9774851182262,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        20000,
+        1,
+        854.7373956467278,
+        "WITHIN_RANGE",
+        249.69446504054798,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        20000,
+        2,
+        854.7373956467278,
+        "WITHIN_RANGE",
+        64.52760402047274,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        20000,
+        3,
+        854.7373956467278,
+        "WITHIN_RANGE",
+        26.07780233979056,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        30000,
+        0,
+        1161.16506789664,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        6,
+        15000,
+        30000,
+        0.5,
+        1161.16506789664,
+        "EXTRAPOLATED_ESTIMATE",
+        612.4114810367128,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        30000,
+        1,
+        1161.16506789664,
+        "EXTRAPOLATED_ESTIMATE",
+        322.99268422270956,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        30000,
+        2,
+        1161.16506789664,
+        "EXTRAPOLATED_ESTIMATE",
+        79.02057128611177,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        15000,
+        30000,
+        3,
+        1161.16506789664,
+        "EXTRAPOLATED_ESTIMATE",
+        30.803863734321386,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        1000,
+        0,
+        89.11991791555592,
+        "WITHIN_RANGE",
+        89.11991791555592,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        1000,
+        0.5,
+        89.11991791555592,
+        "WITHIN_RANGE",
+        57.7119944818499,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        1000,
+        1,
+        89.11991791555592,
+        "WITHIN_RANGE",
+        37.37295079455748,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        1000,
+        2,
+        89.11991791555592,
+        "WITHIN_RANGE",
+        14.46884676227065,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        1000,
+        3,
+        89.11991791555592,
+        "WITHIN_RANGE",
+        7.62987611992866,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        3000,
+        0,
+        218.41969554230252,
+        "WITHIN_RANGE",
+        218.41969554230252,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        3000,
+        0.5,
+        218.41969554230252,
+        "WITHIN_RANGE",
+        131.6605777144832,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        3000,
+        1,
+        218.41969554230252,
+        "WITHIN_RANGE",
+        79.36329954619053,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        3000,
+        2,
+        218.41969554230252,
+        "WITHIN_RANGE",
+        26.175369490383574,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        3000,
+        3,
+        218.41969554230252,
+        "WITHIN_RANGE",
+        12.420994733191737,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        7000,
+        0,
+        442.77311143535655,
+        "WITHIN_RANGE",
+        442.77311143535655,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        7000,
+        0.5,
+        442.77311143535655,
+        "WITHIN_RANGE",
+        252.2366813032624,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        7000,
+        1,
+        442.77311143535655,
+        "WITHIN_RANGE",
+        143.69287960742042,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        7000,
+        2,
+        442.77311143535655,
+        "WITHIN_RANGE",
+        41.767801292285476,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        7000,
+        3,
+        442.77311143535655,
+        "WITHIN_RANGE",
+        18.23838307545744,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        20000,
+        0,
+        1046.3617378811766,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        6,
+        45000,
+        20000,
+        0.5,
+        1046.3617378811766,
+        "WITHIN_RANGE",
+        556.4755521636919,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        20000,
+        1,
+        1046.3617378811766,
+        "WITHIN_RANGE",
+        295.94453709951233,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        20000,
+        2,
+        1046.3617378811766,
+        "WITHIN_RANGE",
+        73.76340947896989,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        20000,
+        3,
+        1046.3617378811766,
+        "WITHIN_RANGE",
+        29.108992511882697,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        30000,
+        0,
+        1429.2694423685566,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        6,
+        45000,
+        30000,
+        0.5,
+        1429.2694423685566,
+        "EXTRAPOLATED_ESTIMATE",
+        741.3956498048876,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        30000,
+        1,
+        1429.2694423685566,
+        "EXTRAPOLATED_ESTIMATE",
+        384.57934750127515,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        30000,
+        2,
+        1429.2694423685566,
+        "EXTRAPOLATED_ESTIMATE",
+        90.6574653537498,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        45000,
+        30000,
+        3,
+        1429.2694423685566,
+        "EXTRAPOLATED_ESTIMATE",
+        34.48659306387055,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        1000,
+        0,
+        101.5784376205965,
+        "WITHIN_RANGE",
+        101.5784376205965,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        1000,
+        0.5,
+        101.5784376205965,
+        "WITHIN_RANGE",
+        65.09525367417145,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        1000,
+        1,
+        101.5784376205965,
+        "WITHIN_RANGE",
+        41.71546787057037,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        1000,
+        2,
+        101.5784376205965,
+        "WITHIN_RANGE",
+        15.776620063963858,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        1000,
+        3,
+        101.5784376205965,
+        "WITHIN_RANGE",
+        8.19236715062902,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        3000,
+        0,
+        248.95404452544813,
+        "WITHIN_RANGE",
+        248.95404452544813,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        3000,
+        0.5,
+        248.95404452544813,
+        "WITHIN_RANGE",
+        148.50448968553408,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        3000,
+        1,
+        248.95404452544813,
+        "WITHIN_RANGE",
+        88.5849575121347,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        3000,
+        2,
+        248.95404452544813,
+        "WITHIN_RANGE",
+        28.54126990664905,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        3000,
+        3,
+        248.95404452544813,
+        "WITHIN_RANGE",
+        13.336708079640541,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        7000,
+        0,
+        492.21201433315287,
+        "WITHIN_RANGE",
+        492.21201433315287,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        7000,
+        0.5,
+        492.21201433315287,
+        "WITHIN_RANGE",
+        278.0376851696854,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        7000,
+        1,
+        492.21201433315287,
+        "WITHIN_RANGE",
+        157.05621180183843,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        7000,
+        2,
+        492.21201433315287,
+        "WITHIN_RANGE",
+        44.796350835063215,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        7000,
+        3,
+        492.21201433315287,
+        "WITHIN_RANGE",
+        19.318654712719223,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        20000,
+        0,
+        1186.5538032917068,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        6,
+        100000,
+        20000,
+        0.5,
+        1186.5538032917068,
+        "WITHIN_RANGE",
+        624.7204954543719,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        20000,
+        1,
+        1186.5538032917068,
+        "WITHIN_RANGE",
+        328.9152976949404,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        20000,
+        2,
+        1186.5538032917068,
+        "WITHIN_RANGE",
+        80.15897497124823,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        20000,
+        3,
+        1186.5538032917068,
+        "WITHIN_RANGE",
+        31.168193712263765,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        30000,
+        0,
+        1622.803972651282,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        6,
+        100000,
+        30000,
+        0.5,
+        1622.803972651282,
+        "EXTRAPOLATED_ESTIMATE",
+        833.2827332977573,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        30000,
+        1,
+        1622.803972651282,
+        "EXTRAPOLATED_ESTIMATE",
+        427.8767647319466,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        30000,
+        2,
+        1622.803972651282,
+        "EXTRAPOLATED_ESTIMATE",
+        98.5998067383259,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        100000,
+        30000,
+        3,
+        1622.803972651282,
+        "EXTRAPOLATED_ESTIMATE",
+        36.95147398120141,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        1000,
+        0,
+        152.63799195894592,
+        "WITHIN_RANGE",
+        152.63799195894592,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        1000,
+        0.5,
+        152.63799195894592,
+        "WITHIN_RANGE",
+        94.682503768417,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        1000,
+        1,
+        152.63799195894592,
+        "WITHIN_RANGE",
+        58.73227500442682,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        1000,
+        2,
+        152.63799195894592,
+        "WITHIN_RANGE",
+        20.652557459943637,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        1000,
+        3,
+        152.63799195894592,
+        "WITHIN_RANGE",
+        10.222424408324544,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        3000,
+        0,
+        376.8479613783802,
+        "WITHIN_RANGE",
+        376.8479613783802,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        3000,
+        0.5,
+        376.8479613783802,
+        "WITHIN_RANGE",
+        217.4658868665871,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        3000,
+        1,
+        376.8479613783802,
+        "WITHIN_RANGE",
+        125.4920201178628,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        3000,
+        2,
+        376.8479613783802,
+        "WITHIN_RANGE",
+        37.54395398128263,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        3000,
+        3,
+        376.8479613783802,
+        "WITHIN_RANGE",
+        16.708021832539263,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        7000,
+        0,
+        750.7773023590123,
+        "WITHIN_RANGE",
+        750.7773023590123,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        7000,
+        0.5,
+        750.7773023590123,
+        "WITHIN_RANGE",
+        410.0174677198855,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        7000,
+        1,
+        750.7773023590123,
+        "WITHIN_RANGE",
+        223.92036001514205,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        7000,
+        2,
+        750.7773023590123,
+        "WITHIN_RANGE",
+        59.22425005259058,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        7000,
+        3,
+        750.7773023590123,
+        "WITHIN_RANGE",
+        24.30265335723654,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        20000,
+        0,
+        1778.0909440061143,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        6,
+        1000000,
+        20000,
+        0.5,
+        1778.0909440061143,
+        "WITHIN_RANGE",
+        906.373281059101,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        20000,
+        1,
+        1778.0909440061143,
+        "WITHIN_RANGE",
+        462.0194076051804,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        20000,
+        2,
+        1778.0909440061143,
+        "WITHIN_RANGE",
+        104.74228402469427,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        20000,
+        3,
+        1778.0909440061143,
+        "WITHIN_RANGE",
+        38.83351850504802,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        30000,
+        0,
+        2441.105925506886,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        30000,
+        0.5,
+        2441.105925506886,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        30000,
+        1,
+        2441.105925506886,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        30000,
+        2,
+        2441.105925506886,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        1000000,
+        30000,
+        3,
+        2441.105925506886,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        1000,
+        0,
+        169.53982352624922,
+        "EXTRAPOLATED_ESTIMATE",
+        169.53982352624922,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        1000,
+        0.5,
+        169.53982352624922,
+        "EXTRAPOLATED_ESTIMATE",
+        104.28748651606136,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        1000,
+        1,
+        169.53982352624922,
+        "EXTRAPOLATED_ESTIMATE",
+        64.14941113911107,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        1000,
+        2,
+        169.53982352624922,
+        "EXTRAPOLATED_ESTIMATE",
+        22.13785520035056,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        1000,
+        3,
+        169.53982352624922,
+        "EXTRAPOLATED_ESTIMATE",
+        10.823001700865051,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        3000,
+        0,
+        415.5937486462209,
+        "EXTRAPOLATED_ESTIMATE",
+        415.5937486462209,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        3000,
+        0.5,
+        415.5937486462209,
+        "EXTRAPOLATED_ESTIMATE",
+        237.9554829639131,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        3000,
+        1,
+        415.5937486462209,
+        "EXTRAPOLATED_ESTIMATE",
+        136.24558130875545,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        3000,
+        2,
+        415.5937486462209,
+        "EXTRAPOLATED_ESTIMATE",
+        40.054150275677706,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        3000,
+        3,
+        415.5937486462209,
+        "EXTRAPOLATED_ESTIMATE",
+        17.620987705438797,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        7000,
+        0,
+        835.6544243826565,
+        "EXTRAPOLATED_ESTIMATE",
+        835.6544243826565,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        7000,
+        0.5,
+        835.6544243826565,
+        "EXTRAPOLATED_ESTIMATE",
+        452.4794369360586,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        7000,
+        1,
+        835.6544243826565,
+        "EXTRAPOLATED_ESTIMATE",
+        245.00276056244581,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        7000,
+        2,
+        835.6544243826565,
+        "EXTRAPOLATED_ESTIMATE",
+        63.57124983054211,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        7000,
+        3,
+        835.6544243826565,
+        "EXTRAPOLATED_ESTIMATE",
+        25.75967022158021,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        20000,
+        0,
+        1975.5204761205196,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        6,
+        2000000,
+        20000,
+        0.5,
+        1975.5204761205196,
+        "EXTRAPOLATED_ESTIMATE",
+        998.5701292443731,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        20000,
+        1,
+        1975.5204761205196,
+        "EXTRAPOLATED_ESTIMATE",
+        504.7491610804702,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        20000,
+        2,
+        1975.5204761205196,
+        "EXTRAPOLATED_ESTIMATE",
+        112.29543374340813,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        20000,
+        3,
+        1975.5204761205196,
+        "EXTRAPOLATED_ESTIMATE",
+        41.121123279003676,
+        "WITHIN_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        30000,
+        0,
+        2712.153029334253,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        30000,
+        0.5,
+        2712.153029334253,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        30000,
+        1,
+        2712.153029334253,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        30000,
+        2,
+        2712.153029334253,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        6,
+        2000000,
+        30000,
+        3,
+        2712.153029334253,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        15000,
+        1000,
+        0,
+        81.63826453128706,
+        "WITHIN_RANGE",
+        81.63826453128706,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        1000,
+        0.5,
+        81.63826453128706,
+        "WITHIN_RANGE",
+        53.23898762852366,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        1000,
+        1,
+        81.63826453128706,
+        "WITHIN_RANGE",
+        34.71888850140663,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        1000,
+        2,
+        81.63826453128706,
+        "WITHIN_RANGE",
+        13.653707489701969,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        1000,
+        3,
+        81.63826453128706,
+        "WITHIN_RANGE",
+        7.274716028221001,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        3000,
+        0,
+        195.23807742276972,
+        "WITHIN_RANGE",
+        195.23807742276972,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        3000,
+        0.5,
+        195.23807742276972,
+        "WITHIN_RANGE",
+        118.74748180023762,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        3000,
+        1,
+        195.23807742276972,
+        "WITHIN_RANGE",
+        72.22445856892682,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        3000,
+        2,
+        195.23807742276972,
+        "WITHIN_RANGE",
+        24.303511565982234,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        3000,
+        3,
+        195.23807742276972,
+        "WITHIN_RANGE",
+        11.686042462773818,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        7000,
+        0,
+        390.9955299507947,
+        "WITHIN_RANGE",
+        390.9955299507947,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        7000,
+        0.5,
+        390.9955299507947,
+        "WITHIN_RANGE",
+        224.9660864551512,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        7000,
+        1,
+        390.9955299507947,
+        "WITHIN_RANGE",
+        129.43815511475455,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        7000,
+        2,
+        390.9955299507947,
+        "WITHIN_RANGE",
+        38.47022028199265,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        7000,
+        3,
+        390.9955299507947,
+        "WITHIN_RANGE",
+        17.04613578104411,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        20000,
+        0,
+        874.3576906609712,
+        "WITHIN_RANGE",
+        874.3576906609712,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        20000,
+        0.5,
+        874.3576906609712,
+        "WITHIN_RANGE",
+        471.72531292540003,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        20000,
+        1,
+        874.3576906609712,
+        "WITHIN_RANGE",
+        254.50084471304737,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        20000,
+        2,
+        874.3576906609712,
+        "WITHIN_RANGE",
+        65.50337637091975,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        20000,
+        3,
+        874.3576906609712,
+        "WITHIN_RANGE",
+        26.401530276199686,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        30000,
+        0,
+        1183.4317227389513,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        8,
+        15000,
+        30000,
+        0.5,
+        1183.4317227389513,
+        "EXTRAPOLATED_ESTIMATE",
+        623.2079869803708,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        30000,
+        1,
+        1183.4317227389513,
+        "EXTRAPOLATED_ESTIMATE",
+        328.18808856774115,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        30000,
+        2,
+        1183.4317227389513,
+        "EXTRAPOLATED_ESTIMATE",
+        80.01943229482703,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        15000,
+        30000,
+        3,
+        1183.4317227389513,
+        "EXTRAPOLATED_ESTIMATE",
+        31.12358482345633,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        1000,
+        0,
+        104.8421822222996,
+        "WITHIN_RANGE",
+        104.8421822222996,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        1000,
+        0.5,
+        104.8421822222996,
+        "WITHIN_RANGE",
+        67.01711386373422,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        1000,
+        1,
+        104.8421822222996,
+        "WITHIN_RANGE",
+        42.838611858552426,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        1000,
+        2,
+        104.8421822222996,
+        "WITHIN_RANGE",
+        16.110044226211247,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        1000,
+        3,
+        104.8421822222996,
+        "WITHIN_RANGE",
+        8.334426320697647,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        3000,
+        0,
+        250.7015138997441,
+        "WITHIN_RANGE",
+        250.7015138997441,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        3000,
+        0.5,
+        250.7015138997441,
+        "WITHIN_RANGE",
+        149.46326769538533,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        3000,
+        1,
+        250.7015138997441,
+        "WITHIN_RANGE",
+        89.10703426831277,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        3000,
+        2,
+        250.7015138997441,
+        "WITHIN_RANGE",
+        28.6735983715981,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        3000,
+        3,
+        250.7015138997441,
+        "WITHIN_RANGE",
+        13.387516688050239,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        7000,
+        0,
+        480.8498432272969,
+        "WITHIN_RANGE",
+        480.8498432272969,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        7000,
+        0.5,
+        480.8498432272969,
+        "WITHIN_RANGE",
+        272.1271554012262,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        7000,
+        1,
+        480.8498432272969,
+        "WITHIN_RANGE",
+        154.0048099210013,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        7000,
+        2,
+        480.8498432272969,
+        "WITHIN_RANGE",
+        44.109806876531664,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        7000,
+        3,
+        480.8498432272969,
+        "WITHIN_RANGE",
+        19.07493782686458,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        20000,
+        0,
+        1107.3280997495795,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        8,
+        45000,
+        20000,
+        0.5,
+        1107.3280997495795,
+        "WITHIN_RANGE",
+        586.2382345803302,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        20000,
+        1,
+        1107.3280997495795,
+        "WITHIN_RANGE",
+        310.36444190442216,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        20000,
+        2,
+        1107.3280997495795,
+        "WITHIN_RANGE",
+        76.57826639316086,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        20000,
+        3,
+        1107.3280997495795,
+        "WITHIN_RANGE",
+        30.01906198026302,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        30000,
+        0,
+        1505.8636713133928,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        8,
+        45000,
+        30000,
+        0.5,
+        1505.8636713133928,
+        "EXTRAPOLATED_ESTIMATE",
+        777.8733740939489,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        30000,
+        1,
+        1505.8636713133928,
+        "EXTRAPOLATED_ESTIMATE",
+        401.82056161601656,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        30000,
+        2,
+        1505.8636713133928,
+        "EXTRAPOLATED_ESTIMATE",
+        93.84183128638665,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        45000,
+        30000,
+        3,
+        1505.8636713133928,
+        "EXTRAPOLATED_ESTIMATE",
+        35.47928869845644,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        1000,
+        0,
+        123.94358480365865,
+        "WITHIN_RANGE",
+        123.94358480365865,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        1000,
+        0.5,
+        123.94358480365865,
+        "WITHIN_RANGE",
+        78.17394794036906,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        1000,
+        1,
+        123.94358480365865,
+        "WITHIN_RANGE",
+        49.30603020934358,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        1000,
+        2,
+        123.94358480365865,
+        "WITHIN_RANGE",
+        17.995585123807448,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        1000,
+        3,
+        123.94358480365865,
+        "WITHIN_RANGE",
+        9.128303243269523,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        3000,
+        0,
+        297.70524863083693,
+        "WITHIN_RANGE",
+        297.70524863083693,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        3000,
+        0.5,
+        297.70524863083693,
+        "WITHIN_RANGE",
+        175.06410121201844,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        3000,
+        1,
+        297.70524863083693,
+        "WITHIN_RANGE",
+        102.94558014721324,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        3000,
+        2,
+        297.70524863083693,
+        "WITHIN_RANGE",
+        32.12442711211583,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        3000,
+        3,
+        297.70524863083693,
+        "WITHIN_RANGE",
+        14.698391844140609,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        7000,
+        0,
+        565.1881207375002,
+        "WITHIN_RANGE",
+        565.1881207375002,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        7000,
+        0.5,
+        565.1881207375002,
+        "WITHIN_RANGE",
+        315.7504602005735,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        7000,
+        1,
+        565.1881207375002,
+        "WITHIN_RANGE",
+        176.39852901858575,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        7000,
+        2,
+        565.1881207375002,
+        "WITHIN_RANGE",
+        49.084930125846995,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        7000,
+        3,
+        565.1881207375002,
+        "WITHIN_RANGE",
+        20.82648688634949,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        20000,
+        0,
+        1306.1349009942262,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        8,
+        100000,
+        20000,
+        0.5,
+        1306.1349009942262,
+        "WITHIN_RANGE",
+        682.4207670634828,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        20000,
+        1,
+        1306.1349009942262,
+        "WITHIN_RANGE",
+        356.5467111896513,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        20000,
+        2,
+        1306.1349009942262,
+        "WITHIN_RANGE",
+        85.41401600956223,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        20000,
+        3,
+        1306.1349009942262,
+        "WITHIN_RANGE",
+        32.83830554718897,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        30000,
+        0,
+        1780.9941179972052,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        8,
+        100000,
+        30000,
+        0.5,
+        1780.9941179972052,
+        "EXTRAPOLATED_ESTIMATE",
+        907.7347493401544,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        30000,
+        1,
+        1780.9941179972052,
+        "EXTRAPOLATED_ESTIMATE",
+        462.65305810567816,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        30000,
+        2,
+        1780.9941179972052,
+        "EXTRAPOLATED_ESTIMATE",
+        104.85534836399107,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        100000,
+        30000,
+        3,
+        1780.9941179972052,
+        "EXTRAPOLATED_ESTIMATE",
+        38.867973818993484,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        1000,
+        0,
+        200.609234683154,
+        "WITHIN_RANGE",
+        200.609234683154,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        1000,
+        0.5,
+        200.609234683154,
+        "WITHIN_RANGE",
+        121.7498516872701,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        1000,
+        1,
+        200.609234683154,
+        "WITHIN_RANGE",
+        73.89005002329046,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        1000,
+        2,
+        200.609234683154,
+        "WITHIN_RANGE",
+        24.74363392090089,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        1000,
+        3,
+        200.609234683154,
+        "WITHIN_RANGE",
+        11.859728113667925,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        3000,
+        0,
+        468.152708090633,
+        "WITHIN_RANGE",
+        468.152708090633,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        3000,
+        0.5,
+        468.152708090633,
+        "WITHIN_RANGE",
+        265.5089470575595,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        3000,
+        1,
+        468.152708090633,
+        "WITHIN_RANGE",
+        150.58120939880632,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        3000,
+        2,
+        468.152708090633,
+        "WITHIN_RANGE",
+        43.336063799996204,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        3000,
+        3,
+        468.152708090633,
+        "WITHIN_RANGE",
+        18.79945509154976,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        7000,
+        0,
+        926.6820327595319,
+        "WITHIN_RANGE",
+        926.6820327595319,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        7000,
+        0.5,
+        926.6820327595319,
+        "WITHIN_RANGE",
+        497.63696060532965,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        7000,
+        1,
+        926.6820327595319,
+        "WITHIN_RANGE",
+        267.23572466713813,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        7000,
+        2,
+        926.6820327595319,
+        "WITHIN_RANGE",
+        68.07006927379119,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        7000,
+        3,
+        926.6820327595319,
+        "WITHIN_RANGE",
+        27.249016860183286,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        20000,
+        0,
+        2111.772866335829,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        20000,
+        0.5,
+        2111.772866335829,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        20000,
+        1,
+        2111.772866335829,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        20000,
+        2,
+        2111.772866335829,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        20000,
+        3,
+        2111.772866335829,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        30000,
+        0,
+        2886.012223236985,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        30000,
+        0.5,
+        2886.012223236985,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        30000,
+        1,
+        2886.012223236985,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        30000,
+        2,
+        2886.012223236985,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        1000000,
+        30000,
+        3,
+        2886.012223236985,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        1000,
+        0,
+        235.66888722774854,
+        "EXTRAPOLATED_ESTIMATE",
+        235.66888722774854,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        1000,
+        0.5,
+        235.66888722774854,
+        "EXTRAPOLATED_ESTIMATE",
+        141.1974655649138,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        1000,
+        1,
+        235.66888722774854,
+        "EXTRAPOLATED_ESTIMATE",
+        84.5963356320698,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        1000,
+        2,
+        235.66888722774854,
+        "EXTRAPOLATED_ESTIMATE",
+        27.524721646445514,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        1000,
+        3,
+        235.66888722774854,
+        "EXTRAPOLATED_ESTIMATE",
+        12.944979962779986,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        3000,
+        0,
+        541.1337725573544,
+        "EXTRAPOLATED_ESTIMATE",
+        541.1337725573544,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        3000,
+        0.5,
+        541.1337725573544,
+        "EXTRAPOLATED_ESTIMATE",
+        303.3652302478587,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        3000,
+        1,
+        541.1337725573544,
+        "EXTRAPOLATED_ESTIMATE",
+        170.06970843532397,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        3000,
+        2,
+        541.1337725573544,
+        "EXTRAPOLATED_ESTIMATE",
+        47.69327163630016,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        3000,
+        3,
+        541.1337725573544,
+        "EXTRAPOLATED_ESTIMATE",
+        20.339861525249532,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        7000,
+        0,
+        1078.9391177256273,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        8,
+        2000000,
+        7000,
+        0.5,
+        1078.9391177256273,
+        "EXTRAPOLATED_ESTIMATE",
+        572.3959953785659,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        7000,
+        1,
+        1078.9391177256273,
+        "EXTRAPOLATED_ESTIMATE",
+        303.6660457877073,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        7000,
+        2,
+        1078.9391177256273,
+        "EXTRAPOLATED_ESTIMATE",
+        75.2742387463099,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        7000,
+        3,
+        1078.9391177256273,
+        "EXTRAPOLATED_ESTIMATE",
+        29.598211361223047,
+        "WITHIN_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        20000,
+        0,
+        2471.4720261741018,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        20000,
+        0.5,
+        2471.4720261741018,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        20000,
+        1,
+        2471.4720261741018,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        20000,
+        2,
+        2471.4720261741018,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        20000,
+        3,
+        2471.4720261741018,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        30000,
+        0,
+        3377.5878981259957,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        30000,
+        0.5,
+        3377.5878981259957,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        30000,
+        1,
+        3377.5878981259957,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        30000,
+        2,
+        3377.5878981259957,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        8,
+        2000000,
+        30000,
+        3,
+        3377.5878981259957,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        15000,
+        1000,
+        0,
+        102.57545162770732,
+        "WITHIN_RANGE",
+        102.57545162770732,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        1000,
+        0.5,
+        102.57545162770732,
+        "WITHIN_RANGE",
+        65.68286327381152,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        1000,
+        1,
+        102.57545162770732,
+        "WITHIN_RANGE",
+        42.05917165741117,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        1000,
+        2,
+        102.57545162770732,
+        "WITHIN_RANGE",
+        15.878854899928,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        1000,
+        3,
+        102.57545162770732,
+        "WITHIN_RANGE",
+        8.23598176524002,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        3000,
+        0,
+        232.1978048228736,
+        "WITHIN_RANGE",
+        232.1978048228736,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        3000,
+        0.5,
+        232.1978048228736,
+        "WITHIN_RANGE",
+        139.28296168975191,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        3000,
+        1,
+        232.1978048228736,
+        "WITHIN_RANGE",
+        83.54834978680148,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        3000,
+        2,
+        232.1978048228736,
+        "WITHIN_RANGE",
+        27.255952644507587,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        3000,
+        3,
+        232.1978048228736,
+        "WITHIN_RANGE",
+        12.840982238063413,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        7000,
+        0,
+        435.1460968172372,
+        "WITHIN_RANGE",
+        435.1460968172372,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        7000,
+        0.5,
+        435.1460968172372,
+        "WITHIN_RANGE",
+        248.2363856871982,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        7000,
+        1,
+        435.1460968172372,
+        "WITHIN_RANGE",
+        141.61060763214115,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        7000,
+        2,
+        435.1460968172372,
+        "WITHIN_RANGE",
+        41.29060802150298,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        7000,
+        3,
+        435.1460968172372,
+        "WITHIN_RANGE",
+        18.06692028711382,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        20000,
+        0,
+        926.9412712093161,
+        "WITHIN_RANGE",
+        926.9412712093161,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        20000,
+        0.5,
+        926.9412712093161,
+        "WITHIN_RANGE",
+        497.7650420200749,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        20000,
+        1,
+        926.9412712093161,
+        "WITHIN_RANGE",
+        267.2985276985224,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        20000,
+        2,
+        926.9412712093161,
+        "WITHIN_RANGE",
+        68.08266168273559,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        20000,
+        3,
+        926.9412712093161,
+        "WITHIN_RANGE",
+        27.253160517928837,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        30000,
+        0,
+        1244.6708260332427,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        12,
+        15000,
+        30000,
+        0.5,
+        1244.6708260332427,
+        "EXTRAPOLATED_ESTIMATE",
+        652.8184556332363,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        30000,
+        1,
+        1244.6708260332427,
+        "EXTRAPOLATED_ESTIMATE",
+        342.39730465409144,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        30000,
+        2,
+        1244.6708260332427,
+        "EXTRAPOLATED_ESTIMATE",
+        82.73430275392823,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        15000,
+        30000,
+        3,
+        1244.6708260332427,
+        "EXTRAPOLATED_ESTIMATE",
+        31.989020673443083,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        1000,
+        0,
+        137.61456957649122,
+        "WITHIN_RANGE",
+        137.61456957649122,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        1000,
+        0.5,
+        137.61456957649122,
+        "WITHIN_RANGE",
+        86.07346411485568,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        1000,
+        1,
+        137.61456957649122,
+        "WITHIN_RANGE",
+        53.836169001083526,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        1000,
+        2,
+        137.61456957649122,
+        "WITHIN_RANGE",
+        19.284842650420934,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        1000,
+        3,
+        137.61456957649122,
+        "WITHIN_RANGE",
+        9.662559009915814,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        3000,
+        0,
+        313.75136590509345,
+        "WITHIN_RANGE",
+        313.75136590509345,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        3000,
+        0.5,
+        313.75136590509345,
+        "WITHIN_RANGE",
+        183.72715769628743,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        3000,
+        1,
+        313.75136590509345,
+        "WITHIN_RANGE",
+        107.5873195891273,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        3000,
+        2,
+        313.75136590509345,
+        "WITHIN_RANGE",
+        33.259266495430126,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        3000,
+        3,
+        313.75136590509345,
+        "WITHIN_RANGE",
+        15.123899780691609,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        7000,
+        0,
+        568.7911656398436,
+        "WITHIN_RANGE",
+        568.7911656398436,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        7000,
+        0.5,
+        568.7911656398436,
+        "WITHIN_RANGE",
+        317.6019438067934,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        7000,
+        1,
+        568.7911656398436,
+        "WITHIN_RANGE",
+        177.3427591766161,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        7000,
+        2,
+        568.7911656398436,
+        "WITHIN_RANGE",
+        49.291640169446175,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        7000,
+        3,
+        568.7911656398436,
+        "WITHIN_RANGE",
+        20.89855687774945,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        20000,
+        0,
+        1235.4156566785296,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        12,
+        45000,
+        20000,
+        0.5,
+        1235.4156566785296,
+        "WITHIN_RANGE",
+        648.350988350101,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        20000,
+        1,
+        1235.4156566785296,
+        "WITHIN_RANGE",
+        340.257144890576,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        20000,
+        2,
+        1235.4156566785296,
+        "WITHIN_RANGE",
+        82.32695216596149,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        20000,
+        3,
+        1235.4156566785296,
+        "WITHIN_RANGE",
+        31.85949321462654,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        30000,
+        0,
+        1666.0590853708677,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        12,
+        45000,
+        30000,
+        0.5,
+        1666.0590853708677,
+        "EXTRAPOLATED_ESTIMATE",
+        853.6961080142227,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        30000,
+        1,
+        1666.0590853708677,
+        "EXTRAPOLATED_ESTIMATE",
+        437.43769427985137,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        30000,
+        2,
+        1666.0590853708677,
+        "EXTRAPOLATED_ESTIMATE",
+        100.33006236625295,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        45000,
+        30000,
+        3,
+        1666.0590853708677,
+        "EXTRAPOLATED_ESTIMATE",
+        37.48367962427779,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        1000,
+        0,
+        166.5389327926424,
+        "WITHIN_RANGE",
+        166.5389327926424,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        1000,
+        0.5,
+        166.5389327926424,
+        "WITHIN_RANGE",
+        102.58795391737465,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        1000,
+        1,
+        166.5389327926424,
+        "WITHIN_RANGE",
+        63.194161944445575,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        1000,
+        2,
+        166.5389327926424,
+        "WITHIN_RANGE",
+        21.877941775922455,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        1000,
+        3,
+        166.5389327926424,
+        "WITHIN_RANGE",
+        10.718437252675688,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        3000,
+        0,
+        380.49515303877683,
+        "WITHIN_RANGE",
+        380.49515303877683,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        3000,
+        0.5,
+        380.49515303877683,
+        "WITHIN_RANGE",
+        219.40153203331525,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        3000,
+        1,
+        380.49515303877683,
+        "WITHIN_RANGE",
+        126.51155178752065,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        3000,
+        2,
+        380.49515303877683,
+        "WITHIN_RANGE",
+        37.783852541273866,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        3000,
+        3,
+        380.49515303877683,
+        "WITHIN_RANGE",
+        16.795732786862803,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        7000,
+        0,
+        695.8164534518377,
+        "WITHIN_RANGE",
+        695.8164534518377,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        7000,
+        0.5,
+        695.8164534518377,
+        "WITHIN_RANGE",
+        382.3188454906854,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        7000,
+        1,
+        695.8164534518377,
+        "WITHIN_RANGE",
+        210.0664606193419,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        7000,
+        2,
+        695.8164534518377,
+        "WITHIN_RANGE",
+        56.32036959188665,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        7000,
+        3,
+        695.8164534518377,
+        "WITHIN_RANGE",
+        23.31875894393443,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        20000,
+        0,
+        1491.254160609806,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        12,
+        100000,
+        20000,
+        0.5,
+        1491.254160609806,
+        "WITHIN_RANGE",
+        770.9273291503141,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        20000,
+        1,
+        1491.254160609806,
+        "WITHIN_RANGE",
+        398.5430267552801,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        20000,
+        2,
+        1491.254160609806,
+        "WITHIN_RANGE",
+        93.23876221847593,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        20000,
+        3,
+        1491.254160609806,
+        "WITHIN_RANGE",
+        35.29175386073014,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        100000,
+        30000,
+        0,
+        2017.2373028432155,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        100000,
+        30000,
+        0.5,
+        2017.2373028432155,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        100000,
+        30000,
+        1,
+        2017.2373028432155,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        100000,
+        30000,
+        2,
+        2017.2373028432155,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        100000,
+        30000,
+        3,
+        2017.2373028432155,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        1000,
+        0,
+        307.86261375371924,
+        "WITHIN_RANGE",
+        307.86261375371924,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        1000,
+        0.5,
+        307.86261375371924,
+        "WITHIN_RANGE",
+        180.55212182025178,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        1000,
+        1,
+        307.86261375371924,
+        "WITHIN_RANGE",
+        105.88836460627633,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        1000,
+        2,
+        307.86261375371924,
+        "WITHIN_RANGE",
+        32.84512888202527,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        1000,
+        3,
+        307.86261375371924,
+        "WITHIN_RANGE",
+        14.968922987510192,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        3000,
+        0,
+        672.4563729533168,
+        "WITHIN_RANGE",
+        672.4563729533168,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        3000,
+        0.5,
+        672.4563729533168,
+        "WITHIN_RANGE",
+        370.4937499508992,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        3000,
+        1,
+        672.4563729533168,
+        "WITHIN_RANGE",
+        204.1256864736542,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        3000,
+        2,
+        672.4563729533168,
+        "WITHIN_RANGE",
+        55.0627500397967,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        3000,
+        3,
+        672.4563729533168,
+        "WITHIN_RANGE",
+        22.88986835533055,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        7000,
+        0,
+        1266.2681926542084,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        12,
+        1000000,
+        7000,
+        0.5,
+        1266.2681926542084,
+        "WITHIN_RANGE",
+        663.2332065548912,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        7000,
+        1,
+        1266.2681926542084,
+        "WITHIN_RANGE",
+        347.3816122278648,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        7000,
+        2,
+        1266.2681926542084,
+        "WITHIN_RANGE",
+        83.68090646477539,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        7000,
+        3,
+        1266.2681926542084,
+        "WITHIN_RANGE",
+        32.28958032828966,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        20000,
+        0,
+        2731.0464381631423,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        20000,
+        0.5,
+        2731.0464381631423,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        20000,
+        1,
+        2731.0464381631423,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        20000,
+        2,
+        2731.0464381631423,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        20000,
+        3,
+        2731.0464381631423,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        30000,
+        0,
+        3694.670120012919,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        30000,
+        0.5,
+        3694.670120012919,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        30000,
+        1,
+        3694.670120012919,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        30000,
+        2,
+        3694.670120012919,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        1000000,
+        30000,
+        3,
+        3694.670120012919,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        1000,
+        0,
+        365.7536825463226,
+        "EXTRAPOLATED_ESTIMATE",
+        365.7536825463226,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        1000,
+        0.5,
+        365.7536825463226,
+        "EXTRAPOLATED_ESTIMATE",
+        211.56863012955893,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        1000,
+        1,
+        365.7536825463226,
+        "EXTRAPOLATED_ESTIMATE",
+        122.38095579319047,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        1000,
+        2,
+        365.7536825463226,
+        "EXTRAPOLATED_ESTIMATE",
+        36.809328439926645,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        1000,
+        3,
+        365.7536825463226,
+        "EXTRAPOLATED_ESTIMATE",
+        16.43880637065556,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        3000,
+        0,
+        806.3496110092913,
+        "EXTRAPOLATED_ESTIMATE",
+        806.3496110092913,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        3000,
+        0.5,
+        806.3496110092913,
+        "EXTRAPOLATED_ESTIMATE",
+        437.8597862593663,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        3000,
+        1,
+        806.3496110092913,
+        "EXTRAPOLATED_ESTIMATE",
+        237.76435159821634,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        3000,
+        2,
+        806.3496110092913,
+        "EXTRAPOLATED_ESTIMATE",
+        62.08808314142232,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        3000,
+        3,
+        806.3496110092913,
+        "EXTRAPOLATED_ESTIMATE",
+        25.2646007772098,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        7000,
+        0,
+        1498.126330373767,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        12,
+        2000000,
+        7000,
+        0.5,
+        1498.126330373767,
+        "EXTRAPOLATED_ESTIMATE",
+        774.1953546741181,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        7000,
+        1,
+        1498.126330373767,
+        "EXTRAPOLATED_ESTIMATE",
+        400.08538335311454,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        7000,
+        2,
+        1498.126330373767,
+        "EXTRAPOLATED_ESTIMATE",
+        93.52268803103716,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        7000,
+        3,
+        1498.126330373767,
+        "EXTRAPOLATED_ESTIMATE",
+        35.380072348305504,
+        "WITHIN_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        20000,
+        0,
+        3239.949491363148,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        20000,
+        0.5,
+        3239.949491363148,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        20000,
+        1,
+        3239.949491363148,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        20000,
+        2,
+        3239.949491363148,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        20000,
+        3,
+        3239.949491363148,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        30000,
+        0,
+        4383.13476066034,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        30000,
+        0.5,
+        4383.13476066034,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        30000,
+        1,
+        4383.13476066034,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        30000,
+        2,
+        4383.13476066034,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        12,
+        2000000,
+        30000,
+        3,
+        4383.13476066034,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        15000,
+        1000,
+        0,
+        137.06507684306524,
+        "WITHIN_RANGE",
+        137.06507684306524,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        1000,
+        0.5,
+        137.06507684306524,
+        "WITHIN_RANGE",
+        85.75720291856894,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        1000,
+        1,
+        137.06507684306524,
+        "WITHIN_RANGE",
+        53.655519128603586,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        1000,
+        2,
+        137.06507684306524,
+        "WITHIN_RANGE",
+        19.233884664439355,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        1000,
+        3,
+        137.06507684306524,
+        "WITHIN_RANGE",
+        9.641565836819815,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        3000,
+        0,
+        288.076466381739,
+        "WITHIN_RANGE",
+        288.076466381739,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        3000,
+        0.5,
+        288.076466381739,
+        "WITHIN_RANGE",
+        169.84783847541752,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        3000,
+        1,
+        288.076466381739,
+        "WITHIN_RANGE",
+        100.14107919715927,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        3000,
+        2,
+        288.076466381739,
+        "WITHIN_RANGE",
+        31.433500660754586,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        3000,
+        3,
+        288.076466381739,
+        "WITHIN_RANGE",
+        14.438021635688871,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        7000,
+        0,
+        489.6169661145098,
+        "WITHIN_RANGE",
+        489.6169661145098,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        7000,
+        0.5,
+        489.6169661145098,
+        "WITHIN_RANGE",
+        276.68872770517044,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        7000,
+        1,
+        489.6169661145098,
+        "WITHIN_RANGE",
+        156.36029250914714,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        7000,
+        2,
+        489.6169661145098,
+        "WITHIN_RANGE",
+        44.640025677404616,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        7000,
+        3,
+        489.6169661145098,
+        "WITHIN_RANGE",
+        19.263219501684077,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        20000,
+        0,
+        1061.8534134705883,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        20,
+        15000,
+        20000,
+        0.5,
+        1061.8534134705883,
+        "WITHIN_RANGE",
+        564.0511435557584,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        20000,
+        1,
+        1061.8534134705883,
+        "WITHIN_RANGE",
+        299.6211044862563,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        20000,
+        2,
+        1061.8534134705883,
+        "WITHIN_RANGE",
+        74.48381821119726,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        20000,
+        3,
+        1061.8534134705883,
+        "WITHIN_RANGE",
+        29.342486963785902,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        30000,
+        0,
+        1419.929229288329,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        20,
+        15000,
+        30000,
+        0.5,
+        1419.929229288329,
+        "EXTRAPOLATED_ESTIMATE",
+        736.9368693331712,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        30000,
+        1,
+        1419.929229288329,
+        "EXTRAPOLATED_ESTIMATE",
+        382.4669132663503,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        30000,
+        2,
+        1419.929229288329,
+        "EXTRAPOLATED_ESTIMATE",
+        90.26524282813648,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        15000,
+        30000,
+        3,
+        1419.929229288329,
+        "EXTRAPOLATED_ESTIMATE",
+        34.36389597376175,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        1000,
+        0,
+        195.7946179934107,
+        "WITHIN_RANGE",
+        195.7946179934107,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        1000,
+        0.5,
+        195.7946179934107,
+        "WITHIN_RANGE",
+        119.05888060601417,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        1000,
+        1,
+        195.7946179934107,
+        "WITHIN_RANGE",
+        72.39737841841075,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        1000,
+        2,
+        195.7946179934107,
+        "WITHIN_RANGE",
+        24.349304284754925,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        1000,
+        3,
+        195.7946179934107,
+        "WITHIN_RANGE",
+        11.704139590560917,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        3000,
+        0,
+        410.9647586482344,
+        "WITHIN_RANGE",
+        410.9647586482344,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        3000,
+        0.5,
+        410.9647586482344,
+        "WITHIN_RANGE",
+        235.5158935577965,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        3000,
+        1,
+        410.9647586482344,
+        "WITHIN_RANGE",
+        134.9695684388477,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        3000,
+        2,
+        410.9647586482344,
+        "WITHIN_RANGE",
+        39.75855888859495,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        3000,
+        3,
+        410.9647586482344,
+        "WITHIN_RANGE",
+        17.514021153844084,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        7000,
+        0,
+        706.3155767293597,
+        "WITHIN_RANGE",
+        706.3155767293597,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        7000,
+        0.5,
+        706.3155767293597,
+        "WITHIN_RANGE",
+        387.62320659108707,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        7000,
+        1,
+        706.3155767293597,
+        "WITHIN_RANGE",
+        212.72608907155484,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        7000,
+        2,
+        706.3155767293597,
+        "WITHIN_RANGE",
+        56.88093286643689,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        7000,
+        3,
+        706.3155767293597,
+        "WITHIN_RANGE",
+        23.50937909963116,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        20000,
+        0,
+        1509.744016686002,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        20,
+        45000,
+        20000,
+        0.5,
+        1509.744016686002,
+        "WITHIN_RANGE",
+        779.7173642724109,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        20000,
+        1,
+        1509.744016686002,
+        "WITHIN_RANGE",
+        402.6902318728377,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        20000,
+        2,
+        1509.744016686002,
+        "WITHIN_RANGE",
+        94.00167530430616,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        20000,
+        3,
+        1509.744016686002,
+        "WITHIN_RANGE",
+        35.52895897652744,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        45000,
+        30000,
+        0,
+        2028.4106484297317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        45000,
+        30000,
+        0.5,
+        2028.4106484297317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        45000,
+        30000,
+        1,
+        2028.4106484297317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        45000,
+        30000,
+        2,
+        2028.4106484297317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        45000,
+        30000,
+        3,
+        2028.4106484297317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        100000,
+        1000,
+        0,
+        260.746075320621,
+        "WITHIN_RANGE",
+        260.746075320621,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        1000,
+        0.5,
+        260.746075320621,
+        "WITHIN_RANGE",
+        154.96414350885127,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        1000,
+        1,
+        260.746075320621,
+        "WITHIN_RANGE",
+        92.09682540342631,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        1000,
+        2,
+        260.746075320621,
+        "WITHIN_RANGE",
+        29.428266242168615,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        1000,
+        3,
+        260.746075320621,
+        "WITHIN_RANGE",
+        13.676487059727515,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        3000,
+        0,
+        522.6325469094367,
+        "WITHIN_RANGE",
+        522.6325469094367,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        3000,
+        0.5,
+        522.6325469094367,
+        "WITHIN_RANGE",
+        293.80932245468784,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        3000,
+        1,
+        522.6325469094367,
+        "WITHIN_RANGE",
+        165.17133973334637,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        3000,
+        2,
+        522.6325469094367,
+        "WITHIN_RANGE",
+        46.608586517559296,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        3000,
+        3,
+        522.6325469094367,
+        "WITHIN_RANGE",
+        19.958823707797396,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        7000,
+        0,
+        934.7763096199827,
+        "WITHIN_RANGE",
+        934.7763096199827,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        7000,
+        0.5,
+        934.7763096199827,
+        "WITHIN_RANGE",
+        501.6347361864265,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        7000,
+        1,
+        934.7763096199827,
+        "WITHIN_RANGE",
+        269.1953208047434,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        7000,
+        2,
+        934.7763096199827,
+        "WITHIN_RANGE",
+        68.46268496333384,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        7000,
+        3,
+        934.7763096199827,
+        "WITHIN_RANGE",
+        27.37814693471344,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        20000,
+        0,
+        1998.2006219610046,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        20,
+        100000,
+        20000,
+        0.5,
+        1998.2006219610046,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        20,
+        100000,
+        20000,
+        1,
+        1998.2006219610046,
+        "WITHIN_RANGE",
+        509.61289688135906,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        20000,
+        2,
+        1998.2006219610046,
+        "WITHIN_RANGE",
+        113.14635635474959,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        20000,
+        3,
+        1998.2006219610046,
+        "WITHIN_RANGE",
+        41.37709290154954,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        100000,
+        30000,
+        0,
+        2684.6746034348425,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        100000,
+        30000,
+        0.5,
+        2684.6746034348425,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        100000,
+        30000,
+        1,
+        2684.6746034348425,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        100000,
+        30000,
+        2,
+        2684.6746034348425,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        100000,
+        30000,
+        3,
+        2684.6746034348425,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        1000,
+        0,
+        530.4062958360662,
+        "WITHIN_RANGE",
+        530.4062958360662,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        1000,
+        0.5,
+        530.4062958360662,
+        "WITHIN_RANGE",
+        297.8277149507099,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        1000,
+        1,
+        530.4062958360662,
+        "WITHIN_RANGE",
+        167.23283356383163,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        1000,
+        2,
+        530.4062958360662,
+        "WITHIN_RANGE",
+        47.06590253911298,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        1000,
+        3,
+        530.4062958360662,
+        "WITHIN_RANGE",
+        20.119664087807898,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        3000,
+        0,
+        1114.171035189278,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        20,
+        1000000,
+        3000,
+        0.5,
+        1114.171035189278,
+        "WITHIN_RANGE",
+        589.5705251714004,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        3000,
+        1,
+        1114.171035189278,
+        "WITHIN_RANGE",
+        311.9749061613605,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        3000,
+        2,
+        1114.171035189278,
+        "WITHIN_RANGE",
+        76.8908906703034,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        3000,
+        3,
+        1114.171035189278,
+        "WITHIN_RANGE",
+        30.119765419915712,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        7000,
+        0,
+        1958.5479320015738,
+        "WITHIN_RANGE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        20,
+        1000000,
+        7000,
+        0.5,
+        1958.5479320015738,
+        "WITHIN_RANGE",
+        990.6741999333062,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        7000,
+        1,
+        1958.5479320015738,
+        "WITHIN_RANGE",
+        501.10357493804077,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        7000,
+        2,
+        1958.5479320015738,
+        "WITHIN_RANGE",
+        111.65648522296732,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        7000,
+        3,
+        1958.5479320015738,
+        "WITHIN_RANGE",
+        40.928691573314715,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        20000,
+        0,
+        4229.002174904594,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        20000,
+        0.5,
+        4229.002174904594,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        20000,
+        1,
+        4229.002174904594,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        20000,
+        2,
+        4229.002174904594,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        20000,
+        3,
+        4229.002174904594,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        30000,
+        0,
+        5681.859274818422,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        30000,
+        0.5,
+        5681.859274818422,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        30000,
+        1,
+        5681.859274818422,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        30000,
+        2,
+        5681.859274818422,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        1000000,
+        30000,
+        3,
+        5681.859274818422,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        1000,
+        0,
+        673.8135339782672,
+        "EXTRAPOLATED_ESTIMATE",
+        673.8135339782672,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        1000,
+        0.5,
+        673.8135339782672,
+        "EXTRAPOLATED_ESTIMATE",
+        371.1816459857293,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        1000,
+        1,
+        673.8135339782672,
+        "EXTRAPOLATED_ESTIMATE",
+        204.47172306443917,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        1000,
+        2,
+        673.8135339782672,
+        "EXTRAPOLATED_ESTIMATE",
+        55.136215189167515,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        1000,
+        3,
+        673.8135339782672,
+        "EXTRAPOLATED_ESTIMATE",
+        22.91497003520816,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        3000,
+        0,
+        1397.1292845252074,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        20,
+        2000000,
+        3000,
+        0.5,
+        1397.1292845252074,
+        "EXTRAPOLATED_ESTIMATE",
+        726.0428694894632,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        3000,
+        1,
+        1397.1292845252074,
+        "EXTRAPOLATED_ESTIMATE",
+        377.30098007045405,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        3000,
+        2,
+        1397.1292845252074,
+        "EXTRAPOLATED_ESTIMATE",
+        89.30411749573936,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        3000,
+        3,
+        1397.1292845252074,
+        "EXTRAPOLATED_ESTIMATE",
+        34.06282946122624,
+        "WITHIN_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        7000,
+        0,
+        2464.993561814717,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        7000,
+        0.5,
+        2464.993561814717,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        7000,
+        1,
+        2464.993561814717,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        7000,
+        2,
+        2464.993561814717,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        7000,
+        3,
+        2464.993561814717,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        20000,
+        0,
+        5322.546854080201,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        20000,
+        0.5,
+        5322.546854080201,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        20000,
+        1,
+        5322.546854080201,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        20000,
+        2,
+        5322.546854080201,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        20000,
+        3,
+        5322.546854080201,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        30000,
+        0,
+        7151.086936765045,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        30000,
+        0.5,
+        7151.086936765045,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        30000,
+        1,
+        7151.086936765045,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        30000,
+        2,
+        7151.086936765045,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        20,
+        2000000,
+        30000,
+        3,
+        7151.086936765045,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        15000,
+        1000,
+        0,
+        167.59414398311685,
+        "EXTRAPOLATED_ESTIMATE",
+        167.59414398311685,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        1000,
+        0.5,
+        167.59414398311685,
+        "EXTRAPOLATED_ESTIMATE",
+        103.18584197612704,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        1000,
+        1,
+        167.59414398311685,
+        "EXTRAPOLATED_ESTIMATE",
+        63.53037004320897,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        1000,
+        2,
+        167.59414398311685,
+        "EXTRAPOLATED_ESTIMATE",
+        21.96951524516493,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        1000,
+        3,
+        167.59414398311685,
+        "EXTRAPOLATED_ESTIMATE",
+        10.755302802381456,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        3000,
+        0,
+        402.30672424685963,
+        "EXTRAPOLATED_ESTIMATE",
+        402.30672424685963,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        3000,
+        0.5,
+        402.30672424685963,
+        "EXTRAPOLATED_ESTIMATE",
+        230.94697901968397,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        3000,
+        1,
+        402.30672424685963,
+        "EXTRAPOLATED_ESTIMATE",
+        132.5767229423453,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        3000,
+        2,
+        402.30672424685963,
+        "EXTRAPOLATED_ESTIMATE",
+        39.202640223601726,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        3000,
+        3,
+        402.30672424685963,
+        "EXTRAPOLATED_ESTIMATE",
+        17.31246453645309,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        7000,
+        0,
+        587.294837949592,
+        "EXTRAPOLATED_ESTIMATE",
+        587.294837949592,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        7000,
+        0.5,
+        587.294837949592,
+        "EXTRAPOLATED_ESTIMATE",
+        327.0957256873285,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        7000,
+        1,
+        587.294837949592,
+        "EXTRAPOLATED_ESTIMATE",
+        182.1770035242558,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        7000,
+        2,
+        587.294837949592,
+        "EXTRAPOLATED_ESTIMATE",
+        50.34631353666511,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        7000,
+        3,
+        587.294837949592,
+        "EXTRAPOLATED_ESTIMATE",
+        21.26544003380684,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        20000,
+        0,
+        1381.8300370343186,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        30,
+        15000,
+        20000,
+        0.5,
+        1381.8300370343186,
+        "EXTRAPOLATED_ESTIMATE",
+        718.7248048602211,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        20000,
+        1,
+        1381.8300370343186,
+        "EXTRAPOLATED_ESTIMATE",
+        373.8269767460075,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        20000,
+        2,
+        1381.8300370343186,
+        "EXTRAPOLATED_ESTIMATE",
+        88.65620246804032,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        20000,
+        3,
+        1381.8300370343186,
+        "EXTRAPOLATED_ESTIMATE",
+        33.859548856963976,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        15000,
+        30000,
+        0,
+        2048.1789332451317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        15000,
+        30000,
+        0.5,
+        2048.1789332451317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        15000,
+        30000,
+        1,
+        2048.1789332451317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        15000,
+        30000,
+        2,
+        2048.1789332451317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        15000,
+        30000,
+        3,
+        2048.1789332451317,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        1000,
+        0,
+        255.12093152676746,
+        "EXTRAPOLATED_ESTIMATE",
+        255.12093152676746,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        1000,
+        0.5,
+        255.12093152676746,
+        "EXTRAPOLATED_ESTIMATE",
+        151.88567960135646,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        1000,
+        1,
+        255.12093152676746,
+        "EXTRAPOLATED_ESTIMATE",
+        90.4248017985363,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        1000,
+        2,
+        255.12093152676746,
+        "EXTRAPOLATED_ESTIMATE",
+        29.006876271575052,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        1000,
+        3,
+        255.12093152676746,
+        "EXTRAPOLATED_ESTIMATE",
+        13.515297171157709,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        3000,
+        0,
+        583.7701464467227,
+        "EXTRAPOLATED_ESTIMATE",
+        583.7701464467227,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        3000,
+        0.5,
+        583.7701464467227,
+        "EXTRAPOLATED_ESTIMATE",
+        325.28915949625804,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        3000,
+        1,
+        583.7701464467227,
+        "EXTRAPOLATED_ESTIMATE",
+        181.25804810307983,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        3000,
+        2,
+        583.7701464467227,
+        "EXTRAPOLATED_ESTIMATE",
+        50.146290746561185,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        3000,
+        3,
+        583.7701464467227,
+        "EXTRAPOLATED_ESTIMATE",
+        21.195965204291884,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        7000,
+        0,
+        900.6261422714556,
+        "EXTRAPOLATED_ESTIMATE",
+        900.6261422714556,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        7000,
+        0.5,
+        900.6261422714556,
+        "EXTRAPOLATED_ESTIMATE",
+        484.74881664303257,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        7000,
+        1,
+        900.6261422714556,
+        "EXTRAPOLATED_ESTIMATE",
+        260.9089434647956,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        7000,
+        2,
+        900.6261422714556,
+        "EXTRAPOLATED_ESTIMATE",
+        66.79825071131515,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        7000,
+        3,
+        900.6261422714556,
+        "EXTRAPOLATED_ESTIMATE",
+        26.829804417624462,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        45000,
+        20000,
+        0,
+        2089.6787839052463,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        20000,
+        0.5,
+        2089.6787839052463,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        20000,
+        1,
+        2089.6787839052463,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        20000,
+        2,
+        2089.6787839052463,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        20000,
+        3,
+        2089.6787839052463,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        30000,
+        0,
+        3101.500070865644,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        30000,
+        0.5,
+        3101.500070865644,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        30000,
+        1,
+        3101.500070865644,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        30000,
+        2,
+        3101.500070865644,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        45000,
+        30000,
+        3,
+        3101.500070865644,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        1000,
+        0,
+        455.98798465963387,
+        "EXTRAPOLATED_ESTIMATE",
+        455.98798465963387,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        1000,
+        0.5,
+        455.98798465963387,
+        "EXTRAPOLATED_ESTIMATE",
+        259.1547788686306,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        1000,
+        1,
+        455.98798465963387,
+        "EXTRAPOLATED_ESTIMATE",
+        147.28721297465847,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        1000,
+        2,
+        455.98798465963387,
+        "EXTRAPOLATED_ESTIMATE",
+        42.58807008430569,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        1000,
+        3,
+        455.98798465963387,
+        "EXTRAPOLATED_ESTIMATE",
+        18.532306805705943,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        3000,
+        0,
+        1072.085380727352,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        30,
+        100000,
+        3000,
+        0.5,
+        1072.085380727352,
+        "EXTRAPOLATED_ESTIMATE",
+        569.0498309441076,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        3000,
+        1,
+        1072.085380727352,
+        "EXTRAPOLATED_ESTIMATE",
+        302.0447027062568,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        3000,
+        2,
+        1072.085380727352,
+        "EXTRAPOLATED_ESTIMATE",
+        74.95768339839064,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        3000,
+        3,
+        1072.085380727352,
+        "EXTRAPOLATED_ESTIMATE",
+        29.495854002907354,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        7000,
+        0,
+        1624.1923635855462,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        30,
+        100000,
+        7000,
+        0.5,
+        1624.1923635855462,
+        "EXTRAPOLATED_ESTIMATE",
+        833.9386261691119,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        7000,
+        1,
+        1624.1923635855462,
+        "EXTRAPOLATED_ESTIMATE",
+        428.1842765727272,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        7000,
+        2,
+        1624.1923635855462,
+        "EXTRAPOLATED_ESTIMATE",
+        98.65558479687078,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        7000,
+        3,
+        1624.1923635855462,
+        "EXTRAPOLATED_ESTIMATE",
+        36.96865641979785,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        100000,
+        20000,
+        0,
+        3813.9824330622114,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        20000,
+        0.5,
+        3813.9824330622114,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        20000,
+        1,
+        3813.9824330622114,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        20000,
+        2,
+        3813.9824330622114,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        20000,
+        3,
+        3813.9824330622114,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        30000,
+        0,
+        5660.710573094062,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        30000,
+        0.5,
+        5660.710573094062,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        30000,
+        1,
+        5660.710573094062,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        30000,
+        2,
+        5660.710573094062,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        100000,
+        30000,
+        3,
+        5660.710573094062,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        1000,
+        0,
+        700.6598332286084,
+        "EXTRAPOLATED_ESTIMATE",
+        700.6598332286084,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        1000,
+        0.5,
+        700.6598332286084,
+        "EXTRAPOLATED_ESTIMATE",
+        384.76660440898684,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        1000,
+        1,
+        700.6598332286084,
+        "EXTRAPOLATED_ESTIMATE",
+        211.29417278886342,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        1000,
+        2,
+        700.6598332286084,
+        "EXTRAPOLATED_ESTIMATE",
+        56.579317975431664,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        1000,
+        3,
+        700.6598332286084,
+        "EXTRAPOLATED_ESTIMATE",
+        23.40685638660549,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        3000,
+        0,
+        1648.8136988388535,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        30,
+        1000000,
+        3000,
+        0.5,
+        1648.8136988388535,
+        "EXTRAPOLATED_ESTIMATE",
+        845.5626383188181,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        3000,
+        1,
+        1648.8136988388535,
+        "EXTRAPOLATED_ESTIMATE",
+        433.6306617443737,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        3000,
+        2,
+        1648.8136988388535,
+        "EXTRAPOLATED_ESTIMATE",
+        99.64207212262295,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        3000,
+        3,
+        1648.8136988388535,
+        "EXTRAPOLATED_ESTIMATE",
+        37.27225935822346,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        7000,
+        0,
+        2511.59451817058,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        7000,
+        0.5,
+        2511.59451817058,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        7000,
+        1,
+        2511.59451817058,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        7000,
+        2,
+        2511.59451817058,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        7000,
+        3,
+        2511.59451817058,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        20000,
+        0,
+        5897.809635141409,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        20000,
+        0.5,
+        5897.809635141409,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        20000,
+        1,
+        5897.809635141409,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        20000,
+        2,
+        5897.809635141409,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        20000,
+        3,
+        5897.809635141409,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        30000,
+        0,
+        8753.52572951835,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        30000,
+        0.5,
+        8753.52572951835,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        30000,
+        1,
+        8753.52572951835,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        30000,
+        2,
+        8753.52572951835,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        1000000,
+        30000,
+        3,
+        8753.52572951835,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        1000,
+        0,
+        606.5280482117915,
+        "EXTRAPOLATED_ESTIMATE",
+        606.5280482117915,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        1000,
+        0.5,
+        606.5280482117915,
+        "EXTRAPOLATED_ESTIMATE",
+        336.93850587461714,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        1000,
+        1,
+        606.5280482117915,
+        "EXTRAPOLATED_ESTIMATE",
+        187.1761035218887,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        1000,
+        2,
+        606.5280482117915,
+        "EXTRAPOLATED_ESTIMATE",
+        51.43070798552873,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        1000,
+        3,
+        606.5280482117915,
+        "EXTRAPOLATED_ESTIMATE",
+        21.641238789895556,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        3000,
+        0,
+        1441.4716181739564,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "OUTPUT_OUTSIDE_CHART"
+      ],
+      [
+        30,
+        2000000,
+        3000,
+        0.5,
+        1441.4716181739564,
+        "EXTRAPOLATED_ESTIMATE",
+        747.2171521715684,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        3000,
+        1,
+        1441.4716181739564,
+        "EXTRAPOLATED_ESTIMATE",
+        387.3357376308808,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        3000,
+        2,
+        1441.4716181739564,
+        "EXTRAPOLATED_ESTIMATE",
+        91.16856468266197,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        3000,
+        3,
+        1441.4716181739564,
+        "EXTRAPOLATED_ESTIMATE",
+        34.64633617746946,
+        "WITHIN_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        7000,
+        0,
+        2194.336360544721,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        7000,
+        0.5,
+        2194.336360544721,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        7000,
+        1,
+        2194.336360544721,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        7000,
+        2,
+        2194.336360544721,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        7000,
+        3,
+        2194.336360544721,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        20000,
+        0,
+        5152.813496100655,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        20000,
+        0.5,
+        5152.813496100655,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        20000,
+        1,
+        5152.813496100655,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        20000,
+        2,
+        5152.813496100655,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        20000,
+        3,
+        5152.813496100655,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        30000,
+        0,
+        7647.802880712161,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        30000,
+        0.5,
+        7647.802880712161,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        30000,
+        1,
+        7647.802880712161,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        30000,
+        2,
+        7647.802880712161,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ],
+      [
+        30,
+        2000000,
+        30000,
+        3,
+        7647.802880712161,
+        "EXTRAPOLATED_ESTIMATE",
+        null,
+        "INPUT_OUTSIDE_RANGE"
+      ]
+    ]
   },
   "pavement": {
     "cases": 45,
@@ -815,6 +9567,1358 @@
         "lookupSource": "supplied"
       }
     ],
-    "hash": "cde883a4a73f25e6fc0d2ef2a8d9a34fd763314bc09344272fad1aa447136661"
+    "hash": "cde883a4a73f25e6fc0d2ef2a8d9a34fd763314bc09344272fad1aa447136661",
+    "expected": [
+      {
+        "dIn": 8.018621597024783,
+        "dMm": 203.6729885644295,
+        "dM": 0.20367298856442947,
+        "roundedMm": 210,
+        "roundedIn": 8.267716535433072,
+        "target": 6,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 6.960280214198207,
+          "serviceability": -0.15515640508111375,
+          "strength": -0.5107738091179698,
+          "rhs": 5.999999999999124
+        },
+        "residual": -8.757439218243235e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 20
+        }
+      },
+      {
+        "dIn": 11.317892804346268,
+        "dMm": 287.4744772303952,
+        "dM": 0.2874744772303952,
+        "roundedMm": 290,
+        "roundedIn": 11.41732283464567,
+        "target": 7,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 7.955442689583184,
+          "serviceability": -0.17440775679071666,
+          "strength": -0.4866849327930125,
+          "rhs": 6.999999999999455
+        },
+        "residual": -5.453415496958769e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 20
+        }
+      },
+      {
+        "dIn": 14.282798004849987,
+        "dMm": 362.78306932318964,
+        "dM": 0.36278306932318966,
+        "roundedMm": 370,
+        "roundedIn": 14.566929133858268,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 8.643891116629513,
+          "serviceability": -0.17581754825264603,
+          "strength": -0.4747535640412248,
+          "rhs": 7.698970004335643
+        },
+        "residual": -3.7569947153315297e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 20
+        }
+      },
+      {
+        "dIn": 7.87126616895735,
+        "dMm": 199.93016069151668,
+        "dM": 0.19993016069151667,
+        "roundedMm": 200,
+        "roundedIn": 7.874015748031496,
+        "target": 6,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 6.907694231971001,
+          "serviceability": -0.1524460130526915,
+          "strength": -0.46089821891787125,
+          "rhs": 6.000000000000438
+        },
+        "residual": 4.3787196091216174e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 34
+        }
+      },
+      {
+        "dIn": 11.176919727298355,
+        "dMm": 283.8937610733782,
+        "dM": 0.28389376107337816,
+        "roundedMm": 290,
+        "roundedIn": 11.41732283464567,
+        "target": 7,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 7.918700206710718,
+          "serviceability": -0.17423738341976272,
+          "strength": -0.45011282329169217,
+          "rhs": 6.999999999999264
+        },
+        "residual": -7.362999099314038e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 34
+        }
+      },
+      {
+        "dIn": 14.14030441537981,
+        "dMm": 359.16373215064715,
+        "dM": 0.3591637321506472,
+        "roundedMm": 360,
+        "roundedIn": 14.173228346456694,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 8.613989363680409,
+          "serviceability": -0.17579501216842652,
+          "strength": -0.4448743471758416,
+          "rhs": 7.69897000433614
+        },
+        "residual": 1.2168044349891716e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 34
+        }
+      },
+      {
+        "dIn": 7.459715720398561,
+        "dMm": 189.47677929812346,
+        "dM": 0.18947677929812345,
+        "roundedMm": 190,
+        "roundedIn": 7.480314960629921,
+        "target": 6,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 6.756064904264257,
+          "serviceability": -0.1429517733686988,
+          "strength": -0.3187631308962159,
+          "rhs": 5.999999999999342
+        },
+        "residual": -6.581402089977928e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 100
+        }
+      },
+      {
+        "dIn": 10.80105468602347,
+        "dMm": 274.3467890249961,
+        "dM": 0.2743467890249961,
+        "roundedMm": 280,
+        "roundedIn": 11.023622047244094,
+        "target": 7,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 7.818618048217577,
+          "serviceability": -0.17368196074216888,
+          "strength": -0.3505860874747108,
+          "rhs": 7.000000000000698
+        },
+        "residual": 6.981082378842984e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 100
+        }
+      },
+      {
+        "dIn": 13.766231237313157,
+        "dMm": 349.66227342775414,
+        "dM": 0.34966227342775413,
+        "roundedMm": 350,
+        "roundedIn": 13.779527559055119,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 8.534132038752125,
+          "serviceability": -0.1757253282086089,
+          "strength": -0.3650867062073222,
+          "rhs": 7.698970004336195
+        },
+        "residual": 1.758593271006248e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 100
+        }
+      },
+      {
+        "dIn": 7.17052675502583,
+        "dMm": 182.13137957765608,
+        "dM": 0.18213137957765607,
+        "roundedMm": 190,
+        "roundedIn": 7.480314960629921,
+        "target": 6,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 6.645037914997369,
+          "serviceability": -0.13430432221396174,
+          "strength": -0.21638359278254005,
+          "rhs": 6.000000000000868
+        },
+        "residual": 8.677503160470224e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 170
+        }
+      },
+      {
+        "dIn": 10.555168012344026,
+        "dMm": 268.10126751353823,
+        "dM": 0.26810126751353824,
+        "roundedMm": 270,
+        "roundedIn": 10.62992125984252,
+        "target": 7,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 7.7514055441511625,
+          "serviceability": -0.17321984076690433,
+          "strength": -0.2838357033846452,
+          "rhs": 6.999999999999613
+        },
+        "residual": -3.872457909892546e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 170
+        }
+      },
+      {
+        "dIn": 13.526753607788905,
+        "dMm": 343.5795416378382,
+        "dM": 0.3435795416378382,
+        "roundedMm": 350,
+        "roundedIn": 13.779527559055119,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 8.481938992484386,
+          "serviceability": -0.1756711709208146,
+          "strength": -0.31294781722718285,
+          "rhs": 7.698970004336388
+        },
+        "residual": 3.694822225952521e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 170
+        }
+      },
+      {
+        "dIn": 6.161700972582312,
+        "dMm": 156.50720470359073,
+        "dM": 0.15650720470359072,
+        "roundedMm": 160,
+        "roundedIn": 6.299212598425197,
+        "target": 6,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 6.224368949891938,
+          "serviceability": -0.09036140482166939,
+          "strength": 0.16034245493002514,
+          "rhs": 6.000000000000294
+        },
+        "residual": 2.9398705692074145e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 500
+        }
+      },
+      {
+        "dIn": 9.847691994197731,
+        "dMm": 250.13137665262238,
+        "dM": 0.25013137665262236,
+        "roundedMm": 260,
+        "roundedIn": 10.236220472440946,
+        "target": 7,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 7.549729489301708,
+          "serviceability": -0.17124669957751876,
+          "strength": -0.08413278972398654,
+          "rhs": 7.0000000000002025
+        },
+        "residual": 2.0250467969162855e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 500
+        }
+      },
+      {
+        "dIn": 12.867010513362203,
+        "dMm": 326.82206703939994,
+        "dM": 0.3268220670393999,
+        "roundedMm": 330,
+        "roundedIn": 12.992125984251969,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.29434999999999995,
+          "thickness": 8.33357390939798,
+          "serviceability": -0.1754695133000256,
+          "strength": -0.1647843917615548,
+          "rhs": 7.698970004336401
+        },
+        "residual": 3.8191672047105385e-13,
+        "iterations": 32,
+        "z": -0.841,
+        "n": {
+          "z": -0.841,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 500
+        }
+      },
+      {
+        "dIn": 8.471466333137897,
+        "dMm": 215.17524486170257,
+        "dM": 0.21517524486170256,
+        "roundedMm": 220,
+        "roundedIn": 8.661417322834646,
+        "target": 6,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 7.116666566110495,
+          "serviceability": -0.16167845461104655,
+          "strength": -0.5062881114986116,
+          "rhs": 6.000000000000837
+        },
+        "residual": 8.36664071357518e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 20
+        }
+      },
+      {
+        "dIn": 11.91864278461744,
+        "dMm": 302.73352672928297,
+        "dM": 0.302733526729283,
+        "roundedMm": 310,
+        "roundedIn": 12.20472440944882,
+        "target": 7,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 8.107444138975502,
+          "serviceability": -0.17496240995711737,
+          "strength": -0.483781729018043,
+          "rhs": 7.000000000000343
+        },
+        "residual": 3.4283687000424834e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 20
+        }
+      },
+      {
+        "dIn": 15.029051762932472,
+        "dMm": 381.73791477848476,
+        "dM": 0.3817379147784848,
+        "roundedMm": 390,
+        "roundedIn": 15.354330708661418,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 8.796072560647076,
+          "serviceability": -0.17590830076049,
+          "strength": -0.47249425555087954,
+          "rhs": 7.698970004335706
+        },
+        "residual": -3.126388037344441e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 20
+        }
+      },
+      {
+        "dIn": 8.326458285291288,
+        "dMm": 211.4920404463987,
+        "dM": 0.21149204044639872,
+        "roundedMm": 220,
+        "roundedIn": 8.661417322834646,
+        "target": 6,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 7.067418127847786,
+          "serviceability": -0.15985423450411027,
+          "strength": -0.4588638933430048,
+          "rhs": 6.000000000000671
+        },
+        "residual": 6.705747068735946e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 34
+        }
+      },
+      {
+        "dIn": 11.77753510983058,
+        "dMm": 299.1493917896967,
+        "dM": 0.29914939178969674,
+        "roundedMm": 300,
+        "roundedIn": 11.811023622047244,
+        "target": 7,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 8.072386059857143,
+          "serviceability": -0.17485326814255434,
+          "strength": -0.44883279171525564,
+          "rhs": 6.999999999999334
+        },
+        "residual": -6.661338147750939e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 34
+        }
+      },
+      {
+        "dIn": 14.885978203733483,
+        "dMm": 378.1038463748304,
+        "dM": 0.3781038463748304,
+        "roundedMm": 380,
+        "roundedIn": 14.960629921259843,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 8.767452623217332,
+          "serviceability": -0.17589389926309876,
+          "strength": -0.4438887196179843,
+          "rhs": 7.69897000433625
+        },
+        "residual": 2.3092638912203256e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 34
+        }
+      },
+      {
+        "dIn": 7.925685166667252,
+        "dMm": 201.3124032333482,
+        "dM": 0.2013124032333482,
+        "roundedMm": 210,
+        "roundedIn": 8.267716535433072,
+        "target": 6,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 6.927215495548821,
+          "serviceability": -0.15348519818817843,
+          "strength": -0.3250302973614396,
+          "rhs": 5.999999999999203
+        },
+        "residual": -7.966960424710123e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 100
+        }
+      },
+      {
+        "dIn": 11.402826869997316,
+        "dMm": 289.6318024979318,
+        "dM": 0.2896318024979318,
+        "roundedMm": 290,
+        "roundedIn": 11.41732283464567,
+        "target": 7,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 7.977377008748241,
+          "serviceability": -0.17450197543529256,
+          "strength": -0.35417503331280586,
+          "rhs": 7.000000000000143
+        },
+        "residual": 1.4299672557172016e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 100
+        }
+      },
+      {
+        "dIn": 14.511389986876484,
+        "dMm": 368.58930566666265,
+        "dM": 0.36858930566666265,
+        "roundedMm": 370,
+        "roundedIn": 14.566929133858268,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 8.691282769950574,
+          "serviceability": -0.17584981147053788,
+          "strength": -0.3677629541437385,
+          "rhs": 7.698970004336297
+        },
+        "residual": 2.779998453661392e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 100
+        }
+      },
+      {
+        "dIn": 7.648655526733727,
+        "dMm": 194.27585037903665,
+        "dM": 0.19427585037903666,
+        "roundedMm": 200,
+        "roundedIn": 7.874015748031496,
+        "target": 6,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 6.826572207338385,
+          "serviceability": -0.14768921185403783,
+          "strength": -0.23018299548476287,
+          "rhs": 5.999999999999584
+        },
+        "residual": -4.156675004196586e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 170
+        }
+      },
+      {
+        "dIn": 11.159105853942538,
+        "dMm": 283.4412886901405,
+        "dM": 0.28344128869014046,
+        "roundedMm": 290,
+        "roundedIn": 11.41732283464567,
+        "target": 7,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 7.91402704907621,
+          "serviceability": -0.17421452593016,
+          "strength": -0.2911125231464964,
+          "rhs": 6.999999999999554
+        },
+        "residual": -4.4586556668946287e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 170
+        }
+      },
+      {
+        "dIn": 14.272448119771273,
+        "dMm": 362.5201822421903,
+        "dM": 0.3625201822421903,
+        "roundedMm": 370,
+        "roundedIn": 14.566929133858268,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 8.64172864009326,
+          "serviceability": -0.17581597750029654,
+          "strength": -0.31824265825678005,
+          "rhs": 7.698970004336184
+        },
+        "residual": 1.652011860642233e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 170
+        }
+      },
+      {
+        "dIn": 6.7272477019509855,
+        "dMm": 170.87209162955503,
+        "dM": 0.17087209162955502,
+        "roundedMm": 180,
+        "roundedIn": 7.086614173228347,
+        "target": 6,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 6.46698253034287,
+          "serviceability": -0.11749091059578888,
+          "strength": 0.09920838025241972,
+          "rhs": 5.999999999999501
+        },
+        "residual": -4.991562718714704e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 500
+        }
+      },
+      {
+        "dIn": 10.466414049615974,
+        "dMm": 265.8469168602457,
+        "dM": 0.2658469168602457,
+        "roundedMm": 270,
+        "roundedIn": 10.62992125984252,
+        "target": 7,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 7.726793006979761,
+          "serviceability": -0.17302965585162647,
+          "strength": -0.10506335112738684,
+          "rhs": 7.000000000000747
+        },
+        "residual": 7.469580509678053e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 500
+        }
+      },
+      {
+        "dIn": 13.61853486091583,
+        "dMm": 345.91078546726203,
+        "dM": 0.345910785467262,
+        "roundedMm": 350,
+        "roundedIn": 13.779527559055119,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.4487,
+          "thickness": 8.502043280922942,
+          "serviceability": -0.17569291922731434,
+          "strength": -0.17868035735895862,
+          "rhs": 7.698970004336669
+        },
+        "residual": 6.501466032204917e-13,
+        "iterations": 32,
+        "z": -1.282,
+        "n": {
+          "z": -1.282,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 500
+        }
+      },
+      {
+        "dIn": 8.857436547943493,
+        "dMm": 224.9788883177647,
+        "dM": 0.2249788883177647,
+        "roundedMm": 230,
+        "roundedIn": 9.05511811023622,
+        "target": 6,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 7.244165328060006,
+          "serviceability": -0.16556415343035413,
+          "strength": -0.5028511746307137,
+          "rhs": 5.999999999998937
+        },
+        "residual": -1.06314956838105e-12,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 20
+        }
+      },
+      {
+        "dIn": 12.434987399881578,
+        "dMm": 315.84867995699204,
+        "dM": 0.31584867995699206,
+        "roundedMm": 320,
+        "roundedIn": 12.598425196850394,
+        "target": 7,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 8.232543886449854,
+          "serviceability": -0.17527949486576216,
+          "strength": -0.48151439158383486,
+          "rhs": 7.000000000000257
+        },
+        "residual": 2.566835632933362e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 20
+        }
+      },
+      {
+        "dIn": 15.670914065054433,
+        "dMm": 398.0412172523826,
+        "dM": 0.39804121725238256,
+        "roundedMm": 400,
+        "roundedIn": 15.748031496062993,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 8.921401684204723,
+          "serviceability": -0.17595997158677057,
+          "strength": -0.4707217082824346,
+          "rhs": 7.698970004335518
+        },
+        "residual": -5.009326287108706e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 20
+        }
+      },
+      {
+        "dIn": 8.713861212168993,
+        "dMm": 221.33207478909242,
+        "dM": 0.22133207478909242,
+        "roundedMm": 230,
+        "roundedIn": 9.05511811023622,
+        "target": 6,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 7.197330422020762,
+          "serviceability": -0.16426631448407858,
+          "strength": -0.4573141075360966,
+          "rhs": 6.000000000000587
+        },
+        "residual": 5.870859354217828e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 34
+        }
+      },
+      {
+        "dIn": 12.293668026310712,
+        "dMm": 312.2591678682921,
+        "dM": 0.3122591678682921,
+        "roundedMm": 320,
+        "roundedIn": 12.598425196850394,
+        "target": 7,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 8.198789494871024,
+          "serviceability": -0.17520390985332934,
+          "strength": -0.44783558501835335,
+          "rhs": 6.999999999999341
+        },
+        "residual": -6.590283874174929e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 34
+        }
+      },
+      {
+        "dIn": 15.527314286915217,
+        "dMm": 394.3937828876465,
+        "dM": 0.39439378288764654,
+        "roundedMm": 400,
+        "roundedIn": 15.748031496062993,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 8.893786800685305,
+          "serviceability": -0.17595001051027923,
+          "strength": -0.4431167858395078,
+          "rhs": 7.698970004335519
+        },
+        "residual": -5.000444502911705e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 34
+        }
+      },
+      {
+        "dIn": 8.320064921425317,
+        "dMm": 211.32964900420305,
+        "dM": 0.21132964900420304,
+        "roundedMm": 220,
+        "roundedIn": 8.661417322834646,
+        "target": 6,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 7.0652291910648,
+          "serviceability": -0.15976852042602321,
+          "strength": -0.3297106706382079,
+          "rhs": 6.000000000000569
+        },
+        "residual": 5.693223670277803e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 100
+        }
+      },
+      {
+        "dIn": 11.919527593728912,
+        "dMm": 302.75600088071434,
+        "dM": 0.30275600088071436,
+        "roundedMm": 310,
+        "roundedIn": 12.20472440944882,
+        "target": 7,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 8.10766275876649,
+          "serviceability": -0.17496305964808972,
+          "strength": -0.35694969911879587,
+          "rhs": 6.999999999999603
+        },
+        "residual": -3.97015753605956e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 100
+        }
+      },
+      {
+        "dIn": 15.152125054839509,
+        "dMm": 384.8639763929235,
+        "dM": 0.3848639763929235,
+        "roundedMm": 390,
+        "roundedIn": 15.354330708661418,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 8.8204880626905,
+          "serviceability": -0.17591975371890042,
+          "strength": -0.3698483046359172,
+          "rhs": 7.698970004335681
+        },
+        "residual": -3.375077994860476e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 100
+        }
+      },
+      {
+        "dIn": 8.051123481910697,
+        "dMm": 204.4985364405317,
+        "dM": 0.2044985364405317,
+        "roundedMm": 210,
+        "roundedIn": 8.267716535433072,
+        "target": 6,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 6.9717633007026345,
+          "serviceability": -0.15571130897055027,
+          "strength": -0.24030199173114633,
+          "rhs": 6.000000000000937
+        },
+        "residual": 9.370282327836321e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 170
+        }
+      },
+      {
+        "dIn": 11.677206200762111,
+        "dMm": 296.6010374993576,
+        "dM": 0.29660103749935757,
+        "roundedMm": 300,
+        "roundedIn": 11.811023622047244,
+        "target": 7,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 8.047223124775117,
+          "serviceability": -0.17476853273705012,
+          "strength": -0.2967045920372877,
+          "rhs": 7.000000000000779
+        },
+        "residual": 7.789324740770098e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 170
+        }
+      },
+      {
+        "dIn": 14.913459383090082,
+        "dMm": 378.80186833048805,
+        "dM": 0.37880186833048807,
+        "roundedMm": 380,
+        "roundedIn": 14.960629921259843,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 8.77296980993152,
+          "serviceability": -0.17589676096103163,
+          "strength": -0.32235304463397624,
+          "rhs": 7.698970004336514
+        },
+        "residual": 4.956035581926699e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 170
+        }
+      },
+      {
+        "dIn": 7.18742335967723,
+        "dMm": 182.56055333580164,
+        "dM": 0.18256055333580165,
+        "roundedMm": 190,
+        "roundedIn": 7.480314960629921,
+        "target": 6,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 6.6516322706106035,
+          "serviceability": -0.13485877354239528,
+          "strength": 0.058976502931339804,
+          "rhs": 5.999999999999548
+        },
+        "residual": -4.5208281562736374e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 1000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 500
+        }
+      },
+      {
+        "dIn": 10.994451321097703,
+        "dMm": 279.25906355588165,
+        "dM": 0.27925906355588165,
+        "roundedMm": 280,
+        "roundedIn": 11.023622047244094,
+        "target": 7,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 7.8705058387207245,
+          "serviceability": -0.17398781583351663,
+          "strength": -0.12076802288727455,
+          "rhs": 6.999999999999933
+        },
+        "residual": -6.661338147750939e-14,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 10000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 500
+        }
+      },
+      {
+        "dIn": 14.263535279472265,
+        "dMm": 362.2937960985955,
+        "dM": 0.3622937960985955,
+        "roundedMm": 370,
+        "roundedIn": 14.566929133858268,
+        "target": 7.698970004336019,
+        "terms": {
+          "reliability": -0.57575,
+          "thickness": 8.639865241031796,
+          "serviceability": -0.17581461677103305,
+          "strength": -0.18933061992508562,
+          "rhs": 7.698970004335678
+        },
+        "residual": -3.410605131648481e-13,
+        "iterations": 32,
+        "z": -1.645,
+        "n": {
+          "z": -1.645,
+          "so": 0.35,
+          "w": 50000000,
+          "pt": 2.5,
+          "dpsi": 2,
+          "sc": 616.5140894675196,
+          "ec": 3362957.491256766,
+          "cd": 1,
+          "j": 3.8,
+          "k": 500
+        }
+      }
+    ]
   }
 }
