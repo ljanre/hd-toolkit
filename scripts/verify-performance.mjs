@@ -16,6 +16,10 @@ assert.equal(JSON.stringify(optimized.SubgradeModelTables),JSON.stringify(origin
 for(const file of ['dist/components/subbase-thickness/tests/test-report.json','dist/components/subbase-thickness/dist/qa.html','dist/components/subgrade-reaction/README.md','dist/components/subgrade-reaction/figure-3-3.png'])await assert.rejects(access(new URL('../'+file,import.meta.url)),{code:'ENOENT'});
 for(const file of ['dist/components/subgrade-reaction/figure-3-3.webp','dist/components/subgrade-reaction/figure-3-6.webp','dist/components/subbase-thickness/dist/assets/rn29-figure6-display.png'])await access(new URL('../'+file,import.meta.url));
 const html=await read('dist/index.html');
+const scripts=new Set([...html.matchAll(/<script\b[^>]*src="([^"]+)"/g)].map(match=>match[1]));
+const preloads=[...html.matchAll(/<link rel="preload" as="script" href="([^"]+)"/g)].map(match=>match[1]);
+assert.equal(preloads.length,4);for(const url of preloads){assert.ok(scripts.has(url),'Preloads must exactly match versioned script URLs to avoid duplicate requests');assert.ok(url.includes('v='+manifest.version));}
+
 assert.match(html,new RegExp('hd-toolkit-build" content="'+manifest.version));
 assert.match(html,new RegExp('tool-registry.js\\?v='+manifest.version));
 assert.equal((html.match(/\/component\.js/g)||[]).length,0,'Individual registration scripts should not load in the main page');

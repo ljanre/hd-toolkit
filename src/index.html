@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Offline AASHTO 1993 rigid pavement calculator with automatic R-to-Z lookup and an interactive pavement cross-section.">
   <title>HD Toolkit | Rigid Pavement Design</title>
+  <link rel="preload" as="script" href="./components/subgrade-reaction/model-data.js">
+  <link rel="preload" as="script" href="./components/subgrade-reaction/engine.js">
+  <link rel="preload" as="script" href="./components/subgrade-reaction/nomograph-extension.js?v=nomograph-format-4">
+  <link rel="preload" as="script" href="./components/subgrade-reaction/loss-support.js">
   <style>
     :root{--ink:#18302f;--muted:#61716f;--line:#dce5e0;--page:#f3f6f3;--green:#d9f6df;--green-line:#89c899;--green-ink:#145532;--yellow:#fff2ad;--yellow-line:#e4c854;--dark:#153f34;--red:#a42626;--red-bg:#fff0ed;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
     *{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--page);font-family:Inter,Segoe UI,Arial,sans-serif;font-size:14px;line-height:1.5}
@@ -724,7 +728,9 @@
   $('fcMPa').addEventListener('blur',()=>{formatFc();render();});
   $('fcUnitMPa').addEventListener('change',function(){const strength=number('fcMPa');fcDisplayMPa=this.checked;$('fcDisplayUnit').textContent=fcDisplayMPa?'MPa':'psi';formatFc(strength);render();});
   $('scStandard').addEventListener('change',render);
-  $('foundationMode').addEventListener('change',render);
+  // Keep focus-driven help from moving the switch between pointer-down and click.
+  $('foundationMode').addEventListener('pointerdown',function(e){e.preventDefault();});
+  $('foundationMode').addEventListener('change',function(){render();this.focus();});
   $('foundationMaterial').addEventListener('change',function(){window.RigidFoundation.selectMaterial();render();});
   $('j').addEventListener('input',matchLoadTransfer);
   $('jCondition').addEventListener('change',function(){updateLoadTransfer(true);render();});

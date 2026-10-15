@@ -207,3 +207,12 @@ rigid('foundationDsb').value='250';foundation.update();assert.equal(rigid('found
 foundation.restore();foundation.update();assert.equal(rigid('k').value,'','Reset clears previous foundation values');
 console.log('Integrated foundation support passed: shared engines, live overlays, adjusted input, invalidation, state restoration and manual mode.');
 
+
+// Unrelated renders reuse foundation output, but changes and restores invalidate it.
+foundation.restore({mode:'auto',dsb:8,esb:50000,mr:7000,ls:1});foundation.update();
+let recomputations=0;const originalFoundationCalculation=context.NomographExtension.calculate;context.NomographExtension.calculate=(...args)=>{recomputations++;return originalFoundationCalculation(...args);};
+const cachedK=rigid('k').value;for(let i=0;i<30;i++)foundation.update();assert.equal(recomputations,0);assert.equal(rigid('k').value,cachedK);
+rigid('foundationMr').value='8000';foundation.update();assert.equal(recomputations,1);assert.equal(Number(rigid('k').value),Math.round(loss(originalFoundationCalculation({DSB:8,ESB:50000,MR:8000}).result,1).result));
+rigid('foundationLs').value='4';foundation.update();assert.equal(rigid('k').value,'','Invalidation still clears a previously valid design value');
+foundation.restore({mode:'auto',dsb:8,esb:50000,mr:7000,ls:1});foundation.update();assert.equal(rigid('k').value,cachedK,'Restore forces a fresh, correct result');
+context.NomographExtension.calculate=originalFoundationCalculation;
