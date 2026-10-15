@@ -65,7 +65,7 @@ The public Project Road Details tool under Others searches the supplied DPWH nat
 
 Data is loaded only when opening this tool. `scripts/import-road-network.py <csv-path>` regenerates the compact dictionary-encoded `network-data.json`, preserves every CSV cell and records the source SHA-256. Run the regression checks and review inventory changes before publishing a replacement snapshot.
 
-For Flexible Pavement Design and Culvert, public mode shows the shared Under Development panel. Developer Mode reveals the existing calculator and removes the UD label. Returning to public mode hides the calculator without discarding its inputs.
+For Flexible Pavement Design, Culvert, Curve Widening, Swept Path Analysis and Design Criteria, public mode shows the shared Under Development panel. Developer Mode reveals the existing calculator and removes the UD label. Returning to public mode hides the calculator without discarding its inputs.
 
 
 ### Design Criteria typical section
