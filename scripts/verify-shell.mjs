@@ -79,7 +79,7 @@ for(const link of adminLinks){assert.equal(link.hidden,true);shell.location.hash
 nodes.get('adminModeToggle').handlers.click();assert.equal(strengthLink.hidden,true);nodes.get('adminPassword').value='revilla123';submitAdmin();assert.equal(strengthLink.hidden,false);shell.location.hash='#strengthTool';dispatch('hashchange');assert.equal(nodes.get('strengthTool').hidden,false);
 for(const link of adminLinks){assert.equal(link.hidden,false);shell.location.hash='#'+link.dataset.tool+'Tool';dispatch('hashchange');assert.equal(nodes.get(link.dataset.tool+'Tool').hidden,false);}
 nodes.get('adminModeToggle').handlers.click();assert.equal(shell.location.hash,'#pavementTool');for(const link of adminLinks)assert.equal(link.hidden,true);
-for(const [id,title] of [['trafficTool','CESAL, W18 (UD)'],['flexibleTool','Flexible Pavement Design (UD)']]){shell.location.hash='#'+id;dispatch('hashchange');assert.equal(nodes.get(id).hidden,false,'UD tools remain public with Admin off');assert.equal(shell.document.title,'HD Toolkit | '+title);}
+for(const [id,title] of [['trafficTool','CESAL, W18'],['flexibleTool','Flexible Pavement Design (UD)']]){shell.location.hash='#'+id;dispatch('hashchange');assert.equal(nodes.get(id).hidden,false,'UD tools remain public with Admin off');assert.equal(shell.document.title,'HD Toolkit | '+title);}
 
 shell.location.hash='#culvertTool';dispatch('hashchange');
 assert.equal(nodes.get('culvertTool').hidden,false);assert.equal(nodes.get('pavementTool').hidden,true);

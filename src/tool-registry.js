@@ -7,7 +7,7 @@
     { id: 'others', title: 'Others', icon: '⌖' }
   ];
   const tools = {
-    traffic: { id: 'trafficTool', title: 'CESAL, W18 (UD)', development: 'ud', group: 'pavement', icon: '⇄', element: 'design-traffic', page: 'index.html' },
+    traffic: { id: 'trafficTool', title: 'CESAL, W18', group: 'pavement', icon: '⇄', element: 'design-traffic', page: 'index.html' },
     cbr: { id: 'cbrTool', title: 'Design CBR', group: 'pavement', icon: '◫', element: 'design-cbr', page: 'index.html' },
     pavement: { id: 'pavementTool', title: 'Rigid Pavement Design', group: 'pavement', icon: '▤' },
     flexible: { id: 'flexibleTool', title: 'Flexible Pavement Design (UD)', development: 'ud', group: 'pavement', icon: '▥', element: 'flexible-pavement', page: 'index.html' },
