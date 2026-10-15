@@ -22,16 +22,14 @@
     row.count=input(tr,'survey AADT');row.count.placeholder='AADT';
     for(const [key,label] of [['openingDisplay','opening AADT'],['trafficDisplay','cumulative design traffic']]){const cell=make('td'),output=make('output','—');output.setAttribute('aria-label',profile.code+' '+label);cell.append(output);tr.append(cell);row[key]=output;}
     row.weight=input(efTr,'adopted GVW (kg)');row.fractions=input(efTr,'physical axle fractions','text');row.fractions.placeholder='e.g. 0.2, 0.8';
-    const modeCell=make('td'),mode=make('select');for(const [value,label] of [['auto','From Axle Fractions'],['manual','Entered EF']]){const option=make('option',label);option.value=value;mode.append(option);}mode.setAttribute('aria-label',profile.code+' EF source');modeCell.append(mode);efTr.append(modeCell);row.mode=mode;
-    const efCell=make('td'),automatic=make('input'),manual=make('input'),note=make('small');automatic.readOnly=true;automatic.setAttribute('aria-label',profile.code+' calculated EF');manual.type='number';manual.min='0';manual.step='any';manual.setAttribute('aria-label',profile.code+' entered EF');manual.hidden=true;note.className='sheet-row-note';efCell.append(automatic,manual,note);efTr.append(efCell);row.automatic=automatic;row.manual=manual;row.note=note;
+    const efCell=make('td'),automatic=make('input'),note=make('small');automatic.readOnly=true;automatic.setAttribute('aria-label',profile.code+' calculated EF');note.className='sheet-row-note';efCell.append(automatic,note);efTr.append(efCell);row.automatic=automatic;row.note=note;
     const removeCell=make('td'),remove=make('button','−');remove.type='button';remove.setAttribute('aria-label','Remove loading case '+(rows.length+1));remove.addEventListener('click',()=>{rows.splice(rows.indexOf(row),1);tr.remove();efTr.remove();update();});removeCell.append(remove);tr.append(removeCell);
     function setProfile(){const p=V.profiles.find(p=>p.code===select.value);row.sampleName=null;customOption.textContent='New Configuration';if(p){row.customKind=p.kind;row.weight.value=String(p.gvw);row.fractions.value=p.fractions?p.fractions.join(', '):'';}updateVisual(row,rows.includes(row)?rows.indexOf(row):rows.length);}
 
     select.addEventListener('change',()=>{setProfile();update();});setProfile();rows.push(row);$('sheetRows').append(tr);$('sheetEFRows').append(efTr);return row;
   }
   function factor(row){
-    row.note.textContent='';row.automatic.hidden=row.mode.value==='manual';row.manual.hidden=row.mode.value!=='manual';
-    if(row.mode.value==='manual')return n(row.manual);
+    row.note.textContent='';
     if(!row.fractions.value.trim())return NaN;
     const fractions=row.fractions.value.trim().split(/[\s,;]+/).map(Number),weight=n(row.weight);
     if(!Number.isFinite(weight)||weight<=0)throw new Error('Enter a positive GVW for '+row.select.value+'.');
@@ -50,7 +48,7 @@
     body.append(make('h3','1. Design Traffic'),make('p',`Survey ${$('sheetSurvey').value}; opening ${$('sheetOpening').value}; delay m = ${delay} years; design period n = ${years} years; annual g = ${math(rate)}.`),make('p','Opening AADT = survey AADT × (1+g)^m. G = [(1+g)^n − 1] / g; G = n when g = 0. Design Trafficᵢ = opening AADTᵢ × G × 365.'));
     for(const {row,d,traffic,label} of cases)body.append(make('h4',label),make('p',`Opening AADT = ${math(n(row.count))} × (1 + ${math(rate)})^${delay} = ${math(d.opening)} vehicles/day.`),make('p',n(row.count)===0?'Zero AADT: Design Trafficᵢ = 0 vehicles.':`G = ${math(d.growth)}; Design Trafficᵢ = ${math(d.opening)} × ${math(d.growth)} × 365 = ${math(traffic)} vehicles.`));
     body.append(make('h3','2. Equivalence Factor · EF'),make('p','Axle load (tonnes) = GVW (kg) × axle fraction / 1,000. EFᵢ = Σ(axle load / 8.2)^4.'));
-    for(const {row,label} of cases)body.append(make('h4',label),make('p',row.mode.value==='manual'?`Adopted entered EF = ${math(row.ef)} ESAL/vehicle.`:`GVW = ${math(n(row.weight))} kg; axle fractions: ${row.fractions.value||'not provided'}. Calculated EF = ${math(row.ef)} ESAL/vehicle${n(row.count)===0?' (zero traffic; no loading contribution)':''}.`));
+    for(const {row,label} of cases)body.append(make('h4',label),make('p',`GVW = ${math(n(row.weight))} kg; axle fractions: ${row.fractions.value||'not provided'}. Calculated EF = ${math(row.ef)} ESAL/vehicle${n(row.count)===0?' (zero traffic; no loading contribution)':''}.`));
     body.append(make('h3','3. Distribution Factors'),make('p',`DD = ${math(dd)}; DL = ${math(dl)}. Apply these shares once after summing CESALᵢ.`));
     body.append(make('h3','4. CESAL and W18'));
     for(const {row,d,traffic,label} of cases)body.append(make('h4',label),make('p',d.esal===null?'CESALᵢ pending: enter a verified EF. Excluded from the partial subtotal.':`CESALᵢ = Design Trafficᵢ × EFᵢ = ${math(traffic)} × ${math(row.ef)} = ${math(traffic*row.ef)} ESAL before distribution.`),make('p',d.esal===null?'Design-lane contribution pending.':`Design-lane contribution = ${math(traffic*row.ef)} × ${math(dd)} × ${math(dl)} = ${math(d.esal)} ESAL.`));
@@ -73,7 +71,7 @@
     $('sheetAuditParameters').textContent='Survey '+($('sheetSurvey').value||'—')+' · Opening '+($('sheetOpening').value||'—')+' · n = '+($('sheetYears').value||'—')+' years · r = '+($('sheetGrowth').value||'—')+'% · DD = '+($('sheetDD').value||'—')+' · DL = '+($('sheetDL').value||'—');
     try{
       for(const row of rows)updateVisual(row,rows.indexOf(row));
-      for(const row of rows){row.automatic.value='';row.note.textContent='';row.automatic.hidden=row.mode.value==='manual';row.manual.hidden=row.mode.value!=='manual';const included=row.count.value.trim()!==''||row.count.validity.badInput;row.tr.classList.toggle('sheet-included',included);if(!included)continue;active.push(row);const count=n(row.count);if(!Number.isFinite(count)||count<0)throw new Error('Enter nonnegative AADT for '+row.select.value+'.');row.ef=count===0?0:factor(row);if(Number.isFinite(row.ef))row.automatic.value=row.ef.toFixed(3);else{row.automatic.value='';row.note.textContent=row.mode.value==='manual'?'Enter adopted EF.':'Enter verified axle fractions.';}}
+      for(const row of rows){row.automatic.value='';row.note.textContent='';const included=row.count.value.trim()!==''||row.count.validity.badInput;row.tr.classList.toggle('sheet-included',included);if(!included)continue;active.push(row);const count=n(row.count);if(!Number.isFinite(count)||count<0)throw new Error('Enter nonnegative AADT for '+row.select.value+'.');row.ef=count===0?0:factor(row);if(Number.isFinite(row.ef))row.automatic.value=row.ef.toFixed(3);else{row.automatic.value='';row.note.textContent='Enter verified axle fractions using New Configuration.';}}
       if(!active.length){summary();return;}
       const survey=n($('sheetSurvey')),opening=n($('sheetOpening'));if(!Number.isInteger(survey)||!Number.isInteger(opening)||survey<1900||opening>2200||opening<survey)throw new Error('Enter valid survey and opening years (1900–2200); opening cannot precede the survey.');
       result=C.forecast({aadt:active.map(row=>n(row.count)),rates:active.map(()=>n($('sheetGrowth'))),factors:active.map(row=>row.ef),years:n($('sheetYears')),delay:opening-survey,dd:n($('sheetDD')),dl:n($('sheetDL')),preview:true});

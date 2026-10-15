@@ -20,3 +20,5 @@ const worksheetHtml=await readFile(new URL('index.html',root),'utf8');for(const 
 assert.match(worksheetHtml,/<details id="trafficCalculationSteps"[^>]*hidden/,'Calculation steps must start hidden');
 
 const labelledTruck=V.diagram(V.profiles.find(p=>p.code==='1-1'),true);assert.ok(labelledTruck.includes('0.2W')&&labelledTruck.includes('0.8W'),'EF illustration must show each physical axle share');assert.ok(labelledTruck.includes('W = 18 t'));
+
+assert.ok(!worksheetHtml.includes('<th>EF Source</th>'),'EF Source selector column is removed');assert.ok(labelledTruck.includes('class="axle-load-arrow"')&&labelledTruck.includes('stroke="#c43127"'),'Engineering axle loads use red arrows');assert.ok(labelledTruck.includes('3.6 t')&&labelledTruck.includes('14.4 t'),'Axle diagram shows source loads in tonnes');
