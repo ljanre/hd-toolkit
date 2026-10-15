@@ -18,3 +18,5 @@ console.log('Truck configuration forecast: supplied worksheet, zero growth, open
 
 const worksheetHtml=await readFile(new URL('index.html',root),'utf8');for(const id of ['sheetApply','sheetExport','sheetPrint','sheetEquation'])assert.ok(!worksheetHtml.includes('id="'+id+'"'),'Removed traffic control/note: '+id);
 assert.match(worksheetHtml,/<details id="trafficCalculationSteps"[^>]*hidden/,'Calculation steps must start hidden');
+
+const labelledTruck=V.diagram(V.profiles.find(p=>p.code==='1-1'),true);assert.ok(labelledTruck.includes('0.2W')&&labelledTruck.includes('0.8W'),'EF illustration must show each physical axle share');assert.ok(labelledTruck.includes('W = 18 t'));
