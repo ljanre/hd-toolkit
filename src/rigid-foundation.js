@@ -10,6 +10,7 @@
   function selectMaterial(){const range=materialRanges[$('foundationMaterial').value];if(range)$('foundationEsb').value=String(range[0]);}
   function syncNomographs(){
     window.ManualNomographs?.setEnabled(!$('foundationMode').checked);
+    for(const id of ['pavementCompositeValue','pavementCorrectedValue'])$(id).hidden=!$('foundationMode').checked;
     NomographExtension.updatePlot($('pavementExtendedPlot'),$('foundationExtendedPlot').innerHTML);$('pavementExtensionNote').textContent=$('foundationExtensionNote').textContent;
     $('pavementCompositePath').setAttribute('points',$('foundationCompositePath').getAttribute('points')||'');
     $('pavementCompositePoints').innerHTML=$('foundationCompositePoints').innerHTML;
