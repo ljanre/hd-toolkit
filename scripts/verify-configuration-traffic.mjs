@@ -22,3 +22,9 @@ assert.match(worksheetHtml,/<details id="trafficCalculationSteps"[^>]*hidden/,'C
 const labelledTruck=V.diagram(V.profiles.find(p=>p.code==='1-1'),true);assert.ok(labelledTruck.includes('0.2W')&&labelledTruck.includes('0.8W'),'EF illustration must show each physical axle share');assert.ok(labelledTruck.includes('W = 18 t'));
 
 assert.ok(!worksheetHtml.includes('<th>EF Source</th>'),'EF Source selector column is removed');assert.ok(labelledTruck.includes('class="axle-load-arrow"')&&labelledTruck.includes('stroke="#c43127"'),'Engineering axle loads use red arrows');assert.ok(labelledTruck.includes('3.6 t')&&labelledTruck.includes('14.4 t'),'Axle diagram shows source loads in tonnes');
+
+runInNewContext(await readFile(new URL('custom-configuration.js',root),'utf8'),context);const custom=context.VehicleConfiguration;
+const adopted=custom.validate({name:'Project truck',layout:'1-1',gvw:20000,fractions:'0.25, 0.75',useManual:false});assert.ok(Math.abs(adopted.ef-C.axleFactor('5,15'))<1e-12);
+assert.equal(custom.validate({layout:'11-12',gvw:43500,fractions:'',useManual:true,manualEF:'2.5'}).ef,2.5);
+for(const draft of [{layout:'1-1',gvw:0,fractions:'0.2,0.8'},{layout:'1-2',gvw:18000,fractions:'0.2,0.8'},{layout:'1-1',gvw:18000,fractions:'0.2,0.7'},{layout:'1-1',gvw:18000,fractions:'0.2,0.8',useManual:true,manualEF:-1}])assert.throws(()=>custom.validate(draft));
+const escapedDiagram=V.diagram({...V.profiles[0],name:'<img src=x onerror=alert(1)>'},true);assert.ok(!escapedDiagram.includes('<img'));assert.ok(escapedDiagram.includes('&lt;img'));
