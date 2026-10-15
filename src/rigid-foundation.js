@@ -3,7 +3,7 @@
   const $=id=>document.getElementById(id),fields={DSB:'foundationDsb',ESB:'foundationEsb',MR:'foundationMr'};
   const number=id=>$(id).value.trim()===''?null:Number($(id).value)/(id==='foundationDsb'?25.4:1);
   const fmt=value=>Number.isFinite(value)?value.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
-  let previousMode='auto',manualValue='';
+  let previousMode='auto',manualValue=null;
   const materialRanges={unbound:[15000,45000],lime:[20000,70000],bituminous:[40000,300000],asphalt:[350000,1000000],'cement-aggregate':[500000,1000000],'cement-treated':[1000000,2000000]};
   function selectMaterial(){const range=materialRanges[$('foundationMaterial').value];if(range)$('foundationEsb').value=String(range[0]);}
   function syncNomographs(){
@@ -32,9 +32,9 @@
     $('foundationEsb').min=String(minimum);$('foundationEsb').max=String(maximum);
     const rangeText=range.map(value=>value.toLocaleString('en-US')).join('–')+' psi';
     $('foundationEsbHelp').textContent=state.material==='project'?'Positive project modulus; edge-curve extrapolation outside 15,000–1,000,000 psi.':'Material range: '+rangeText+'.';
-    if(state.mode!==previousMode){if(previousMode==='manual')manualValue=$('k').value;if(manual)$('k').value=manualValue;previousMode=state.mode;}
+    if(state.mode!==previousMode){if(previousMode==='manual')manualValue=$('k').value;if(manual&&manualValue!==null)$('k').value=manualValue;previousMode=state.mode;}
     $('foundationInputs').hidden=false;
-    for(const id of ['foundationMaterial','foundationEsb','foundationMr','foundationLs'])$(id).closest('.field').hidden=manual;
+    for(const id of ['foundationMaterial','foundationEsb','foundationMr','foundationLs'])$(id).closest('.field').hidden=false;
     $('foundationDsb').disabled=false;$('foundationDsb').readOnly=false;
     $('foundationDsb').min='0';$('foundationDsb').max='1000';
     $('foundationDsbHelp').textContent=manual?'Pavement drawing: 0–1,000 mm. Does not change manual kcorr.':'Positive thickness up to 1,000 mm; edge-curve extrapolation outside 101.6–508 mm.';
