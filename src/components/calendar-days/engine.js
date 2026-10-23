@@ -15,5 +15,25 @@ function calendarDays(amount) {
   return { ...limits[index], index };
 }
 
-globalThis.CalendarDays = Object.freeze({ limits, calculate: calendarDays });
+const dayMs = 86400000;
+function dateValue(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value) || value.startsWith('0000')) {
+    throw new RangeError('Enter a complete, valid date.');
+  }
+  const time = Date.parse(value + 'T00:00:00Z');
+  if (!Number.isFinite(time) || new Date(time).toISOString().slice(0, 10) !== value) {
+    throw new RangeError('Enter a complete, valid date.');
+  }
+  return time;
+}
+function elapsedDays(ntp, issued) {
+  const start = dateValue(ntp), end = dateValue(issued);
+  if (end < start) throw new RangeError('The document date cannot be before the signed NTP date.');
+  return (end - start) / dayMs;
+}
+function deadline(ntp, days) {
+  if (!Number.isInteger(days) || days < 0) throw new RangeError('Enter a valid calendar day limit.');
+  return new Date(dateValue(ntp) + days * dayMs).toISOString();
+}
+globalThis.CalendarDays = Object.freeze({ limits, calculate: calendarDays, elapsedDays, deadline });
 })();
