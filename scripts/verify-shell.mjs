@@ -24,6 +24,7 @@ for (const id of ['flexibleTool','sidebarToggle','pavementTool','subgradeTool','
 nodes.set('criteriaTool',create());nodes.set('geometryTool',create());nodes.set('wideningTool',create());
 nodes.set('projectTool',create());
 nodes.set('calendarTool',create());
+nodes.set('seismicTool',create());
 nodes.set('culvertTool',create());
 nodes.get('adminPasswordDialog').showModal=function(){this.open=true;};nodes.get('adminPasswordDialog').close=function(){this.open=false;this.handlers.close();};
 nodes.set('foundationSteps',create());
@@ -59,7 +60,7 @@ dispatch('message',{source:{},data:{type:'hd-toolkit-design-period',years:25}});
 dispatch('message',{source:trafficFrame.contentWindow,data:{type:'hd-toolkit-design-period',years:25}});assert.equal(nodes.get('rigidDesignYears').value,'25');assert.equal(nodes.get('rigidDesignYears').lastEvent.type,'input');
 dispatch('message',{source:trafficFrame.contentWindow,data:{type:'hd-toolkit-design-period',years:0}});assert.equal(nodes.get('rigidDesignYears').value,'25');
 nodes.get('rigidDesignYears').manualPeriod=true;nodes.get('rigidDesignYears').value='30';dispatch('message',{source:trafficFrame.contentWindow,data:{type:'hd-toolkit-design-period',years:20}});assert.equal(nodes.get('rigidDesignYears').value,'30','Manual design period must not be overwritten by background traffic updates');
-for(const id of ['calendarTool','flexibleTool','pavementTool','subgradeTool','subbaseTool','strengthTool','trafficTool','cbrTool','rainfallTool','coordinatesTool']) {shell.location.hash='#'+id;dispatch('hashchange');assert.equal(nodes.get(id).hidden,false);}
+for(const id of ['seismicTool','calendarTool','flexibleTool','pavementTool','subgradeTool','subbaseTool','strengthTool','trafficTool','cbrTool','rainfallTool','coordinatesTool']) {shell.location.hash='#'+id;dispatch('hashchange');assert.equal(nodes.get(id).hidden,false);}
 storage.set('hd-admin-mode','true');runInNewContext(await readFile(path.join(root,'admin-mode.js'),'utf8'),shell);
 assert.equal(nodes.get('foundationSteps').hidden,true);
 shell.location.hash='#rainfallTool';dispatch('hashchange');assert.equal(nodes.get('rainfallTool').hidden,false,'Rainfall remains public with Admin off');

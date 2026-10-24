@@ -19,7 +19,7 @@ npm test
 npm run build
 ```
 
-The test command runs 17 regression suites. The build creates a clean production site in root `dist/`, excluding development notes, tests and QA pages. It compacts model tables without changing their values, uses pixel-identical WebP foundation charts, and versions local assets and calculator documents automatically. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
+The test command runs 28 regression suites. The build creates a clean production site in root `dist/`, excluding development notes, tests and QA pages. It compacts model tables without changing their values, uses pixel-identical WebP foundation charts, and versions local assets and calculator documents automatically. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
 
 ## Upload to GitHub
 
@@ -127,3 +127,8 @@ Editing the rigid pavement Load Transfer Coefficient J synchronizes the Joint La
 The [15 October 2026 QA report](docs/qa-kcorr-2026-10-15.md) documents the pre-feature numerical baseline, regression coverage, production browser checks and local performance measurements. `npm test` includes a comparison of 875 foundation/correction combinations and 45 slab results (with a bounded tolerance for Node/V8 floating-point roundoff and exact engine-source hashes) against the pre-manual-kcorr reference. Unchanged foundation inputs reuse existing output/rendering; dependency preloads retain execution order and share the same versioned URLs as their scripts.
 
 The CESAL, W18 terminology follows the supplied concept: Design Trafficᵢ denotes cumulative two-way vehicles, CESALᵢ denotes equivalent axle loads before directional/lane distribution, and total CESAL W18 = ΣCESALᵢ × DD × DL. Rigid/flexible pavement and flexible-subbase inputs refer to final design-lane CESAL, not cumulative vehicles. Internal route IDs and saved ESAL inputs are retained.
+
+
+### Seismic coefficients kh & kv
+
+Others includes a public Seismic kh & kv worksheet using the DPWH BSDS Guide wall/abutment coefficient method. Enter reference PGA from HazardHunter PH, its unit and map basis, a project-adopted Fpga and foundation condition. The result shows normalized PGA, As, kh0, kh and kv, with the unreduced case selected initially and a conditional Chapter 7 half-coefficient wall-inertia example available. kv follows the cited example as zero. The calculator links directly to the DPWH manual and D.O.18, s.2020; it does not assume a site factor, choose a design return period, retrieve map values or claim a general slope-stability design method. See the [component reference](src/components/seismic-coefficients/README.md) for scope, equations, precision and checks.
