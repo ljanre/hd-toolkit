@@ -52,6 +52,7 @@
 .sheet-traffic{min-width:750px!important}
 #sheetNew{background:#eaf3fa;border-color:#8db7d2;color:#18577d}
 #sheetShoulder{background:#f0faf4;border-color:#9ac8b4;color:#17665d}
+#sheetShoulder[aria-pressed="true"]{background:#17665d;border-color:#17665d;color:white}
 #sheetShoulderStatus{font-size:11px;line-height:1.6;color:#17665d;margin:0}
 
 /* Fit the traffic table to its worksheet; wrap the selected native-option label. */

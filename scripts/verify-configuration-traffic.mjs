@@ -59,15 +59,25 @@ assert.match(controller,/dl:laneFactor\(\),preview:true/,'Forecast must consume 
 const count=value=>({value,validity:{badInput:false},focus(){this.focused=true;}});
 const shoulderRows=['101','100','1','0','','70','10.1'].map(value=>({count:count(value)}));
 const shoulderStatus={hidden:true,textContent:''};let updates=0;
-const shoulderContext={rows:shoulderRows,$:()=>shoulderStatus,n:input=>input.validity.badInput||input.value.trim()===''?NaN:Number(input.value),update:()=>updates++};
+const shoulderButton={setAttribute(key,value){this[key]=value;}};
+const shoulderContext={rows:shoulderRows,shoulderOriginals:null,$:id=>id==='sheetShoulder'?shoulderButton:shoulderStatus,n:input=>input.validity.badInput||input.value.trim()===''?NaN:Number(input.value),update:()=>updates++};
 runInNewContext(controller.slice(controller.indexOf('  function shoulderTraffic(){'),controller.indexOf('  function clear(){')),shoulderContext);
 shoulderContext.shoulderTraffic();
 assert.deepEqual(shoulderRows.map(row=>row.count.value),['11','10','1','0','','7','2']);
 assert.equal(updates,1);assert.equal(shoulderStatus.hidden,false);
+assert.equal(shoulderButton['aria-pressed'],'true');
 const shoulderForecast=C.forecast({aadt:shoulderRows.slice(0,2).map(row=>Number(row.count.value)),rates:[0,0],factors:[2,3],years:20,delay:1,dd:.5,dl:1});
 assert.equal(shoulderForecast.total,189800,'Rounded shoulder counts flow through EF and distribution without another 10% reduction');
+shoulderRows[0].count.value='-1';
+shoulderContext.shoulderTraffic();
+assert.deepEqual(shoulderRows.map(row=>row.count.value),['101','100','1','0','','70','10.1'],'Toggle off restores exact originals, even after invalid edits to shoulder counts');
+assert.equal(shoulderButton['aria-pressed'],'false');assert.equal(shoulderContext.shoulderOriginals,null);
+shoulderContext.shoulderTraffic();
+assert.deepEqual(shoulderRows.map(row=>row.count.value),['11','10','1','0','','7','2'],'Repeated toggles must not compound the reduction');
+shoulderContext.shoulderTraffic();assert.equal(updates,4);
 for(const invalid of [count('-1'),count('Infinity'),{...count(''),validity:{badInput:true}}]){
   shoulderRows.splice(0,shoulderRows.length,{count:count('100')},{count:invalid});
   shoulderContext.shoulderTraffic();assert.equal(shoulderRows[0].count.value,'100','Invalid traffic must not leave a partly converted table');
-  assert.equal(invalid.focused,true);assert.equal(updates,1);assert.match(shoulderStatus.textContent,/No values were changed/);
+  assert.equal(invalid.focused,true);assert.equal(updates,4);assert.match(shoulderStatus.textContent,/No values were changed/);
+  assert.equal(shoulderButton['aria-pressed'],'false');assert.equal(shoulderContext.shoulderOriginals,null);
 }

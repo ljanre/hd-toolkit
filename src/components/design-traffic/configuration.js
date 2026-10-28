@@ -1,5 +1,5 @@
 (() => {
-  const $=id=>document.getElementById(id),C=DesignTraffic,V=VehicleAnnex,rows=[];let result=null,active=[];
+  const $=id=>document.getElementById(id),C=DesignTraffic,V=VehicleAnnex,rows=[];let result=null,active=[],shoulderOriginals=null;
   const laneRanges={'1':[100,100],'2':[80,100],'3':[60,80],'4':[50,75]};
   function laneFactor(){
     const range=laneRanges[$('sheetLanes').value],percent=n($('sheetDL'));
@@ -29,7 +29,7 @@
     const tr=make('tr'),efTr=make('tr'),row={tr,efTr},heading=make('th'),select=make('select'),diagram=make('div'),linked=make('div');
     for(const p of V.profiles){const option=make('option',p.code+' · '+p.name);option.value=p.code;select.append(option);}select.value=profile.code;select.setAttribute('aria-label','Configuration for loading case '+(rows.length+1));const control=make('div');control.className='truck-type-control';const selectWrap=make('div'),selectedLabel=make('span');selectWrap.className='truck-select';selectedLabel.className='truck-selected-label';selectedLabel.setAttribute('aria-hidden','true');selectWrap.append(select,selectedLabel);diagram.className='truck-preview';row.selectedLabel=selectedLabel;control.append(selectWrap,diagram);heading.append(control);tr.append(heading);const efDiagram=make('div'),lockNote=make('small');lockNote.className='ef-lock-note';const edit=make('button','Edit Configuration');edit.type='button';edit.className='edit-custom';edit.hidden=true;row.edit=edit;edit.addEventListener('click',()=>editCustom(row));const efHeading=make('th');efHeading.append(linked,efDiagram,lockNote,edit);efTr.append(efHeading);row.efDiagram=efDiagram;row.lockNote=lockNote;row.select=select;row.diagram=diagram;row.linked=linked;
     function input(parent,label,type='number'){const cell=make('td'),field=make('input');field.type=type;field.step='any';field.min='0';field.setAttribute('aria-label',profile.code+' '+label);cell.dataset.label=label==='survey AADT'?'Survey AADT · veh/day':label;cell.append(field);parent.append(cell);return field;}
-    row.count=input(tr,'survey AADT');row.count.value='0';row.count.placeholder='AADT';
+    row.count=input(tr,'survey AADT');row.count.value='0';row.count.placeholder='AADT';if(shoulderOriginals)shoulderOriginals.set(row,row.count.value);
     for(const [key,label] of [['openingDisplay','opening AADT'],['trafficDisplay','cumulative design traffic']]){const cell=make('td'),output=make('output','—');output.setAttribute('aria-label',profile.code+' '+label);cell.dataset.label=label==='opening AADT'?'Opening AADT · veh/day':'Design Trafficᵢ · cumulative vehicles';cell.append(output);tr.append(cell);row[key]=output;}
     row.weight=input(efTr,'adopted GVW (kg)');row.fractions=input(efTr,'physical axle fractions','text');row.fractions.placeholder='e.g. 0.2, 0.8';
     const efCell=make('td'),automatic=make('input'),note=make('small');efCell.dataset.label='EFᵢ · ESAL/vehicle';automatic.readOnly=true;automatic.setAttribute('aria-label',profile.code+' calculated EF');note.className='sheet-row-note';efCell.append(automatic,note);efTr.append(efCell);row.automatic=automatic;row.note=note;
@@ -121,15 +121,23 @@
     summary();
   }
   function shoulderTraffic(){
-    const included=rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput),status=$('sheetShoulderStatus');
+    const status=$('sheetShoulderStatus'),button=$('sheetShoulder');
     status.hidden=false;
+    if(shoulderOriginals){
+      for(const row of rows)if(shoulderOriginals.has(row))row.count.value=shoulderOriginals.get(row);
+      shoulderOriginals=null;button.setAttribute('aria-pressed','false');update();
+      status.textContent='Shoulder Design off. Original Survey AADT values restored.';return;
+    }
+    const included=rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput);
     const invalid=included.find(row=>!Number.isFinite(n(row.count))||n(row.count)<0);
     if(invalid){status.textContent='Enter valid, nonnegative Survey AADT values before converting. No values were changed.';invalid.count.focus();return;}
+    shoulderOriginals=new Map(rows.map(row=>[row,row.count.value]));
     for(const row of included)row.count.value=String(Math.ceil(n(row.count)/10));
+    button.setAttribute('aria-pressed','true');
     update();
-    status.textContent='Survey AADT converted to 10% of the previous counts, rounded up to whole vehicles/day. Use the resulting W18 directly for shoulder design without another 10% reduction.';
+    status.textContent='Shoulder Design on. Survey AADT is 10% of the original counts, rounded up to whole vehicles/day. Toggle off to restore the originals. Use the resulting W18 directly without another 10% reduction.';
   }
-  function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();['1-1','1-2','11-1','12-2','11-11','12-12'].forEach(code=>add(V.profiles.find(profile=>profile.code===code)));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetLanes:'1',sheetDL:'100'}))$(id).value=value;laneDefaults();$('sheetShoulderStatus').hidden=true;update();}
+  function clear(){shoulderOriginals=null;$('sheetShoulder').setAttribute('aria-pressed','false');rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();['1-1','1-2','11-1','12-2','11-11','12-12'].forEach(code=>add(V.profiles.find(profile=>profile.code===code)));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetLanes:'1',sheetDL:'100'}))$(id).value=value;laneDefaults();$('sheetShoulderStatus').hidden=true;update();}
   $('sheetLanes').addEventListener('change',laneDefaults);
   $('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
   $('sheetNew').addEventListener('click',newTruck);
