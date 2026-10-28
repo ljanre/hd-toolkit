@@ -46,8 +46,32 @@
 /* Keep the truck preview beside its selector and separate catalogue/custom actions. */
 #sheetRows .truck-type-control{display:flex;align-items:center;gap:10px;min-width:0}
 #sheetRows .truck-type-control select{flex:1 1 0;min-width:0;max-width:none;width:0}
-#sheetRows .truck-type-control>div{flex:0 0 86px}
+#sheetRows .truck-type-control>.truck-preview{flex:0 0 86px}
 #sheetRows .truck-type-control .vehicle-diagram{width:86px;height:24px;margin:0}
 #sheetRows th{min-width:330px;max-width:none}
 .sheet-traffic{min-width:750px!important}
 #sheetNew{background:#eaf3fa;border-color:#8db7d2;color:#18577d}
+
+/* Fit the traffic table to its worksheet; wrap the selected native-option label. */
+#trafficStage .sheet-scroll{overflow:visible}
+.sheet-traffic{width:100%;min-width:0!important;table-layout:fixed}
+.sheet-traffic thead th{text-align:center;min-width:0;white-space:normal;overflow-wrap:anywhere}
+.sheet-traffic thead th:first-child{width:42%}.sheet-traffic thead th:nth-child(2){width:18%}.sheet-traffic thead th:nth-child(3){width:16%}
+.sheet-traffic thead th:last-child,#sheetRows td:last-child{width:60px;min-width:0;max-width:none}
+#sheetRows th,#sheetRows td:nth-child(2),#sheetRows td:nth-child(3),#sheetRows td:nth-child(4){min-width:0;max-width:none}
+#sheetRows input{width:100%;min-width:0}#sheetRows output{white-space:normal;overflow-wrap:anywhere}
+#sheetRows .truck-select{position:relative;flex:1 1 0;min-width:0}
+#sheetRows .truck-type-control .truck-select select{position:absolute;inset:0;z-index:1;width:100%;height:100%;min-height:0;opacity:0;cursor:pointer;margin:0}
+#sheetRows .truck-selected-label{display:block;border:1px solid #b8d8c8;border-radius:5px;background:#f0faf4;padding:5px 24px 5px 7px;white-space:normal;overflow-wrap:anywhere;font-size:12px;font-weight:400;line-height:1.5;text-align:left}
+#sheetRows .truck-select::after{content:'⌄';position:absolute;right:7px;top:50%;transform:translateY(-50%);pointer-events:none;color:#294b59}
+#sheetRows .truck-select select:focus-visible+.truck-selected-label{outline:2px solid #17665d;outline-offset:2px}
+.config-workspace table thead th{text-align:center}
+@media(max-width:650px){
+ .sheet-traffic,.sheet-traffic tbody,.sheet-traffic tr,.sheet-traffic th,.sheet-traffic td{display:block;width:100%}
+ .sheet-traffic thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ #sheetRows tr{padding:8px;border-bottom:1px solid var(--border)}
+ #sheetRows th{padding:0 0 8px;border:0}
+ #sheetRows td,#sheetRows td:last-child{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,110px);align-items:center;gap:8px;width:100%;padding:5px 0;border:0;text-align:right}
+ #sheetRows td::before{content:attr(data-label);text-align:left;font-size:11px;color:#536977}
+ #sheetRows .remove-truck{justify-self:end}
+}
