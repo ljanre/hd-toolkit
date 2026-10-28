@@ -5,13 +5,13 @@
   current=data;const c=M.chart(data),target=$('cesalContributionChart');target.replaceChildren();
   if(!data||!c.rows.length){const p=document.createElement('p');p.className='chart-empty';p.textContent='Enter positive AADT and an EF to display design-lane loading contributions.';target.append(p);}
   else {
-   const list=document.createElement('ol');list.className='cesal-bars';const max=Math.max(0,...c.rows.map(r=>r.contribution));
-   for(const r of c.rows){const li=document.createElement('li'),heading=document.createElement('div'),label=document.createElement('span'),value=document.createElement('strong'),track=document.createElement('div'),bar=document.createElement('div');
-    heading.className='cesal-bar-heading';label.textContent=r.label;value.textContent=M.fmt(r.contribution)+' ESAL · '+M.fmt(r.share)+'%';heading.append(label,value);
-    track.className='cesal-bar-track';track.setAttribute('aria-hidden','true');bar.style.width=(max?r.contribution/max*100:0)+'%';track.append(bar);li.append(heading,track);list.append(li);
-   }target.append(list);
+   const stack=document.createElement('div'),legend=document.createElement('ul');stack.className='cesal-stack';stack.setAttribute('aria-hidden','true');legend.className='cesal-stack-legend';
+   for(const r of c.rows){
+    const segment=document.createElement('div');segment.className='cesal-stack-segment';segment.style.width=r.share+'%';segment.style.backgroundColor=r.color;segment.title=r.label+' · '+M.fmt(r.contribution)+' ESAL · '+M.fmt(r.share)+'%';if(r.share>=8)segment.textContent=M.fmt(r.share)+'%';stack.append(segment);
+    const li=document.createElement('li'),swatch=document.createElement('span'),details=document.createElement('div'),label=document.createElement('span'),value=document.createElement('strong');swatch.className='cesal-stack-swatch';swatch.style.backgroundColor=r.color;swatch.setAttribute('aria-hidden','true');label.textContent=r.label;value.textContent=M.fmt(r.contribution)+' ESAL · '+M.fmt(r.share)+'%';details.append(label,value);li.append(swatch,details);legend.append(li);
+   }target.append(stack,legend);
   }
-  $('cesalChartStatus').textContent=c.partial?'Partial loading contributions — active cases without EF are excluded.':c.rows.length?'Shares of total design-lane CESAL. The ten largest cases are shown separately; any remainder is grouped as Other.':'';
+  $('cesalChartStatus').textContent=c.partial?'Partial loading contributions — active cases without EF are excluded.':c.rows.length?c.total>0?'One bar = 100% of design-lane CESAL. Colors match the legend. The ten largest cases are shown separately; any remainder is grouped as Other.':'Total CESAL is zero; no percentage distribution is drawn.':'';
   $('generateCesalReport').disabled=!M.canReport(data);
   $('cesalReportStatus').textContent=M.canReport(data)?'Download an editable Word report with calculation tables, chart and draft discussion.':'Complete the inputs and EF for all positive-AADT cases to generate a report.';
  }

@@ -1,8 +1,8 @@
 # CESAL chart and editable engineering report
 
-The chart compares design-lane ESAL contributions by loading case. A ranked horizontal bar chart is suited to an ordinal category (truck type) and a quantitative measure (CESAL). A zero baseline preserves magnitude comparisons. Rank by ESAL rather than AADT because different EFs can make the most frequent vehicle a different vehicle from the largest loading contributor. No dual-axis AADT/ESAL chart is used.
+The chart uses one 100% stacked horizontal bar, as requested by the user, to show each truck type’s share of design-lane CESAL. Segment widths use full-precision contributions divided by their sum; colors match the legend in both the page and Word report. Separate vehicle cases retain their individual values. Zero total loading produces no filled segments. AADT and ESAL are not plotted on a dual axis.
 
-Research consulted: [Observable Plot, Bar mark](https://observablehq.com/plot/marks/bar), including its categorical/quantitative definition, horizontal orientation, descending sort and zero baseline. Source inspected at https://raw.githubusercontent.com/observablehq/plot/main/docs/marks/bar.md on 28 October 2026. This is visualization guidance, not a DPWH-prescribed chart or engineering coefficient source.
+Research consulted: [Observable Plot, Bar mark](https://observablehq.com/plot/marks/bar), including its categorical/quantitative definition, horizontal orientation, stacked bars and descending sort. Source inspected at https://raw.githubusercontent.com/observablehq/plot/main/docs/marks/bar.md on 28 October 2026. This is visualization guidance, not a DPWH-prescribed chart or engineering coefficient source.
 
 The chart displays the ten largest cases individually and groups further cases as Other. It excludes zero AADT and cases without an available EF, labels partial results, and retains separate repeated loading cases. Report generation requires a complete valid forecast and at least one positive-AADT case. A verified EF of zero remains a valid entered factor and is documented as such.
 

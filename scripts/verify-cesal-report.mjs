@@ -9,6 +9,12 @@ const cases=specs.map(([code,aadt],i)=>{const p=c.VehicleAnnex.profiles.find(p=>
 const data={parameters,cases,complete:true,total:result.total},M=c.CesalReportModel;
 assert.ok(Math.abs(result.total-1348586.636391494)<.01);
 const chart=M.chart(data);assert.equal(chart.rows[0].code,'11-1');assert.ok(Math.abs(chart.rows.reduce((s,r)=>s+r.share,0)-100)<1e-10);assert.equal(chart.total,result.total);
+assert.equal(new Set(chart.rows.map(r=>r.color)).size,3,'Known truck types have distinct legend colors');
+const reranked=M.chart({...data,cases:cases.map((r,i)=>({...r,contribution:i===0?1e9:r.contribution}))});
+for(const r of chart.rows)assert.equal(reranked.rows.find(x=>x.code===r.code).color,r.color,'Truck colors stay stable when rank changes');
+const stackedSvg=M.chartSvg(data).svg;assert.match(stackedSvg,/One bar = 100%/);
+for(const r of chart.rows)assert.ok((stackedSvg.match(new RegExp('fill="'+r.color+'"','g'))||[]).length>=2,'SVG segment and legend share the same color');
+
 const many={...data,cases:Array.from({length:20},(_,i)=>({...cases[0],index:i,contribution:i+1}))};
 const grouped=M.chart(many);assert.equal(grouped.rows.length,11);assert.equal(grouped.rows.at(-1).label,'Other 10 loading cases');assert.equal(grouped.rows.reduce((s,r)=>s+r.contribution,0),210);
 assert.equal(M.chart({...data,cases:[{...cases[0],aadt:0},{...cases[1],ef:NaN,contribution:null}]}).rows.length,0);
