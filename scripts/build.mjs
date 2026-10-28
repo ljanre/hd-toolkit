@@ -9,7 +9,7 @@ const source = resolve(project, 'src');
 const output = resolve(project, 'dist');
 const webExtensions = new Set(['.html','.js','.css','.png','.svg','.jpg','.jpeg','.webp','.ico','.json','.woff','.woff2']);
 export function isRuntimeFile(name) {
-  return (webExtensions.has(extname(name)) || ['components/design-criteria/reference-excerpts.pdf','components/design-criteria/do-112-s2024-reference.pdf'].includes(name)) && !/(^|\/)tests\//.test(name) && !/(^|\/)qa\.(html|js)$/.test(name) && !/^components\/subbase-thickness\/[^/]+\.json$/.test(name) && !/^components\/subgrade-reaction\/figure-3-[36]\.png$/.test(name);
+  return name !== 'components/project-details/network-data.json' && (webExtensions.has(extname(name)) || ['components/design-criteria/reference-excerpts.pdf','components/design-criteria/do-112-s2024-reference.pdf'].includes(name)) && !/(^|\/)tests\//.test(name) && !/(^|\/)qa\.(html|js)$/.test(name) && !/^components\/subbase-thickness\/[^/]+\.json$/.test(name) && !/^components\/subgrade-reaction\/figure-3-[36]\.png$/.test(name);
 }
 async function filesIn(folder) {
   const entries = await readdir(folder, { withFileTypes: true });
@@ -24,7 +24,11 @@ const inputs = await filesIn(source);
 await readFile(resolve(source, 'index.html'));
 const runtime = inputs.filter(path => isRuntimeFile(relative(source,path).split(sep).join('/')));
 const contents = new Map(await Promise.all(runtime.map(async path => [path, await readFile(path)])));
+// The lazy-loaded road worksheet carries its snapshot, avoiding a second data request.
+const inventoryBytes = await readFile(resolve(source,'components/project-details/network-data.json'));
+const inventoryJson = JSON.stringify(JSON.parse(inventoryBytes.toString('utf8'))).replaceAll('<','\\u003c');
 const digest = createHash('sha256');
+digest.update('components/project-details/network-data.json').update(inventoryBytes);
 for (const [path,bytes] of contents) digest.update(relative(source,path)).update(bytes);
 // Build logic is part of the release identity, so optimizer changes also invalidate caches.
 const version = digest.update(await readFile(fileURLToPath(import.meta.url))).digest('hex').slice(0,12);
@@ -59,6 +63,11 @@ for (const [file,bytes] of contents) {
   if (['.html','.css','.js'].includes(extname(file))) {
     let text=data.toString('utf8');
     if(extname(file)==='.html') {
+      if(name==='components/project-details/index.html') {
+        const marker='<script type="application/json" id="road-inventory-data"></script>';
+        if(!text.includes(marker)) throw new Error('Missing road inventory embed marker');
+        text=text.replace(marker,()=>'<script type="application/json" id="road-inventory-data">'+inventoryJson+'</script>');
+      }
       text=text.replace(/((?:src|href)=["'])([^"']+)(["'])/g,(_,prefix,url,end)=>prefix+versionUrl(url,file)+end);
       text=text.replace('<head>','<head>\n  <meta name="hd-toolkit-build" content="'+version+'">');
       text=text.replace(/<img\b([^>]*?)>/g,(tag,attrs)=>'<img'+attrs+(/\bdecoding=/.test(attrs)?'':' decoding="async"')+'>');

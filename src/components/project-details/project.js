@@ -35,10 +35,21 @@
   function update(){if(!inventory)return;matches=E.search(inventory.records,filters());page=0;if(selected&&!matches.some(record=>record.index===selected.index)){selected=null;details();}results();}
   async function load(){
     $('load-status').textContent='Loading the supplied CSV inventory…';$('load-status').classList.remove('error');$('retry').hidden=true;
-    try{const version=document.querySelector('meta[name="hd-toolkit-build"]')?.content||new URLSearchParams(location.search).get('v')||'network-1';const response=await fetch('network-data.json?v='+encodeURIComponent(version));if(!response.ok)throw new Error('Inventory unavailable');inventory=E.load(await response.json());
+    try{
+      const embedded=$('road-inventory-data')?.textContent.trim();
+      let data;
+      if(embedded) data=JSON.parse(embedded);
+      else {
+        // Source previews use the same snapshot; production embeds it in this page.
+        const version=document.querySelector('meta[name="hd-toolkit-build"]')?.content||new URLSearchParams(location.search).get('v')||'network-1';
+        const response=await fetch('network-data.json?v='+encodeURIComponent(version));
+        if(!response.ok)throw new Error('Inventory unavailable: HTTP '+response.status);
+        data=await response.json();
+      }
+      inventory=E.load(data);
       $('inventory-count').textContent=inventory.records.length.toLocaleString()+' source records';
       fillOptions('region',E.options(inventory.records,'REGION'),'All regions');fillOptions('classification',E.options(inventory.records,'ROAD_SEC_CLASS'),'All classifications');cascades();update();$('load-status').textContent='Search and select a matching road section to view its audit reference.';
-    }catch(error){$('inventory-count').textContent='Inventory unavailable';$('load-status').textContent='Could not load the road inventory. Check your connection and retry.';$('load-status').classList.add('error');$('retry').hidden=false;}
+    }catch(error){console.error('Road inventory initialization failed:',error);$('inventory-count').textContent='Inventory unavailable';$('load-status').textContent='Could not open the road inventory. Retry loading or reload this tool.';$('load-status').classList.add('error');$('retry').hidden=false;}
   }
   $('search').addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(update,140);});
   ['region','province','deo','classification'].forEach(id=>$(id).addEventListener('change',()=>{if(id==='region'){$('province').value='';$('deo').value='';}if(id==='province')$('deo').value='';if(id==='region'||id==='province')cascades();update();}));
