@@ -85,23 +85,22 @@
   }
   function update(){
     $('sheetAdd').disabled=$('sheetNew').disabled=rows.length>=50;
-    TrafficTimeline.render({survey:$('sheetSurvey').value,opening:$('sheetOpening').value,years:$('sheetYears').value,growth:$('sheetGrowth').value,counts:rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput).map(row=>n(row.count)),labels:rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput).map((row,i)=>'Case '+(i+1)+' · '+caseCode(row)+' · '+fmt(n(row.weight))+' kg'),showVehicles:$('timelineVehicles').checked});
-    result=null;active=[];$('sheetTotal').textContent='—';$('sheetW18').textContent='—';$('sheetTotalNote').textContent='Cumulative equivalent standard axle loads';$('sheetMillion').textContent='— ×10⁶ ESAL';$('sheetAADT').textContent='—';$('sheetCompletion').textContent='Input Required';$('sheetError').textContent='';
-    $('sheetAuditTitle').textContent='4. CESAL & W18';
-    $('sheetAuditParameters').textContent='Survey '+($('sheetSurvey').value||'—')+' · Opening '+($('sheetOpening').value||'—')+' · n = '+($('sheetYears').value||'—')+' years · r = '+($('sheetGrowth').value||'—')+'% · DD = '+($('sheetDD').value||'—')+' · DL = '+($('sheetDL').value||'—');
+    result=null;active=[];for(const id of ['sheetTotal','sheetAADT','sheetOpeningAADT'])$(id).textContent='—';$('sheetError').textContent='';
     try{
       for(const row of rows)updateVisual(row,rows.indexOf(row));
       for(const row of rows){row.automatic.value='';row.note.textContent='';const included=row.count.value.trim()!==''||row.count.validity.badInput;row.tr.classList.toggle('sheet-included',included);if(!included)continue;active.push(row);const count=n(row.count);if(!Number.isFinite(count)||count<0)throw new Error('Enter nonnegative AADT for '+row.select.value+'.');row.ef=count===0?0:factor(row);if(Number.isFinite(row.ef))row.automatic.value=row.ef.toFixed(3);else{row.automatic.value='';row.note.textContent='Enter verified axle fractions using + New Truck Type.';}}
       if(!active.length){summary();return;}
       const survey=n($('sheetSurvey')),opening=n($('sheetOpening'));if(!Number.isInteger(survey)||!Number.isInteger(opening)||survey<1900||opening>2200||opening<survey)throw new Error('Enter valid survey and opening years (1900–2200); opening cannot precede the survey.');
       result=C.forecast({aadt:active.map(row=>n(row.count)),rates:active.map(()=>n($('sheetGrowth'))),factors:active.map(row=>row.ef),years:n($('sheetYears')),delay:opening-survey,dd:n($('sheetDD')),dl:n($('sheetDL')),preview:true});
-      $('sheetAADT').textContent=fmt(active.reduce((sum,row)=>sum+n(row.count),0));$('sheetTotal').textContent=fmt(result.complete?result.total:result.subtotal);$('sheetMillion').textContent=fmt(result.complete?result.million:result.subtotalMillion)+' ×10⁶ ESAL'+(result.complete?'':' · Partial subtotal');$('sheetCompletion').textContent=result.complete?'Complete':'Pending EF';$('sheetW18').textContent=result.complete?fmt(result.total)+' ESAL':'Pending EF';$('sheetTotalNote').textContent=result.complete?'Total for all included loading cases':'Partial subtotal · missing EF excluded';
+      $('sheetAADT').textContent=fmt(active.reduce((sum,row)=>sum+n(row.count),0));
+      $('sheetOpeningAADT').textContent=fmt(result.detail.reduce((sum,item)=>sum+item.opening,0));
+      $('sheetTotal').textContent=fmt(result.complete?result.total:result.subtotal)+(result.complete?'':' · Partial');
       if(!result.complete)$('sheetError').textContent=result.pendingClasses+' active loading cases have no EF. Their ESAL is excluded from the subtotal.';
     }catch(error){$('sheetError').textContent=error.message;result=null;}
     summary();
   }
   function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.filter(profile=>!['11-12','12-11'].includes(profile.code)).forEach(profile=>add(profile));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetDL:'1.00'}))$(id).value=value;update();}
-  $('timelineVehicles').addEventListener('change',update);$('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
+  $('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
   $('sheetNew').addEventListener('click',newTruck);
   $('sheetClear').addEventListener('click',()=>clear());$('sheetAdd').addEventListener('click',()=>{add();update();});
   window.addEventListener('message',event=>{if(window.parent===window||event.source!==window.parent||event.data?.type!=='hd-toolkit-admin-state'||typeof event.data.enabled!=='boolean')return;const steps=$('trafficCalculationSteps');steps.hidden=!event.data.enabled;if(steps.hidden)steps.open=false;});
