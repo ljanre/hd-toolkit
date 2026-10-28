@@ -24,3 +24,21 @@
 .magvw-reference{margin-top:18px}.magvw-reference summary{cursor:pointer;font-size:13px;font-weight:600;color:#17665d;margin-bottom:12px}
 .magvw-reference .table-scroll table{min-width:540px}.magvw-reference th,.magvw-reference td{text-align:left;white-space:normal}
 .magvw-reference td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+
+/* Compact traffic worksheet; retain the linked engineering diagrams in Section 2. */
+.worksheet-heading{padding-bottom:10px;margin-bottom:14px}
+.cesal-stage{padding:16px;margin-bottom:16px}.cesal-stage>header{margin-bottom:12px}
+#trafficStage .sheet-inputs{gap:8px 16px;margin-bottom:12px}
+#trafficStage .sheet-field{margin:0}#trafficStage .sheet-inputs input{margin-top:4px;min-height:34px;padding:5px 8px}
+.sheet-traffic{min-width:660px!important}.sheet-traffic th,.sheet-traffic td{padding:6px 8px}
+#sheetRows th{min-width:200px;max-width:300px;vertical-align:middle}
+#sheetRows select{width:100%;max-width:300px;min-height:30px;padding:4px 6px}
+#sheetRows .vehicle-diagram{width:95px;height:24px;margin:2px auto 0}
+#sheetRows input{min-height:32px;padding:4px 6px}
+#sheetRows td:nth-child(2),#sheetRows td:nth-child(3){min-width:85px}
+#sheetRows td:nth-child(4){min-width:135px}
+.sheet-traffic thead th:last-child,#sheetRows td:last-child{width:44px;min-width:44px;max-width:44px;padding:4px;text-align:center}
+#sheetRows .remove-truck{display:inline-grid;place-items:center;width:28px;height:28px;min-height:28px;padding:0;border:1px solid #b42318;border-radius:5px;background:#b42318;color:white;font-size:18px;line-height:1;cursor:pointer}
+#sheetRows .remove-truck:hover{background:#8f1c13;border-color:#8f1c13}
+#sheetRows .remove-truck:focus-visible{outline:2px solid #b42318;outline-offset:2px}
+.traffic-actions{margin:10px 0 0}.traffic-actions button{flex-basis:140px;min-height:34px;padding:6px 10px}
