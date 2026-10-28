@@ -109,8 +109,8 @@
 .sheet-summary thead th:nth-child(4){width:14%}.sheet-summary thead th:nth-child(5){width:8%}.sheet-summary thead th:nth-child(6){width:13%}.sheet-summary thead th:last-child{width:15%}
 #sheetSummary th,#sheetSummary td{padding:8px;font-size:11px}
 #sheetSummary th{font-weight:400;text-align:left}
-.summary-truck{display:flex;align-items:center;gap:8px;min-width:0}.summary-truck>span{flex:1;min-width:0}
-.summary-truck>div{flex:0 0 74px}.summary-truck .vehicle-diagram{display:block;width:74px;height:24px}
+.summary-truck{display:flex;align-items:center;gap:10px;min-width:0}.summary-truck>span{flex:1;min-width:0;font-size:12px;line-height:1.5}
+.summary-truck>div{flex:0 0 86px}.summary-truck .vehicle-diagram{display:block;width:86px;height:24px}
 .sheet-summary tfoot th,.sheet-summary tfoot td{background:white;border-top:2px solid #b8cbd7;padding:10px 8px;color:#294b59}
 .sheet-summary tfoot td:last-child{font-weight:700}
 @media(max-width:800px){
