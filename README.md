@@ -37,7 +37,7 @@ Public tabs: Rigid Pavement Design, Design CBR, Subbase Thickness Design, Rainfa
 
 The current Developer switch is a client-side interface gate configured in `src/admin-mode.js`. It is not authentication: publicly hosted source and assets remain accessible. Browser-local values and uploaded illustrations stay in the user's browser; there is no shared account database. The rainfall locator uses external map, geocoding, and municipality services and requires internet access.
 
-The CESAL workspace includes a single color-coded stacked bar showing design-lane loading shares by truck type. **Generate Report** opens optional project fields and editable draft discussion, then downloads a real Word `.docx` engineering calculation report. Text and tables are editable; the chart is an embedded image with source values retained in the calculation table. Report generation requires valid inputs, complete EF data and at least one positive-AADT case.
+The CESAL workspace includes a single color-coded stacked bar showing design-lane loading shares by truck type. **Generate Report is temporarily disabled.** Its retained implementation opens optional project fields and editable draft discussion, then downloads a real Word `.docx` engineering calculation report. Text and tables are editable; the chart is an embedded image with source values retained in the calculation table. Report generation requires valid inputs, complete EF data and at least one positive-AADT case.
 
 ## Project layout
 

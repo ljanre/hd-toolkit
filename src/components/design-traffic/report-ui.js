@@ -1,4 +1,5 @@
 (() => {
+ const REPORT_ENABLED=false;
  const M=CesalReportModel,$=id=>document.getElementById(id);let current=null,draft=null,copyTimer;
  function update(data){
   clearTimeout(copyTimer);$('copyCesalW18').disabled=!M.canReport(data);$('copyCesalW18').textContent='Copy W18';$('cesalCopyStatus').textContent='';
@@ -12,8 +13,8 @@
    }target.append(stack,legend);
   }
   $('cesalChartStatus').textContent=c.partial?'Partial loading contributions — active cases without EF are excluded.':c.rows.length?c.total>0?'One bar = 100% of design-lane CESAL. Colors match the legend. The ten largest cases are shown separately; any remainder is grouped as Other.':'Total CESAL is zero; no percentage distribution is drawn.':'';
-  $('generateCesalReport').disabled=!M.canReport(data);
-  $('cesalReportStatus').textContent=M.canReport(data)?'Download an editable Word report with calculation tables, chart and draft discussion.':'Complete the inputs and EF for all positive-AADT cases to generate a report.';
+  $('generateCesalReport').disabled=!REPORT_ENABLED||!M.canReport(data);
+  $('cesalReportStatus').textContent=!REPORT_ENABLED?'Report generation is temporarily unavailable.':M.canReport(data)?'Download an editable Word report with calculation tables, chart and draft discussion.':'Complete the inputs and EF for all positive-AADT cases to generate a report.';
  }
  $('copyCesalW18').addEventListener('click',async()=>{
   if(!M.canReport(current))return;
@@ -28,7 +29,7 @@
   }catch{$('cesalCopyStatus').textContent='Copy unavailable. Select and copy the W18 value.';}
  });
  $('generateCesalReport').addEventListener('click',()=>{
-  if(!M.canReport(current))return;
+  if(!REPORT_ENABLED||!M.canReport(current))return;
   draft=JSON.parse(JSON.stringify(current));$('cesalReportDiscussion').value=M.discussion(draft);$('cesalReportError').textContent='';$('cesalReportDialog').showModal();$('cesalReportProject').focus();
  });
  $('cesalReportCancel').addEventListener('click',()=>$('cesalReportDialog').close());
@@ -39,7 +40,7 @@
   finally{URL.revokeObjectURL(url);}
  }
  $('cesalReportForm').addEventListener('submit',async event=>{
-  event.preventDefault();const button=$('downloadCesalWord');if(button.disabled)return;
+  event.preventDefault();if(!REPORT_ENABLED)return;const button=$('downloadCesalWord');if(button.disabled)return;
   button.disabled=true;button.textContent='Generating…';$('cesalReportError').textContent='';
   try{
    const data=draft,meta={project:$('cesalReportProject').value,location:$('cesalReportLocation').value,prepared:$('cesalReportPrepared').value,reference:$('cesalReportReference').value,discussion:$('cesalReportDiscussion').value,date:new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})};
