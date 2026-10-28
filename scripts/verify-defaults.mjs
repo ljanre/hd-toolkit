@@ -169,3 +169,20 @@ assert.ok(Math.abs(shoulder.result().n.w-128674.3123456)<1e-7,'Use full source p
 sn.get('resetInputs').events.click();assert.equal(sn.get('shoulderDesign').checked,false);assert.equal(shoulder.result().roundedMm,300);
 const guideSource=await readFile(new URL('../src/components/input-guide.js',import.meta.url),'utf8');assert.ok(guideSource.includes('page 6-143'));assert.ok(guideSource.includes('not a universal requirement'));
 console.log('Shoulder mode: 10% calculation, original load storage, restore, reversible toggling, source precision, unchanged support/joint inputs, reset and DGCS reference verified.');
+
+// Manual shoulder traffic overrides the initial 10% suggestion without losing the source load.
+sn.get('shoulderDesign').checked=true;sn.get('shoulderDesign').events.change.call(sn.get('shoulderDesign'));
+assert.notEqual(sn.get('shoulderWMillion').readOnly,true);
+sn.get('shoulderWMillion').events.focus.call(sn.get('shoulderWMillion'));
+sn.get('shoulderWMillion').value='700000.123456789';sn.get('shoulderWMillion').events.input();sn.get('designForm').events.input();
+assert.ok(Math.abs(shoulder.result().n.w-700000.123456789)<1e-7);
+sn.get('shoulderWMillion').events.blur.call(sn.get('shoulderWMillion'));
+assert.equal(sn.get('shoulderWMillion').value,'0.70');assert.equal(shoulder.saved().inputs.wMillion,15);assert.equal(shoulder.saved().inputs.shoulderManual,true);
+const editedShoulder=mount(shoulder.saved());assert.ok(Math.abs(editedShoulder.result().n.w-700000.123456789)<1e-7);
+sn.get('r').value='90';sn.get('designForm').events.input();assert.ok(Math.abs(shoulder.result().n.w-700000.123456789)<1e-7);
+sn.get('shoulderDesign').checked=false;sn.get('shoulderDesign').events.change.call(sn.get('shoulderDesign'));assert.equal(shoulder.result().n.w,15000000);
+sn.get('shoulderDesign').checked=true;sn.get('shoulderDesign').events.change.call(sn.get('shoulderDesign'));assert.ok(Math.abs(shoulder.result().n.w-700000.123456789)<1e-7,'Mode changes retain an adopted shoulder load');
+const lastValid=shoulder.saved();sn.get('shoulderWMillion').events.focus.call(sn.get('shoulderWMillion'));sn.get('shoulderWMillion').value='-1';sn.get('shoulderWMillion').events.input();sn.get('designForm').events.input();
+assert.equal(shoulder.result(),null);assert.equal(sn.get('shoulderWMillion').getAttribute('aria-invalid'),'true');assert.equal(sn.get('wMillion').getAttribute('aria-invalid'),undefined);assert.equal(shoulder.saved().inputs.shoulderWMillion,lastValid.inputs.shoulderWMillion);
+sn.get('resetInputs').events.click();assert.equal(sn.get('shoulderDesign').checked,false);assert.equal(shoulder.result().roundedMm,300);assert.equal(shoulder.saved().inputs.shoulderManual,false);
+console.log('Editable shoulder load: direct full-precision adoption, unrelated edits, toggle/restore persistence, correct validation target and reset verified.');
