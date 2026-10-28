@@ -39,3 +39,18 @@ for(const code of ['12-1','12-2','12-3'])assert.match(V.profiles.find(p=>p.code=
 for(const removed of ['sheetSample','cesal-flow','Establish opening traffic','Enter annual-average two-way survey counts','Convert each vehicle loading case','Vehicle cases are linked to Section 1.'])assert.ok(!worksheetHtml.includes(removed),removed+' removed');
 assert.match(worksheetHtml,/id="sheetSurvey" value="2025"/);assert.match(worksheetHtml,/id="sheetOpening" value="2026"/);
 assert.ok(worksheetHtml.indexOf('id="sheetRows"')<worksheetHtml.indexOf('id="sheetAdd"'));
+
+// Exercise the UI's actual percentage conversion against the supplied lane-factor table.
+const controller=await readFile(new URL('configuration.js',root),'utf8');
+const laneNodes={sheetLanes:{value:'1'},sheetDL:{value:'100',validity:{badInput:false}}};
+const laneContext={$:id=>laneNodes[id]};
+const laneStart=controller.indexOf('  const laneRanges=');
+const laneEnd=controller.indexOf('\n',controller.indexOf('  const n=input=>',laneStart));
+runInNewContext(controller.slice(laneStart,laneEnd),laneContext);
+for(const [lanes,min,max] of [['1',100,100],['2',80,100],['3',60,80],['4',50,75]]){
+  laneNodes.sheetLanes.value=lanes;laneContext.laneDefaults();assert.equal(laneNodes.sheetDL.value,String(max));
+  for(const percent of [min,max]){laneNodes.sheetDL.value=String(percent);assert.equal(laneContext.laneFactor(),percent/100);}
+  for(const percent of ['',min-.01,max+.01]){laneNodes.sheetDL.value=String(percent);assert.throws(()=>laneContext.laneFactor());}
+}
+laneNodes.sheetLanes.value='2';laneNodes.sheetDL.value='90.125';assert.equal(laneContext.laneFactor(),.90125);
+assert.match(controller,/dl:laneFactor\(\),preview:true/,'Forecast must consume the validated fraction, not the displayed percent');

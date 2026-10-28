@@ -1,5 +1,13 @@
 (() => {
   const $=id=>document.getElementById(id),C=DesignTraffic,V=VehicleAnnex,rows=[];let result=null,active=[];
+  const laneRanges={'1':[100,100],'2':[80,100],'3':[60,80],'4':[50,75]};
+  function laneFactor(){
+    const range=laneRanges[$('sheetLanes').value],percent=n($('sheetDL'));
+    if(!range)throw new Error('Select the number of lanes in each direction.');
+    if(!Number.isFinite(percent)||percent<range[0]||percent>range[1])throw new Error('Lane Distribution must be '+(range[0]===range[1]?range[0]+'%':range[0]+'–'+range[1]+'%')+' for the selected number of lanes per direction.');
+    return percent/100;
+  }
+  function laneDefaults(){const [min,max]=laneRanges[$('sheetLanes').value];$('sheetDL').min=String(min);$('sheetDL').max=String(max);$('sheetDL').value=String(max);}
   const n=input=>input.value.trim()===''||input.validity.badInput?NaN:Number(input.value),fmt=value=>Number.isFinite(value)?value.toLocaleString('en-US',{maximumFractionDigits:2}):'—';
   const make=(tag,text)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node;};
   const caseCode=row=>row.select.value==='custom'?(row.sampleName||'New Truck Type'):row.select.value;
@@ -62,13 +70,13 @@
   function calculationSteps(){
     const body=$('trafficCalculationBody');body.replaceChildren();
     if(!result){body.append(make('p','Enter valid project years and included loading cases to show substituted calculation steps.'));return;}
-    const math=value=>Number.isFinite(value)?value.toLocaleString('en-US',{maximumFractionDigits:6}):'—',delay=n($('sheetOpening'))-n($('sheetSurvey')),years=n($('sheetYears')),rate=n($('sheetGrowth'))/100,dd=n($('sheetDD')),dl=n($('sheetDL'));
+    const math=value=>Number.isFinite(value)?value.toLocaleString('en-US',{maximumFractionDigits:6}):'—',delay=n($('sheetOpening'))-n($('sheetSurvey')),years=n($('sheetYears')),rate=n($('sheetGrowth'))/100,dd=n($('sheetDD')),dl=n($('sheetDL'))/100;
     const cases=active.map((row,i)=>({row,d:result.detail[i],traffic:n(row.count)===0?0:365*result.detail[i].opening*result.detail[i].growth,label:`Case ${i+1} · ${caseCode(row)}`}));
     body.append(make('h3','1. Design Traffic'),make('p',`Survey ${$('sheetSurvey').value}; opening ${$('sheetOpening').value}; delay m = ${delay} years; design period n = ${years} years; annual g = ${math(rate)}.`),make('p','Opening AADT = survey AADT × (1+g)^m. G = [(1+g)^n − 1] / g; G = n when g = 0. Design Trafficᵢ = opening AADTᵢ × G × 365.'));
     for(const {row,d,traffic,label} of cases)body.append(make('h4',label),make('p',`Opening AADT = ${math(n(row.count))} × (1 + ${math(rate)})^${delay} = ${math(d.opening)} vehicles/day.`),make('p',n(row.count)===0?'Zero AADT: Design Trafficᵢ = 0 vehicles.':`G = ${math(d.growth)}; Design Trafficᵢ = ${math(d.opening)} × ${math(d.growth)} × 365 = ${math(traffic)} vehicles.`));
     body.append(make('h3','2. Equivalence Factor · EF'),make('p','Axle load (tonnes) = GVW (kg) × axle fraction / 1,000. EFᵢ = Σ(axle load / 8.2)^4.'));
     for(const {row,label} of cases)body.append(make('h4',label),make('p',row.select.value==='custom'&&row.adoptedEF!=null?`Entered verified EF = ${math(row.adoptedEF)} ESAL/vehicle. Layout ${row.layoutCode}; GVW ${math(n(row.weight))} kg.`:`GVW = ${math(n(row.weight))} kg; axle fractions: ${row.fractions.value||'not provided'}. Calculated EF = ${math(row.ef)} ESAL/vehicle${n(row.count)===0?' (zero traffic; no loading contribution)':''}.`));
-    body.append(make('h3','3. Distribution Factors'),make('p',`DD = ${math(dd)}; DL = ${math(dl)}. Apply these shares once after summing CESALᵢ.`));
+    body.append(make('h3','3. Distribution Factors'),make('p',`DD = ${math(dd)}; ${$('sheetLanes').value} lane(s) per direction; adopted DL = ${$('sheetDL').value}% ÷ 100 = ${math(dl)}. Apply these shares once after summing CESALᵢ.`));
     body.append(make('h3','4. CESAL and W18'));
     for(const {row,d,traffic,label} of cases)body.append(make('h4',label),make('p',d.esal===null?'CESALᵢ pending: enter a verified EF. Excluded from the partial subtotal.':`CESALᵢ = Design Trafficᵢ × EFᵢ = ${math(traffic)} × ${math(row.ef)} = ${math(traffic*row.ef)} ESAL before distribution.`),make('p',d.esal===null?'Design-lane contribution pending.':`Design-lane contribution = ${math(traffic*row.ef)} × ${math(dd)} × ${math(dl)} = ${math(d.esal)} ESAL.`));
     body.append(make('p',result.complete?`W18 = ΣCESALᵢ × ${math(dd)} × ${math(dl)} = ${math(result.total)} ESAL = ${math(result.million)} × 10⁶ ESAL.`:`Partial CESAL subtotal = ${math(result.subtotal)} ESAL; W18 is pending ${result.pendingClasses} missing EF case(s).`),make('p','DD and DL are applied once. Display values are rounded; calculation uses full precision. Projected-end AADT is a boundary value, not an additional year of CESAL.'));
@@ -103,12 +111,13 @@
       for(const row of rows){row.automatic.value='';row.note.textContent='';const included=row.count.value.trim()!==''||row.count.validity.badInput;row.tr.classList.toggle('sheet-included',included);if(!included)continue;active.push(row);const count=n(row.count);if(!Number.isFinite(count)||count<0)throw new Error('Enter nonnegative AADT for '+row.select.value+'.');row.ef=count===0?0:factor(row);if(Number.isFinite(row.ef))row.automatic.value=row.ef.toFixed(3);else{row.automatic.value='';row.note.textContent='Enter verified axle fractions using + New Truck Type.';}}
       if(!active.length){summary();return;}
       const survey=n($('sheetSurvey')),opening=n($('sheetOpening'));if(!Number.isInteger(survey)||!Number.isInteger(opening)||survey<1900||opening>2200||opening<survey)throw new Error('Enter valid survey and opening years (1900–2200); opening cannot precede the survey.');
-      result=C.forecast({aadt:active.map(row=>n(row.count)),rates:active.map(()=>n($('sheetGrowth'))),factors:active.map(row=>row.ef),years:n($('sheetYears')),delay:opening-survey,dd:n($('sheetDD')),dl:n($('sheetDL')),preview:true});
+      result=C.forecast({aadt:active.map(row=>n(row.count)),rates:active.map(()=>n($('sheetGrowth'))),factors:active.map(row=>row.ef),years:n($('sheetYears')),delay:opening-survey,dd:n($('sheetDD')),dl:laneFactor(),preview:true});
       if(!result.complete)$('sheetError').textContent=result.pendingClasses+' active loading cases have no EF. Their summary rows are hidden and totals are partial.';
     }catch(error){$('sheetError').textContent=error.message;result=null;}
     summary();
   }
-  function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.filter(profile=>!['11-12','12-11'].includes(profile.code)).forEach(profile=>add(profile));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetDL:'1.00'}))$(id).value=value;update();}
+  function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.filter(profile=>!['11-12','12-11'].includes(profile.code)).forEach(profile=>add(profile));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetLanes:'1',sheetDL:'100'}))$(id).value=value;laneDefaults();update();}
+  $('sheetLanes').addEventListener('change',laneDefaults);
   $('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
   $('sheetNew').addEventListener('click',newTruck);
   $('sheetClear').addEventListener('click',()=>clear());$('sheetAdd').addEventListener('click',()=>{add();update();});
