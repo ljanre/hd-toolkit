@@ -137,3 +137,11 @@
 .cesal-total-highlight{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:16px;background:#eaf6ef;border-top:2px solid #8dbfa4;color:#17665d}
 .cesal-total-highlight>span{font-size:14px;font-weight:600}
 .cesal-total-highlight>output{font-size:26px;line-height:1.3;font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;min-width:0}
+
+/* Keep project and distribution labels beside their controls. */
+#configurationWorksheet .sheet-inputs .sheet-field{display:grid;grid-template-columns:minmax(130px,.8fr) minmax(0,1.2fr);gap:10px;align-items:center}
+#configurationWorksheet .sheet-field>.guide-label-row{margin:0;justify-content:flex-start}
+#configurationWorksheet .sheet-inputs .sheet-field>input{margin:0}
+#configurationWorksheet .lane-distribution-controls{margin:0}
+@media(max-width:1000px){.distribution-inputs{grid-template-columns:1fr}}
+@media(max-width:650px){#configurationWorksheet .sheet-inputs .sheet-field{grid-template-columns:minmax(110px,.8fr) minmax(0,1.2fr);gap:8px}}
