@@ -21,7 +21,7 @@
     const profile=visualProfile(row),custom=row.select.value==='custom';row.weight.readOnly=true;row.fractions.readOnly=true;row.edit.hidden=!custom;
     row.weight.title=row.fractions.title=custom?'Edit using Edit Configuration':'Catalogue value · use + New Truck Type to create an editable case';
     row.selectedLabel.textContent=row.select.selectedOptions[0]?.textContent||'';
-    row.linked.textContent='Case '+(index+1)+' · '+(custom?profile.name:profile.code+' · '+profile.name);row.efDiagram.innerHTML=V.diagram(profile,true);row.diagram.innerHTML=V.diagram(profile);
+    row.linked.textContent='Code '+(custom?row.layoutCode:profile.code)+' · '+profile.name;row.efDiagram.innerHTML=V.diagram(profile,true);row.diagram.innerHTML=V.diagram(profile);
     row.lockNote.textContent=custom?'Custom loading case · use Edit Configuration to revise layout, weight or EF.':'';row.lockNote.hidden=!custom;
   }
   function add(profile=V.profiles[0]){
@@ -71,7 +71,7 @@
     const body=$('trafficCalculationBody');body.replaceChildren();
     if(!result){body.append(make('p','Enter valid project years and included loading cases to show substituted calculation steps.'));return;}
     const math=value=>Number.isFinite(value)?value.toLocaleString('en-US',{maximumFractionDigits:6}):'—',delay=n($('sheetOpening'))-n($('sheetSurvey')),years=n($('sheetYears')),rate=n($('sheetGrowth'))/100,dd=n($('sheetDD')),dl=n($('sheetDL'))/100;
-    const cases=active.map((row,i)=>({row,d:result.detail[i],traffic:n(row.count)===0?0:365*result.detail[i].opening*result.detail[i].growth,label:`Case ${i+1} · ${caseCode(row)}`}));
+    const cases=active.map((row,i)=>({row,d:result.detail[i],traffic:n(row.count)===0?0:365*result.detail[i].opening*result.detail[i].growth,label:row.select.value==='custom'?`Code ${row.layoutCode} · ${caseCode(row)}`:`Code ${row.select.value}`}));
     body.append(make('h3','1. Design Traffic'),make('p',`Survey ${$('sheetSurvey').value}; opening ${$('sheetOpening').value}; delay m = ${delay} years; design period n = ${years} years; annual g = ${math(rate)}.`),make('p','Opening AADT = survey AADT × (1+g)^m. G = [(1+g)^n − 1] / g; G = n when g = 0. Design Trafficᵢ = opening AADTᵢ × G × 365.'));
     for(const {row,d,traffic,label} of cases)body.append(make('h4',label),make('p',`Opening AADT = ${math(n(row.count))} × (1 + ${math(rate)})^${delay} = ${math(d.opening)} vehicles/day.`),make('p',n(row.count)===0?'Zero AADT: Design Trafficᵢ = 0 vehicles.':`G = ${math(d.growth)}; Design Trafficᵢ = ${math(d.opening)} × ${math(d.growth)} × 365 = ${math(traffic)} vehicles.`));
     body.append(make('h3','2. Equivalence Factor · EF'),make('p','Axle load (tonnes) = GVW (kg) × axle fraction / 1,000. EFᵢ = Σ(axle load / 8.2)^4.'));
@@ -117,7 +117,7 @@
     }catch(error){$('sheetError').textContent=error.message;result=null;}
     summary();
   }
-  function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.filter(profile=>!['11-12','12-11'].includes(profile.code)).forEach(profile=>add(profile));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetLanes:'2',sheetDL:'100'}))$(id).value=value;laneDefaults();update();}
+  function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.filter(profile=>!['11-12','12-11'].includes(profile.code)).forEach(profile=>add(profile));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetLanes:'1',sheetDL:'100'}))$(id).value=value;laneDefaults();update();}
   $('sheetLanes').addEventListener('change',laneDefaults);
   $('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
   $('sheetNew').addEventListener('click',newTruck);
