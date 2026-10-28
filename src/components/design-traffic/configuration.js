@@ -81,21 +81,30 @@
   }
   function summary(){
     $('sheetSummary').replaceChildren();for(const row of rows){row.openingDisplay.textContent='—';row.trafficDisplay.textContent='—';}calculationSteps();if(!result){previewTraffic();return;}
-    active.forEach((row,i)=>{const d=result.detail[i],tr=make('tr'),designTraffic=n(row.count)===0?0:365*d.opening*d.growth,cesal=d.esal===null?null:designTraffic*row.ef;row.openingDisplay.textContent=fmt(d.opening);row.trafficDisplay.textContent=fmt(designTraffic);const values=[caseCode(row)+' · '+fmt(n(row.weight))+' kg',fmt(n(row.count)),fmt(d.opening),fmt(designTraffic),fmt(row.ef),cesal===null?'Pending EF':fmt(cesal),d.esal===null?'Pending EF':fmt(d.esal)];values.forEach(value=>tr.append(make('td',value)));$('sheetSummary').append(tr);});
+    const totals={survey:0,opening:0,traffic:0,cesal:0};
+    active.forEach((row,i)=>{
+      const d=result.detail[i],count=n(row.count),designTraffic=count===0?0:365*d.opening*d.growth;
+      row.openingDisplay.textContent=fmt(d.opening);row.trafficDisplay.textContent=fmt(designTraffic);
+      if(count<=0||!Number.isFinite(row.ef)||d.esal===null)return;
+      const cesal=designTraffic*row.ef,profile=visualProfile(row),tr=make('tr'),heading=make('th'),truck=make('div'),name=make('span',row.select.value==='custom'?profile.name:profile.code+' · '+profile.name),diagram=make('div');
+      heading.scope='row';truck.className='summary-truck';diagram.innerHTML=V.diagram(profile);truck.append(name,diagram);heading.append(truck);tr.append(heading);
+      const values=[['Survey AADT · veh/day',count],['Opening AADT · veh/day',d.opening],['Design Trafficᵢ · vehicles',designTraffic],['EFᵢ · ESAL/vehicle',row.ef],['CESALᵢ · ESAL',cesal],['Design-lane contribution · ESAL',d.esal]];
+      values.forEach(([label,value])=>{const cell=make('td',fmt(value));cell.dataset.label=label;tr.append(cell);});$('sheetSummary').append(tr);
+      totals.survey+=count;totals.opening+=d.opening;totals.traffic+=designTraffic;totals.cesal+=cesal;
+    });
+    for(const [id,value] of Object.entries({sheetAADT:totals.survey,sheetOpeningAADT:totals.opening,sheetTrafficTotal:totals.traffic,sheetCESALTotal:totals.cesal,sheetTotal:result.complete?result.total:result.subtotal}))$(id).textContent=fmt(value);
+    $('sheetTotalsLabel').textContent=result.complete?'Total':'Total (partial)';
   }
   function update(){
     $('sheetAdd').disabled=$('sheetNew').disabled=rows.length>=50;
-    result=null;active=[];for(const id of ['sheetTotal','sheetAADT','sheetOpeningAADT'])$(id).textContent='—';$('sheetError').textContent='';
+    result=null;active=[];for(const id of ['sheetTotal','sheetAADT','sheetOpeningAADT','sheetTrafficTotal','sheetCESALTotal'])$(id).textContent='—';$('sheetError').textContent='';$('sheetTotalsLabel').textContent='Total';
     try{
       for(const row of rows)updateVisual(row,rows.indexOf(row));
       for(const row of rows){row.automatic.value='';row.note.textContent='';const included=row.count.value.trim()!==''||row.count.validity.badInput;row.tr.classList.toggle('sheet-included',included);if(!included)continue;active.push(row);const count=n(row.count);if(!Number.isFinite(count)||count<0)throw new Error('Enter nonnegative AADT for '+row.select.value+'.');row.ef=count===0?0:factor(row);if(Number.isFinite(row.ef))row.automatic.value=row.ef.toFixed(3);else{row.automatic.value='';row.note.textContent='Enter verified axle fractions using + New Truck Type.';}}
       if(!active.length){summary();return;}
       const survey=n($('sheetSurvey')),opening=n($('sheetOpening'));if(!Number.isInteger(survey)||!Number.isInteger(opening)||survey<1900||opening>2200||opening<survey)throw new Error('Enter valid survey and opening years (1900–2200); opening cannot precede the survey.');
       result=C.forecast({aadt:active.map(row=>n(row.count)),rates:active.map(()=>n($('sheetGrowth'))),factors:active.map(row=>row.ef),years:n($('sheetYears')),delay:opening-survey,dd:n($('sheetDD')),dl:n($('sheetDL')),preview:true});
-      $('sheetAADT').textContent=fmt(active.reduce((sum,row)=>sum+n(row.count),0));
-      $('sheetOpeningAADT').textContent=fmt(result.detail.reduce((sum,item)=>sum+item.opening,0));
-      $('sheetTotal').textContent=fmt(result.complete?result.total:result.subtotal)+(result.complete?'':' · Partial');
-      if(!result.complete)$('sheetError').textContent=result.pendingClasses+' active loading cases have no EF. Their ESAL is excluded from the subtotal.';
+      if(!result.complete)$('sheetError').textContent=result.pendingClasses+' active loading cases have no EF. Their summary rows are hidden and totals are partial.';
     }catch(error){$('sheetError').textContent=error.message;result=null;}
     summary();
   }
