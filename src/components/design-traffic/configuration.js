@@ -12,7 +12,7 @@
     const profile=visualProfile(row),custom=row.select.value==='custom';row.weight.readOnly=true;row.fractions.readOnly=true;row.edit.hidden=!custom;
     row.weight.title=row.fractions.title=custom?'Edit using Edit Configuration':'Catalogue value · select New Configuration to edit';
     row.linked.textContent='Case '+(index+1)+' · '+(custom?profile.name:profile.code+' · '+profile.name);row.efDiagram.innerHTML=V.diagram(profile,true);row.diagram.innerHTML=V.diagram(profile);
-    row.lockNote.textContent=custom?'Custom loading case · use Edit Configuration to revise layout, weight or EF.':'Catalogue GVW and axle shares locked. Select New Configuration in Section 1 to edit.';
+    row.lockNote.textContent=custom?'Custom loading case · use Edit Configuration to revise layout, weight or EF.':'';row.lockNote.hidden=!custom;
   }
   function add(profile=V.profiles[0]){
     if(rows.length>=50)return;
@@ -86,11 +86,10 @@
     }catch(error){$('sheetError').textContent=error.message;result=null;}
     summary();
   }
-  function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.forEach(profile=>add(profile));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetDL:'1.00'}))$(id).value=value;update();}
+  function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.filter(profile=>!['11-12','12-11'].includes(profile.code)).forEach(profile=>add(profile));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetDL:'1.00'}))$(id).value=value;update();}
   $('timelineVehicles').addEventListener('change',update);$('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
   $('sheetClear').addEventListener('click',()=>clear());$('sheetAdd').addEventListener('click',()=>{add();update();});
   window.addEventListener('message',event=>{if(window.parent===window||event.source!==window.parent||event.data?.type!=='hd-toolkit-admin-state'||typeof event.data.enabled!=='boolean')return;const steps=$('trafficCalculationSteps');steps.hidden=!event.data.enabled;if(steps.hidden)steps.open=false;});
   if(window.parent!==window)window.parent.postMessage({type:'hd-toolkit-traffic-ready'},'*');
-  for(const profile of V.profiles){const tr=make('tr');for(const value of [profile.code,profile.name,fmt(profile.gvw)])tr.append(make('td',value));$('magvwRows').append(tr);}
   clear();
 })();
