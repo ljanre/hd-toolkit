@@ -610,6 +610,9 @@
   'use strict';
   const C=globalThis.PavementCalc,V=globalThis.PavementIllustration,$=function(id){return document.getElementById(id);};
   C.LABELS.wMillion='CESAL W18';
+  // Reference startup/reset scenario: existing lower-bound inputs yield 300 mm after 10 mm rounding.
+  // Keep the protected solver and saved project inputs unchanged.
+  C.DEFAULT_INPUTS.wMillion=15;
   const STORAGE_KEY='aashto93-rigid-local-v1';
 
   let result=null,lookupSource=C.DEFAULTS.lookupSource,trafficPrecision=null,trafficEditing=false,fcDisplayMPa=false,fcPrecision=null,fcFormatted=null,jImage=null,jUploadVersion=0;

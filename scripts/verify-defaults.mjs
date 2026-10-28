@@ -106,7 +106,7 @@ assert.doesNotMatch(html.match(/<input id="rigidDesignYears"[^>]*>/)[0],/readonl
 app.nodes.get('rigidDesignYears').value='25';app.nodes.get('rigidDesignYears').events.input.call(app.nodes.get('rigidDesignYears'),{isTrusted:true});app.nodes.get('designForm').events.input();assert.equal(app.saved().inputs.designYears,25);assert.equal(app.saved().inputs.designYearsManual,true);
 assert.equal(mount(app.saved()).nodes.get('rigidDesignYears').manualPeriod,true);
 app.nodes.get('resetInputs').events.click();assert.equal(app.nodes.get('rigidDesignYears').value,'20');
-const traffic=app.nodes.get('wMillion');traffic.events.focus.call(traffic);assert.equal(traffic.value,'1000000');
+const traffic=app.nodes.get('wMillion');traffic.events.focus.call(traffic);assert.equal(traffic.value,'15000000');
 traffic.value='38151550.46';app.nodes.get('designForm').events.input();
 assert.match(app.nodes.get('wMillionHelp').textContent,/38.15 × 10⁶/);
 assert.ok(Math.abs(app.result().n.w-38151550.46)<1e-7);
@@ -115,9 +115,11 @@ assert.ok(Math.abs(app.result().n.w-38151550.46)<1e-7,'Display rounding must pre
 traffic.events.focus.call(traffic);traffic.value='';app.nodes.get('designForm').events.input();assert.equal(app.result(),null);traffic.events.blur.call(traffic);
 app.nodes.get('resetInputs').events.click();
 const projectKeys=['r','wMillion','p0','pt','dpsi','fcMPa','sc','ecMillion','cd','j','k'];
-const collector={r:85,so:0.30,wMillion:1,p0:4.5,pt:2,dpsi:2.5,fcMPa:3500/145.038,cd:1,j:3.8,k:34};
+const collector={r:85,so:0.30,wMillion:15,p0:4.5,pt:2,dpsi:2.5,fcMPa:3500/145.038,cd:1,j:3.8,k:34};
 for(const [key,value] of Object.entries(collector)){assert.equal(Number(app.nodes.get(key).value),key==='fcMPa'?Number((value*145.038).toPrecision(15)):value,key);assert.equal(app.context.PavementCalc.DEFAULT_INPUTS[key],value,key);}
-assert.ok(app.result()?.dMm>0,'Collector assumptions calculate on startup');
+assert.equal(app.result().roundedMm,300,'Reference default must calculate a 300 mm rounded slab');
+assert.ok(Math.abs(app.result().dMm-290.7961249513565)<1e-7);
+assert.ok(app.context.PavementCalc.checkThickness(300,app.result()).meets,'300 mm must support the default loading');
 assert.equal(app.nodes.get('errors').hidden,true);
 assert.equal(app.nodes.has('saveCase'),false);
 assert.match(app.nodes.get('stepSolve').textContent,/Calculated D/);assert.match(app.nodes.get('stepRounding').textContent,/Meets entered CESAL/);

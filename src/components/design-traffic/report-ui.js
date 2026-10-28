@@ -1,6 +1,7 @@
 (() => {
- const M=CesalReportModel,$=id=>document.getElementById(id);let current=null,draft=null;
+ const M=CesalReportModel,$=id=>document.getElementById(id);let current=null,draft=null,copyTimer;
  function update(data){
+  clearTimeout(copyTimer);$('copyCesalW18').disabled=!M.canReport(data);$('copyCesalW18').textContent='Copy W18';$('cesalCopyStatus').textContent='';
   current=data;const c=M.chart(data),target=$('cesalContributionChart');target.replaceChildren();
   if(!data||!c.rows.length){const p=document.createElement('p');p.className='chart-empty';p.textContent='Enter positive AADT and an EF to display design-lane loading contributions.';target.append(p);}
   else {
@@ -14,6 +15,18 @@
   $('generateCesalReport').disabled=!M.canReport(data);
   $('cesalReportStatus').textContent=M.canReport(data)?'Download an editable Word report with calculation tables, chart and draft discussion.':'Complete the inputs and EF for all positive-AADT cases to generate a report.';
  }
+ $('copyCesalW18').addEventListener('click',async()=>{
+  if(!M.canReport(current))return;
+  const value=String(current.total),button=$('copyCesalW18');
+  try{
+   try{if(!navigator.clipboard?.writeText)throw Error('Clipboard API unavailable');await navigator.clipboard.writeText(value);}
+   catch{
+    const field=document.createElement('textarea'),focused=document.activeElement;field.value=value;field.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(field);
+    try{field.focus();field.select();if(!document.execCommand('copy'))throw Error('Clipboard access denied');}finally{field.remove();focused?.focus();}
+   }
+   button.textContent='Copied';$('cesalCopyStatus').textContent='W18 copied in ESAL.';copyTimer=setTimeout(()=>{button.textContent='Copy W18';$('cesalCopyStatus').textContent='';},2500);
+  }catch{$('cesalCopyStatus').textContent='Copy unavailable. Select and copy the W18 value.';}
+ });
  $('generateCesalReport').addEventListener('click',()=>{
   if(!M.canReport(current))return;
   draft=JSON.parse(JSON.stringify(current));$('cesalReportDiscussion').value=M.discussion(draft);$('cesalReportError').textContent='';$('cesalReportDialog').showModal();$('cesalReportProject').focus();
