@@ -2,36 +2,47 @@
   const $=id=>document.getElementById(id),C=DesignTraffic,V=VehicleAnnex,rows=[];let result=null,active=[];
   const n=input=>input.value.trim()===''||input.validity.badInput?NaN:Number(input.value),fmt=value=>Number.isFinite(value)?value.toLocaleString('en-US',{maximumFractionDigits:2}):'—';
   const make=(tag,text)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node;};
-  const caseCode=row=>row.select.value==='custom'?(row.sampleName||'New Configuration'):row.select.value;
+  const caseCode=row=>row.select.value==='custom'?(row.sampleName||'New Truck Type'):row.select.value;
   function visualProfile(row){
     const standard=V.profiles.find(p=>p.code===row.select.value);if(standard)return standard;
     const parts=row.fractions.value.trim().split(/[\s,;]+/).map(Number),valid=row.fractions.value.trim()&&parts.length>=2&&parts.length<=20&&parts.every(v=>Number.isFinite(v)&&v>=0&&v<=1);
-    return {code:row.layoutCode||'custom',name:row.sampleName||'New Configuration',gvw:n(row.weight),fractions:valid?parts:null,kind:row.customKind||'rigid'};
+    return {code:row.layoutCode||'custom',name:row.sampleName||'New Truck Type',gvw:n(row.weight),fractions:valid?parts:null,kind:row.customKind||'rigid'};
   }
   function updateVisual(row,index){
     const profile=visualProfile(row),custom=row.select.value==='custom';row.weight.readOnly=true;row.fractions.readOnly=true;row.edit.hidden=!custom;
-    row.weight.title=row.fractions.title=custom?'Edit using Edit Configuration':'Catalogue value · select New Configuration to edit';
+    row.weight.title=row.fractions.title=custom?'Edit using Edit Configuration':'Catalogue value · use + New Truck Type to create an editable case';
     row.linked.textContent='Case '+(index+1)+' · '+(custom?profile.name:profile.code+' · '+profile.name);row.efDiagram.innerHTML=V.diagram(profile,true);row.diagram.innerHTML=V.diagram(profile);
     row.lockNote.textContent=custom?'Custom loading case · use Edit Configuration to revise layout, weight or EF.':'';row.lockNote.hidden=!custom;
   }
   function add(profile=V.profiles[0]){
     if(rows.length>=50)return;
     const tr=make('tr'),efTr=make('tr'),row={tr,efTr},heading=make('th'),select=make('select'),diagram=make('div'),linked=make('div');
-    for(const p of V.profiles){const option=make('option',p.code+' · '+p.name);option.value=p.code;select.append(option);}const customOption=make('option','New Configuration');customOption.value='custom';select.append(customOption);select.value=profile.code;select.setAttribute('aria-label','Configuration for loading case '+(rows.length+1));heading.append(select,diagram);tr.append(heading);const efDiagram=make('div'),lockNote=make('small');lockNote.className='ef-lock-note';const edit=make('button','Edit Configuration');edit.type='button';edit.className='edit-custom';edit.hidden=true;row.edit=edit;edit.addEventListener('click',()=>editCustom(row));const efHeading=make('th');efHeading.append(linked,efDiagram,lockNote,edit);efTr.append(efHeading);row.efDiagram=efDiagram;row.lockNote=lockNote;row.select=select;row.diagram=diagram;row.linked=linked;
+    for(const p of V.profiles){const option=make('option',p.code+' · '+p.name);option.value=p.code;select.append(option);}select.value=profile.code;select.setAttribute('aria-label','Configuration for loading case '+(rows.length+1));const control=make('div');control.className='truck-type-control';control.append(select,diagram);heading.append(control);tr.append(heading);const efDiagram=make('div'),lockNote=make('small');lockNote.className='ef-lock-note';const edit=make('button','Edit Configuration');edit.type='button';edit.className='edit-custom';edit.hidden=true;row.edit=edit;edit.addEventListener('click',()=>editCustom(row));const efHeading=make('th');efHeading.append(linked,efDiagram,lockNote,edit);efTr.append(efHeading);row.efDiagram=efDiagram;row.lockNote=lockNote;row.select=select;row.diagram=diagram;row.linked=linked;
     function input(parent,label,type='number'){const cell=make('td'),field=make('input');field.type=type;field.step='any';field.min='0';field.setAttribute('aria-label',profile.code+' '+label);cell.append(field);parent.append(cell);return field;}
     row.count=input(tr,'survey AADT');row.count.value='0';row.count.placeholder='AADT';
     for(const [key,label] of [['openingDisplay','opening AADT'],['trafficDisplay','cumulative design traffic']]){const cell=make('td'),output=make('output','—');output.setAttribute('aria-label',profile.code+' '+label);cell.append(output);tr.append(cell);row[key]=output;}
     row.weight=input(efTr,'adopted GVW (kg)');row.fractions=input(efTr,'physical axle fractions','text');row.fractions.placeholder='e.g. 0.2, 0.8';
     const efCell=make('td'),automatic=make('input'),note=make('small');automatic.readOnly=true;automatic.setAttribute('aria-label',profile.code+' calculated EF');note.className='sheet-row-note';efCell.append(automatic,note);efTr.append(efCell);row.automatic=automatic;row.note=note;
     const removeCell=make('td'),remove=make('button','−');remove.type='button';remove.className='remove-truck';remove.setAttribute('aria-label','Remove loading case '+(rows.length+1));remove.addEventListener('click',()=>{rows.splice(rows.indexOf(row),1);tr.remove();efTr.remove();update();});removeCell.append(remove);tr.append(removeCell);
-    function setProfile(){const p=V.profiles.find(p=>p.code===select.value);row.sampleName=null;row.adoptedEF=null;row.committedValue=select.value;customOption.textContent='New Configuration';if(p){row.layoutCode=p.code;row.customKind=p.kind;row.weight.value=String(p.gvw);row.fractions.value=p.fractions?p.fractions.join(', '):'';}updateVisual(row,rows.includes(row)?rows.indexOf(row):rows.length);}
+    function setProfile(){const p=V.profiles.find(p=>p.code===select.value);row.sampleName=null;row.adoptedEF=null;row.committedValue=select.value;select.querySelector('option[value=custom]')?.remove();if(p){row.layoutCode=p.code;row.customKind=p.kind;row.weight.value=String(p.gvw);row.fractions.value=p.fractions?p.fractions.join(', '):'';}updateVisual(row,rows.includes(row)?rows.indexOf(row):rows.length);}
 
-    select.addEventListener('change',()=>{if(select.value==='custom'){select.value=row.committedValue;editCustom(row);return;}setProfile();update();});setProfile();rows.push(row);$('sheetRows').append(tr);$('sheetEFRows').append(efTr);return row;
+    select.addEventListener('change',()=>{if(select.value==='custom')return;setProfile();update();});setProfile();rows.push(row);$('sheetRows').append(tr);$('sheetEFRows').append(efTr);return row;
+  }
+  function applyCustom(row,config){
+    let option=row.select.querySelector('option[value=custom]');
+    if(!option){option=make('option');option.value='custom';row.select.append(option);}
+    option.textContent=config.name;
+    row.select.value='custom';row.committedValue='custom';row.layoutCode=config.layout;row.sampleName=config.name;row.customKind=V.profiles.find(p=>p.code===config.layout).kind;row.adoptedEF=config.manualEF;row.weight.value=String(config.gvw);row.fractions.value=config.fractionsText;update();
   }
   function editCustom(row){
-    VehicleConfiguration.open({name:row.select.value==='custom'?caseCode(row):'New Configuration',layout:row.layoutCode||row.select.value,gvw:row.weight.value,fractions:row.fractions.value,manualEF:row.select.value==='custom'?row.adoptedEF:null},config=>{
-      row.select.value='custom';row.committedValue='custom';row.layoutCode=config.layout;row.sampleName=config.name;row.customKind=V.profiles.find(p=>p.code===config.layout).kind;row.adoptedEF=config.manualEF;row.weight.value=String(config.gvw);row.fractions.value=config.fractionsText;row.select.querySelector('option[value=custom]').textContent='New Configuration · '+config.name;update();
-    },row.select);
+    VehicleConfiguration.open({name:caseCode(row),layout:row.layoutCode,gvw:row.weight.value,fractions:row.fractions.value,manualEF:row.adoptedEF},config=>applyCustom(row,config),row.edit);
+  }
+  function newTruck(){
+    if(rows.length>=50)return;
+    const profile=V.profiles[0];
+    VehicleConfiguration.open({name:'New Truck Type',layout:profile.code,gvw:profile.gvw,fractions:profile.fractions.join(', ')},config=>{
+      const row=add(V.profiles.find(p=>p.code===config.layout));if(row)applyCustom(row,config);
+    },$('sheetNew'));
   }
   function factor(row){
     row.note.textContent='';
@@ -71,13 +82,14 @@
     active.forEach((row,i)=>{const d=result.detail[i],tr=make('tr'),designTraffic=n(row.count)===0?0:365*d.opening*d.growth,cesal=d.esal===null?null:designTraffic*row.ef;row.openingDisplay.textContent=fmt(d.opening);row.trafficDisplay.textContent=fmt(designTraffic);const values=[caseCode(row)+' · '+fmt(n(row.weight))+' kg',fmt(n(row.count)),fmt(d.opening),fmt(designTraffic),fmt(row.ef),cesal===null?'Pending EF':fmt(cesal),d.esal===null?'Pending EF':fmt(d.esal)];values.forEach(value=>tr.append(make('td',value)));$('sheetSummary').append(tr);});
   }
   function update(){
+    $('sheetAdd').disabled=$('sheetNew').disabled=rows.length>=50;
     TrafficTimeline.render({survey:$('sheetSurvey').value,opening:$('sheetOpening').value,years:$('sheetYears').value,growth:$('sheetGrowth').value,counts:rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput).map(row=>n(row.count)),labels:rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput).map((row,i)=>'Case '+(i+1)+' · '+caseCode(row)+' · '+fmt(n(row.weight))+' kg'),showVehicles:$('timelineVehicles').checked});
     result=null;active=[];$('sheetTotal').textContent='—';$('sheetW18').textContent='—';$('sheetTotalNote').textContent='Cumulative equivalent standard axle loads';$('sheetMillion').textContent='— ×10⁶ ESAL';$('sheetAADT').textContent='—';$('sheetCompletion').textContent='Input Required';$('sheetError').textContent='';
     $('sheetAuditTitle').textContent='4. CESAL & W18';
     $('sheetAuditParameters').textContent='Survey '+($('sheetSurvey').value||'—')+' · Opening '+($('sheetOpening').value||'—')+' · n = '+($('sheetYears').value||'—')+' years · r = '+($('sheetGrowth').value||'—')+'% · DD = '+($('sheetDD').value||'—')+' · DL = '+($('sheetDL').value||'—');
     try{
       for(const row of rows)updateVisual(row,rows.indexOf(row));
-      for(const row of rows){row.automatic.value='';row.note.textContent='';const included=row.count.value.trim()!==''||row.count.validity.badInput;row.tr.classList.toggle('sheet-included',included);if(!included)continue;active.push(row);const count=n(row.count);if(!Number.isFinite(count)||count<0)throw new Error('Enter nonnegative AADT for '+row.select.value+'.');row.ef=count===0?0:factor(row);if(Number.isFinite(row.ef))row.automatic.value=row.ef.toFixed(3);else{row.automatic.value='';row.note.textContent='Enter verified axle fractions using New Configuration.';}}
+      for(const row of rows){row.automatic.value='';row.note.textContent='';const included=row.count.value.trim()!==''||row.count.validity.badInput;row.tr.classList.toggle('sheet-included',included);if(!included)continue;active.push(row);const count=n(row.count);if(!Number.isFinite(count)||count<0)throw new Error('Enter nonnegative AADT for '+row.select.value+'.');row.ef=count===0?0:factor(row);if(Number.isFinite(row.ef))row.automatic.value=row.ef.toFixed(3);else{row.automatic.value='';row.note.textContent='Enter verified axle fractions using + New Truck Type.';}}
       if(!active.length){summary();return;}
       const survey=n($('sheetSurvey')),opening=n($('sheetOpening'));if(!Number.isInteger(survey)||!Number.isInteger(opening)||survey<1900||opening>2200||opening<survey)throw new Error('Enter valid survey and opening years (1900–2200); opening cannot precede the survey.');
       result=C.forecast({aadt:active.map(row=>n(row.count)),rates:active.map(()=>n($('sheetGrowth'))),factors:active.map(row=>row.ef),years:n($('sheetYears')),delay:opening-survey,dd:n($('sheetDD')),dl:n($('sheetDL')),preview:true});
@@ -88,6 +100,7 @@
   }
   function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.filter(profile=>!['11-12','12-11'].includes(profile.code)).forEach(profile=>add(profile));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetDL:'1.00'}))$(id).value=value;update();}
   $('timelineVehicles').addEventListener('change',update);$('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
+  $('sheetNew').addEventListener('click',newTruck);
   $('sheetClear').addEventListener('click',()=>clear());$('sheetAdd').addEventListener('click',()=>{add();update();});
   window.addEventListener('message',event=>{if(window.parent===window||event.source!==window.parent||event.data?.type!=='hd-toolkit-admin-state'||typeof event.data.enabled!=='boolean')return;const steps=$('trafficCalculationSteps');steps.hidden=!event.data.enabled;if(steps.hidden)steps.open=false;});
   if(window.parent!==window)window.parent.postMessage({type:'hd-toolkit-traffic-ready'},'*');

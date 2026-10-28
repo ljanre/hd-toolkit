@@ -42,3 +42,12 @@
 #sheetRows .remove-truck:hover{background:#8f1c13;border-color:#8f1c13}
 #sheetRows .remove-truck:focus-visible{outline:2px solid #b42318;outline-offset:2px}
 .traffic-actions{margin:10px 0 0}.traffic-actions button{flex-basis:140px;min-height:34px;padding:6px 10px}
+
+/* Keep the truck preview beside its selector and separate catalogue/custom actions. */
+#sheetRows .truck-type-control{display:flex;align-items:center;gap:10px;min-width:0}
+#sheetRows .truck-type-control select{flex:1 1 0;min-width:0;max-width:none;width:0}
+#sheetRows .truck-type-control>div{flex:0 0 86px}
+#sheetRows .truck-type-control .vehicle-diagram{width:86px;height:24px;margin:0}
+#sheetRows th{min-width:330px;max-width:none}
+.sheet-traffic{min-width:750px!important}
+#sheetNew{background:#eaf3fa;border-color:#8db7d2;color:#18577d}

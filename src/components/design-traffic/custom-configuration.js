@@ -10,7 +10,7 @@
   const calculatedEF=fractions?C.axleFactor(fractions.map(f=>gvw*f/1000).join(',')):null;
   const manualEF=draft.useManual?(String(draft.manualEF).trim()===''?NaN:Number(draft.manualEF)):null;
   if(draft.useManual&&(!Number.isFinite(manualEF)||manualEF<0))throw Error('Enter a verified EF of zero or greater in ESAL/vehicle.');
-  return {name:String(draft.name||'New Configuration').trim().slice(0,80)||'New Configuration',layout:layout.code,gvw,fractions,fractionsText:text,manualEF,calculatedEF,ef:manualEF??calculatedEF};
+  return {name:String(draft.name||'New Truck Type').trim().slice(0,80)||'New Truck Type',layout:layout.code,gvw,fractions,fractionsText:text,manualEF,calculatedEF,ef:manualEF??calculatedEF};
  }
  let bound=false,apply,trigger;
  function values(){return {name:$('customName').value,layout:$('customLayout').value,gvw:$('customWeight').value,fractions:$('customFractions').value,useManual:$('customOverride').checked,manualEF:$('customEF').value};}
@@ -26,7 +26,7 @@
    $('customConfigForm').addEventListener('input',preview);$('customConfigForm').addEventListener('change',preview);$('customConfigForm').addEventListener('submit',event=>{event.preventDefault();try{const config=validate(values());apply(config);$('customConfigDialog').close();}catch(error){$('customError').textContent=error.message;}});
    $('customCancel').addEventListener('click',()=>$('customConfigDialog').close());$('customConfigDialog').addEventListener('close',()=>trigger?.focus());bound=true;
   }
-  apply=onApply;trigger=focusTarget;$('customName').value=initial.name||'New Configuration';$('customLayout').value=initial.layout||'1-1';$('customWeight').value=initial.gvw??'';$('customFractions').value=initial.fractions||'';$('customOverride').checked=initial.manualEF!=null;$('customEF').value=initial.manualEF??'';preview();$('customConfigDialog').showModal();$('customName').focus();
+  apply=onApply;trigger=focusTarget;$('customName').value=initial.name||'New Truck Type';$('customLayout').value=initial.layout||'1-1';$('customWeight').value=initial.gvw??'';$('customFractions').value=initial.fractions||'';$('customOverride').checked=initial.manualEF!=null;$('customEF').value=initial.manualEF??'';preview();$('customConfigDialog').showModal();$('customName').focus();
  }
  globalThis.VehicleConfiguration=Object.freeze({validate,open});
 })();
