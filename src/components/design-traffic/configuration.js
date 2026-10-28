@@ -120,10 +120,20 @@
     }catch(error){$('sheetError').textContent=error.message;result=null;}
     summary();
   }
-  function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();['1-1','1-2','11-1','12-2','11-11','12-12'].forEach(code=>add(V.profiles.find(profile=>profile.code===code)));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetLanes:'1',sheetDL:'100'}))$(id).value=value;laneDefaults();update();}
+  function shoulderTraffic(){
+    const included=rows.filter(row=>row.count.value.trim()!==''||row.count.validity.badInput),status=$('sheetShoulderStatus');
+    status.hidden=false;
+    const invalid=included.find(row=>!Number.isFinite(n(row.count))||n(row.count)<0);
+    if(invalid){status.textContent='Enter valid, nonnegative Survey AADT values before converting. No values were changed.';invalid.count.focus();return;}
+    for(const row of included)row.count.value=String(Math.ceil(n(row.count)/10));
+    update();
+    status.textContent='Survey AADT converted to 10% of the previous counts, rounded up to whole vehicles/day. Use the resulting W18 directly for shoulder design without another 10% reduction.';
+  }
+  function clear(){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();['1-1','1-2','11-1','12-2','11-11','12-12'].forEach(code=>add(V.profiles.find(profile=>profile.code===code)));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetLanes:'1',sheetDL:'100'}))$(id).value=value;laneDefaults();$('sheetShoulderStatus').hidden=true;update();}
   $('sheetLanes').addEventListener('change',laneDefaults);
   $('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
   $('sheetNew').addEventListener('click',newTruck);
+  $('sheetShoulder').addEventListener('click',shoulderTraffic);
   $('sheetClear').addEventListener('click',()=>clear());$('sheetAdd').addEventListener('click',()=>{add();update();});
   window.addEventListener('message',event=>{if(window.parent===window||event.source!==window.parent||event.data?.type!=='hd-toolkit-admin-state'||typeof event.data.enabled!=='boolean')return;const steps=$('trafficCalculationSteps');steps.hidden=!event.data.enabled;if(steps.hidden)steps.open=false;});
   if(window.parent!==window)window.parent.postMessage({type:'hd-toolkit-traffic-ready'},'*');

@@ -54,3 +54,20 @@ for(const [lanes,min,max] of [['1',100,100],['2',80,100],['3',60,80],['4',50,75]
 }
 laneNodes.sheetLanes.value='2';laneNodes.sheetDL.value='90.125';assert.equal(laneContext.laneFactor(),.90125);
 assert.match(controller,/dl:laneFactor\(\),preview:true/,'Forecast must consume the validated fraction, not the displayed percent');
+
+// Convert entered traffic before forecasting, rounding upward for each truck type.
+const count=value=>({value,validity:{badInput:false},focus(){this.focused=true;}});
+const shoulderRows=['101','100','1','0','','70','10.1'].map(value=>({count:count(value)}));
+const shoulderStatus={hidden:true,textContent:''};let updates=0;
+const shoulderContext={rows:shoulderRows,$:()=>shoulderStatus,n:input=>input.validity.badInput||input.value.trim()===''?NaN:Number(input.value),update:()=>updates++};
+runInNewContext(controller.slice(controller.indexOf('  function shoulderTraffic(){'),controller.indexOf('  function clear(){')),shoulderContext);
+shoulderContext.shoulderTraffic();
+assert.deepEqual(shoulderRows.map(row=>row.count.value),['11','10','1','0','','7','2']);
+assert.equal(updates,1);assert.equal(shoulderStatus.hidden,false);
+const shoulderForecast=C.forecast({aadt:shoulderRows.slice(0,2).map(row=>Number(row.count.value)),rates:[0,0],factors:[2,3],years:20,delay:1,dd:.5,dl:1});
+assert.equal(shoulderForecast.total,189800,'Rounded shoulder counts flow through EF and distribution without another 10% reduction');
+for(const invalid of [count('-1'),count('Infinity'),{...count(''),validity:{badInput:true}}]){
+  shoulderRows.splice(0,shoulderRows.length,{count:count('100')},{count:invalid});
+  shoulderContext.shoulderTraffic();assert.equal(shoulderRows[0].count.value,'100','Invalid traffic must not leave a partly converted table');
+  assert.equal(invalid.focused,true);assert.equal(updates,1);assert.match(shoulderStatus.textContent,/No values were changed/);
+}
