@@ -37,7 +37,7 @@ V.profiles.forEach((p,i)=>assert.ok(p.name.includes('('+wheels[i]+' wheels)'),p.
 for(const code of ['11-1','11-2','11-3'])assert.match(V.profiles.find(p=>p.code===code).name,/Truck-trailer with 2 axles at motor vehicle/);
 for(const code of ['12-1','12-2','12-3'])assert.match(V.profiles.find(p=>p.code===code).name,/Truck semi-trailer with 3 axles at motor vehicle/);
 for(const removed of ['sheetSample','cesal-flow','Establish opening traffic','Enter annual-average two-way survey counts','Convert each vehicle loading case','Vehicle cases are linked to Section 1.'])assert.ok(!worksheetHtml.includes(removed),removed+' removed');
-assert.match(worksheetHtml,/id="sheetSurvey" value="2025"/);assert.match(worksheetHtml,/id="sheetOpening" value="2026"/);
+assert.match(worksheetHtml,/id="sheetSurvey" type="number"/);assert.match(worksheetHtml,/id="sheetOpening" type="number"/);
 assert.ok(worksheetHtml.indexOf('id="sheetRows"')<worksheetHtml.indexOf('id="sheetAdd"'));
 
 // Exercise the UI's actual percentage conversion against the supplied lane-factor table.
