@@ -153,6 +153,7 @@ nodes.set('criteriaTool',element('criteriaTool'));nodes.set('geometryTool',eleme
 nodes.set('projectTool',element('projectTool'));
 nodes.set('calendarTool',element('calendarTool'));
 nodes.set('crossSlopeTool',element('crossSlopeTool'));
+nodes.set('hydrologyTool',element('hydrologyTool'));
 nodes.set('seismicTool',element('seismicTool'));
 nodes.set('culvertTool', element('culvertTool'));
 nodes.get('k').dispatchEvent = event => { nodes.get('k').lastEvent = event; };

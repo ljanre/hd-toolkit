@@ -77,3 +77,4 @@ cross-slope{display:block}cross-slope iframe{display:block;width:100%;height:cal
 calendar-days{display:block}calendar-days iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:0;border-radius:16px;background:#f4f7fa}@media(max-width:760px){calendar-days iframe{height:calc(100dvh - 180px);min-height:650px}}
 
 seismic-coefficients{display:block}seismic-coefficients iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:0;border-radius:16px;background:#f4f7fa}@media(max-width:760px){seismic-coefficients iframe{height:calc(100dvh - 180px);min-height:650px}}
+hydrology-tool{display:block}hydrology-tool iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:0;border-radius:14px;background:#f5f7fa}@media(max-width:760px){hydrology-tool iframe{height:calc(100dvh - 180px);min-height:650px}}

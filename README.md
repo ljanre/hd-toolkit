@@ -19,7 +19,7 @@ npm test
 npm run build
 ```
 
-The test command runs 29 regression suites. The build creates a clean production site in root `dist/`, excluding development notes, tests and QA pages. It compacts model tables without changing their values, uses pixel-identical WebP foundation charts, and versions local assets and calculator documents automatically. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
+The test command runs 30 regression suites. The build creates a clean production site in root `dist/`, excluding development notes, tests and QA pages. It compacts model tables without changing their values, uses pixel-identical WebP foundation charts, and versions local assets and calculator documents automatically. Deploy the contents of that folder with a static hosting service. The nested `src/components/subbase-thickness/dist/` folder is required source for the supplied subbase module; retain it in the repository.
 
 ## Upload to GitHub
 
@@ -33,11 +33,13 @@ The upload folder is a snapshot. Later edits to the working project must be copi
 
 ## Tools and access
 
-Public tabs: Rigid Pavement Design, Design CBR, Subbase Thickness Design, Rainfall Station Locator, PRS92 Converter, CESAL, W18, and Flexible Pavement Design (UD). Developer mode enables additional tools: Corrected Subgrade Reaction and Concrete Modulus of Rupture. Calculation-step panels in the pavement, CBR, and subbase design workspaces are Developer-only. Generate Report and Save buttons in those design input panels are disabled placeholders.
+Public tabs include Hydrology, Cross-Section, Rigid Pavement Design, Design CBR, Subbase Thickness Design, Rainfall Station Locator, PRS92 Converter, CESAL, W18, and Flexible Pavement Design (UD). Developer mode enables additional tools: Corrected Subgrade Reaction and Concrete Modulus of Rupture. Calculation-step panels in the pavement, CBR, and subbase design workspaces are Developer-only. Generate Report and Save buttons in those design input panels are disabled placeholders.
 
 The current Developer switch is a client-side interface gate configured in `src/admin-mode.js`. It is not authentication: publicly hosted source and assets remain accessible. Browser-local values and uploaded illustrations stay in the user's browser; there is no shared account database. The rainfall locator uses external map, geocoding, and municipality services and requires internet access.
 
 The CESAL workspace includes a single color-coded stacked bar showing design-lane loading shares by truck type. **Generate Report is temporarily disabled.** Its retained implementation opens optional project fields and editable draft discussion, then downloads a real Word `.docx` engineering calculation report. Text and tables are editable; the chart is an embedded image with source values retained in the calculation table. Report generation requires valid inputs, complete EF data and at least one positive-AADT case.
+
+Hydrology is a public Hydraulics tool at `#hydrologyTool`. It computes Rational Method peak flow using SI units, area-weighted C, manual or segmented Tc, user-supplied RIDF interpolation or direct intensity, and the optional FHWA two-branch critical check. Source tables, input guides, eight original FHWA reference pages, a published worked example, local draft retention, Copy Q and printing are included. Project rainfall and return-period criteria start blank. See `src/components/hydrology-tool/REFERENCE.md` for provenance, assumptions and limits.
 
 ## Project layout
 

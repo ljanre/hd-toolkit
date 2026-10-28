@@ -12,6 +12,7 @@
     pavement: { id: 'pavementTool', title: 'Rigid Pavement Design', group: 'pavement', icon: '▤' },
     flexible: { id: 'flexibleTool', title: 'Flexible Pavement Design (UD)', development: 'ud', group: 'pavement', icon: '▥', element: 'flexible-pavement', page: 'index.html' },
     subbase: { id: 'subbaseTool', title: 'Subbase Thickness Design', label: 'Subbase Thickness', group: 'pavement', icon: '▰', element: 'subbase-thickness', page: 'rigid.html' },
+    hydrology: { id: 'hydrologyTool', title: 'Hydrology', group: 'hydraulics', icon: '≈', element: 'hydrology-tool', page: 'index.html' },
     culvert: { id: 'culvertTool', title: 'Culvert (UD)', development: 'ud', group: 'hydraulics', icon: '▱', element: 'culvert-hydraulics', page: 'index.html' },
     seismic: { id: 'seismicTool', title: 'Seismic Coefficients kh & kv', label: 'Seismic kh & kv', group: 'others', icon: '∿', element: 'seismic-coefficients', page: 'index.html' },
     calendar: { id: 'calendarTool', title: 'Calendar Days', group: 'others', icon: '▦', element: 'calendar-days', page: 'index.html' },
