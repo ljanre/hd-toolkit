@@ -169,3 +169,9 @@ body:not(.admin-mode) #foundationSteps{display:none!important}
 .nomograph-extension:has(svg)+.foundation-nomograph{display:none}
 
 .nomograph-extension-note{min-height:3.2em;margin:8px 0 0;color:#b42318!important;font-size:12px;line-height:1.6}.nomograph-extension svg{margin:0;aspect-ratio:1420/1230}
+
+/* Shoulder traffic is derived from the preserved mainline load; it is never an editable second load. */
+.shoulder-design-toggle{grid-column:1/-1;margin:0 0 4px}.shoulder-design-toggle .round-toggle{font-size:12px}
+#cesalEntry.shoulder-source,#cesalEntry.shoulder-source input{background:#eef1f3;border-color:#cbd4da;color:#65747d}
+#shoulderTrafficEntry,#shoulderTrafficEntry input{background:#fff5c7;border-color:#dfc764;color:#70570b}
+#shoulderTrafficField[hidden]{display:none!important}

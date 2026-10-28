@@ -117,8 +117,14 @@
                 </div>
                 <div class="field">
                   <label for="wMillion">CESAL<span class="symbol">W<sub>18</sub></span></label>
-                  <div class="entry"><input id="wMillion" name="wMillion" type="number" min="0" step="any" required aria-describedby="wMillionHelp"><span id="trafficUnit" class="unit">× 10⁶ ESAL</span></div>
+                  <div class="entry" id="cesalEntry"><input id="wMillion" name="wMillion" type="number" min="0" step="any" required aria-describedby="wMillionHelp"><span id="trafficUnit" class="unit">× 10⁶ ESAL</span></div>
                   <small id="wMillionHelp">42,230,000 total 18-kip ESALs.</small>
+                </div>
+                <div class="shoulder-design-toggle"><label class="round-toggle" for="shoulderDesign"><input id="shoulderDesign" type="checkbox" role="switch" aria-controls="shoulderTrafficField"><span class="toggle-track" aria-hidden="true"></span>Shoulder Design · 10%</label></div>
+                <div class="field" id="shoulderTrafficField" hidden>
+                  <label for="shoulderWMillion">Shoulder CESAL<span class="symbol">W<sub>18,sh</sub></span></label>
+                  <div class="entry" id="shoulderTrafficEntry"><input id="shoulderWMillion" type="number" step="any" readonly aria-describedby="shoulderWMillionHelp"><span class="unit">× 10⁶ ESAL</span></div>
+                  <small id="shoulderWMillionHelp">10% of mainline CESAL; used for shoulder slab design.</small>
                 </div>
               </div>
             </div>
@@ -620,8 +626,9 @@
   function number(id){const raw=$(id).value.trim();if(id==='fcMPa')return raw===''?NaN:fcPrecision!==null&&raw===fcFormatted?fcPrecision:Number(raw)/(fcDisplayMPa?1:145.038);if(id==='wMillion'&&trafficEditing)return raw===''?NaN:Number(raw)/1e6;if(id==='wMillion'&&trafficPrecision!==null&&raw===trafficPrecision.toFixed(2))return trafficPrecision;return raw===''?NaN:Number(raw);}
   function formatFc(strength=number('fcMPa')){fcPrecision=Number.isFinite(strength)?strength:null;fcFormatted=fcPrecision===null?'':(fcDisplayMPa?fcPrecision:fcPrecision*145.038).toFixed(2);$('fcMPa').value=fcFormatted;}
   function formatTraffic(){const value=number('wMillion');trafficEditing=false;trafficPrecision=Number.isFinite(value)?value:null;$('trafficUnit').textContent='× 10⁶ ESAL';if(trafficPrecision!==null)$('wMillion').value=value.toFixed(2);}
-  function inputs(){const p={};p.fcUnitMPa=fcDisplayMPa;p.scStandard=$('scStandard').checked;p.scSpecified=p.scStandard?550:number('scSpecified');C.NUMERIC_KEYS.forEach(function(key){p[key]=number(key);});p.jImage=jImage;p.jCondition=document.getElementById('jCondition').value;p.designYears=number('rigidDesignYears');p.designYearsManual=document.getElementById('rigidDesignYears').manualPeriod===true;p.dpsi=Number.isFinite(p.p0)&&Number.isFinite(p.pt)?p.p0-p.pt:NaN;p.roundStep=number('roundStep');p.lookupSource=lookupSource;p.trialMm=null;if(window.RigidFoundation)p.foundation=window.RigidFoundation.getState();try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;}catch{p.sc=NaN;p.ecMillion=NaN;}return p;}
-  function write(p){fcDisplayMPa=p.fcUnitMPa===true;$('fcUnitMPa').checked=fcDisplayMPa;$('fcDisplayUnit').textContent=fcDisplayMPa?'MPa':'psi';$('scStandard').checked=p.scStandard!==false;$('scSpecified').value=String(p.scStandard===false?(p.scSpecified??550):550);jUploadVersion++;jImage=validJointImage(p.jImage)?{data:p.jImage.data,name:String(p.jImage.name||'Project illustration').slice(0,180)}:null;document.getElementById('jImageFile').value='';document.getElementById('jUploadStatus').textContent=jImage?jImage.name:'';document.getElementById('jCondition').value=p.jCondition||'project';document.getElementById('rigidDesignYears').manualPeriod=p.designYearsManual===true;trafficPrecision=null;trafficEditing=false;$('rigidDesignYears').value=String(p.designYears??20);C.NUMERIC_KEYS.forEach(function(key){$(key).value=p[key]==null?'':String(key==='fcMPa'?Number((fcDisplayMPa?p[key]:p[key]*145.038).toPrecision(15)):p[key]);});formatFc(p.fcMPa);if(window.RigidFoundation)window.RigidFoundation.restore(p.foundation||(Number.isFinite(p.k)?{mode:'manual'}:{mode:'auto'}),p.k);formatTraffic();$('roundStep').value=String(p.roundStep);lookupSource=p.lookupSource;$('legacyConcreteNotice').hidden=!p.legacyConcrete;}
+  function inputs(){const p={};p.shoulderDesign=$('shoulderDesign').checked;p.fcUnitMPa=fcDisplayMPa;p.scStandard=$('scStandard').checked;p.scSpecified=p.scStandard?550:number('scSpecified');C.NUMERIC_KEYS.forEach(function(key){p[key]=number(key);});p.jImage=jImage;p.jCondition=document.getElementById('jCondition').value;p.designYears=number('rigidDesignYears');p.designYearsManual=document.getElementById('rigidDesignYears').manualPeriod===true;p.dpsi=Number.isFinite(p.p0)&&Number.isFinite(p.pt)?p.p0-p.pt:NaN;p.roundStep=number('roundStep');p.lookupSource=lookupSource;p.trialMm=null;if(window.RigidFoundation)p.foundation=window.RigidFoundation.getState();try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);p.sc=concrete.meanPsi;p.ecMillion=concrete.ecMillion;}catch{p.sc=NaN;p.ecMillion=NaN;}return p;}
+  function write(p){$('shoulderDesign').checked=p.shoulderDesign===true;fcDisplayMPa=p.fcUnitMPa===true;$('fcUnitMPa').checked=fcDisplayMPa;$('fcDisplayUnit').textContent=fcDisplayMPa?'MPa':'psi';$('scStandard').checked=p.scStandard!==false;$('scSpecified').value=String(p.scStandard===false?(p.scSpecified??550):550);jUploadVersion++;jImage=validJointImage(p.jImage)?{data:p.jImage.data,name:String(p.jImage.name||'Project illustration').slice(0,180)}:null;document.getElementById('jImageFile').value='';document.getElementById('jUploadStatus').textContent=jImage?jImage.name:'';document.getElementById('jCondition').value=p.jCondition||'project';document.getElementById('rigidDesignYears').manualPeriod=p.designYearsManual===true;trafficPrecision=null;trafficEditing=false;$('rigidDesignYears').value=String(p.designYears??20);C.NUMERIC_KEYS.forEach(function(key){$(key).value=p[key]==null?'':String(key==='fcMPa'?Number((fcDisplayMPa?p[key]:p[key]*145.038).toPrecision(15)):p[key]);});formatFc(p.fcMPa);if(window.RigidFoundation)window.RigidFoundation.restore(p.foundation||(Number.isFinite(p.k)?{mode:'manual'}:{mode:'auto'}),p.k);formatTraffic();$('roundStep').value=String(p.roundStep);lookupSource=p.lookupSource;$('legacyConcreteNotice').hidden=!p.legacyConcrete;}
+  function esalText(value){return Number.isFinite(value)?value.toLocaleString('en-US',{maximumFractionDigits:6}):'—';}
   function fmt(value,digits){return Number.isFinite(value)?value.toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits}):'—';}
   function set(id,value){$(id).textContent=value;}
   const loadConditions={
@@ -673,7 +680,11 @@
   }
   function helpers(p){
     set('rHelp','Supported table range: 50–99.99%.');set('soHelp','Default 0.30 · Supplied rigid range 0.30–0.40.');
-    set('wMillionHelp',(Number.isFinite(p.wMillion)?fmt(p.wMillion,2)+' × 10⁶ ESAL = '+fmt(p.wMillion*1e6,0)+' ESAL. ':'')+'Enter total ESALs while editing; conversion is automatic.');
+    const mainline=p.mainlineWMillion;
+    $('wMillion').readOnly=p.shoulderDesign;$('cesalEntry').classList.toggle('shoulder-source',p.shoulderDesign);$('shoulderTrafficField').hidden=!p.shoulderDesign;
+    $('shoulderWMillion').value=Number.isFinite(p.wMillion)?p.wMillion.toFixed(2):'';
+    set('wMillionHelp',(Number.isFinite(mainline)?fmt(mainline,2)+' × 10⁶ ESAL = '+esalText(mainline*1e6)+' ESAL. ':'')+(p.shoulderDesign?'Mainline traffic retained; toggle Shoulder Design off to edit.':'Enter total ESALs while editing; conversion is automatic.'));
+    set('shoulderWMillionHelp',Number.isFinite(p.wMillion)?'0.10 × '+esalText(mainline*1e6)+' = '+esalText(p.wMillion*1e6)+' ESAL used for shoulder design.':'Enter valid mainline CESAL.');
     set('ptHelp','Present serviceability index.');
     set('p0Help','Enter the adopted initial serviceability (maximum 5).');
     set('dpsiHelp',Number.isFinite(p.dpsi)?'Automatic: '+fmt(p.p0,2)+' − '+fmt(p.pt,2)+' = '+fmt(p.dpsi,2)+'.':'Automatic: enter initial and terminal serviceability.');
@@ -686,7 +697,7 @@
     result=null;
   }
   function processSteps(p,solved){
-    set('stepTraffic',fmt(p.wMillion,2)+' million × 1,000,000 = '+fmt(p.wMillion*1e6,0)+' design-lane ESAL over '+p.designYears+' years.');
+    set('stepTraffic',(p.shoulderDesign?'Shoulder design: mainline '+esalText(p.mainlineWMillion*1e6)+' ESAL × 0.10 = '+esalText(p.wMillion*1e6)+' shoulder ESAL. ':'')+fmt(p.wMillion,2)+' million × 1,000,000 = '+fmt(p.wMillion*1e6,0)+' design-lane ESAL over '+p.designYears+' years.');
     try{const z=C.reliability(p.r,p.lookupSource).z;set('stepReliability','R = '+fmt(p.r,2)+'%; ZR = '+fmt(z,3)+'; So = '+fmt(p.so,2)+'; ZR × So = '+fmt(z*p.so,6)+'.');}catch{set('stepReliability','Enter valid Reliability and Overall Standard Deviation.');}
     set('stepServiceability',fmt(p.p0,2)+' − '+fmt(p.pt,2)+' = '+fmt(p.dpsi,2)+'.');
     try{const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);set('stepConcrete','f′c = '+fmt(p.fcMPa,2)+' MPa; Sc = '+fmt(concrete.specificationMPa,3)+' MPa = '+fmt(concrete.specificationPsi,2)+' psi; PS = '+fmt(concrete.ps,2)+'%; SDs = '+fmt(concrete.sdPsi,2)+' psi; S′c = '+fmt(p.sc,2)+' psi; Ec = '+fmt(p.ecMillion*1e6,2)+' psi.');}catch{set('stepConcrete','Enter valid concrete strength and Reliability to calculate properties.');}
@@ -704,7 +715,7 @@
     updateLoadTransfer();
     const standard=$('scStandard').checked;$('scSpecified').readOnly=standard;$('scSpecifiedEntry').classList.toggle('auto',standard);if(standard)$('scSpecified').value='550';
     if(window.RigidFoundation)window.RigidFoundation.update();
-    const p=inputs();$('dpsi').value=Number.isFinite(p.dpsi)?p.dpsi.toFixed(2):'';clearErrors();helpers(p);updateLookup(p);
+    const sourceInputs=inputs(),p={...sourceInputs,mainlineWMillion:sourceInputs.wMillion,wMillion:sourceInputs.shoulderDesign?sourceInputs.wMillion*0.10:sourceInputs.wMillion};$('dpsi').value=Number.isFinite(p.dpsi)?p.dpsi.toFixed(2):'';clearErrors();helpers(p);updateLookup(p);
     let concreteError=null;
     try{
       const concrete=C.concreteProperties(p.fcMPa,C.reliability(p.r,p.lookupSource).z,p.lookupSource,p.scSpecified);
@@ -724,7 +735,7 @@
     try{result=C.solve(p);}catch(e){empty();showErrors([{key:null,message:e.message}]);if(V)V.update(p,null);return;}
     processSteps(p,result);
     if(V)V.update(p,result);
-    saveLocal(p);
+    saveLocal(sourceInputs);
   }
   function makeCase(p){
     return {app:'aashto93-rigid-local',version:2,equationConstant:C.CONSTANT,concreteMethod:'SPECIFIED_SC_AND_PAVEMENT_Z',units:{fcMPa:'MPa',wMillion:'million ESAL',ecMillion:'million psi',sc:'psi',k:'pci',trialMm:'mm'},inputs:p,illustration:V?V.getSettings():undefined};
@@ -763,13 +774,15 @@
     };
     reader.readAsDataURL(file);
   });
-  $('wMillion').addEventListener('focus',function(){if(trafficEditing)return;const value=number('wMillion');trafficEditing=true;if(Number.isFinite(value))this.value=String(value*1e6);trafficPrecision=null;$('trafficUnit').textContent='ESAL';});
+  $('wMillion').addEventListener('focus',function(){if(this.readOnly||trafficEditing)return;const value=number('wMillion');trafficEditing=true;if(Number.isFinite(value))this.value=String(value*1e6);trafficPrecision=null;$('trafficUnit').textContent='ESAL';});
   $('wMillion').addEventListener('blur',function(){formatTraffic();render();});
+  $('shoulderDesign').addEventListener('pointerdown',function(e){e.preventDefault();});
+  $('shoulderDesign').addEventListener('change',function(){formatTraffic();render();this.focus?.();});
   $('roundStep').addEventListener('change',render);
   if(V)V.onSettingsChange(function(){saveLocal(inputs());});
   $('resetInputs').addEventListener('click',function(){write(Object.assign({},C.DEFAULT_INPUTS));if(V)V.reset();try{localStorage.removeItem(STORAGE_KEY);}catch(e){}render();message('Recommended defaults restored. Enter project-specific design values.');});
   let restored=false;
-  try{const saved=localStorage.getItem(STORAGE_KEY);if(saved){const data=JSON.parse(saved);write(C.readCase(data));if(V)V.restoreSettings(data.illustration);restored=true;}}catch(e){}
+  try{const saved=localStorage.getItem(STORAGE_KEY);if(saved){const data=JSON.parse(saved);write({...C.readCase(data),shoulderDesign:data.inputs.shoulderDesign===true});if(V)V.restoreSettings(data.illustration);restored=true;}}catch(e){}
   if(!restored)write(Object.assign({},C.DEFAULT_INPUTS));
   render();
   if(restored)message('Latest inputs restored from this browser.');

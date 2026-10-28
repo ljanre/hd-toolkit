@@ -151,3 +151,21 @@ for(const id of ['reliability','fc','ps','z'])assert.doesNotMatch(strength.match
 console.log('Recommended defaults, blank startup, calculation, reset and saved-case restoration passed.');
 
 for(const [j,layout,figure] of [[3.8,'undoweled-aggregate','undoweled'],[3.2,'doweled-aggregate','doweled'],[2.7,'doweled-hma','doweled'],[2.9,'crcp-hma','crcp-hma'],[2.3,'crcp-pcc','crcp-pcc'],[3.05,'crcp-hma','crcp-hma'],[2.8,'crcp-pcc','crcp-pcc'],[3.5,'project',null],[2.2,'project',null]]){app.nodes.get('j').value=String(j);app.nodes.get('j').events.input();app.nodes.get('designForm').events.input();assert.equal(app.nodes.get('jCondition').value,layout,'Editing J selects a matching prescribed joint layout or Others');assert.equal(Number(app.nodes.get('j').value),j,'Matching does not overwrite the adopted coefficient');if(figure)assert.equal(app.nodes.get('jFigure').src,'./assets/load-transfer/'+figure+'.svg');}
+
+// Shoulder traffic is a reversible UI load selection; the engine and stored mainline load stay intact.
+const shoulder=mount(),sn=shoulder.nodes,mainlineResult=shoulder.result();
+assert.equal(sn.get('shoulderDesign').checked,false);assert.equal(sn.get('shoulderTrafficField').hidden,true);
+sn.get('shoulderDesign').checked=true;sn.get('shoulderDesign').events.change.call(sn.get('shoulderDesign'));
+assert.equal(sn.get('wMillion').readOnly,true);assert.equal(sn.get('wMillion').value,'15.00');assert.equal(sn.get('shoulderWMillion').value,'1.50');assert.equal(sn.get('shoulderTrafficField').hidden,false);
+assert.equal(shoulder.result().n.w,1500000);assert.equal(shoulder.saved().inputs.wMillion,15);assert.equal(shoulder.saved().inputs.shoulderDesign,true);
+assert.equal(shoulder.result().n.k,mainlineResult.n.k);assert.equal(shoulder.result().n.j,mainlineResult.n.j);
+sn.get('designForm').events.input();assert.equal(shoulder.result().n.w,1500000,'Repeated renders cannot compound the 10% reduction');
+const shoulderRestored=mount(shoulder.saved());assert.equal(shoulderRestored.nodes.get('shoulderDesign').checked,true);assert.equal(shoulderRestored.result().n.w,1500000);assert.equal(shoulderRestored.nodes.get('wMillion').value,'15.00');
+sn.get('shoulderDesign').checked=false;sn.get('shoulderDesign').events.change.call(sn.get('shoulderDesign'));
+assert.equal(shoulder.result().dMm,mainlineResult.dMm);assert.equal(sn.get('wMillion').readOnly,false);assert.equal(sn.get('shoulderTrafficField').hidden,true);
+sn.get('wMillion').events.focus.call(sn.get('wMillion'));sn.get('wMillion').value='1286743.123456';sn.get('designForm').events.input();sn.get('wMillion').events.blur.call(sn.get('wMillion'));
+sn.get('shoulderDesign').checked=true;sn.get('shoulderDesign').events.change.call(sn.get('shoulderDesign'));
+assert.ok(Math.abs(shoulder.result().n.w-128674.3123456)<1e-7,'Use full source precision, not rounded displayed millions');
+sn.get('resetInputs').events.click();assert.equal(sn.get('shoulderDesign').checked,false);assert.equal(shoulder.result().roundedMm,300);
+const guideSource=await readFile(new URL('../src/components/input-guide.js',import.meta.url),'utf8');assert.ok(guideSource.includes('page 6-143'));assert.ok(guideSource.includes('not a universal requirement'));
+console.log('Shoulder mode: 10% calculation, original load storage, restore, reversible toggling, source precision, unchanged support/joint inputs, reset and DGCS reference verified.');
