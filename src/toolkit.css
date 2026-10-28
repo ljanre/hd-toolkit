@@ -73,6 +73,7 @@ road-widening{display:block}road-widening iframe{display:block;width:100%;height
 .foundation-nomograph .manual-nomograph-layer .manual-nomograph-line{pointer-events:none}.manual-nomograph-segment{stroke:transparent;stroke-width:20;pointer-events:stroke;vector-effect:non-scaling-stroke;touch-action:none}.manual-nomograph-segment:focus{stroke:#1769aa35;outline:none}
 .foundation-auto-toggle input[type=checkbox]{top:50%;transform:translateY(-50%);height:20px;min-height:0;padding:0}
 
+cross-slope{display:block}cross-slope iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:1px solid var(--line);border-radius:12px;background:#f2f5f9}@media(max-width:760px){cross-slope iframe{height:calc(100dvh - 180px);min-height:650px}}
 calendar-days{display:block}calendar-days iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:0;border-radius:16px;background:#f4f7fa}@media(max-width:760px){calendar-days iframe{height:calc(100dvh - 180px);min-height:650px}}
 
 seismic-coefficients{display:block}seismic-coefficients iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:0;border-radius:16px;background:#f4f7fa}@media(max-width:760px){seismic-coefficients iframe{height:calc(100dvh - 180px);min-height:650px}}
