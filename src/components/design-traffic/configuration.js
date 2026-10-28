@@ -86,11 +86,11 @@
     }catch(error){$('sheetError').textContent=error.message;result=null;}
     summary();
   }
-  function clear(count=3){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.slice(0,count).forEach(profile=>add(profile));$('sheetSurvey').value='';$('sheetOpening').value='';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetDL:'1.00'}))$(id).value=value;update();}
+  function clear(count=3){rows.splice(0);$('sheetRows').replaceChildren();$('sheetEFRows').replaceChildren();V.profiles.slice(0,count).forEach(profile=>add(profile));$('sheetSurvey').value='2025';$('sheetOpening').value='2026';for(const [id,value] of Object.entries({sheetYears:'20',sheetGrowth:'2',sheetDD:'0.50',sheetDL:'1.00'}))$(id).value=value;update();}
   $('timelineVehicles').addEventListener('change',update);$('configurationForm').addEventListener('input',update);$('configurationForm').addEventListener('change',update);$('configurationForm').addEventListener('submit',event=>event.preventDefault());
   $('sheetClear').addEventListener('click',()=>clear());$('sheetAdd').addEventListener('click',()=>{add();update();});
-  $('sheetSample').addEventListener('click',()=>{clear(0);add(V.profiles.find(p=>p.code==='1-2'));add(V.profiles.find(p=>p.code==='11-2'));$('sheetSurvey').value='2025';$('sheetOpening').value='2025';$('sheetGrowth').value='3.8';$('sheetDL').value='0.50';rows.find(row=>row.select.value==='1-2').count.value='2197';const trailer=rows.find(row=>row.select.value==='11-2');trailer.count.value='1865';trailer.select.value='custom';trailer.committedValue='custom';trailer.layoutCode='11-2';trailer.sampleName='Sample 11-2';trailer.select.querySelector('option[value=custom]').textContent='New Configuration · Sample 11-2';trailer.fractions.value='0.168, 0.2981, 0.2793, 0.2538';update();});
   window.addEventListener('message',event=>{if(window.parent===window||event.source!==window.parent||event.data?.type!=='hd-toolkit-admin-state'||typeof event.data.enabled!=='boolean')return;const steps=$('trafficCalculationSteps');steps.hidden=!event.data.enabled;if(steps.hidden)steps.open=false;});
   if(window.parent!==window)window.parent.postMessage({type:'hd-toolkit-traffic-ready'},'*');
+  for(const profile of V.profiles){const tr=make('tr');for(const value of [profile.code,profile.name,fmt(profile.gvw)])tr.append(make('td',value));$('magvwRows').append(tr);}
   clear();
 })();

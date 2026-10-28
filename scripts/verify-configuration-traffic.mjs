@@ -28,3 +28,14 @@ const adopted=custom.validate({name:'Project truck',layout:'1-1',gvw:20000,fract
 assert.equal(custom.validate({layout:'11-12',gvw:43500,fractions:'',useManual:true,manualEF:'2.5'}).ef,2.5);
 for(const draft of [{layout:'1-1',gvw:0,fractions:'0.2,0.8'},{layout:'1-2',gvw:18000,fractions:'0.2,0.8'},{layout:'1-1',gvw:18000,fractions:'0.2,0.7'},{layout:'1-1',gvw:18000,fractions:'0.2,0.8',useManual:true,manualEF:-1}])assert.throws(()=>custom.validate(draft));
 const escapedDiagram=V.diagram({...V.profiles[0],name:'<img src=x onerror=alert(1)>'},true);assert.ok(!escapedDiagram.includes('<img'));assert.ok(escapedDiagram.includes('&lt;img'));
+
+// Verify the supplied Annex A code/weight pairs independently of EF calculations.
+const magvw=[['1-1',18000],['1-2',33300],['1-3',35600],['11-1',34000],['11-2',40600],['11-3',41000],['12-1',39700],['12-2',41500],['12-3',42000],['11-11',39700],['11-12',43500],['12-11',43500],['12-12',45000]];
+assert.equal(JSON.stringify(V.profiles.map(p=>[p.code,p.gvw])),JSON.stringify(magvw));
+const wheels=[6,10,14,10,14,18,14,18,22,14,18,18,22];
+V.profiles.forEach((p,i)=>assert.ok(p.name.includes('('+wheels[i]+' wheels)'),p.code+' Annex A wheel count'));
+for(const code of ['11-1','11-2','11-3'])assert.match(V.profiles.find(p=>p.code===code).name,/Truck-trailer with 2 axles at motor vehicle/);
+for(const code of ['12-1','12-2','12-3'])assert.match(V.profiles.find(p=>p.code===code).name,/Truck semi-trailer with 3 axles at motor vehicle/);
+for(const removed of ['sheetSample','cesal-flow','Establish opening traffic','Enter annual-average two-way survey counts','Convert each vehicle loading case','Vehicle cases are linked to Section 1.'])assert.ok(!worksheetHtml.includes(removed),removed+' removed');
+assert.match(worksheetHtml,/id="sheetSurvey" value="2025"/);assert.match(worksheetHtml,/id="sheetOpening" value="2026"/);
+assert.ok(worksheetHtml.indexOf('id="sheetRows"')<worksheetHtml.indexOf('id="sheetAdd"'));

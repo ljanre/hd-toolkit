@@ -1,20 +1,21 @@
 /* Transcribed from the four user-supplied Annex A/B images.
-   GVW values are source examples, not a verification of current legal limits. */
+   Codes, descriptions and allowable GVW follow the supplied Annex A (DPWH 2013).
+   Axle shares remain from Annex B; applicability of legal limits requires the governing issuance. */
 (() => {
   const profiles=[
-    {code:'1-1',name:'Rigid Truck · 2 Axles',gvw:18000,fractions:[.2,.8],kind:'rigid',classes:[6]},
-    {code:'1-2',name:'Rigid Truck · Tandem Rear · 3 Axles',gvw:33300,fractions:[.2,.4,.4],kind:'rigid',classes:[7]},
-    {code:'1-3',name:'Rigid Truck · Tridem Rear · 4 Axles',gvw:35600,fractions:[.208,.264,.264,.264],kind:'rigid',classes:[7]},
-    {code:'11-1',name:'Semi-Trailer · 3 Axles',gvw:34000,fractions:[.112,.444,.444],kind:'semi',classes:[]},
-    {code:'11-2',name:'Semi-Trailer · 4 Axles',gvw:40600,fractions:[.1688,.2981,.2793,.2538],kind:'semi',classes:[]},
-    {code:'11-3',name:'Semi-Trailer · 5 Axles',gvw:41000,fractions:[.155,.197,.216,.216,.216],kind:'semi',classes:[8]},
-    {code:'12-1',name:'Semi-Trailer · 4 Axles',gvw:39700,fractions:[.1688,.2538,.2793,.2981],kind:'semi',classes:[]},
-    {code:'12-2',name:'Semi-Trailer · 5 Axles',gvw:41500,fractions:[.112,.222,.222,.222,.222],kind:'semi',classes:[8]},
-    {code:'12-3',name:'Semi-Trailer · 6 Axles',gvw:42000,fractions:[.0755,.196,.196,.1875,.1875,.1575],kind:'semi',classes:[8]},
-    {code:'11-11',name:'Truck and Trailer · 4 Axles',gvw:39700,fractions:[.169,.298,.254,.279],kind:'trailer',classes:[]},
-    {code:'11-12',name:'Truck and Trailer · 5 Axles',gvw:43500,fractions:null,kind:'trailer',classes:[9]},
-    {code:'12-11',name:'Truck and Trailer · 5 Axles',gvw:43500,fractions:null,kind:'trailer',classes:[9]},
-    {code:'12-12',name:'Truck and Trailer · 6 Axles',gvw:45000,fractions:[.109,.177,.188,.263,.131,.132],kind:'trailer',classes:[9]}
+    {code:'1-1',name:'Truck with 2 axles (6 wheels)',gvw:18000,fractions:[.2,.8],kind:'rigid',classes:[6]},
+    {code:'1-2',name:'Truck with tandem rear axle · 3 axles (10 wheels)',gvw:33300,fractions:[.2,.4,.4],kind:'rigid',classes:[7]},
+    {code:'1-3',name:'Truck with tridem rear axle · 4 axles (14 wheels)',gvw:35600,fractions:[.208,.264,.264,.264],kind:'rigid',classes:[7]},
+    {code:'11-1',name:'Truck-trailer with 2 axles at motor vehicle & 1 axle at trailer (10 wheels)',gvw:34000,fractions:[.112,.444,.444],kind:'semi',classes:[]},
+    {code:'11-2',name:'Truck-trailer with 2 axles at motor vehicle & 2 axles at trailer (14 wheels)',gvw:40600,fractions:[.1688,.2981,.2793,.2538],kind:'semi',classes:[]},
+    {code:'11-3',name:'Truck-trailer with 2 axles at motor vehicle & 3 axles at trailer (18 wheels)',gvw:41000,fractions:[.155,.197,.216,.216,.216],kind:'semi',classes:[8]},
+    {code:'12-1',name:'Truck semi-trailer with 3 axles at motor vehicle & 1 axle at trailer (14 wheels)',gvw:39700,fractions:[.1688,.2538,.2793,.2981],kind:'semi',classes:[]},
+    {code:'12-2',name:'Truck semi-trailer with 3 axles at motor vehicle & 2 axles at trailer (18 wheels)',gvw:41500,fractions:[.112,.222,.222,.222,.222],kind:'semi',classes:[8]},
+    {code:'12-3',name:'Truck semi-trailer with 3 axles at motor vehicle & 3 axles at trailer (22 wheels)',gvw:42000,fractions:[.0755,.196,.196,.1875,.1875,.1575],kind:'semi',classes:[8]},
+    {code:'11-11',name:'Truck-trailer with 2 axles at motor vehicle & 2 axles at trailer (14 wheels)',gvw:39700,fractions:[.169,.298,.254,.279],kind:'trailer',classes:[]},
+    {code:'11-12',name:'Truck-trailer with 2 axles at motor vehicle & 3 axles at trailer (18 wheels)',gvw:43500,fractions:null,kind:'trailer',classes:[9]},
+    {code:'12-11',name:'Truck-trailer with 3 axles at motor vehicle & 2 axles at trailer (18 wheels)',gvw:43500,fractions:null,kind:'trailer',classes:[9]},
+    {code:'12-12',name:'Truck-trailer with 3 axles at motor vehicle & 3 axles at trailer (22 wheels)',gvw:45000,fractions:[.109,.177,.188,.263,.131,.132],kind:'trailer',classes:[9]}
   ];
   function calculate(code,gvwKg){
     const profile=profiles.find(p=>p.code===code);
