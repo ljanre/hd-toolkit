@@ -9,6 +9,7 @@
     return {code:row.layoutCode||'custom',name:row.sampleName||'New Truck Type',gvw:n(row.weight),fractions:valid?parts:null,kind:row.customKind||'rigid'};
   }
   function updateVisual(row,index){
+    row.efTr.hidden=!(Number.isFinite(n(row.count))&&n(row.count)>0);
     const profile=visualProfile(row),custom=row.select.value==='custom';row.weight.readOnly=true;row.fractions.readOnly=true;row.edit.hidden=!custom;
     row.weight.title=row.fractions.title=custom?'Edit using Edit Configuration':'Catalogue value · use + New Truck Type to create an editable case';
     row.selectedLabel.textContent=row.select.selectedOptions[0]?.textContent||'';
@@ -23,7 +24,7 @@
     row.count=input(tr,'survey AADT');row.count.value='0';row.count.placeholder='AADT';
     for(const [key,label] of [['openingDisplay','opening AADT'],['trafficDisplay','cumulative design traffic']]){const cell=make('td'),output=make('output','—');output.setAttribute('aria-label',profile.code+' '+label);cell.dataset.label=label==='opening AADT'?'Opening AADT · veh/day':'Design Trafficᵢ · cumulative vehicles';cell.append(output);tr.append(cell);row[key]=output;}
     row.weight=input(efTr,'adopted GVW (kg)');row.fractions=input(efTr,'physical axle fractions','text');row.fractions.placeholder='e.g. 0.2, 0.8';
-    const efCell=make('td'),automatic=make('input'),note=make('small');automatic.readOnly=true;automatic.setAttribute('aria-label',profile.code+' calculated EF');note.className='sheet-row-note';efCell.append(automatic,note);efTr.append(efCell);row.automatic=automatic;row.note=note;
+    const efCell=make('td'),automatic=make('input'),note=make('small');efCell.dataset.label='EFᵢ · ESAL/vehicle';automatic.readOnly=true;automatic.setAttribute('aria-label',profile.code+' calculated EF');note.className='sheet-row-note';efCell.append(automatic,note);efTr.append(efCell);row.automatic=automatic;row.note=note;
     const removeCell=make('td'),remove=make('button','−');remove.type='button';remove.className='remove-truck';remove.setAttribute('aria-label','Remove loading case '+(rows.length+1));remove.addEventListener('click',()=>{rows.splice(rows.indexOf(row),1);tr.remove();efTr.remove();update();});removeCell.dataset.label='Remove';removeCell.append(remove);tr.append(removeCell);
     function setProfile(){const p=V.profiles.find(p=>p.code===select.value);row.sampleName=null;row.adoptedEF=null;row.committedValue=select.value;select.querySelector('option[value=custom]')?.remove();if(p){row.layoutCode=p.code;row.customKind=p.kind;row.weight.value=String(p.gvw);row.fractions.value=p.fractions?p.fractions.join(', '):'';}updateVisual(row,rows.includes(row)?rows.indexOf(row):rows.length);}
 

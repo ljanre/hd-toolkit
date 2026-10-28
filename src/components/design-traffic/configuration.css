@@ -75,3 +75,23 @@
  #sheetRows td::before{content:attr(data-label);text-align:left;font-size:11px;color:#536977}
  #sheetRows .remove-truck{justify-self:end}
 }
+
+/* Compact EF rows, showing only truck types carrying positive survey AADT. */
+.sheet-loading{min-width:0!important;width:100%;table-layout:fixed}
+.sheet-loading th,.sheet-loading td{padding:6px 8px;min-width:0;overflow-wrap:anywhere}
+.sheet-loading thead th:first-child{width:40%}.sheet-loading thead th:nth-child(2){width:18%}.sheet-loading thead th:nth-child(3){width:28%}
+#sheetEFRows th,#sheetEFRows td:nth-child(3){min-width:0}
+#sheetEFRows th{font-size:11px;font-weight:500}
+#sheetEFRows .engineering-diagram{width:280px;height:auto;max-width:100%;margin:4px auto}
+#sheetEFRows input{min-width:0;min-height:32px;padding:4px 6px;width:100%;font-size:12px}
+#sheetEFRows .ef-lock-note[hidden],#sheetEFRows tr[hidden]{display:none!important}
+#efStage .sheet-scroll{overflow:visible}
+@media(max-width:650px){
+ .sheet-loading,.sheet-loading tbody,.sheet-loading tr,.sheet-loading th,.sheet-loading td{display:block;width:100%}
+ .sheet-loading thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ #sheetEFRows tr{padding:8px;border-bottom:1px solid var(--border)}
+ #sheetEFRows th{padding:0 0 8px;border:0}
+ #sheetEFRows td{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,140px);align-items:center;gap:8px;padding:5px 0;border:0;text-align:right}
+ #sheetEFRows td::before{content:attr(data-label);text-align:left;font-size:11px;color:#536977}
+ #sheetEFRows td:last-child .sheet-row-note{grid-column:1/-1}
+}
