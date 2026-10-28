@@ -88,7 +88,7 @@
     try{const preview=C.forecast({aadt:included.map(row=>n(row.count)),rates:included.map(()=>n($('sheetGrowth'))),factors:included.map(()=>0),years:n($('sheetYears')),delay:opening-survey,dd:1,dl:1,preview:true});included.forEach((row,i)=>{row.openingDisplay.textContent=fmt(preview.detail[i].opening);row.trafficDisplay.textContent=fmt(preview.detail[i].vehicles);});}catch{/* Invalid traffic inputs retain the empty first-stage outputs. */}
   }
   function summary(){
-    $('sheetSummary').replaceChildren();for(const row of rows){row.openingDisplay.textContent='—';row.trafficDisplay.textContent='—';}calculationSteps();if(!result){previewTraffic();return;}
+    $('sheetSummary').replaceChildren();for(const row of rows){row.openingDisplay.textContent='—';row.trafficDisplay.textContent='—';}calculationSteps();if(!result){CesalPresentation.update(null);previewTraffic();return;}
     const totals={survey:0,opening:0,traffic:0,cesal:0};
     active.forEach((row,i)=>{
       const d=result.detail[i],count=n(row.count),designTraffic=count===0?0:365*d.opening*d.growth;
@@ -103,6 +103,9 @@
     for(const [id,value] of Object.entries({sheetAADT:totals.survey,sheetOpeningAADT:totals.opening,sheetTrafficTotal:totals.traffic,sheetCESALTotal:totals.cesal,sheetTotal:result.complete?result.total:result.subtotal}))$(id).textContent=fmt(value);
     $('sheetW18Highlight').textContent=fmt(result.complete?result.total:result.subtotal)+' ESAL'+(result.complete?'':' · Partial');
     $('sheetTotalsLabel').textContent=result.complete?'TOTAL':'TOTAL (PARTIAL)';
+    CesalPresentation.update({complete:result.complete,total:result.complete?result.total:result.subtotal,
+      parameters:{survey:n($('sheetSurvey')),opening:n($('sheetOpening')),years:n($('sheetYears')),growth:n($('sheetGrowth')),dd:n($('sheetDD')),dl:n($('sheetDL'))/100,lanes:n($('sheetLanes'))},
+      cases:active.map((row,i)=>{const d=result.detail[i],profile=visualProfile(row),traffic=n(row.count)>0?365*d.opening*d.growth:0;return {index:rows.indexOf(row),code:row.layoutCode||profile.code,name:profile.name,custom:row.select.value==='custom',aadt:n(row.count),gvw:n(row.weight),fractions:row.fractions.value,manual:row.adoptedEF!=null,ef:row.ef,opening:d.opening,growthFactor:d.growth,traffic,cesal:Number.isFinite(row.ef)?traffic*row.ef:null,contribution:d.esal};})});
   }
   function update(){
     $('sheetAdd').disabled=$('sheetNew').disabled=rows.length>=50;

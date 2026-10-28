@@ -1,0 +1,11 @@
+# CESAL chart and editable engineering report
+
+The chart compares design-lane ESAL contributions by loading case. A ranked horizontal bar chart is suited to an ordinal category (truck type) and a quantitative measure (CESAL). A zero baseline preserves magnitude comparisons. Rank by ESAL rather than AADT because different EFs can make the most frequent vehicle a different vehicle from the largest loading contributor. No dual-axis AADT/ESAL chart is used.
+
+Research consulted: [Observable Plot, Bar mark](https://observablehq.com/plot/marks/bar), including its categorical/quantitative definition, horizontal orientation, descending sort and zero baseline. Source inspected at https://raw.githubusercontent.com/observablehq/plot/main/docs/marks/bar.md on 28 October 2026. This is visualization guidance, not a DPWH-prescribed chart or engineering coefficient source.
+
+The chart displays the ten largest cases individually and groups further cases as Other. It excludes zero AADT and cases without an available EF, labels partial results, and retains separate repeated loading cases. Report generation requires a complete valid forecast and at least one positive-AADT case. A verified EF of zero remains a valid entered factor and is documented as such.
+
+The report snapshots the existing full-precision forecast, not a second calculation engine. It includes project fields, assumptions, method, loading/EF provenance, all positive-AADT cases, totals, a worked substitution, chart, draft narrative and review items. Source references are the supplied CESAL concept citing DO 22 s2011, Annex A/B and Table 1. It does not claim independent verification of current legal limits or approved project assumptions.
+
+Word export is a real OOXML .docx package generated locally with no third-party scripts, external report service or project-data upload. Text and tables are native editable Word content. The chart is an embedded PNG; its values remain editable in the calculation table, or the report can be regenerated from edited worksheet inputs. Report output uses landscape A4 pages and a page-number field. Optional metadata is never populated with invented project information. The automatically suggested discussion can be edited before download and throughout the Word document.
