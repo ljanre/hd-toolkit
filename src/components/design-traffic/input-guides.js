@@ -27,12 +27,16 @@
  function heading(labelNodes,key){const row=document.createElement('span'),text=document.createElement('span');row.className='guide-label-row';text.append(...labelNodes);row.append(text);add(row,key);return row;}
  for(const [id,key] of Object.entries({sheetSurvey:'survey',sheetOpening:'opening',sheetYears:'years',sheetGrowth:'growth',sheetDD:'dd',sheetDL:'dl'})){
   const input=document.getElementById(id),field=input.closest('.sheet-field'),label=field.querySelector('label');
-  label.htmlFor=id==='sheetDL'?'sheetLanes':id;if(label.contains(input))field.append(input);const row=document.createElement('div');row.className='guide-label-row';label.before(row);row.append(label);add(row,key);
+  label.htmlFor=id==='sheetDL'?'sheetLanes':id;if(label.contains(input))field.append(input);const row=document.createElement('div');row.className='guide-label-row';label.before(row);row.append(label);add(field,key);
  }
  for(const [id,key] of Object.entries({customName:'name',customLayout:'layout',customWeight:'weight',customFractions:'fractions',customOverride:'override',customEF:'override'})){
   const input=document.getElementById(id),label=input.closest('label');label.classList.add('cesal-guide-label');
-  const row=heading([...label.childNodes].filter(node=>node.nodeType===3),key);
-  if(input.type==='checkbox')input.after(row);else label.prepend(row);
+  const textNodes=[...label.childNodes].filter(node=>node.nodeType===3);
+  if(input.type==='checkbox')input.after(heading(textNodes,key));
+  else {
+   const title=document.createElement('span');title.className='guide-label-row';title.append(...textNodes);label.prepend(title);
+   const controls=document.createElement('div');controls.className='custom-guide-controls';input.before(controls);controls.append(input);add(controls,key);
+  }
  }
  for(const [selector,keys] of [['.sheet-traffic thead th',['vehicle','aadt','openingAADT','traffic']],['.sheet-loading thead th',['vehicle','weight','fractions','ef']],['.sheet-summary thead th',['vehicle','aadt','openingAADT','traffic','ef','cesal','w18']]])document.querySelectorAll(selector).forEach((th,i)=>{
   if(!keys[i])return;const nodes=[...th.childNodes],split=nodes.findIndex(node=>node.nodeName==='BR');

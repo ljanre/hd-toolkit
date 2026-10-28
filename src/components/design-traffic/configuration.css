@@ -145,3 +145,12 @@
 #configurationWorksheet .lane-distribution-controls{margin:0}
 @media(max-width:1000px){.distribution-inputs{grid-template-columns:1fr}}
 @media(max-width:650px){#configurationWorksheet .sheet-inputs .sheet-field{grid-template-columns:minmax(110px,.8fr) minmax(0,1.2fr);gap:8px}}
+
+/* Field guides follow the input box on its right. */
+#configurationWorksheet .sheet-inputs .sheet-field{grid-template-columns:minmax(130px,.8fr) minmax(0,1.2fr) 24px}
+#configurationWorksheet .sheet-field>.input-guide-button{position:static;align-self:center;margin:0}
+.custom-guide-controls{display:flex;align-items:center;gap:8px;margin-top:6px;min-width:0}
+.custom-fields .custom-guide-controls input,.custom-fields .custom-guide-controls select{flex:1;min-width:0;margin:0}
+.custom-guide-controls>.input-guide-button{position:static;flex-shrink:0;margin:0}
+@media(max-width:850px){.sheet-inputs{grid-template-columns:1fr}}
+@media(max-width:650px){#configurationWorksheet .sheet-inputs .sheet-field{grid-template-columns:minmax(110px,.8fr) minmax(0,1.2fr) 24px}}
