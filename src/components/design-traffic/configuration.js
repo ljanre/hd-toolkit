@@ -101,11 +101,12 @@
       totals.survey+=count;totals.opening+=d.opening;totals.traffic+=designTraffic;totals.cesal+=cesal;
     });
     for(const [id,value] of Object.entries({sheetAADT:totals.survey,sheetOpeningAADT:totals.opening,sheetTrafficTotal:totals.traffic,sheetCESALTotal:totals.cesal,sheetTotal:result.complete?result.total:result.subtotal}))$(id).textContent=fmt(value);
+    $('sheetW18Highlight').textContent=fmt(result.complete?result.total:result.subtotal)+' ESAL'+(result.complete?'':' · Partial');
     $('sheetTotalsLabel').textContent=result.complete?'TOTAL':'TOTAL (PARTIAL)';
   }
   function update(){
     $('sheetAdd').disabled=$('sheetNew').disabled=rows.length>=50;
-    result=null;active=[];for(const id of ['sheetTotal','sheetAADT','sheetOpeningAADT','sheetTrafficTotal','sheetCESALTotal'])$(id).textContent='—';$('sheetError').textContent='';$('sheetTotalsLabel').textContent='TOTAL';
+    result=null;active=[];for(const id of ['sheetW18Highlight','sheetTotal','sheetAADT','sheetOpeningAADT','sheetTrafficTotal','sheetCESALTotal'])$(id).textContent='—';$('sheetError').textContent='';$('sheetTotalsLabel').textContent='TOTAL';
     try{
       for(const row of rows)updateVisual(row,rows.indexOf(row));
       for(const row of rows){row.automatic.value='';row.note.textContent='';const included=row.count.value.trim()!==''||row.count.validity.badInput;row.tr.classList.toggle('sheet-included',included);if(!included)continue;active.push(row);const count=n(row.count);if(!Number.isFinite(count)||count<0)throw new Error('Enter nonnegative AADT for '+row.select.value+'.');row.ef=count===0?0:factor(row);if(Number.isFinite(row.ef))row.automatic.value=row.ef.toFixed(3);else{row.automatic.value='';row.note.textContent='Enter verified axle fractions using + New Truck Type.';}}
