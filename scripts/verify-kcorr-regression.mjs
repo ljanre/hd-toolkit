@@ -3,9 +3,10 @@ import {readFile} from 'node:fs/promises';
 import {runInNewContext} from 'node:vm';
 import {createHash} from 'node:crypto';
 const root=new URL('../src/',import.meta.url),baseline=JSON.parse(await readFile(new URL('./kcorr-calculation-baseline.json',import.meta.url),'utf8'));
-const hash=text=>createHash('sha256').update(text).digest('hex'),context={};
+const hash=text=>createHash('sha256').update(text.replace(/\r\n/g,'\n')).digest('hex'),context={};
 // V8/libm can differ in the final floating-point bits across supported Node versions.
-// Keep source hashes and structure/statuses exact; bound only numerical roundoff.
+// Normalize checkout line endings only; keep engine contents and result structures exact.
+// Bound only numerical roundoff in calculated results.
 function equivalent(actual,expected,path='result'){
  if(typeof expected==='number'){
   assert.equal(typeof actual,'number',path);assert.ok(Number.isFinite(actual),path);

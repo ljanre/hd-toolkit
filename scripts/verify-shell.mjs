@@ -22,7 +22,7 @@ classes.add('admin-mode');
 const create = () => ({closest(){return null;},value:'',handlers:{},attributes:{},setAttribute(k,v){this.attributes[k]=v;},removeAttribute(k){delete this.attributes[k];},addEventListener(k,f){this.handlers[k]=f;},dispatchEvent(e){this.lastEvent=e;},focus(){this.focused=true;}});
 for (const id of ['flexibleTool','sidebarToggle','pavementTool','subgradeTool','subbaseTool','strengthTool','trafficTool','cbrTool','rainfallTool','coordinatesTool','k','sc','ecMillion','fcMPa','r','wMillion','rigidDesignYears','adminModeToggle','adminModeState','adminPasswordDialog','adminPasswordForm','adminPassword','adminPasswordError','adminPasswordCancel']) nodes.set(id,create());
 nodes.set('criteriaTool',create());nodes.set('geometryTool',create());nodes.set('wideningTool',create());
-nodes.set('projectTool',create());
+nodes.set('projectTool',create());nodes.set('alignmentTool',create());
 nodes.set('crossSlopeTool',create());
 nodes.set('hydrologyTool',create());
 nodes.set('calendarTool',create());

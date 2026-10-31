@@ -150,7 +150,7 @@ const frame = { contentWindow: {} };
 const nodes = new Map();
 for (const id of ['flexibleTool','flexibleTool', 'sidebarToggle', 'pavementTool', 'rainfallTool', 'coordinatesTool', 'subgradeTool', 'subbaseTool', 'strengthTool','cbrTool','trafficTool', 'k']) nodes.set(id, element(id));
 nodes.set('criteriaTool',element('criteriaTool'));nodes.set('geometryTool',element('geometryTool'));nodes.set('wideningTool',element('wideningTool'));
-nodes.set('projectTool',element('projectTool'));
+nodes.set('projectTool',element('projectTool'));nodes.set('alignmentTool',element('alignmentTool'));
 nodes.set('calendarTool',element('calendarTool'));
 nodes.set('crossSlopeTool',element('crossSlopeTool'));
 nodes.set('hydrologyTool',element('hydrologyTool'));
