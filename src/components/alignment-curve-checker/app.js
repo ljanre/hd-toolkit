@@ -3,7 +3,7 @@
 const C=AlignmentChecker,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='hd-alignment-check-v4';
 const inputs=['radiusSpeed','radiusEmax'],fields=C.alignmentColumns;
 const colors=['#197657','#2778ad','#c47b17','#8b50a6','#ba5451','#218c92'];
-let model=null,view=null,drag=null,origin={x:0,y:0},plotFrame=null,drawingLayer=null;
+let rotation=0,model=null,view=null,drag=null,origin={x:0,y:0},plotFrame=null,drawingLayer=null;
 const curveColor=(c,i)=>model?.radiusChecks?.[i]?.status==='FAIL'?'#c33129':colors[i%colors.length];
 const f=(n,d=3)=>Number.isFinite(n)?n.toFixed(d):'—';
 const badge=status=>{const e=document.createElement('span');e.className='badge '+status.toLowerCase().replaceAll(' ','-');e.textContent=status;return e;};
@@ -72,7 +72,9 @@ function calculate(){
 function svg(name,attributes={},text,parent=drawingLayer||$('plot')){
  const node=document.createElementNS(NS,name);for(const [key,value]of Object.entries(attributes))node.setAttribute(key,value);if(text!==undefined)node.textContent=text;parent.append(node);return node;
 }
-const xy=p=>({x:p.x-origin.x,y:-(p.y-origin.y)});
+const xy=p=>AlignmentPlotLayout.rotate(p,origin,rotation);
+function rotatePlot(change){rotation=(rotation+change+360)%360;fitPlot();}
+function resetView(){rotation=0;fitPlot();}
 function fitPlot(){
  if(!model?.curves.length){view=null;draw();return;}
  origin={...model.curves[0].pc};let all=model.curves.flatMap(c=>[...c.points,c.pi]);
@@ -85,6 +87,7 @@ function fitPlot(){
  view={x:(minX+maxX)/2-(g.x+g.width/2)*scale,y:(minY+maxY)/2-(g.y+g.height/2)*scale,width:plotFrame.width*scale,height:plotFrame.height*scale};draw();
 }
 function draw(){
+ $('rotationAngle').textContent=rotation+'°';
  const plot=$('plot');drawingLayer=null;plot.replaceChildren();svg('title',{},'Alignment with separate annotation rails and equal geometry scales');
  if(!view||!model?.curves.length){plot.setAttribute('viewBox','0 0 1000 600');svg('text',{x:500,y:300,'text-anchor':'middle',fill:'#71877a','font-size':18},'Enter valid curve data to plot the alignment.');return;}
  plot.setAttribute('viewBox',[view.x,view.y,view.width,view.height].join(' '));
@@ -97,8 +100,8 @@ function draw(){
  drawingLayer=gridLayer;
  if($('grid').checked){
   const raw=geom.width/6,power=10**Math.floor(Math.log10(raw)),step=[1,2,5,10].find(v=>v*power>=raw)*power;
-  for(let x=Math.ceil(geom.x/step)*step;x<=geom.x+geom.width;x+=step){svg('line',{x1:x,y1:geom.y,x2:x,y2:geom.y+geom.height,stroke:'#dfe8e0','stroke-width':scale*.7});svg('text',{x:x+3*scale,y:geom.y+geom.height-5*scale,fill:'#809185','font-size':9*scale},f(x+origin.x,step<1?3:0));}
-  for(let y=Math.ceil(geom.y/step)*step;y<=geom.y+geom.height;y+=step){svg('line',{x1:geom.x,y1:y,x2:geom.x+geom.width,y2:y,stroke:'#dfe8e0','stroke-width':scale*.7});svg('text',{x:geom.x+4*scale,y:y-3*scale,fill:'#809185','font-size':9*scale},f(origin.y-y,step<1?3:0));}
+  for(let x=Math.ceil(geom.x/step)*step;x<=geom.x+geom.width;x+=step){svg('line',{x1:x,y1:geom.y,x2:x,y2:geom.y+geom.height,stroke:'#dfe8e0','stroke-width':scale*.7});svg('text',{x:x+3*scale,y:geom.y+geom.height-5*scale,fill:'#809185','font-size':9*scale},f(x,step<1?3:0));}
+  for(let y=Math.ceil(geom.y/step)*step;y<=geom.y+geom.height;y+=step){svg('line',{x1:geom.x,y1:y,x2:geom.x+geom.width,y2:y,stroke:'#dfe8e0','stroke-width':scale*.7});svg('text',{x:geom.x+4*scale,y:y-3*scale,fill:'#809185','font-size':9*scale},f(-y,step<1?3:0));}
  }
  drawingLayer=geometry;
  const path=(points,attrs)=>svg('polyline',{points:points.map(p=>{const q=xy(p);return q.x+','+q.y;}).join(' '),fill:'none',...attrs});
@@ -158,7 +161,11 @@ function draw(){
   svg('rect',{x:q.x,y:q.y,width:w,height:h,rx:5*scale,fill:'#fff',stroke:box.color,'stroke-width':scale},undefined,group);
   const maxChars=Math.max(8,Math.floor((box.width-18)/6.1));box.lines.forEach((text,i)=>{text=String(text);const shown=text.length>maxChars?text.slice(0,maxChars-1)+'…':text;const textNode=svg('text',{x:q.x+8*scale,y:q.y+(18+15*i)*scale,fill:box.color,'font-size':(i===0?11:10.5)*scale,'font-weight':i===0?700:400},shown,group);if(textNode.getComputedTextLength()>w-16*scale){textNode.setAttribute('textLength',w-16*scale);textNode.setAttribute('lengthAdjust','spacingAndGlyphs');}});
  }
- drawingLayer=null;svg('text',{x:geom.x+geom.width-10*scale,y:geom.y+18*scale,'text-anchor':'end',fill:'#456c56','font-size':11*scale},'↑ Local Y');
+ drawingLayer=null;
+ const compass=svg('g',{transform:'translate('+(geom.x+geom.width-30*scale)+' '+(geom.y+43*scale)+') rotate('+rotation+')',class:'view-orientation'});
+ svg('line',{x1:0,y1:12*scale,x2:0,y2:-15*scale,stroke:'#456c56','stroke-width':1.4*scale},undefined,compass);
+ svg('path',{d:'M '+(-4*scale)+' '+(-8*scale)+' L 0 '+(-17*scale)+' L '+(4*scale)+' '+(-8*scale),fill:'none',stroke:'#456c56','stroke-width':1.4*scale},undefined,compass);
+ svg('text',{x:geom.x+geom.width-10*scale,y:geom.y+16*scale,'text-anchor':'end',fill:'#456c56','font-size':10*scale},'Local Y · view '+rotation+'°');
  $('plotScale').textContent='Equal geometry scales · '+f(scale*100,2)+' m per 100 screen px';
 }
 function zoom(factor,point){
@@ -172,8 +179,8 @@ $('plot').addEventListener('wheel',event=>{event.preventDefault();zoom(event.del
 $('plot').addEventListener('pointerdown',event=>{if(!view)return;drag={point:screenPoint(event),view:{...view}};$('plot').setPointerCapture(event.pointerId);});
 $('plot').addEventListener('pointermove',event=>{if(!drag)return;const point=screenPoint(event);view.x+=drag.point.x-point.x;view.y+=drag.point.y-point.y;draw();});
 for(const type of ['pointerup','pointercancel'])$('plot').addEventListener(type,()=>{drag=null;});
-$('plot').addEventListener('keydown',event=>{if(['+','=','-','0'].includes(event.key)){event.preventDefault();if(event.key==='0')fitPlot();else zoom(event.key==='-'?1.25:.8);}});
-$('zoomIn').addEventListener('click',()=>zoom(.8));$('zoomOut').addEventListener('click',()=>zoom(1.25));$('fit').addEventListener('click',fitPlot);
+$('plot').addEventListener('keydown',event=>{if(['+','=','-','0'].includes(event.key)){event.preventDefault();if(event.key==='0')resetView();else zoom(event.key==='-'?1.25:.8);}});
+$('zoomIn').addEventListener('click',()=>zoom(.8));$('zoomOut').addEventListener('click',()=>zoom(1.25));$('fit').addEventListener('click',resetView);$('rotateLeft').addEventListener('click',()=>rotatePlot(-15));$('rotateRight').addEventListener('click',()=>rotatePlot(15));
 for(const id of ['labels','stations','checkedTangents'])$(id).addEventListener('change',fitPlot);for(const id of ['construction','grid'])$(id).addEventListener('change',draw);$('centers').addEventListener('change',fitPlot);
 let resizeTimer;addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitPlot,100);});
 for(const id of inputs)$(id).addEventListener('input',calculate);

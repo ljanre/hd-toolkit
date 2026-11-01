@@ -86,3 +86,13 @@ assert.doesNotMatch(C.alignmentPrompt(),/327.42|7\+225|PI 29/,'Prompt must remai
 assert.match(html,/<option value="8" selected>8% · default/);
 for(const text of ['Design Controls table','Source Details / Review table','Actual per-curve superelevation e is NOT emax','never assume missing speed','does not import speed automatically','do not average speeds'])assert.ok(C.alignmentPrompt().includes(text),text);
 assert.match(app,/id==='radiusEmax'/);
+
+// View rotation preserves distances and never alters model coordinates.
+for(const degrees of [0,15,30,45,60,90,135,180,225,270,315,360]){
+ const p={x:103,y:204},origin={x:100,y:200},copy={...p},q=P.rotate(p,origin,degrees);
+ assert.ok(Math.abs(Math.hypot(q.x,q.y)-5)<1e-10);assert.deepEqual(p,copy);
+ const b=P.rotate({x:106,y:208},origin,degrees);assert.ok(Math.abs(Math.hypot(b.x-q.x,b.y-q.y)-5)<1e-10);
+}
+const cw=P.rotate({x:0,y:10},{x:0,y:0},90);assert.ok(Math.abs(cw.x-10)<1e-10&&Math.abs(cw.y)<1e-10);
+assert.match(html,/id="rotateLeft"/);assert.match(html,/id="rotateRight"/);assert.match(app,/function resetView\(\)\{rotation=0/);
+console.log('View rotation: 12 distance-preservation cases, clockwise direction and reset verified.');

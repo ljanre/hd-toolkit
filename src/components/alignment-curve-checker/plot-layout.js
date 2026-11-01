@@ -38,5 +38,6 @@
    if(selected)placed.push({...selected,anchor});
   }return placed;
  }
- globalThis.AlignmentPlotLayout=Object.freeze({frame,place,symbols});
+ function rotate(point,origin,degrees){const radians=degrees*Math.PI/180,c=Math.cos(radians),s=Math.sin(radians),x=point.x-origin.x,y=point.y-origin.y;return {x:x*c+y*s,y:x*s-y*c};}
+ globalThis.AlignmentPlotLayout=Object.freeze({frame,place,symbols,rotate});
 })();
