@@ -236,7 +236,7 @@ function parseTable(text,layout='legacy'){
  const hasHeader=header.includes('id')&&header.includes('r');
  const names=hasHeader?header:layout==='alignment'?alignmentColumns:layout==='design'?designColumns:layout==='station'?stationColumns:columns;
  const result=(hasHeader?records.slice(1):records).map(fields=>{
-  const row={turn:'AUTO'};fields.forEach((v,i)=>{if(names[i])row[names[i]]=v.trim();});return row;
+  const row={turn:layout==='alignment'?'':'AUTO'};fields.forEach((v,i)=>{if(names[i])row[names[i]]=v.trim();});if(layout==='alignment'){const turn=String(row.turn||'').toUpperCase();row.turn=({LEFT:'L',RIGHT:'R',L:'L',R:'R'})[turn]??row.turn;}return row;
  });
  if(!result.length||result.length>200)throw Error('Import requires 1–200 data rows.');
  return result;
@@ -300,10 +300,21 @@ function alignmentPrompt(){
  'PI NO.\tPI STATION\tI\tR\tTURN',
  'One row per curve in alignment order. PI NO. is the unique source curve identifier. PI STATION is the conventional tangent-intersection station, not a PC or PT station. I is the positive intersection angle in decimal degrees or D°M′S″; R is the circular radius in metres; TURN is L or R. Use stations such as 2+100.000 or numeric metres. Do not add units inside numeric cells.',
  '2. Below the code block, list missing or ambiguous fields by curve ID. Leave their TSV cells blank rather than guessing. If no source has been supplied, ask me to attach or paste it; do not fabricate a schedule.',
- '3. State whether the data are sufficient to generate each circular curve and to check adjacent connections. At least two complete successive curves are needed for connection checks.',
+ '3. Provide a TURN audit table OUTSIDE the TSV: PI ID | evidence / segment assignment | incoming forward azimuth | outgoing forward azimuth | signed change | source angle / residual | TURN | uncertainty. Explain every inferred turn. Keep any coordinates and azimuth columns out of the import block.',
+ '4. State whether the data are sufficient to generate each circular curve and to check adjacent connections. At least two complete successive curves are needed for connection checks.',
  '',
  'Requirements:',
  '- Preserve identifiers, source values, order and precision. Resolve duplicates or conflicting readings explicitly. Do not infer left/right from station values or an unsigned angle.',
+ 'TURN determination (in increasing-station travel direction):',
+ '- Prefer explicit source L/R only when clearly tied to the curve and travel direction; cross-check against available geometry and report conflicts rather than silently overriding them.',
+ '- In staggered ELEMENTS OF CURVE schedules, AZIMUTH / DISTANCE cells between PI rows generally describe tangent segments between PIs, not the curve occupying the nearest text row. Identify the tangent ending at this PI (incoming) and the tangent leaving it (outgoing) using grid boundaries, PI order, coordinates and distances. Do not shift azimuths by one row just to make a result fit.',
+ '- Use azimuths measured clockwise from north, both oriented in increasing-station travel. Verify whether printed bearings are forward or back azimuths. Convert each back azimuth by (A + 180) mod 360 before pairing; never compare one forward bearing with one unconverted back bearing. A uniform 180-degree conversion of BOTH bearings leaves the signed turn unchanged. Do not reverse PI order.',
+ '- Convert DMS to decimal degrees. Compute d = ((Aout - Ain + 540) mod 360) - 180. For -180 < d < 0 use L; for 0 < d < 180 use R. A zero change is straight; exactly 180 degrees is ambiguous. Leave TURN blank for either rather than inventing a curve direction.',
+ '- Cross-check abs(d) against the source intersection angle I. Report the angular residual and allow only differences explained by printed rounding (for example, whole-second azimuths versus a fractional-second angle). Preserve the source I; do not replace it with the rounded azimuth difference. If the residual exceeds the source precision or the pairing is uncertain, leave TURN blank and request clarification.',
+ '- Coordinate fallback: use previous PI, current PI and next PI in increasing-station order. In Easting/Northing coordinates form u = current - previous and v = next - current; z = uE*vN - uN*vE. z > 0 means L, z < 0 means R. Compare with the source I. Do not swap Northing/Easting columns. A first or last PI requires an additional tangent endpoint, adjacent PI or a clearly assigned boundary azimuth; do not guess its turn.',
+ '- If a plan image is used, follow increasing station and verify its orientation. Page-left/page-right, the sign of an unsigned angle, alternating curve assumptions, and station progression alone do not determine L/R.',
+ '- If spiral lengths or TS/SC/CS/ST data indicate transition curves, flag that this tool reconstructs simple circular curves only. Do not treat a total spiral-plus-circular deflection as circular I or substitute TS/ST for PC/PT. Blank spiral entries alone do not supply turn direction.',
+ '- If no reliable explicit direction, matched azimuth pair, or complete coordinate geometry is available, leave TURN blank and identify the exact missing evidence in the audit. Never default missing direction to Right, Left or Auto.',
  '- Required per curve: PI identifier, PI station, 0 < intersection angle < 180 degrees, positive radius and explicit L/R direction. Stations must be nonnegative. Flag unreadable or inconsistent entries.',
  '- For checking only, calculate T = R tan(I/2), Lc = pi R I/180, PC = PI station - T, PT = PC + Lc, and the intervening tangent = next PC - previous PT. Distinguish T from the PT-to-PC connecting tangent. Do not include derived columns in the five-column import block.',
  '- Flag PC before zero and overlapping curves. For reverse curves compare the PT-to-PC tangent with the 30 m minimum. For directly connected same-direction compound curves compare larger/smaller radius with 1.5. For same-direction curves with a positive tangent shorter than 30 m, flag a broken-back screening concern. The app treats gaps within 0.05 m of zero as direct connections.',

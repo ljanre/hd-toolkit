@@ -19,3 +19,9 @@ Source inconsistency: at 70 km/h / 4%, Table 3-12 prints calculated 203.1 m but 
 A pass applies to the limiting-radius check, not actual superelevation design. For the selected emax, Tables 3-13–3-16 relate actual design e to R and V. Road-class/project minimums (including Tables 3-1 / 3-2 where applicable) may be more restrictive and must also be checked. The existing supplied-note 30 m tangent criterion is retained; this change does not alter tangent settings.
 
 Radius failures color the radius input, calculated radius cell, curve centerline, curve detail boxes and symbol labels red. Detailed checks reports Rmin and shortfall. Calculation tests independently evaluate V²/[127(emax/100+f)] and compare the rounded values for all 48 supported rows, plus below/equal/above boundaries through the full model chain.
+
+## Turn extraction and import
+
+The copy prompt requires a separate turn audit: incoming/outgoing forward azimuths, signed change, source-angle residual, evidence and uncertainty. Staggered azimuth cells belong to tangent segments; both headings must be oriented in increasing-station travel. Clockwise-from-north signed change is ((Aout−Ain+540) mod 360)−180: positive Right, negative Left. Uniformly converting both back azimuths by 180 degrees preserves that difference. Coordinate confirmation uses E/N vectors and their cross product (positive Left). Missing endpoints, ambiguous row pairing, angle disagreement, zero/180-degree changes and unresolvable direction remain blank. Spiral geometry is flagged as outside this circular reconstruction model.
+
+The five-column TSV format remains unchanged. Alignment imports now normalize Left/Right and lowercase L/R to the dropdown values. A missing TURN stays blank rather than receiving the legacy AUTO placeholder. Other import layouts retain their original behavior.

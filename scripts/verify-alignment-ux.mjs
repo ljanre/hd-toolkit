@@ -74,3 +74,11 @@ assert.equal(radiusCases,48);assert.equal(C.minimumRadiusCheck(150,{radiusSpeed:
 for(const options of [{},{radiusSpeed:30},{radiusEmax:8},{radiusSpeed:35,radiusEmax:8},{radiusSpeed:15,radiusEmax:4},{radiusSpeed:130,radiusEmax:4},{radiusSpeed:30,radiusEmax:5}])assert.equal(C.minimumRadiusCheck(20,options).status,'NOT EVALUATED');
 assert.match(app,/radius-deficient/);assert.match(app,/curveColor/);assert.match(html,/radiusSpeed/);assert.match(html,/radiusEmax/);
 console.log('DGCS radius: 48 independent limiting-radius cases, 144 full-chain boundary checks and missing/unsupported controls passed.');
+
+// Imports must preserve direction without silently choosing a side.
+for(const [source,expected] of [['L','L'],['R','R'],['l','L'],['r','R'],['Left','L'],['Right','R'],['LEFT','L'],['RIGHT','R'],[' left ','L'],[' right ','R']]){
+ const [row]=C.parseTable('PI NO.\tPI STATION\tI\tR\tTURN\nA\t1000\t20\t100\t'+source,'alignment');assert.equal(row.turn,expected);assert.equal(C.alignmentSchedule([row]).errors.length,0);
+}
+const [noTurn]=C.parseTable('PI NO.\tPI STATION\tI\tR\nA\t1000\t20\t100','alignment');assert.equal(noTurn.turn,'');assert.ok(C.alignmentSchedule([noTurn]).errors.length);
+for(const text of ['staggered ELEMENTS OF CURVE','TURN audit table OUTSIDE the TSV','Aout - Ain + 540','back azimuths','uE*vN - uN*vE','leave TURN blank','spiral-plus-circular'])assert.ok(C.alignmentPrompt().includes(text),text);
+assert.doesNotMatch(C.alignmentPrompt(),/327.42|7\+225|PI 29/,'Prompt must remain generic, not embed current project data.');

@@ -29,7 +29,7 @@ function renderRows(values){
    control.dataset.field=field;control.value=value[field]??'';control.setAttribute('aria-label',(value.id||'Curve')+' '+({r:'Radius',delta:'Intersection angle',piStation:'PI station',turn:'Direction',id:'PI number'}[field]));
    if(field!=='turn'){control.autocomplete='off';control.spellcheck=false;if(!['id','delta','piStation','givenPC','givenPT'].includes(field))control.inputMode='decimal';}
    if(['piStation','givenPC','givenPT'].includes(field))control.addEventListener('blur',()=>{try{if(control.value.trim())control.value=C.formatStation(C.station(control.value));}catch{}calculate();});
-   control.title=({piStation:'Tangent PI station: PC = PI − T; PT = PC + Lc.',delta:'Intersection angle: decimal degrees or D°M′S″.',r:'Simple circular-curve radius, metres.'}[field])||'';
+   control.title=({piStation:'Tangent PI station: PC = PI − T; PT = PC + Lc.',delta:'Intersection angle: decimal degrees or D°M′S″.',r:'Simple circular-curve radius, metres.',turn:'Travel in increasing station. Clockwise heading change = Right; counterclockwise = Left. The copy prompt explains staggered azimuth rows and back bearings.'}[field])||'';
    control.addEventListener('input',calculate);td.append(control);tr.append(td);
   }
   const action=document.createElement('td'),button=document.createElement('button');button.textContent='−';button.className='remove-curve';button.title='Remove Curve';button.disabled=values.length===1;button.setAttribute('aria-label','Remove '+value.id);button.addEventListener('click',()=>{tr.remove();renderRows(rows());calculate();});action.append(button);tr.append(action);$('inputRows').append(tr);
