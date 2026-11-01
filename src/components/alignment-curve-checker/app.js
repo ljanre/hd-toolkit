@@ -1,40 +1,38 @@
 (() => {
 'use strict';
-const C=AlignmentChecker,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='hd-alignment-curve-checker-v2';
-const inputs=['project','stationBasis','startStation','minimumTangent','maximumRatio'],fields=C.stationColumns;
+const C=AlignmentChecker,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='hd-alignment-curve-checker-v3';
+const inputs=['reactionTime','deceleration'],fields=C.designColumns;
 const colors=['#197657','#2778ad','#c47b17','#8b50a6','#ba5451','#218c92'];
-let model=null,lastReplacement=null,view=null,drag=null,origin={x:0,y:0};
+let model=null,view=null,drag=null,origin={x:0,y:0};
 const f=(n,d=3)=>Number.isFinite(n)?n.toFixed(d):'—';
 const badge=status=>{const e=document.createElement('span');e.className='badge '+status.toLowerCase().replaceAll(' ','-');e.textContent=status;return e;};
-function options(){return Object.fromEntries(inputs.map(id=>[id,$(id).value]));}
+function options(){return {stationBasis:'stations',minimumTangent:30,maximumRatio:1.5,...Object.fromEntries(inputs.map(id=>[id,$(id).value]))};}
 function rows(){return [...$('inputRows').children].map(tr=>Object.fromEntries(fields.map(field=>[field,tr.querySelector('[data-field="'+field+'"]').value])));}
-function capture(){return {options:options(),rows:rows(),compare:$('compareInputs').checked,sight:$('showSight').checked};}
+function capture(){return {options:options(),rows:rows()};}
 function restore(data){
- if(!data.options?.stationBasis){
-  const legacy=C.analyze(data.rows||[],data.options||{});
-  data={...data,options:{...data.options,stationBasis:'stations'},rows:(data.rows||[]).map((r,i)=>{const c=legacy.curves[i];return c?{...r,piStation:String(c.piStation),delta:String(c.delta),turn:c.s===1?'R':'L',gap:String(c.gap)}:r;})};
-  $('notice').textContent='Previous schedule converted to station inputs. Plot origin and orientation are now local; review any unresolved angles or directions.';
+ if(!data.options?.stationBasis||data.options.stationBasis==='spacing'){
+  const legacy=data.options?.stationBasis?C.stationSchedule(data.rows||[],data.options):C.analyze(data.rows||[],data.options||{});
+  data={...data,rows:(data.rows||[]).map((r,i)=>{const c=legacy.curves[i];return c?{...r,piStation:C.formatStation(c.piStation),delta:String(c.delta),turn:c.s===1?'R':'L'}:r;})};
  }
- for(const id of inputs)if(data.options?.[id]!==undefined)$(id).value=data.options[id];$('compareInputs').checked=!!data.compare;$('showSight').checked=!!data.sight;renderRows(data.rows||[]);calculate();}
+ for(const id of inputs)if(data.options?.[id]!==undefined)$(id).value=data.options[id];renderRows(data.rows||[]);calculate();
+}
 function renderRows(values){
  $('inputRows').replaceChildren();
  for(const [rowIndex,value] of values.entries()){
   const tr=document.createElement('tr');
   for(const field of fields){
    const td=document.createElement('td');
-   if(field==='piStation')td.className='station-only';
-   if(field==='gap')td.className='spacing-only';
-   if(field.startsWith('given'))td.className='compare-only';
-   if(['sightRadius','sightDistance','availableOffset'].includes(field))td.className='sight-only';
+
    const control=document.createElement(field==='turn'?'select':'input');
    if(field==='turn')for(const [text,val] of [['Choose…',''],['Left','L'],['Right','R']]){const opt=document.createElement('option');opt.value=val;opt.textContent=text;control.append(opt);}
-   control.dataset.field=field;control.value=value[field]??'';control.setAttribute('aria-label',(value.id||'Curve')+' '+({r:'Radius',delta:'Intersection angle',piStation:'PI station',gap:'Tangent before',givenT:'Entered T',givenPC:'Entered PC',givenL:'Entered curve length',givenPT:'Entered PT',turn:'Direction',id:'PI number',sightRadius:'Sight path radius',sightDistance:'Required sight distance',availableOffset:'Available horizontal sight offset'}[field]));
-   if(field==='gap'&&rowIndex===0){control.value='0';control.readOnly=true;control.title='First curve: position is set by the First PC station.';}
+   control.dataset.field=field;control.value=value[field]??(field==='grade'?'0':'');control.setAttribute('aria-label',(value.id||'Curve')+' '+({designSpeed:'Design speed',grade:'Grade',r:'Radius',delta:'Intersection angle',piStation:'PI station',gap:'Tangent before',givenT:'Entered T',givenPC:'Entered PC',givenL:'Entered curve length',givenPT:'Entered PT',turn:'Direction',id:'PI number',sightRadius:'Sight path radius',sightDistance:'Adopted sight distance override',availableOffset:'Available horizontal sight offset'}[field]));
    if(field!=='turn'){control.autocomplete='off';control.spellcheck=false;if(!['id','delta','piStation','givenPC','givenPT'].includes(field))control.inputMode='decimal';}
    if(['piStation','givenPC','givenPT'].includes(field))control.addEventListener('blur',()=>{try{if(control.value.trim())control.value=C.formatStation(C.station(control.value));}catch{}calculate();});
+   control.title=({designSpeed:'Design speed V, km/h; used when adopted S is blank.',grade:'Grade in travel direction: positive uphill, negative downhill. Initial 0 means level.',sightRadius:'Radius at the inside-lane path center; enter the correct lane radius.',sightDistance:'Optional adopted S in metres overrides the speed-based SSD.',availableOffset:'Minimum unobstructed inward clearance from the inside-lane path to the obstruction.'}[field])||'';
    control.addEventListener('input',calculate);td.append(control);tr.append(td);
   }
-  const action=document.createElement('td'),button=document.createElement('button');button.textContent='Remove';button.setAttribute('aria-label','Remove '+value.id);button.addEventListener('click',()=>{lastReplacement=capture();tr.remove();renderRows(rows());$('undo').disabled=false;calculate();});action.append(button);tr.append(action);$('inputRows').append(tr);
+  for(const key of ['S','required','status']){const td=document.createElement('td');td.dataset.result=key;td.className='auto-result';tr.append(td);}
+  const action=document.createElement('td'),button=document.createElement('button');button.textContent='Remove';button.setAttribute('aria-label','Remove '+value.id);button.addEventListener('click',()=>{tr.remove();renderRows(rows());calculate();});action.append(button);tr.append(action);$('inputRows').append(tr);
  }
 }
 function addCell(row,value){const cell=document.createElement('td');cell.textContent=value;row.append(cell);return cell;}
@@ -44,8 +42,7 @@ function errors(messages){
  if(messages.length){const strong=document.createElement('strong');strong.textContent='Check the input schedule';box.append(strong);const ul=document.createElement('ul');for(const message of messages){const li=document.createElement('li');li.textContent=message;ul.append(li);}box.append(ul);}
 }
 function calculate(){
- document.body.dataset.stationBasis=$('stationBasis').value;document.body.classList.toggle('compare',$('compareInputs').checked);document.body.classList.toggle('show-sight',$('showSight').checked);$('sightHelp').hidden=!$('showSight').checked;
- const raw=rows().map(r=>{const clean={...r};if(!$('compareInputs').checked)for(const key of ['givenT','givenPC','givenL','givenPT'])clean[key]='';if(!$('showSight').checked)for(const key of ['sightRadius','sightDistance','availableOffset'])clean[key]='';return clean;});
+ const raw=rows();
  try{model=C.stationSchedule(raw,options());}catch(error){model={errors:['Calculation could not be completed: '+error.message],curves:[],pairs:[],points:[],checks:[],summary:null};}
  errors(model.errors);
  const generated=!!model.summary&&!model.errors.length;for(const id of ['plotWorkspace','elementsPanel','stationsPanel','checksPanel','compliancePanel','summary'])$(id).hidden=!generated;
@@ -60,9 +57,9 @@ function calculate(){
    const finding=addCell(tr,'');const answer=document.createElement('span');answer.className='checklist-answer';answer.textContent=item.answer==='NOT EVALUATED'?'Not evaluated':item.answer;finding.append(answer,document.createTextNode(item.reason));$('complianceRows').append(tr);
  }
 
- [...$('inputRows').children].forEach((tr,i)=>{const invalid=model.errors.some(message=>message.startsWith('Row '+(i+1)+':'));for(const control of tr.querySelectorAll('input,select'))invalid?control.setAttribute('aria-invalid','true'):control.removeAttribute('aria-invalid');});
+ [...$('inputRows').children].forEach((tr,i)=>{const h=model.sightOffsets?.[i];for(const key of ['S','required','status']){const cell=tr.querySelector('[data-result="'+key+'"]');cell.textContent=key==='status'?(h?.status??'NOT EVALUATED'):f(h?.[key]);cell.title=h?.message??'Enter valid curve geometry.';cell.classList.toggle('hso-fail',h?.status==='FAIL');}const invalid=model.errors.some(message=>message.startsWith('Row '+(i+1)+':'));for(const control of tr.querySelectorAll('input,select'))invalid?control.setAttribute('aria-invalid','true'):control.removeAttribute('aria-invalid');});
  $('summary').replaceChildren();$('pairCards').replaceChildren();
- $('exportResults').disabled=!!model.errors.length;$('printReport').disabled=!!model.errors.length;
+
  if(model.summary){
   const s=model.summary,items=[['Screening status',s.failed?'Checks failed':s.warnings?'Review warnings':'Further evaluation required',C.formatStation(s.start)+' → '+C.formatStation(s.end)+' · '+(s.continuous?f(s.length,2)+' m':'Discontinuous chain — review geometry')],['Passed',s.passed,'Evaluated checks'],['Failed',s.failed,'Resolve deficiencies'],['Warnings',s.warnings,'Review arrangement'],['Not evaluated',s.notEvaluated,'Further design inputs']];
   items.forEach(([title,value,note],i)=>{const card=document.createElement('div');card.className='stat'+(!i?' title'+(s.failed?' failed':''):'');const label=document.createElement('small'),strong=document.createElement('strong'),small=document.createElement('small');label.textContent=title;strong.textContent=value;small.textContent=note;card.append(label,strong,small);$('summary').append(card);});
@@ -76,7 +73,7 @@ function calculate(){
  fillTable('geometryRows',model.curves.map(c=>[c.id,c.s===1?'R':'L',f(c.R),f(c.delta,6),f(c.T),f(c.L),f(c.chord),f(c.external),f(c.middle),C.formatStation(c.pcStation),C.formatStation(c.piStation),C.formatStation(c.ptStation),f(c.gap)]));
  fillTable('pointRows',model.points.filter(p=>p.type!=='Center').map(p=>[p.id,p.station===null?'—':C.formatStation(p.station),p.type==='PI'?'Tangent intersection · not on circular arc':p.type==='Center'?'Circle center':p.type==='PC'?'Beginning of curve':'End of curve']));
  $('checkRows').replaceChildren();for(const check of model.checks){const tr=document.createElement('tr');const status=addCell(tr,'');status.append(badge(check.status));for(const value of [check.subject,check.actual,check.criterion,check.message])addCell(tr,value);$('checkRows').append(tr);}
- $('evaluationStamp').textContent='Evaluation: '+new Date().toLocaleString('en-PH',{timeZone:'Asia/Manila'})+' · Asia/Manila · preliminary circular-curve geometry screening.';
+
  try{localStorage.setItem(KEY,JSON.stringify(capture()));}catch{$('notice').textContent='Browser storage is unavailable. Export inputs to retain this schedule.';}
  fitPlot();
 }
@@ -140,12 +137,10 @@ $('plot').addEventListener('keydown',event=>{if(['+','=','-','0'].includes(event
 $('zoomIn').addEventListener('click',()=>zoom(.8));$('zoomOut').addEventListener('click',()=>zoom(1.25));$('fit').addEventListener('click',fitPlot);
 for(const id of ['labels','stations','construction','grid'])$(id).addEventListener('change',draw);$('centers').addEventListener('change',fitPlot);
 let resizeTimer;addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitPlot,100);});
-for(const id of inputs.filter(id=>id!=='stationBasis'))$(id).addEventListener('input',calculate);
-$('stationBasis').addEventListener('change',()=>{const values=rows();if(model?.summary&&$('stationBasis').value==='spacing')$('startStation').value=C.formatStation(model.curves[0].pcStation);if(model?.summary)model.curves.forEach((c,i)=>{values[i].piStation=String(c.piStation);values[i].gap=String(c.gap);});renderRows(values);calculate();});$('compareInputs').addEventListener('change',calculate);$('showSight').addEventListener('change',calculate);
+for(const id of inputs)$(id).addEventListener('input',calculate);
 $('addRow').addEventListener('click',()=>{const old=rows();if(old.length>=200){$('notice').textContent='Maximum 200 rows.';return;}const ids=new Set(old.map(r=>r.id));let n=old.length+1;while(ids.has('PI-'+n))n++;old.push({id:'PI-'+n,turn:'',r:'',delta:''});renderRows(old);calculate();});
-$('undo').addEventListener('click',()=>{if(!lastReplacement)return;const previous=lastReplacement;lastReplacement=capture();restore(previous);});
 $('pasteOpen').addEventListener('click',()=>{$('pasteError').textContent='';$('pasteDialog').showModal();$('pasteText').focus();});
-$('applyPaste').addEventListener('click',()=>{try{const imported=C.parseTable($('pasteText').value,'station');lastReplacement=capture();$('undo').disabled=false;renderRows(imported);$('pasteDialog').close();calculate();$('notice').textContent='Imported '+imported.length+' rows. Coordinate columns are ignored. Review angles, L/R directions, stations and highlighted errors.';}catch(error){$('pasteError').textContent=error.message;}});
+$('applyPaste').addEventListener('click',()=>{try{const imported=C.parseTable($('pasteText').value,'design');renderRows(imported);$('pasteDialog').close();calculate();$('notice').textContent='Imported '+imported.length+' rows. Coordinate columns are ignored. Review angles, L/R directions, stations and highlighted errors.';}catch(error){$('pasteError').textContent=error.message;}});
 function sample(name){
  const base={project:'ILLUSTRATIVE EXAMPLE · not surveyed project data',stationBasis:'stations',startStation:'2+000',minimumTangent:'30',maximumRatio:'1.5'};
  let data=[{id:'PI-1',r:'150',delta:'40',turn:'R',gap:'0'},{id:'PI-2',r:'200',delta:'35',turn:'L',gap:'30'}];
@@ -157,17 +152,13 @@ function sample(name){
  const stationRows=data.map((r,i)=>{const c=solved.curves[i],pc=previousPT===null?2000:previousPT+Number(r.gap);let pi=Number((pc+c.T).toFixed(3));if(previousPT!==null&&Number(r.gap)>=30&&pi-c.T-previousPT<Number(r.gap))pi+=.001;previousPT=pi-c.T+c.L;return {...r,piStation:C.formatStation(pi)};});
  return {options:base,rows:stationRows,compare:false};
 }
-$('sample').addEventListener('change',()=>{if(!$('sample').value)return;lastReplacement=capture();$('undo').disabled=false;restore(sample($('sample').value));$('notice').textContent='Illustrative example loaded. Undo replacement restores the previous schedule.';$('sample').value='';});
-let currentExportUrl;
-function download(name,text){if(currentExportUrl)URL.revokeObjectURL(currentExportUrl);const blob=new Blob(['\uFEFF'+text],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');currentExportUrl=url;$('saveCsv').href=url;$('saveCsv').download=name;$('exportTitle').textContent=name;$('exportText').value=text;$('exportDialog').showModal();}
-$('exportInputs').addEventListener('click',()=>{const exportRows=rows().map((r,i)=>({...r,piStation:$('stationBasis').value==='spacing'?(model?.curves[i]?String(model.curves[i].piStation):''):r.piStation}));download('alignment-curve-inputs.csv',C.csv(['PI NO.','PI STATION','I','R','TURN','TANGENT BEFORE','T','PC','Lc','PT','SIGHT PATH RADIUS','SIGHT DISTANCE','AVAILABLE OFFSET'],exportRows.map(r=>fields.map(field=>r[field]))));});
-$('exportResults').addEventListener('click',()=>{
- if(!model?.summary)return;
- const records=[['Project',$('project').value],['Station basis',$('stationBasis').value],['First PC station',$('startStation').value],['Plot basis','Local schematic; arbitrary origin and orientation'],['Screening tangent m',model.summary.minimumTangent],['Radius ratio limit',model.summary.maximumRatio],['Evaluation (PH)',new Date().toLocaleString('en-PH',{timeZone:'Asia/Manila'})],[],['COMPLIANCE CHECKLIST'],['Review item','Answer','Reason'],...C.complianceChecklist(model).map(c=>[c.label,c.answer,c.reason]),[],['CURVE ELEMENTS'],['PI','Turn','R (m)','Delta (degrees)','T (m)','Lc (m)','Long chord (m)','External (m)','Middle ordinate (m)','PC station (m)','PI tangent station (m)','PT station (m)','Gap before (m)'],
- ...model.curves.map(c=>[c.id,c.s===1?'R':'L',c.R,c.delta,c.T,c.L,c.chord,c.external,c.middle,c.pcStation,c.piStation,c.ptStation,c.gap]),[],['POINTS'],['Point','Station (m)','Type'],...model.points.filter(p=>p.type!=='Center').map(p=>[p.id,p.station??'',p.type]),[],['CHECKS'],['Status','Subject','Actual','Criterion','Finding'],...model.checks.map(c=>[c.status,c.subject,c.actual,c.criterion,c.message])];
- download('alignment-curve-results.csv',records.map(r=>C.csv(r,[])).join('\r\n'));
-});
-$('printReport').addEventListener('click',()=>{fitPlot();window.print();});
-let saved;try{saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('hd-alignment-curve-checker-v1'));}catch{}
+$('sample').addEventListener('change',()=>{if(!$('sample').value)return;restore(sample($('sample').value));$('notice').textContent='Illustrative example loaded. Replace sample values with project inputs.';$('sample').value='';});
+async function copyTable(){
+ const text=C.chatTable(rows(),model,options());
+ try{await navigator.clipboard.writeText(text);$('notice').textContent='Table copied. Paste it into ChatGPT.';}
+ catch{$('copyText').value=text;$('copyDialog').showModal();$('copyText').focus();$('copyText').select();$('notice').textContent='Clipboard access unavailable. Copy the selected table from the dialog.';}
+}
+$('copyTable').addEventListener('click',copyTable);$('retryCopy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('copyText').value);$('copyDialog').close();$('notice').textContent='Table copied. Paste it into ChatGPT.';}catch{$('copyText').focus();$('copyText').select();}});
+let saved;try{saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('hd-alignment-curve-checker-v2')||localStorage.getItem('hd-alignment-curve-checker-v1'));}catch{}
 if(saved?.rows?.length)restore(saved);else restore(sample('reverse30'));
 })();

@@ -57,19 +57,28 @@ function pairCheck(first,second,gap,criteria={minimumTangent:30,maximumRatio:1.5
  if(zero)return {kind:Math.abs(first.R-second.R)<1e-9?'Same-radius connection':'Compound',status:ratio<=criteria.maximumRatio+1e-12?'PASS':'FAIL',ratio,gap,actual:ratio,limit:criteria.maximumRatio,deficiency:Math.max(0,ratio-criteria.maximumRatio),message:'Direct same-direction connection: compare larger/smaller radius. Equal radii form a continuous circular arc.'};
  return {kind:'Same-direction with tangent',status:gap<criteria.minimumTangent?'WARNING':'NOT EVALUATED',ratio,gap,actual:gap,limit:criteria.minimumTangent,deficiency:Math.max(0,criteria.minimumTangent-gap),message:gap<criteria.minimumTangent?'Short tangent / broken-back screening warning. Review appearance, transitions and driver expectancy.':'Short-tangent warning not triggered. This does not establish overall acceptability.'};
 }
+// FHWA-RD-02-045 Eq. 3.5.1: metric SSD, grade signed + uphill / - downhill.
+function stoppingSightDistance(speed,grade,reaction=2.5,deceleration=3.4){
+ const V=number(speed,'Design speed'),G=number(grade,'Grade'),t=number(reaction,'Reaction time'),a=number(deceleration,'Deceleration');
+ if(V<=0||t<=0||a<=0||Math.abs(G)>=100)throw Error('Speed, reaction time and deceleration must be positive; grade must be between -100% and 100%.');
+ const effective=a/9.81+G/100;if(effective<=0)throw Error('Deceleration is insufficient for the entered downgrade.');
+ const distance=.278*V*t+V*V/(254*effective);if(!finite(distance))throw Error('SSD exceeds the numerical range.');return distance;
+}
 function sightOffsetCheck(curve){
- const source=curve.source||{};
- const fields=['sightRadius','sightDistance','availableOffset'];
- const values=fields.map(key=>String(source[key]??'').trim());
- const result={id:curve.id,status:'NOT EVALUATED',required:null,available:null,margin:null};
- if(values.some(v=>v===''))return {...result,message:'Enter required sight distance S, inside-lane path radius Rs, and available clear offset for this curve.'};
- let radius,S,available;
- try{[radius,S,available]=values.map((v,i)=>number(v,fields[i]));}catch(error){return {...result,message:error.message};}
- if(radius<=0||S<=0||available<0)return {...result,message:'Sight-path radius and required distance must be positive; available offset must be nonnegative.'};
+ const source=curve.source||{},result={id:curve.id,status:'NOT EVALUATED',required:null,available:null,margin:null,S:null,ssdSource:null};
+ let S,radius,available;
+ try{
+  if(String(source.sightDistance??'').trim()!==''){S=number(source.sightDistance,'Adopted S');if(S<=0)throw Error('Adopted S must be positive.');result.ssdSource='Adopted S';}
+  else {S=stoppingSightDistance(source.designSpeed,source.grade,source.reactionTime??2.5,source.deceleration??3.4);result.ssdSource='Speed / grade SSD';}
+  result.S=S;
+  radius=number(source.sightRadius,'Inside-lane path radius Rs');if(radius<=0)throw Error('Inside-lane path radius must be positive.');
+ }catch(error){return {...result,message:error.message};}
  const pathLength=radius*curve.delta*RAD;
- if(S>pathLength+1e-10)return {...result,pathLength,message:'Required sight distance extends beyond this circular curve (S > Rs × Δ). Use a full alignment sightline analysis; this single-curve formula is not applied.'};
- const required=2*radius*Math.sin(S/(4*radius))**2,margin=available-required;
- return {...result,radius,S,pathLength,required,available,margin,status:margin>=-1e-9?'PASS':'FAIL',message:'Required HSO '+required.toFixed(6)+' m; available '+available.toFixed(6)+' m; margin '+margin.toFixed(6)+' m. Assumes the entered minimum clear offset is maintained along the inside-lane sightline envelope. Required sight distance and obstacle clearance must be adopted/verified for the project.'};
+ if(S>pathLength+1e-10)return {...result,radius,pathLength,message:'S exceeds this circular lane-path arc (S > Rs × Δ). Full alignment sightline analysis required; HSO is not evaluated.'};
+ const required=2*radius*Math.sin(S/(4*radius))**2;Object.assign(result,{radius,pathLength,required});
+ try{available=number(source.availableOffset,'Available clear offset M');if(available<0)throw Error('Available clear offset must be nonnegative.');}catch(error){return {...result,message:error.message};}
+ const margin=available-required;
+ return {...result,available,margin,status:margin>=-1e-9?'PASS':'FAIL',message:result.ssdSource+' '+S.toFixed(3)+' m; required HSO '+required.toFixed(6)+' m; available '+available.toFixed(6)+' m; margin '+margin.toFixed(6)+' m. Constant inside-lane clearance assumed; verify obstacle/eye-height envelope and the adopted project sight-distance criterion.'};
 }
 function complianceChecklist(model){
  const labels=['Radius requirement of compound curves','Tangent length between PT and PC of reverse curves','Absence of broken-back / flat-back arrangement','Horizontal sight offset'];
@@ -90,7 +99,7 @@ function complianceChecklist(model){
  let sightResult;
  if(bad.length)sightResult=item(3,'NO',bad.map(s=>s.id+': offset deficit '+(-s.margin).toFixed(6)+' m.').join('; ')+(missing.length?' Other curves still need evaluation.':''));
  else if(missing.length||!criteria.continuous)sightResult=item(3,'NOT EVALUATED',!criteria.continuous?'Resolve alignment continuity and stationing before confirming horizontal sight offset.':missing.map(s=>s.id+': '+s.message).join(' '));
- else sightResult=item(3,'YES','All '+sight.length+' curves meet HSO ≥ Rs[1 − cos(S/(2Rs))] for the supplied sight-distance and clear-offset inputs. This does not verify that the adopted sight distance meets a speed-based standard.');
+ else sightResult=item(3,'YES','All '+sight.length+' curves meet HSO ≥ Rs[1 − cos(S/(2Rs))] for the supplied sight-distance and clear-offset inputs. The result is an envelope screen, not full sight-distance approval. Speed-based values use the entered grade, reaction time and deceleration; an adopted S overrides that calculation.');
  return [pairItem(0,'Compound','compound-curve connection'),pairItem(1,'Reverse','reverse-curve connection'),brokenResult,sightResult];
 }
 
@@ -201,12 +210,14 @@ function parseDelimited(text){
 }
 const columns=['id','n','e','piStation','delta','r','turn','gap','givenT','givenPC','givenL','givenPT','sightRadius','sightDistance','availableOffset'];
 function parseTable(text,layout='legacy'){
- const records=parseDelimited(text);if(!records.length)throw Error('Paste at least one data row.');
- const aliases={pino:'id',pi:'id',id:'id',northing:'n',n:'n',easting:'e',e:'e',pistation:'piStation',pista:'piStation',station:'piStation',i:'delta',delta:'delta',intersectionangle:'delta',r:'r',radius:'r',turn:'turn',direction:'turn',tangentbefore:'gap',gap:'gap',t:'givenT',pc:'givenPC',lc:'givenL',l:'givenL',curvelength:'givenL',pt:'givenPT',sightradius:'sightRadius',sightpathradius:'sightRadius',rs:'sightRadius',sightdistance:'sightDistance',s:'sightDistance',availableoffset:'availableOffset',hsoavailable:'availableOffset'};
+ const markdown=String(text).split(/\r?\n/).filter(line=>line.trim().startsWith('|'));
+ const records=markdown.length>1?markdown.map(line=>line.trim().replace(/^\||\|$/g,'').split(/(?<!\\)\|/).map(cell=>cell.trim().replace(/\\\|/g,'|'))).filter(row=>!row.every(cell=>/^:?-+:?$/.test(cell))):parseDelimited(text);
+ if(!records.length)throw Error('Paste at least one data row.');
+ const aliases={vkmh:'designSpeed',gpercent:'grade',rsm:'sightRadius',adoptedsm:'sightDistance',mavailablem:'availableOffset',deg:'delta',rm:'r',designspeed:'designSpeed',v:'designSpeed',grade:'grade',g:'grade',reactiontime:'reactionTime',deceleration:'deceleration',adopteds:'sightDistance',availableclearoffset:'availableOffset',m:'availableOffset',pino:'id',pi:'id',id:'id',northing:'n',n:'n',easting:'e',e:'e',pistation:'piStation',pista:'piStation',station:'piStation',i:'delta',delta:'delta',intersectionangle:'delta',r:'r',radius:'r',turn:'turn',direction:'turn',tangentbefore:'gap',gap:'gap',t:'givenT',pc:'givenPC',lc:'givenL',l:'givenL',curvelength:'givenL',pt:'givenPT',sightradius:'sightRadius',sightpathradius:'sightRadius',rs:'sightRadius',sightdistance:'sightDistance',s:'sightDistance',availableoffset:'availableOffset',hsoavailable:'availableOffset'};
  const normalize=s=>s.toLowerCase().replace(/[^a-z]/g,'');
  const header=records[0].map(s=>s.trim()==='e'?null:aliases[normalize(s)]||null);
  const hasHeader=header.includes('id')&&header.includes('r');
- const names=hasHeader?header:layout==='station'?stationColumns:columns;
+ const names=hasHeader?header:layout==='design'?designColumns:layout==='station'?stationColumns:columns;
  const result=(hasHeader?records.slice(1):records).map(fields=>{
   const row={turn:'AUTO'};fields.forEach((v,i)=>{if(names[i])row[names[i]]=v.trim();});return row;
  });
@@ -218,6 +229,7 @@ function csv(headers,records){
  return [headers,...records].map(row=>row.map(quote).join(',')).join('\r\n');
 }
 const stationColumns=['id','piStation','delta','r','turn','gap','givenT','givenPC','givenL','givenPT','sightRadius','sightDistance','availableOffset'];
+const designColumns=['id','piStation','delta','r','turn','designSpeed','grade','sightRadius','sightDistance','availableOffset'];
 function stationSchedule(inputRows,options={}){
  const basis=options.stationBasis||'stations',errors=[];
  if(!['stations','spacing'].includes(basis))errors.push('Select PI stations or first PC + tangent spacing.');
@@ -228,11 +240,19 @@ function stationSchedule(inputRows,options={}){
    if(String(r.piStation??'').trim()==='')errors.push('Row '+(i+1)+': Enter the PI station.');
    else try{if(station(r.piStation)-geometry(r.r,r.delta).T<0)errors.push('Row '+(i+1)+': PI station minus T places the PC before station zero.');}catch{}
   }else if(i>0&&String(r.gap??'').trim()==='')errors.push('Row '+(i+1)+': Enter the tangent from the previous PT to this PC (zero for a direct connection).');
-  return {...r,piStation:basis==='stations'?r.piStation:'',gap:basis==='spacing'?(i?r.gap:0):''};
+  return {...r,reactionTime:r.reactionTime??options.reactionTime,deceleration:r.deceleration??options.deceleration,piStation:basis==='stations'?r.piStation:'',gap:basis==='spacing'?(i?r.gap:0):''};
  });
  const model=analyze(rows,{...options,mode:'sequential',startStation:basis==='stations'?0:options.startStation,startE:0,startN:0,startAz:0});
- if(errors.length)return {...model,errors:[...errors,...model.errors],curves:[],pairs:[],points:[],checks:[],summary:null};
+ if(errors.length)return {...model,errors:[...errors,...model.errors],curves:[],pairs:[],points:[],checks:[],sightOffsets:[],summary:null};
  return model;
 }
-globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,pairCheck,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
+function chatTable(rows,model,options={}){
+ const escape=value=>String(value??'').replace(/\|/g,'\\|').replace(/[\r\n]+/g,' ');
+ const headers=['PI','PI station','Δ (deg)','R (m)','Turn','V (km/h)','G (%)','Rs (m)','Adopted S (m)','M available (m)','S used (m)','Required HSO (m)','HSO result'];
+ const table=[headers,headers.map(()=>'---'),...rows.map((r,i)=>{const h=model?.sightOffsets?.[i];return [r.id,r.piStation,r.delta,r.r,r.turn,r.designSpeed,r.grade,r.sightRadius,r.sightDistance,r.availableOffset,h?.S??'',h?.required??'',h?.status??'NOT EVALUATED'];})];
+ const assumptions='Reaction time: '+(options.reactionTime??2.5)+' s; deceleration: '+(options.deceleration??3.4)+' m/s². Grade is signed + uphill / − downhill. Rs is inside-lane path radius; M is measured from that path. Blank adopted S uses speed/grade SSD; entered adopted S overrides it. Local schematic; project screens: tangent ≥ 30 m and compound radius ratio ≤ 1.5.';
+ const findings=(model?.summary?complianceChecklist(model):[]).map(c=>'- '+c.label+': '+c.answer+' — '+c.reason).join('\n');
+ return assumptions+'\n\n'+table.map(row=>'| '+row.map(escape).join(' | ')+' |').join('\n')+(findings?'\n\n'+findings:'');
+}
+globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,designColumns,stoppingSightDistance,chatTable,pairCheck,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
 })();

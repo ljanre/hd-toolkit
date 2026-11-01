@@ -132,6 +132,36 @@ test('Checklist follows calculated results and appears after plot and registers'
  const html=alignmentHtml;assert.ok(html.indexOf('id="compliancePanel"')>html.indexOf('id="plotWorkspace"'));assert.ok(html.indexOf('id="compliancePanel"')>html.indexOf('id="checksPanel"'));
  assert.doesNotMatch(html,/<(?:input|th)[^>]*(?:Northing|Easting)|id="start[EN]"/);
 });
+
+for(const [V,G,t,a] of [[20,0,2.5,3.4],[30,-6,2.5,3.4],[40,6,2.5,3.4],[50,0,2.5,3.4],[60,-3,2.5,3.4],[70,3,2.5,3.4],[80,0,3,3.4],[90,-6,2,4],[100,6,2.5,3.4],[120,0,2.5,4]]){
+ test('Speed / grade SSD and HSO: V='+V+' G='+G,()=>{
+  const reaction=278*V*t/1000,braking=(V/Math.sqrt(254))**2/(a/9.81+G/100),expectedS=reaction+braking;
+  const Rs=500,angle=90,expectedM=Rs-Math.sqrt(Rs*Rs-(Rs*Math.sin(expectedS/(2*Rs)))**2);
+  const actualS=C.stoppingSightDistance(V,G,t,a);near(actualS,expectedS,1e-11);
+  const raw={id:'SSD',piStation:2000,r:510,delta:angle,turn:'R',designSpeed:V,grade:G,sightRadius:Rs,availableOffset:expectedM+.1};
+  const m=C.stationSchedule([raw],{stationBasis:'stations',reactionTime:t,deceleration:a});assert.equal(m.errors.length,0);near(m.sightOffsets[0].required,expectedM,1e-9);assert.equal(m.checklist[3].answer,'YES');
+  const failing=C.stationSchedule([{...raw,availableOffset:Math.max(0,expectedM-.01)}],{stationBasis:'stations',reactionTime:t,deceleration:a});assert.equal(failing.checklist[3].answer,'NO');
+  return {inputs:{V,G,t,a,Rs},expectedS,actualS,expectedHSO:expectedM,actualHSO:m.sightOffsets[0].required};
+ });
+}
+test('SSD boundaries, adopted override and missing offset',()=>{
+ for(const args of [[0,0],[50,''],[50,-40],[50,0,0],[50,0,2.5,0]])assert.throws(()=>C.stoppingSightDistance(...args));
+ assert.ok(C.stoppingSightDistance(60,-6)>C.stoppingSightDistance(60,0));assert.ok(C.stoppingSightDistance(60,6)<C.stoppingSightDistance(60,0));
+ const manual=C.sightOffsetCheck({id:'A',delta:90,source:{sightRadius:100,sightDistance:50,designSpeed:'invalid',availableOffset:10}});assert.equal(manual.ssdSource,'Adopted S');assert.equal(manual.S,50);
+ const partial=C.sightOffsetCheck({id:'A',delta:90,source:{sightRadius:100,designSpeed:40,grade:0}});assert.ok(partial.required>0);assert.equal(partial.status,'NOT EVALUATED');
+ const long=C.sightOffsetCheck({id:'A',delta:5,source:{sightRadius:100,designSpeed:100,grade:0,availableOffset:30}});assert.equal(long.required,null);assert.equal(long.status,'NOT EVALUATED');
+});
+test('ChatGPT copy includes editable values, assumptions and current findings',()=>{
+ const raw=[{id:'A|B',piStation:'2+000',r:200,delta:90,turn:'R',designSpeed:40,grade:0,sightRadius:198.5,availableOffset:10}];
+ const m=C.stationSchedule(raw,{reactionTime:2.5,deceleration:3.4});const text=C.chatTable(raw,m,{reactionTime:2.5,deceleration:3.4});
+ assert.ok(text.includes('A\\|B'));assert.match(text,/V \(km\/h\)/);assert.match(text,/Reaction time: 2.5 s/);assert.match(text,/Required HSO/);assert.match(text,/Horizontal sight offset: YES/);const roundTrip=C.parseTable(text,'design');assert.equal(roundTrip[0].id,'A|B');assert.equal(roundTrip[0].designSpeed,'40');assert.equal(roundTrip[0].r,'200');assert.equal(roundTrip[0].sightRadius,'198.5');assert.equal(roundTrip[0].availableOffset,'10');
+ const blank=C.chatTable([{id:'PI-1'}],null,{});assert.match(blank,/NOT EVALUATED/);assert.equal(C.designColumns.includes('designSpeed'),true);
+ const parsed=C.parseTable('PI NO.,PI STATION,I,R,TURN,DESIGN SPEED,GRADE,RS,ADOPTED S,AVAILABLE CLEAR OFFSET\nA,2+000,90,200,R,40,0,198.5,,10','design');assert.equal(parsed[0].designSpeed,'40');assert.equal(parsed[0].grade,'0');assert.equal(parsed[0].availableOffset,'10');
+});
+test('Removed panels and controls stay absent; HSO inputs and copy remain',()=>{
+ for(const id of ['project','stationBasis','startStation','undo','compareInputs','showSight','evaluationStamp'])assert.ok(!alignmentHtml.includes('id="'+id+'"'));
+ assert.ok(!alignmentHtml.includes('Method, references &amp; use'));for(const id of ['reactionTime','deceleration','copyTable'])assert.ok(alignmentHtml.includes('id="'+id+'"'));
+});
 await mkdir(new URL('Reports/',root),{recursive:true});
-await writeFile(new URL('Reports/alignment-curve-checker-tests.json',root),JSON.stringify({date:'2026-11-01',tool:'Alignment Curve Checker',baseline:'Public toolkit integration based on 17d94e4',results,passed:results.length,failed:0,limits:'Independent circle rotation and worked benchmarks. Project screening defaults from user brief; full DPWH source not accessible. Numerical agreement is not design approval.'},null,2)+'\n');
+await writeFile(new URL('Reports/alignment-curve-checker-tests.json',root),JSON.stringify({date:'2026-11-01',tool:'Alignment Curve Checker',baseline:'Speed/grade HSO revision from 4defff4',results,passed:results.length,failed:0,limits:'Independent circle rotation and worked benchmarks. SSD: FHWA-RD-02-045 Eq.3.5.1; HSO: TxDOT Roadway Design Manual 4.7.9, reviewed 2026-11-01. Project tangent/radius screens remain from the user brief; no universal DPWH approval is claimed. Numerical agreement is not design approval.'},null,2)+'\n');
 console.log(results.length+' alignment scenario groups passed, including 10 independent rotation cases. Results: Reports/alignment-curve-checker-tests.json');
