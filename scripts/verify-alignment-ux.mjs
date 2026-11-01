@@ -20,7 +20,7 @@ const P=context.AlignmentPlotLayout;
 const intersects=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
 for(const [width,count] of [[280,1],[360,3],[600,6],[759,10],[760,2],[900,4],[1200,8],[1600,12],[1000,30],[1400,50]]){
  const frame=P.frame(width,count,Math.max(0,count-1));
- const items=Array.from({length:count},(_,index)=>({kind:'pi',index,anchorY:index%2?99999:-100,lines:['PI identifier','PC station','PT station','Radius / angle']})).concat(Array.from({length:Math.max(0,count-1)},(_,index)=>({kind:'tangent',index,anchorY:index%3?250:-50,lines:['PT → PC','Length / result']})));
+ const items=Array.from({length:count},(_,index)=>({kind:'pi',index,anchorY:index%2?99999:-100,lines:['PI identifier','PC station','PT station','Radius / angle']})).concat(Array.from({length:Math.max(0,count-1)},(_,index)=>({kind:'tangent',index,anchorY:index%3?250:-50,lines:['T01 · REVERSE','PT station','PC station','Length / result']})));
  const boxes=P.place(frame,items);assert.equal(boxes.length,items.length);
  for(const box of boxes){assert.ok(box.x>=0&&box.y>=0&&box.x+box.width<=frame.width+1e-6&&box.y+box.height<=frame.height+1e-6);assert.equal(intersects(box,frame.geometry),false,'Annotation covers geometry');}
  for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++)assert.equal(intersects(boxes[i],boxes[j]),false,'Annotation boxes overlap');
@@ -29,3 +29,6 @@ assert.match(html,/<details[^>]+id="elementsPanel"[^>]*><summary>Calculated curv
 assert.ok(html.indexOf('id="checksPanel"')>html.indexOf('id="plotWorkspace"'));assert.ok(html.indexOf('id="checksPanel"')<html.indexOf('id="elementsPanel"'));
 assert.doesNotMatch(html,/id="summary"/);assert.doesNotMatch(app,/Illustrative example loaded|\$\('summary'\)/);
 console.log('Alignment UX: 12 readiness cases, prompt-only copy, row controls and tangent/PI plotting contracts verified.');
+
+assert.deepEqual([...html.matchAll(/<input type="checkbox" id="([^"]+)" checked/g)].map(m=>m[1]),['checkedTangents']);
+assert.doesNotMatch(html,/N\/A/);assert.match(html,/Not Applicable/);assert.match(app,/TANGENT SCHEDULE/);assert.match(app,/Lt = /);

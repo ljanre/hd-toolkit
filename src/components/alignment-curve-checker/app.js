@@ -52,9 +52,9 @@ function calculate(){
    for(const answer of ['YES','NO','N/A']){
      const td=addCell(tr,'');const indicator=document.createElement('span');
      indicator.className='compliance-indicator'+(item.answer===answer?' selected':'');indicator.textContent='●';
-     indicator.setAttribute('role','img');indicator.setAttribute('aria-label',answer+(item.answer===answer?' selected':' not selected'));td.append(indicator);
+     indicator.setAttribute('role','img');indicator.setAttribute('aria-label',(answer==='N/A'?'Not Applicable':answer)+(item.answer===answer?' selected':' not selected'));td.append(indicator);
    }
-   const finding=addCell(tr,'');const answer=document.createElement('span');answer.className='checklist-answer';answer.textContent=item.answer==='NOT EVALUATED'?'Not evaluated':item.answer;finding.append(answer,document.createTextNode(item.reason));$('complianceRows').append(tr);
+   const finding=addCell(tr,'');const answer=document.createElement('span');answer.className='checklist-answer';answer.textContent=item.answer==='NOT EVALUATED'?'Not evaluated':item.answer==='N/A'?'Not Applicable':item.answer;finding.append(answer,document.createTextNode(item.reason));$('complianceRows').append(tr);
  }
 
  [...$('inputRows').children].forEach((tr,i)=>{const invalid=model.errors.some(message=>message.startsWith('Row '+(i+1)+':'));for(const control of tr.querySelectorAll('input,select'))invalid?control.setAttribute('aria-invalid','true'):control.removeAttribute('aria-invalid');});
@@ -116,18 +116,19 @@ function draw(){
   for(const p of [c.pc,c.pt]){const q=xy(p);svg('circle',{cx:q.x,cy:q.y,r:3*scale,fill:'white',stroke:color,'stroke-width':line});}
   if($('labels').checked){
    const q=xy(c.pi);svg('path',{class:'pi-marker','data-pi':c.id,d:'M '+q.x+' '+(q.y-6*scale)+' l '+6*scale+' '+12*scale+' h '+(-12*scale)+' Z',fill:color,stroke:'#fff','stroke-width':scale});
-   annotate(c.pi,$('stations').checked?[c.id+' · PI '+C.formatStation(c.piStation),'PC '+C.formatStation(c.pcStation),'PT '+C.formatStation(c.ptStation),'R '+f(c.R,1)+' m · Δ '+f(c.delta,3)+'°']:[c.id+' · PI','R '+f(c.R,1)+' m · Δ '+f(c.delta,3)+'°'],color,'pi',i);
+   annotate(c.pi,$('stations').checked?[c.id+' · STA. '+C.formatStation(c.piStation),'PC STA. '+C.formatStation(c.pcStation),'PT STA. '+C.formatStation(c.ptStation),'R = '+f(c.R,1)+' m · Δ = '+f(c.delta,3)+'°']:[c.id+' · PI','R = '+f(c.R,1)+' m · Δ = '+f(c.delta,3)+'°'],color,'pi',i);
   }
  });
  if($('checkedTangents').checked)model.pairs.forEach((pair,i)=>{
   const a=model.curves[i],b=model.curves[i+1],mid={x:(a.pt.x+b.pc.x)/2,y:(a.pt.y+b.pc.y)/2},color=pair.status==='PASS'?'#18724c':pair.status==='FAIL'?'#c33129':'#a66b00',direct=Math.abs(pair.gap)<=.05;
-  const title=direct?pair.from+' → '+pair.to+' · '+pair.kind:'PT '+pair.from+' → PC '+pair.to;
-  const detail=direct?'R/r = '+f(pair.ratio,3)+' · '+pair.status:'Tangent = '+f(pair.gap,3)+' m · '+(pair.status==='NOT EVALUATED'?'REVIEW':pair.status);
-  const q=xy(mid);if(direct)svg('circle',{class:'connection-marker',cx:q.x,cy:q.y,r:7*scale,fill:'white',stroke:color,'stroke-width':2*scale});annotate(mid,[title,detail],color,'tangent',i);
+  const title='T'+String(i+1).padStart(2,'0')+' · '+pair.kind.toUpperCase();
+  const detail=direct?'R/r = '+f(pair.ratio,3)+' · '+pair.status:'Lt = '+f(pair.gap,3)+' m · '+(pair.status==='NOT EVALUATED'?'REVIEW':pair.status);
+  const lines=[title,'PT '+a.id+' · '+C.formatStation(a.ptStation),'PC '+b.id+' · '+C.formatStation(b.pcStation),detail];
+  const q=xy(mid);if(direct)svg('circle',{class:'connection-marker',cx:q.x,cy:q.y,r:7*scale,fill:'white',stroke:color,'stroke-width':2*scale});annotate(mid,lines,color,'tangent',i);
  });
  const boxes=AlignmentPlotLayout.place(plotFrame,annotations);
  for(const kind of ['pi','tangent'])if(boxes.some(b=>b.kind===kind)){
-  const rail=plotFrame[kind],q=world(rail.x,rail.y+12);svg('text',{x:q.x,y:q.y,fill:'#65766e','font-size':9*scale,'font-weight':700},kind==='pi'?'PI / STATIONS':'CHECKED TANGENTS',labels);
+  const rail=plotFrame[kind],q=world(rail.x,rail.y+12);svg('text',{x:q.x,y:q.y,fill:'#65766e','font-size':9*scale,'font-weight':700},kind==='pi'?'CURVE DATA / CHAINAGE':'TANGENT SCHEDULE',labels);
  }
  for(const box of boxes){
   const p=xy(box.p),q=world(box.x,box.y),w=box.width*scale,h=box.height*scale,mobile=plotFrame.width<760;
