@@ -9,3 +9,13 @@ The user-supplied Plan & Profile, §11.1 Plan / Horizontal Alignment excerpts ar
 The former 50 m warning tier from separately published DPWH project-plan notes has been superseded in this worksheet by the supplied note. Reverse gaps of 30 m or more pass the minimum length screen, not full transition/design approval. Superelevation runoff/runout, sight distance, speed/radius compatibility, widening, vehicle tracking and profile coordination require their own evidence.
 
 The excerpt also asks for PI/PC/PT stations, PI coordinates, intersection angle, radius, tangent distance, curve length, superelevation, widening and design speed in design documentation, together with roadway/shoulder/ROW lines, 100 m station marks and sheet match lines. The local schematic remains a station-based curve checker; it is not a completed surveyed plan or documentation-completeness certification.
+
+## Minimum curve radius — DGCS 2015
+
+The full local DGCS Volume 4 (527 PDF pages) was located and read for this update. §3.6.2.1, printed p.3-19, identifies speed and maximum superelevation as controls. Table 3-12, printed pp.3-20–3-21 (PDF pages 95–96), supplies limiting rounded radii for emax 4%, 6%, 8% and 10%. The lookup uses exact printed speeds only; no interpolation or extrapolation. V and emax start blank to avoid assuming project controls and apply to all curves in the schedule.
+
+Source inconsistency: at 70 km/h / 4%, Table 3-12 prints calculated 203.1 m but rounded 135 m. Table 3-13, p.3-26 (PDF page 101), gives 203 m for 70 km/h at e=4%; the worksheet uses 203 m with this explicit correction. The 4% table is limited to urban conditions by Table 3-13. The 15 km/h / 4% and >100 km/h / 4% cases are absent from the table and remain Not evaluated.
+
+A pass applies to the limiting-radius check, not actual superelevation design. For the selected emax, Tables 3-13–3-16 relate actual design e to R and V. Road-class/project minimums (including Tables 3-1 / 3-2 where applicable) may be more restrictive and must also be checked. The existing supplied-note 30 m tangent criterion is retained; this change does not alter tangent settings.
+
+Radius failures color the radius input, calculated radius cell, curve centerline, curve detail boxes and symbol labels red. Detailed checks reports Rmin and shortfall. Calculation tests independently evaluate V²/[127(emax/100+f)] and compare the rounded values for all 48 supported rows, plus below/equal/above boundaries through the full model chain.

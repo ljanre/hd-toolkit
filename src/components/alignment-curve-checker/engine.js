@@ -62,7 +62,9 @@ function alignmentQualityChecklist(model){
  const valid=!!model?.summary&&!model.errors?.length,curves=model?.curves||[],pairs=model?.pairs||[];
  const entry=(label,status,evidence)=>({label,status,evidence});
  const result=[entry('Station chain and geometric continuity',valid?(model.summary.continuous?'PASS':'FAIL'):'NOT EVALUATED',valid?(model.summary.continuous?'Entered circular curves have a continuous station chain within the calculation tolerance.':'Resolve overlap or station-chain findings in Detailed checks.'):'Enter valid geometry.')];
- result.push(entry('Speed, radius and superelevation compatibility','NOT EVALUATED','Requires adopted design speed, applicable minimum radius, crossfall, superelevation and side-friction criteria. Curve radius alone cannot establish compliance.'));
+ const radiusChecks=model?.radiusChecks||[],failed=radiusChecks.filter(r=>r.status==='FAIL'),missing=radiusChecks.filter(r=>r.status==='NOT EVALUATED');
+ result.push(entry('DGCS limiting minimum radius',failed.length?'FAIL':!valid||!radiusChecks.length||missing.length?'NOT EVALUATED':'PASS',failed.length?failed.map(r=>r.id+': '+r.message).join(' '):missing.length?missing[0].message:radiusChecks.length?'All radii meet Table 3-12 limiting values for the selected V / emax; actual superelevation, road-class minimums and transitions remain separate checks.':'Select design speed and emax.'));
+ result.push(entry('Actual superelevation and road-class compatibility','NOT EVALUATED','The limiting-radius lookup does not check actual crossfall / superelevation or any more restrictive road-class or project minimum. Verify these against DGCS Tables 3-1 and 3-13–3-16 as applicable.'));
  result.push(entry('Superelevation reversal and transition length',pairs.some(p=>p.kind==='Reverse')?'NOT EVALUATED':valid?'NOT APPLICABLE':'NOT EVALUATED',pairs.some(p=>p.kind==='Reverse')?'Reverse curves present. Check runoff and tangent runout lengths, lane rotation, crossfall reversal and any spiral lengths against the available tangent. Meeting the 30 m minimum is not automatic transition approval.':'No reverse connection in the entered schedule; individual curve transitions still require design.'));
  result.push(entry('Same-direction curve arrangement',!valid?'NOT EVALUATED':pairs.some(p=>p.kind==='Same-direction with tangent'&&p.gap<30)?'WARNING':pairs.some(p=>p.kind==='Same-direction with tangent')?'PASS':'NOT APPLICABLE','The supplied note defines broken-back / flat-back as a tangent shorter than 30 m between same-direction curves. Avoid this arrangement unless unusual topography or right-of-way constraints justify it. A length-screen pass does not confirm appearance or transition design.'));
  result.push(entry('Compound-curve justification',pairs.some(p=>p.kind==='Compound')?'NOT EVALUATED':valid?'NOT APPLICABLE':'NOT EVALUATED','Where compound curves are necessary, document terrain/right-of-way constraints and verify the flatter radius is no more than 1.5 times the sharper radius.'));
@@ -261,9 +263,33 @@ function stationSchedule(inputRows,options={}){
  if(errors.length)return {...model,errors:[...errors,...model.errors],curves:[],pairs:[],points:[],checks:[],sightOffsets:[],summary:null};
  return model;
 }
+// DGCS 2015 Table 3-12, pp.3-20–3-21: rounded limiting minimum radius (m).
+// 70 km/h, emax=4% uses Table 3-13 p.3-26 (203 m), corroborating 203.1 calculated;
+// Table 3-12's rounded cell prints 135 m inconsistently.
+const radiusTable={
+ 4:{20:8,30:22,40:47,50:86,60:135,70:203,80:280,90:375,100:492},
+ 6:{15:4,20:8,30:21,40:43,50:79,60:123,70:184,80:252,90:336,100:437,110:560,120:756,130:951},
+ 8:{15:4,20:7,30:20,40:41,50:73,60:113,70:168,80:229,90:304,100:394,110:501,120:667,130:832},
+ 10:{15:4,20:7,30:19,40:38,50:68,60:105,70:154,80:210,90:277,100:358,110:454,120:597,130:739}
+};
+function minimumRadiusCheck(radius,options={}){
+ const base={status:'NOT EVALUATED',minimum:null,speed:null,emax:null,shortfall:null};
+ if(!String(options.radiusSpeed??'').trim()||!String(options.radiusEmax??'').trim())return {...base,message:'Select design speed V and maximum superelevation emax to check minimum radius.'};
+ const speed=Number(options.radiusSpeed),emax=Number(options.radiusEmax),minimum=radiusTable[emax]?.[speed];
+ if(minimum===undefined)return {...base,speed,emax,message:'No exact DGCS Table 3-12 row for this speed / emax combination. No interpolation or extrapolation is applied.'};
+ if(!finite(Number(radius))||Number(radius)<=0)return {...base,speed,emax,message:'Enter a positive radius.'};
+ const R=Number(radius),shortfall=Math.max(0,minimum-R),status=R+1e-9>=minimum?'PASS':'FAIL';
+ return {status,minimum,speed,emax,shortfall,message:'DGCS Table 3-12 limiting minimum: '+minimum+' m at V = '+speed+' km/h, emax = '+emax+'%. '+(status==='FAIL'?'Radius is deficient by '+shortfall.toFixed(3)+' m.':'Meets the limiting minimum only; verify actual superelevation and applicable road-class/project criteria.')+(speed===70&&emax===4?' Table 3-13 confirms 203 m; inconsistent Table 3-12 rounded cell is not used.':'')};
+}
 const alignmentColumns=['id','piStation','delta','r','turn'];
 function alignmentSchedule(rows,options={}){
- return {...stationSchedule(rows.map(row=>Object.fromEntries(alignmentColumns.map(key=>[key,row[key]]))),{...options,scope:'alignment'}),scope:'alignment'};
+ const model={...stationSchedule(rows.map(row=>Object.fromEntries(alignmentColumns.map(key=>[key,row[key]]))),{...options,scope:'alignment'}),scope:'alignment'};
+ if('radiusSpeed' in options||'radiusEmax' in options){
+  model.radiusChecks=model.curves.map(c=>({id:c.id,...minimumRadiusCheck(c.R,options)}));
+  for(const [i,r] of model.radiusChecks.entries())model.checks.push({status:r.status,subject:r.id+' · Minimum curve radius',actual:model.curves[i].R+' m',criterion:r.minimum===null?'Select V / emax':'R ≥ '+r.minimum+' m',message:r.message});
+  if(model.summary){model.summary={...model.summary};for(const r of model.radiusChecks){const key=r.status==='FAIL'?'failed':r.status==='PASS'?'passed':'notEvaluated';model.summary[key]++;model.summary.total++;}}
+ }
+ return model;
 }
 function alignmentPrompt(){
  return [
@@ -281,7 +307,7 @@ function alignmentPrompt(){
  '- Required per curve: PI identifier, PI station, 0 < intersection angle < 180 degrees, positive radius and explicit L/R direction. Stations must be nonnegative. Flag unreadable or inconsistent entries.',
  '- For checking only, calculate T = R tan(I/2), Lc = pi R I/180, PC = PI station - T, PT = PC + Lc, and the intervening tangent = next PC - previous PT. Distinguish T from the PT-to-PC connecting tangent. Do not include derived columns in the five-column import block.',
  '- Flag PC before zero and overlapping curves. For reverse curves compare the PT-to-PC tangent with the 30 m minimum. For directly connected same-direction compound curves compare larger/smaller radius with 1.5. For same-direction curves with a positive tangent shorter than 30 m, flag a broken-back screening concern. The app treats gaps within 0.05 m of zero as direct connections.',
- '- For reverse curves flag less than 30 m as Fail and 30 m or more as passing the minimum tangent length only. For same-direction curves, a positive tangent shorter than 30 m is a broken-back warning requiring avoidance or documented exceptional justification. Transition design still requires separate verification; 1.5 is the compound-radius screen. These checks are not universal design approval. If inputs are incomplete, state Not evaluated rather than Pass. Exclude sight-offset, speed and georeferenced-position inputs from this alignment worksheet.',
+ '- For reverse curves flag less than 30 m as Fail and 30 m or more as passing the minimum tangent length only. For same-direction curves, a positive tangent shorter than 30 m is a broken-back warning requiring avoidance or documented exceptional justification. Transition design still requires separate verification; 1.5 is the compound-radius screen. These checks are not universal design approval. If inputs are incomplete, state Not evaluated rather than Pass. Keep sight-offset and georeferenced-position inputs out of the five-column table. Report any source design speed V and maximum superelevation emax separately so I can set the shared radius-check controls; do not assume missing values.',
  '- In a short separate review after the import block, report errors, connection findings and information still required. The user will paste only the TSV block into Paste table. The generated app output should be curve geometry, PC/PI/PT stations, labelled PI markers, highlighted PT-to-PC tangents and the dynamic connection checklist.'
  ].join('\n');
 }
@@ -311,5 +337,5 @@ function chatTable(rows,model,options={}){
  const findings=(model?.summary?complianceChecklist(model):[]).map(c=>'- '+c.label+': '+c.answer+' — '+c.reason).join('\n');
  return assumptions+'\n\n'+table.map(row=>'| '+row.map(escape).join(' | ')+' |').join('\n')+(findings?'\n\n'+findings:'');
 }
-globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,designColumns,alignmentColumns,alignmentSchedule,alignmentPrompt,alignmentReadiness,alignmentChatTable,stoppingSightDistance,chatTable,pairCheck,alignmentQualityChecklist,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
+globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,designColumns,alignmentColumns,alignmentSchedule,alignmentPrompt,alignmentReadiness,alignmentChatTable,stoppingSightDistance,chatTable,pairCheck,minimumRadiusCheck,alignmentQualityChecklist,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
 })();

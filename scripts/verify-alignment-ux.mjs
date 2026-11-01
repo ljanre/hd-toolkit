@@ -55,3 +55,22 @@ for(const [gap,warning] of [[.1,true],[1,true],[10,true],[20,true],[29,true],[29
 }
 for(const ratio of [1,1.2,1.4999,1.5,1.5001,2])assert.equal(C.pairCheck({R:100,s:1},{R:100*ratio,s:1},0).status,ratio<=1.5?'PASS':'FAIL');
 assert.doesNotMatch(html,/50 m recommended/);assert.doesNotMatch(C.alignmentPrompt(),/50 m/);
+
+// Independently calculate limiting radii using DGCS side-friction rows and V²/[127(e+f)].
+const friction={15:.40,20:.35,30:.28,40:.23,50:.19,60:.17,70:.15,80:.14,90:.13,100:.12,110:.11,120:.09,130:.08};
+let radiusCases=0;
+for(const emax of [4,6,8,10])for(const [v,f] of Object.entries(friction)){
+ const speed=Number(v);if(emax===4&&(speed===15||speed>100))continue;
+ const expected=Math.round(speed**2/(127*(emax/100+f))),options={radiusSpeed:speed,radiusEmax:emax};
+ for(const [radius,status] of [[expected-.001,'FAIL'],[expected,'PASS'],[expected+.001,'PASS']]){
+  const result=C.minimumRadiusCheck(radius,options);assert.equal(result.minimum,expected);assert.equal(result.status,status);
+  const m=C.alignmentSchedule([{id:'R-CHECK',piStation:1000,r:radius,delta:20,turn:'R'}],options);
+  assert.equal(m.errors.length,0);assert.equal(m.radiusChecks[0].status,status);assert.equal(m.checks.at(-1).status,status);
+  assert.equal(C.alignmentQualityChecklist(m).find(q=>q.label==='DGCS limiting minimum radius').status,status);
+ }
+ radiusCases++;
+}
+assert.equal(radiusCases,48);assert.equal(C.minimumRadiusCheck(150,{radiusSpeed:70,radiusEmax:4}).minimum,203);
+for(const options of [{},{radiusSpeed:30},{radiusEmax:8},{radiusSpeed:35,radiusEmax:8},{radiusSpeed:15,radiusEmax:4},{radiusSpeed:130,radiusEmax:4},{radiusSpeed:30,radiusEmax:5}])assert.equal(C.minimumRadiusCheck(20,options).status,'NOT EVALUATED');
+assert.match(app,/radius-deficient/);assert.match(app,/curveColor/);assert.match(html,/radiusSpeed/);assert.match(html,/radiusEmax/);
+console.log('DGCS radius: 48 independent limiting-radius cases, 144 full-chain boundary checks and missing/unsupported controls passed.');

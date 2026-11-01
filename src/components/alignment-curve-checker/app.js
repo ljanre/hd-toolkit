@@ -1,9 +1,10 @@
 (() => {
 'use strict';
 const C=AlignmentChecker,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='hd-alignment-check-v4';
-const inputs=[],fields=C.alignmentColumns;
+const inputs=['radiusSpeed','radiusEmax'],fields=C.alignmentColumns;
 const colors=['#197657','#2778ad','#c47b17','#8b50a6','#ba5451','#218c92'];
 let model=null,view=null,drag=null,origin={x:0,y:0},plotFrame=null,drawingLayer=null;
+const curveColor=(c,i)=>model?.radiusChecks?.[i]?.status==='FAIL'?'#c33129':colors[i%colors.length];
 const f=(n,d=3)=>Number.isFinite(n)?n.toFixed(d):'—';
 const badge=status=>{const e=document.createElement('span');e.className='badge '+status.toLowerCase().replaceAll(' ','-');e.textContent=status;return e;};
 function options(){return {stationBasis:'stations',minimumTangent:30,maximumRatio:1.5,...Object.fromEntries(inputs.map(id=>[id,$(id).value]))};}
@@ -44,6 +45,7 @@ function errors(messages){
 function calculate(){
  const raw=rows();
  try{model=C.alignmentSchedule(raw,options());}catch(error){model={errors:['Calculation could not be completed: '+error.message],curves:[],pairs:[],points:[],checks:[],summary:null};}
+ const radiusCriterion=C.minimumRadiusCheck(1e9,options());$('radiusBasis').textContent=radiusCriterion.minimum===null?radiusCriterion.message:'Limiting Rmin = '+radiusCriterion.minimum+' m · DGCS Table 3-12, pp. 3-20–3-21. Check actual superelevation and any higher road-class/project minimum separately.'+(radiusCriterion.speed===70&&radiusCriterion.emax===4?' Table 3-13 corroborates 203 m; the inconsistent Table 3-12 rounded cell is not used.':'');
  errors(model.errors);$('inputReadiness').textContent=C.alignmentReadiness(raw,model);
  const generated=!!model.summary&&!model.errors.length;for(const id of ['plotWorkspace','elementsPanel','stationsPanel','checksPanel','compliancePanel','qualityPanel'])$(id).hidden=!generated;
  $('qualityRows').replaceChildren();for(const item of generated?C.alignmentQualityChecklist(model):[]){const row=document.createElement('tr');addCell(row,item.label);addCell(row,item.status==='NOT APPLICABLE'?'Not Applicable':item.status==='NOT EVALUATED'?'Not evaluated':item.status).className=item.status==='WARNING'||item.status==='FAIL'?'quality-alert':'';addCell(row,item.evidence);$('qualityRows').append(row);}
@@ -58,8 +60,9 @@ function calculate(){
    const finding=addCell(tr,'');const answer=document.createElement('span');answer.className='checklist-answer';answer.textContent=item.answer==='NOT EVALUATED'?'Not evaluated':item.answer==='N/A'?'Not Applicable':item.answer;finding.append(answer,document.createTextNode(item.reason));$('complianceRows').append(tr);
  }
 
- [...$('inputRows').children].forEach((tr,i)=>{const invalid=model.errors.some(message=>message.startsWith('Row '+(i+1)+':'));for(const control of tr.querySelectorAll('input,select'))invalid?control.setAttribute('aria-invalid','true'):control.removeAttribute('aria-invalid');});
+ [...$('inputRows').children].forEach((tr,i)=>{const invalid=model.errors.some(message=>message.startsWith('Row '+(i+1)+':'));for(const control of tr.querySelectorAll('input,select'))invalid?control.setAttribute('aria-invalid','true'):control.removeAttribute('aria-invalid');const r=tr.querySelector('[data-field=r]'),check=model.radiusChecks?.[i];r.classList.toggle('radius-deficient',check?.status==='FAIL');if(check?.status==='FAIL'){r.setAttribute('aria-invalid','true');r.title=check.message;}else r.title=check?.message||'Simple circular-curve radius, metres.';});
  fillTable('geometryRows',model.curves.map(c=>[c.id,c.s===1?'R':'L',f(c.R),f(c.delta,6),f(c.T),f(c.L),f(c.chord),f(c.external),f(c.middle),C.formatStation(c.pcStation),C.formatStation(c.piStation),C.formatStation(c.ptStation),f(c.gap)]));
+ [...$('geometryRows').children].forEach((tr,i)=>tr.children[2]?.classList.toggle('radius-deficient',model.radiusChecks?.[i]?.status==='FAIL'));
  fillTable('pointRows',model.points.filter(p=>p.type!=='Center').map(p=>[p.id,p.station===null?'—':C.formatStation(p.station),p.type==='PI'?'Tangent intersection · not on circular arc':p.type==='Center'?'Circle center':p.type==='PC'?'Beginning of curve':'End of curve']));
  $('checkRows').replaceChildren();for(const check of model.checks){const tr=document.createElement('tr');const status=addCell(tr,'');status.append(badge(check.status));for(const value of [check.subject,check.actual,check.criterion,check.message])addCell(tr,value);$('checkRows').append(tr);}
 
@@ -102,7 +105,7 @@ function draw(){
  const annotations=[];
  const annotate=(p,lines,color,kind,index)=>{const q=xy(p);annotations.push({p,lines,color,kind,index,anchorY:(q.y-view.y)/scale});};
  model.curves.forEach((c,i)=>{
-  const color=colors[i%colors.length],prev=model.curves[i-1];
+  const color=curveColor(c,i),prev=model.curves[i-1];
   if(prev){
    const pair=model.pairs[i-1],tone=pair.status==='PASS'?'#18724c':['FAIL','WARNING'].includes(pair.status)?'#c33129':'#a66b00',checked=$('checkedTangents').checked;
    if(checked)path([prev.pt,c.pc],{class:'checked-tangent-halo',stroke:tone,'stroke-width':12*scale,opacity:.17});
@@ -131,7 +134,7 @@ function draw(){
  const screen=p=>{const q=xy(p);return {x:(q.x-view.x)/scale,y:(q.y-view.y)/scale};};
  const symbolAnchors=[],segments=[];
  model.curves.forEach((c,i)=>{
-  const color=colors[i%colors.length];
+  const color=curveColor(c,i);
   for(const [text,p] of [['PC',c.pc],['PT',c.pt],['PI',c.pi],['R',C.pointOnArc(c.pc,c.startAz,c.s,c.R,c.L*.55)]])symbolAnchors.push({...screen(p),text,color});
   for(let j=1;j<c.points.length;j++)segments.push([screen(c.points[j-1]),screen(c.points[j])]);
   if(i)segments.push([screen(model.curves[i-1].pt),screen(c.pc)]);

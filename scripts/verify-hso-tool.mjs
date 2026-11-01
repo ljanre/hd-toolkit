@@ -21,6 +21,6 @@ const chain=C.stationSchedule([{id:'A',piStation:2000,delta:90,r:100,turn:'R',de
 assert.equal(H.assess([{delta:5,designSpeed:100,grade:0,sightRadius:100,availableOffset:20}])[0].required,null);
 for(const delta of ['',0,180,'bad'])assert.equal(H.assess([{delta}])[0].status,'NOT EVALUATED');
 const row={id:'Curve-1',station:'2+000',delta:90,sightRadius:100,sightDistance:50,availableOffset:10};const result=H.assess([row]);assert.equal(result[0].status,'PASS');assert.match(H.table([row],result),/Station reference/);assert.match(H.table([row],result),/Required HSO/);
-const alignmentHtml=await readFile(new URL('../src/components/alignment-curve-checker/index.html',import.meta.url),'utf8');assert.doesNotMatch(alignmentHtml,/HSO|Reaction time|Deceleration|Design speed|Path radius|Adopted S/);assert.match(alignmentHtml,/<h1>Alignment Check/);
+const alignmentHtml=await readFile(new URL('../src/components/alignment-curve-checker/index.html',import.meta.url),'utf8');assert.doesNotMatch(alignmentHtml,/HSO|Reaction time|Deceleration|Path radius|Adopted S/);assert.match(alignmentHtml,/<h1>Alignment Check/);
 const registry=await readFile(new URL('../src/tool-registry.js',import.meta.url),'utf8');assert.match(registry,/title: 'HSO Tool', group: 'geometry'/);assert.match(registry,/title: 'Alignment Checker'/);
 console.log('HSO separation: 10 independent SSD/HSO cases, 10 alignment isolation cases, partial inputs, limits, copy and navigation passed.');

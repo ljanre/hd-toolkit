@@ -12,3 +12,5 @@ body[data-station-basis=stations] .spacing-only,body[data-station-basis=spacing]
 .result-dropdown>summary{font-size:16px;color:var(--ink);padding:0;list-style:revert}.result-dropdown[open]>summary{margin-bottom:14px}.annotation-leaders{pointer-events:none}.annotation-labels text{user-select:none}#plot{background:#f6f9f7}.plot-panel{overflow:hidden}
 
 .quality-table{white-space:normal;text-align:left}.quality-table td:last-child{min-width:320px}.quality-alert{color:#c33129;font-weight:700}.symbol-label{font-family:Consolas,monospace;font-weight:700;paint-order:stroke;stroke:#fafcf9;stroke-width:3px;stroke-linejoin:round}.badge.warning{color:#c33129;background:#fff0ed}
+
+.radius-controls{display:flex;flex-wrap:wrap;align-items:end;gap:14px;margin:12px 0 18px}.radius-controls label{display:grid;gap:5px;font-size:11px;font-weight:600;min-width:180px}.radius-controls label span{font-size:10px;font-weight:400;color:#65766e}.radius-controls p{flex:1;min-width:220px;margin:0}.radius-deficient{color:#b4211b!important;background:#fff0ed!important;border-color:#c33129!important;font-weight:700}
