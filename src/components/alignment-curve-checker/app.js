@@ -31,8 +31,9 @@ function renderRows(values){
    control.title=({piStation:'Tangent PI station: PC = PI − T; PT = PC + Lc.',delta:'Intersection angle: decimal degrees or D°M′S″.',r:'Simple circular-curve radius, metres.'}[field])||'';
    control.addEventListener('input',calculate);td.append(control);tr.append(td);
   }
-  const action=document.createElement('td'),button=document.createElement('button');button.textContent='Remove';button.setAttribute('aria-label','Remove '+value.id);button.addEventListener('click',()=>{tr.remove();renderRows(rows());calculate();});action.append(button);tr.append(action);$('inputRows').append(tr);
+  const action=document.createElement('td'),button=document.createElement('button');button.textContent='−';button.className='remove-curve';button.title='Remove Curve';button.disabled=values.length===1;button.setAttribute('aria-label','Remove '+value.id);button.addEventListener('click',()=>{tr.remove();renderRows(rows());calculate();});action.append(button);tr.append(action);$('inputRows').append(tr);
  }
+ $('addRow').disabled=values.length>=200;
 }
 function addCell(row,value){const cell=document.createElement('td');cell.textContent=value;row.append(cell);return cell;}
 function fillTable(id,records){const target=$(id);target.replaceChildren();for(const record of records){const row=document.createElement('tr');for(const value of record)addCell(row,value);target.append(row);}}
@@ -43,7 +44,7 @@ function errors(messages){
 function calculate(){
  const raw=rows();
  try{model=C.alignmentSchedule(raw,options());}catch(error){model={errors:['Calculation could not be completed: '+error.message],curves:[],pairs:[],points:[],checks:[],summary:null};}
- errors(model.errors);
+ errors(model.errors);$('inputReadiness').textContent=C.alignmentReadiness(raw,model);
  const generated=!!model.summary&&!model.errors.length;for(const id of ['plotWorkspace','elementsPanel','stationsPanel','checksPanel','compliancePanel','summary'])$(id).hidden=!generated;
  $('complianceRows').replaceChildren();
  for(const item of generated?C.complianceChecklist(model):[]){
@@ -57,17 +58,11 @@ function calculate(){
  }
 
  [...$('inputRows').children].forEach((tr,i)=>{const invalid=model.errors.some(message=>message.startsWith('Row '+(i+1)+':'));for(const control of tr.querySelectorAll('input,select'))invalid?control.setAttribute('aria-invalid','true'):control.removeAttribute('aria-invalid');});
- $('summary').replaceChildren();$('pairCards').replaceChildren();
+ $('summary').replaceChildren();
 
  if(model.summary){
   const s=model.summary,items=[['Screening status',s.failed?'Checks failed':s.warnings?'Review warnings':s.notEvaluated?'Review connections':'Geometry screens satisfied',C.formatStation(s.start)+' → '+C.formatStation(s.end)+' · '+(s.continuous?f(s.length,2)+' m':'Discontinuous chain — review geometry')],['Passed',s.passed,'Evaluated checks'],['Failed',s.failed,'Resolve deficiencies'],['Warnings',s.warnings,'Review arrangement'],['Not evaluated',s.notEvaluated,'Further design inputs']];
   items.forEach(([title,value,note],i)=>{const card=document.createElement('div');card.className='stat'+(!i?' title'+(s.failed?' failed':''):'');const label=document.createElement('small'),strong=document.createElement('strong'),small=document.createElement('small');label.textContent=title;strong.textContent=value;small.textContent=note;card.append(label,strong,small);$('summary').append(card);});
-  for(const pair of model.pairs){
-   const card=document.createElement('div');card.className='pair-card';const h=document.createElement('h3');h.textContent=pair.from+' → '+pair.to+' · '+pair.kind;
-   const value=document.createElement('strong');value.textContent=f(pair.gap,2)+' m tangent';const p=document.createElement('p');p.textContent='Radius ratio '+f(pair.ratio,3)+'. '+pair.message;
-   card.append(badge(pair.status),h,value,p);$('pairCards').append(card);
-  }
-  if(!model.pairs.length)$('pairCards').textContent='Add another curve to screen the intervening tangent and radius relationship.';
  }
  fillTable('geometryRows',model.curves.map(c=>[c.id,c.s===1?'R':'L',f(c.R),f(c.delta,6),f(c.T),f(c.L),f(c.chord),f(c.external),f(c.middle),C.formatStation(c.pcStation),C.formatStation(c.piStation),C.formatStation(c.ptStation),f(c.gap)]));
  fillTable('pointRows',model.points.filter(p=>p.type!=='Center').map(p=>[p.id,p.station===null?'—':C.formatStation(p.station),p.type==='PI'?'Tangent intersection · not on circular arc':p.type==='Center'?'Circle center':p.type==='PC'?'Beginning of curve':'End of curve']));
@@ -102,9 +97,25 @@ function draw(){
  }
  const path=(points,attrs)=>svg('polyline',{points:points.map(p=>{const q=xy(p);return q.x+','+q.y;}).join(' '),fill:'none',...attrs});
  const label=(p,text,color,offset=0)=>{const q=xy(p);svg('text',{x:q.x+6*scale,y:q.y-(7+offset)*scale,fill:color,'font-size':font,'paint-order':'stroke',stroke:'#fafcf9','stroke-width':3*scale,'stroke-linejoin':'round'},text);};
+ const placed=[];
+ const overlap=(a,b)=>Math.max(0,Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x))*Math.max(0,Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y));
+ function callout(p,lines,color,kind){
+  const q=xy(p),maxChars=Math.max(18,Math.floor(Math.min(310,rect.width-30)/6.1)-3),texts=lines.map(t=>String(t).length>maxChars?String(t).slice(0,maxChars-1)+'…':String(t)),w=Math.min(310,Math.max(80,rect.width-30),Math.max(...texts.map(t=>t.length))*6.1+20)*scale,h=(texts.length*15+12)*scale,pad=12*scale;
+  const starts=[[q.x+18*scale,q.y-h-18*scale],[q.x-w-18*scale,q.y-h-18*scale],[q.x+18*scale,q.y+18*scale],[q.x-w-18*scale,q.y+18*scale],[q.x-w/2,q.y-h-42*scale],[q.x-w/2,q.y+42*scale]];
+  const candidates=starts.map(([x,y])=>({x:Math.max(view.x+pad,Math.min(x,view.x+view.width-w-pad)),y:Math.max(view.y+pad,Math.min(y,view.y+view.height-h-pad)),w,h}));
+  candidates.sort((a,b)=>placed.reduce((n,r)=>n+overlap(a,r),0)-placed.reduce((n,r)=>n+overlap(b,r),0));const box=candidates[0];placed.push(box);
+  const group=svg('g',{class:kind+'-callout'});svg('title',{},lines.join(' · '),group);
+  svg('line',{x1:q.x,y1:q.y,x2:Math.max(box.x,Math.min(q.x,box.x+w)),y2:Math.max(box.y,Math.min(q.y,box.y+h)),stroke:color,'stroke-width':scale},undefined,group);
+  svg('rect',{x:box.x,y:box.y,width:w,height:h,rx:5*scale,fill:'#fff','fill-opacity':.96,stroke:color,'stroke-width':scale},undefined,group);
+  texts.forEach((text,i)=>svg('text',{x:box.x+9*scale,y:box.y+(18+15*i)*scale,fill:color,'font-size':(i===0?11.5:10.5)*scale,'font-weight':i===0?700:400},text,group));
+ }
  model.curves.forEach((c,i)=>{
   const color=colors[i%colors.length],prev=model.curves[i-1];
-  if(prev){const pair=model.pairs[i-1],good=c.source.connectionValid&&pair?.kind!=='Overlap';path([prev.pt,c.pc],{stroke:good?'#83988a':'#c4483b','stroke-width':line,'stroke-dasharray':good?'none':[5*scale,4*scale].join(' ')});}
+  if(prev){
+   const pair=model.pairs[i-1],color=pair.status==='PASS'?'#18724c':pair.status==='FAIL'?'#c33129':'#a66b00',checked=$('checkedTangents').checked;
+   if(checked)path([prev.pt,c.pc],{class:'checked-tangent-halo',stroke:color,'stroke-width':12*scale,opacity:.17});
+   path([prev.pt,c.pc],{class:'checked-tangent','data-connection':prev.id+' → '+c.id,'data-status':pair.status,stroke:checked?color:pair.status==='FAIL'?'#c33129':'#83988a','stroke-width':checked?4*scale:line,'stroke-dasharray':pair.kind==='Overlap'?[6*scale,4*scale].join(' '):'none'});
+  }
   if($('construction').checked)path([c.pc,c.pi,c.pt],{stroke:color,'stroke-width':scale,'stroke-dasharray':[5*scale,4*scale].join(' '),opacity:.5});
   if($('centers').checked){path([c.pc,c.center,c.pt],{stroke:color,'stroke-width':scale,opacity:.3});const center=xy(c.center);svg('circle',{cx:center.x,cy:center.y,r:3*scale,fill:'white',stroke:color,'stroke-width':scale});label(c.center,'O · R '+f(c.R,2),color);}
   path(c.points,{stroke:color,'stroke-width':3*scale,'stroke-linecap':'round'});
@@ -116,8 +127,16 @@ function draw(){
    const q=xy(p);svg('circle',{cx:q.x,cy:q.y,r:3*scale,fill:'white',stroke:color,'stroke-width':line});
    if($('labels').checked)label(p,c.id+' '+name+($('stations').checked?' '+C.formatStation(station):''),color,name==='PT'?12:0);
   }
-  if($('labels').checked){label(c.pi,c.id+' · R '+f(c.R,1)+' · Δ '+f(c.delta,3)+'°',color,26);const q=xy(c.pi);svg('path',{d:'M '+q.x+' '+(q.y-4*scale)+' l '+4*scale+' '+8*scale+' h '+(-8*scale)+' Z',fill:color});}
+  if($('labels').checked){const q=xy(c.pi);svg('circle',{class:'pi-halo',cx:q.x,cy:q.y,r:9*scale,fill:'white',opacity:.9});svg('path',{class:'pi-marker','data-pi':c.id,d:'M '+q.x+' '+(q.y-6*scale)+' l '+6*scale+' '+12*scale+' h '+(-12*scale)+' Z',fill:color,stroke:'#fff','stroke-width':scale});}
  });
+ if($('checkedTangents').checked)model.pairs.forEach((pair,i)=>{
+  const prev=model.curves[i],next=model.curves[i+1],mid={x:(prev.pt.x+next.pc.x)/2,y:(prev.pt.y+next.pc.y)/2},color=pair.status==='PASS'?'#18724c':pair.status==='FAIL'?'#c33129':'#a66b00';
+  const direct=Math.abs(pair.gap)<=.05,title=direct?pair.from+' → '+pair.to+' · '+pair.kind:'PT '+pair.from+' → PC '+pair.to;
+  const detail=direct?'R/r = '+f(pair.ratio,3)+' · '+pair.status:'Tangent = '+f(pair.gap,3)+' m · '+(pair.status==='NOT EVALUATED'?'REVIEW':pair.status);
+  const q=xy(mid);if(direct)svg('circle',{class:'connection-marker',cx:q.x,cy:q.y,r:7*scale,fill:'white',stroke:color,'stroke-width':2*scale});
+  callout(mid,[title,detail],color,'tangent');
+ });
+ if($('labels').checked)model.curves.forEach(c=>callout(c.pi,[c.id+' · PI',C.formatStation(c.piStation),'R '+f(c.R,1)+' m · Δ '+f(c.delta,3)+'°'],colors[model.curves.indexOf(c)%colors.length],'pi'));
  svg('text',{x:view.x+view.width-20*scale,y:view.y+25*scale,'text-anchor':'end',fill:'#456c56','font-size':13*scale},'↑ Local Y');
  $('plotScale').textContent='Equal local scales · '+f(scale*100,2)+' m per 100 screen px · local offsets, m';
 }
@@ -134,10 +153,10 @@ $('plot').addEventListener('pointermove',event=>{if(!drag)return;const point=scr
 for(const type of ['pointerup','pointercancel'])$('plot').addEventListener(type,()=>{drag=null;});
 $('plot').addEventListener('keydown',event=>{if(['+','=','-','0'].includes(event.key)){event.preventDefault();if(event.key==='0')fitPlot();else zoom(event.key==='-'?1.25:.8);}});
 $('zoomIn').addEventListener('click',()=>zoom(.8));$('zoomOut').addEventListener('click',()=>zoom(1.25));$('fit').addEventListener('click',fitPlot);
-for(const id of ['labels','stations','construction','grid'])$(id).addEventListener('change',draw);$('centers').addEventListener('change',fitPlot);
+for(const id of ['labels','stations','construction','checkedTangents','grid'])$(id).addEventListener('change',draw);$('centers').addEventListener('change',fitPlot);
 let resizeTimer;addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitPlot,100);});
 for(const id of inputs)$(id).addEventListener('input',calculate);
-$('addRow').addEventListener('click',()=>{const old=rows();if(old.length>=200){$('notice').textContent='Maximum 200 rows.';return;}const ids=new Set(old.map(r=>r.id));let n=old.length+1;while(ids.has('PI-'+n))n++;old.push({id:'PI-'+n,turn:'',r:'',delta:''});renderRows(old);calculate();});
+$('addRow').addEventListener('click',()=>{const old=rows();if(old.length>=200){$('notice').textContent='Maximum 200 rows.';return;}const ids=new Set(old.map(r=>r.id));let n=old.length+1;while(ids.has('PI-'+n))n++;old.push({id:'PI-'+n,turn:'',r:'',delta:''});renderRows(old);calculate();$('inputRows').lastElementChild.querySelector('[data-field="piStation"]').focus();});
 $('pasteOpen').addEventListener('click',()=>{$('pasteError').textContent='';$('pasteDialog').showModal();$('pasteText').focus();});
 $('applyPaste').addEventListener('click',()=>{try{const imported=C.parseTable($('pasteText').value,'alignment');renderRows(imported);$('pasteDialog').close();calculate();$('notice').textContent='Imported '+imported.length+' rows. Coordinate columns are ignored. Review angles, L/R directions, stations and highlighted errors.';}catch(error){$('pasteError').textContent=error.message;}});
 function sample(name){
@@ -153,9 +172,9 @@ function sample(name){
 }
 $('sample').addEventListener('change',()=>{if(!$('sample').value)return;restore(sample($('sample').value));$('notice').textContent='Illustrative example loaded. Replace sample values with project inputs.';$('sample').value='';});
 async function copyTable(){
- const text=C.alignmentChatTable(rows(),model);
- try{await navigator.clipboard.writeText(text);$('notice').textContent='Table copied. Paste it into ChatGPT.';}
- catch{$('copyText').value=text;$('copyDialog').showModal();$('copyText').focus();$('copyText').select();$('notice').textContent='Clipboard access unavailable. Copy the selected table from the dialog.';}
+ const text=C.alignmentPrompt();
+ try{await navigator.clipboard.writeText(text);$('notice').textContent='Prompt copied. Paste it into your AI chat, then provide the source curve schedule.';}
+ catch{$('copyText').value=text;$('copyDialog').showModal();$('copyText').focus();$('copyText').select();$('notice').textContent='Clipboard access unavailable. Copy the selected prompt from the dialog.';}
 }
 $('copyTable').addEventListener('click',copyTable);$('retryCopy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('copyText').value);$('copyDialog').close();$('notice').textContent='Table copied. Paste it into ChatGPT.';}catch{$('copyText').focus();$('copyText').select();}});
 let saved;try{saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('hd-alignment-curve-checker-v3')||localStorage.getItem('hd-alignment-curve-checker-v2')||localStorage.getItem('hd-alignment-curve-checker-v1'));}catch{}

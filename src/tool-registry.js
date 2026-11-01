@@ -19,7 +19,7 @@
     coordinates: { id: 'coordinatesTool', title: 'PRS92 Converter', label: 'PRS92', group: 'others', icon: '⌖', element: 'coordinate-converter', page: 'index.html' },
     crossSlope: { id: 'crossSlopeTool', title: 'Cross-Section', group: 'geometry', icon: '∠', element: 'cross-slope', page: 'index.html' },
     widening: { id: 'wideningTool', title: 'Curve Widening (UD)', development: 'ud', group: 'geometry', icon: '↗', element: 'road-widening', page: 'index.html' },
-    alignment: { id: 'alignmentTool', title: 'Alignment Check', group: 'geometry', icon: '⌒', element: 'alignment-curve-checker', page: 'index.html' },
+    alignment: { id: 'alignmentTool', title: 'Alignment Checker', group: 'geometry', icon: '⌒', element: 'alignment-curve-checker', page: 'index.html' },
     hso: { id: 'hsoTool', title: 'HSO Tool', group: 'geometry', icon: '◉', element: 'hso-tool', page: 'index.html' },
     geometry: { id: 'geometryTool', title: 'Swept Path Analysis (UD)', development: 'ud', group: 'geometry', icon: '⌁', element: 'curve-widening', page: 'index.html' },
     criteria: { id: 'criteriaTool', title: 'Design Criteria (UD)', development: 'ud', group: 'others', icon: '▦', element: 'design-criteria', page: 'index.html' },

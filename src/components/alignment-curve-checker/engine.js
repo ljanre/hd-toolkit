@@ -251,6 +251,37 @@ const alignmentColumns=['id','piStation','delta','r','turn'];
 function alignmentSchedule(rows,options={}){
  return {...stationSchedule(rows.map(row=>Object.fromEntries(alignmentColumns.map(key=>[key,row[key]]))),{...options,scope:'alignment'}),scope:'alignment'};
 }
+function alignmentPrompt(){
+ return [
+ 'Prepare an input schedule for the HD Toolkit Alignment Checker from the curve schedule, drawing or image I provide next. Do not use sample or assumed project values.',
+ '',
+ 'Return these outputs:',
+ '1. A single fenced TSV code block (tab-separated, not a Markdown table) with exactly these five headers:',
+ 'PI NO.\tPI STATION\tI\tR\tTURN',
+ 'One row per curve in alignment order. PI NO. is the unique source curve identifier. PI STATION is the conventional tangent-intersection station, not a PC or PT station. I is the positive intersection angle in decimal degrees or D°M′S″; R is the circular radius in metres; TURN is L or R. Use stations such as 2+100.000 or numeric metres. Do not add units inside numeric cells.',
+ '2. Below the code block, list missing or ambiguous fields by curve ID. Leave their TSV cells blank rather than guessing. If no source has been supplied, ask me to attach or paste it; do not fabricate a schedule.',
+ '3. State whether the data are sufficient to generate each circular curve and to check adjacent connections. At least two complete successive curves are needed for connection checks.',
+ '',
+ 'Requirements:',
+ '- Preserve identifiers, source values, order and precision. Resolve duplicates or conflicting readings explicitly. Do not infer left/right from station values or an unsigned angle.',
+ '- Required per curve: PI identifier, PI station, 0 < intersection angle < 180 degrees, positive radius and explicit L/R direction. Stations must be nonnegative. Flag unreadable or inconsistent entries.',
+ '- For checking only, calculate T = R tan(I/2), Lc = pi R I/180, PC = PI station - T, PT = PC + Lc, and the intervening tangent = next PC - previous PT. Distinguish T from the PT-to-PC connecting tangent. Do not include derived columns in the five-column import block.',
+ '- Flag PC before zero and overlapping curves. For reverse curves compare the PT-to-PC tangent with the project screen of 30 m. For directly connected same-direction compound curves compare larger/smaller radius with 1.5. For same-direction curves with a positive tangent shorter than 30 m, flag a broken-back screening concern. The app treats gaps within 0.05 m of zero as direct connections.',
+ '- Treat 30 m and 1.5 as project screening settings, not universal design approval. If inputs are incomplete, state Not evaluated rather than Pass. Exclude sight-offset, speed and georeferenced-position inputs from this alignment worksheet.',
+ '- In a short separate review after the import block, report errors, connection findings and information still required. The user will paste only the TSV block into Paste table. The generated app output should be curve geometry, PC/PI/PT stations, labelled PI markers, highlighted PT-to-PC tangents and the dynamic connection checklist.'
+ ].join('\n');
+}
+function alignmentReadiness(rows,model){
+ const names={id:'PI identifier',piStation:'PI station',delta:'intersection angle',r:'radius',turn:'L/R turn'};
+ const missing=rows.flatMap((r,i)=>{const fields=alignmentColumns.filter(key=>!String(r[key]??'').trim());return fields.length?[(r.id||'Row '+(i+1))+': enter '+fields.map(key=>names[key]).join(', ')+'.']:[];});
+ if(!rows.length)return 'Add at least one curve with PI station, intersection angle, radius and L/R turn.';
+ if(missing.length)return 'Inputs needed — '+missing.join(' ');
+ if(model?.errors?.length)return 'All required fields are entered, but invalid values must be corrected before plotting: '+model.errors.join(' ');
+ if(!model?.summary)return 'Enter valid circular-curve geometry to complete the check.';
+ if(rows.length===1)return 'Sufficient for this curve’s elements and PC/PI/PT stations. Add another complete curve to check connecting tangents and compound/reverse arrangements.';
+ if(!model.summary.continuous)return 'Curve elements are available, but the station chain overlaps or is discontinuous. Resolve the marked connection before completing the arrangement checks.';
+ return 'Inputs sufficient for '+rows.length+' curves and '+model.pairs.length+' connection check(s). '+(model.summary.failed||model.summary.warnings?'Review the flagged tangent or radius findings below.':model.summary.notEvaluated?'Some connection findings still require project review.':'All selected geometry screens have been evaluated.');
+}
 function alignmentChatTable(rows,model){
  const esc=value=>String(value??'').replace(/\|/g,'\\|').replace(/[\r\n]+/g,' ');
  const headers=['PI','PI station','Δ (deg)','R (m)','Turn','T (m)','Lc (m)','PC','PT','Tangent before (m)'];
@@ -266,5 +297,5 @@ function chatTable(rows,model,options={}){
  const findings=(model?.summary?complianceChecklist(model):[]).map(c=>'- '+c.label+': '+c.answer+' — '+c.reason).join('\n');
  return assumptions+'\n\n'+table.map(row=>'| '+row.map(escape).join(' | ')+' |').join('\n')+(findings?'\n\n'+findings:'');
 }
-globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,designColumns,alignmentColumns,alignmentSchedule,alignmentChatTable,stoppingSightDistance,chatTable,pairCheck,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
+globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,designColumns,alignmentColumns,alignmentSchedule,alignmentPrompt,alignmentReadiness,alignmentChatTable,stoppingSightDistance,chatTable,pairCheck,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
 })();
