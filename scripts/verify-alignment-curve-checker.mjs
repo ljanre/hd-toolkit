@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 const root=new URL('../',import.meta.url),context={};
 runInNewContext(await readFile(new URL('src/components/alignment-curve-checker/engine.js',root),'utf8'),context);
 const C=context.AlignmentChecker,results=[];
+const alignmentHtml=await readFile(new URL('src/components/alignment-curve-checker/index.html',root),'utf8');
 const near=(actual,expected,tol=1e-7)=>assert.ok(Math.abs(actual-expected)<=tol*Math.max(1,Math.abs(expected)),actual+' vs '+expected);
 const test=(name,fn)=>{const details=fn()||{};results.push({name,status:'PASS',...details});};
 const row=(id,r,delta,turn,gap='',piStation='')=>({id,r,delta,turn,gap,piStation});
@@ -93,6 +94,44 @@ test('Sight offset — missing, invalid and beyond-curve inputs stay unevaluated
 test('Checklist — partial sight coverage is not Yes; known deficit remains No',()=>{const sight={sightRadius:150,sightDistance:50,availableOffset:10};const m=C.analyze([{...row('A',150,40,'R'),...sight},row('B',200,35,'L',30)],opts);assert.equal(m.checklist[3].answer,'NOT EVALUATED');const fail=C.analyze([{...row('A',150,40,'R'),...sight,availableOffset:0},row('B',200,35,'L',30)],opts);assert.equal(fail.checklist[3].answer,'NO');});
 test('Sight input CSV round-trip',()=>{const parsed=C.parseTable(C.csv(['PI NO.','R','I','TURN','SIGHT PATH RADIUS','SIGHT DISTANCE','AVAILABLE OFFSET'],[['A',100,90,'R',98,50,5]]));assert.equal(parsed[0].sightRadius,'98');assert.equal(parsed[0].sightDistance,'50');assert.equal(parsed[0].availableOffset,'5');});
 
+
+for(const [name,radius,delta,turn,gap,secondRadius,secondTurn] of [
+ ['reverse threshold',150,40,'R',30,200,'L'],['reverse short',150,40,'R',20,200,'L'],
+ ['compound limit',150,40,'R',0,225,'R'],['compound fail',150,40,'R',0,300,'R'],
+ ['broken back',150,40,'R',20,200,'R'],['long same direction',150,40,'R',60,200,'R'],
+ ['left to right',300,60,'L',45,180,'R'],['equal radius',100,90,'R',0,100,'R'],
+ ['small radius',15,25,'L',35,30,'R'],['large radius',5000,5,'R',100,6000,'L']]){
+ test('Station-only reconstruction: '+name,()=>{
+  const a=geometryIndependent(radius,delta),b=geometryIndependent(secondRadius,35);
+  const pc1=1000,pt1=pc1+a.L,pc2=pt1+gap;
+  const raw=[{id:'A',r:radius,delta,turn,piStation:pc1+a.T},{id:'B',r:secondRadius,delta:35,turn:secondTurn,piStation:pc2+b.T}];
+  const actual=C.stationSchedule(raw,{stationBasis:'stations'});assert.equal(actual.errors.length,0);
+  near(actual.curves[0].pcStation,pc1);near(actual.curves[1].pcStation,pc2);near(actual.curves[1].gap,gap);
+  near(actual.curves[1].ptStation,pc2+b.L);
+  const spaced=C.stationSchedule(raw.map((r,i)=>({...r,gap:i?gap:0})),{stationBasis:'spacing',startStation:pc1});
+  near(actual.curves[1].pt.x,spaced.curves[1].pt.x);near(actual.curves[1].pt.y,spaced.curves[1].pt.y);
+  assert.deepEqual(actual.checklist.map(c=>c.answer),spaced.checklist.map(c=>c.answer));
+  return {input:raw,expectedGap:gap,actualGap:actual.curves[1].gap};
+ });
+}
+function geometryIndependent(r,d){const rad=d*Math.PI/180;return {T:r*Math.sin(rad)/(1+Math.cos(rad)),L:r*rad};}
+test('Station inputs reject missing controls and ignore stale coordinates',()=>{
+ const valid={id:'A',r:100,delta:90,turn:'R',piStation:'1+100'};
+ assert.equal(C.stationSchedule([{...valid,n:'invalid',e:'invalid'}]).errors.length,0);
+ for(const change of [{piStation:''},{turn:'AUTO'},{delta:''},{piStation:'0+010'},{r:0}])assert.ok(C.stationSchedule([{...valid,...change}]).errors.length>0);
+ const missing=C.stationSchedule([valid,{...valid,id:'B',gap:''}],{stationBasis:'spacing',startStation:1000});assert.ok(missing.errors.length);
+});
+test('Station import/export has no coordinate columns; legacy headers remain readable',()=>{
+ const parsed=C.parseTable('A,1+100,90,100,R,0','station');assert.equal(parsed[0].piStation,'1+100');assert.equal(parsed[0].r,'100');assert.equal(parsed[0].turn,'R');
+ const legacy=C.parseTable('PI NO.,NORTHING,EASTING,PI STATION,I,R,TURN\nA,100,200,1+100,90,100,R','station');assert.equal(C.stationSchedule(legacy).errors.length,0);
+ assert.equal(C.stationColumns.includes('n'),false);assert.equal(C.stationColumns.includes('e'),false);
+});
+test('Checklist follows calculated results and appears after plot and registers',()=>{
+ const make=gap=>C.stationSchedule([row('A',150,40,'R'),row('B',200,35,'L',gap)],{stationBasis:'spacing',startStation:1000});
+ assert.equal(make(20).checklist[1].answer,'NO');assert.equal(make(30).checklist[1].answer,'YES');
+ const html=alignmentHtml;assert.ok(html.indexOf('id="compliancePanel"')>html.indexOf('id="plotWorkspace"'));assert.ok(html.indexOf('id="compliancePanel"')>html.indexOf('id="checksPanel"'));
+ assert.doesNotMatch(html,/<(?:input|th)[^>]*(?:Northing|Easting)|id="start[EN]"/);
+});
 await mkdir(new URL('Reports/',root),{recursive:true});
 await writeFile(new URL('Reports/alignment-curve-checker-tests.json',root),JSON.stringify({date:'2026-11-01',tool:'Alignment Curve Checker',baseline:'Public toolkit integration based on 17d94e4',results,passed:results.length,failed:0,limits:'Independent circle rotation and worked benchmarks. Project screening defaults from user brief; full DPWH source not accessible. Numerical agreement is not design approval.'},null,2)+'\n');
 console.log(results.length+' alignment scenario groups passed, including 10 independent rotation cases. Results: Reports/alignment-curve-checker-tests.json');

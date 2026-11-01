@@ -200,13 +200,13 @@ function parseDelimited(text){
  return records;
 }
 const columns=['id','n','e','piStation','delta','r','turn','gap','givenT','givenPC','givenL','givenPT','sightRadius','sightDistance','availableOffset'];
-function parseTable(text){
+function parseTable(text,layout='legacy'){
  const records=parseDelimited(text);if(!records.length)throw Error('Paste at least one data row.');
  const aliases={pino:'id',pi:'id',id:'id',northing:'n',n:'n',easting:'e',e:'e',pistation:'piStation',pista:'piStation',station:'piStation',i:'delta',delta:'delta',intersectionangle:'delta',r:'r',radius:'r',turn:'turn',direction:'turn',tangentbefore:'gap',gap:'gap',t:'givenT',pc:'givenPC',lc:'givenL',l:'givenL',curvelength:'givenL',pt:'givenPT',sightradius:'sightRadius',sightpathradius:'sightRadius',rs:'sightRadius',sightdistance:'sightDistance',s:'sightDistance',availableoffset:'availableOffset',hsoavailable:'availableOffset'};
  const normalize=s=>s.toLowerCase().replace(/[^a-z]/g,'');
  const header=records[0].map(s=>s.trim()==='e'?null:aliases[normalize(s)]||null);
  const hasHeader=header.includes('id')&&header.includes('r');
- const names=hasHeader?header:columns;
+ const names=hasHeader?header:layout==='station'?stationColumns:columns;
  const result=(hasHeader?records.slice(1):records).map(fields=>{
   const row={turn:'AUTO'};fields.forEach((v,i)=>{if(names[i])row[names[i]]=v.trim();});return row;
  });
@@ -217,5 +217,22 @@ function csv(headers,records){
  const quote=v=>{let t=String(v??'');if(/^[=+@\t\r-]/.test(t)&&!/^[-+]?\d+(\.\d+)?$/.test(t))t="'"+t;return '"'+t.replace(/"/g,'""')+'"';};
  return [headers,...records].map(row=>row.map(quote).join(',')).join('\r\n');
 }
-globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,pairCheck,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
+const stationColumns=['id','piStation','delta','r','turn','gap','givenT','givenPC','givenL','givenPT','sightRadius','sightDistance','availableOffset'];
+function stationSchedule(inputRows,options={}){
+ const basis=options.stationBasis||'stations',errors=[];
+ if(!['stations','spacing'].includes(basis))errors.push('Select PI stations or first PC + tangent spacing.');
+ const rows=(Array.isArray(inputRows)?inputRows:[]).map((r,i)=>{
+  if(!['L','R'].includes(String(r.turn||'').toUpperCase()))errors.push('Row '+(i+1)+': Choose Left or Right; direction cannot be inferred from stations.');
+  if(String(r.delta??'').trim()==='')errors.push('Row '+(i+1)+': Enter the intersection angle.');
+  if(basis==='stations'){
+   if(String(r.piStation??'').trim()==='')errors.push('Row '+(i+1)+': Enter the PI station.');
+   else try{if(station(r.piStation)-geometry(r.r,r.delta).T<0)errors.push('Row '+(i+1)+': PI station minus T places the PC before station zero.');}catch{}
+  }else if(i>0&&String(r.gap??'').trim()==='')errors.push('Row '+(i+1)+': Enter the tangent from the previous PT to this PC (zero for a direct connection).');
+  return {...r,piStation:basis==='stations'?r.piStation:'',gap:basis==='spacing'?(i?r.gap:0):''};
+ });
+ const model=analyze(rows,{...options,mode:'sequential',startStation:basis==='stations'?0:options.startStation,startE:0,startN:0,startAz:0});
+ if(errors.length)return {...model,errors:[...errors,...model.errors],curves:[],pairs:[],points:[],checks:[],summary:null};
+ return model;
+}
+globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,pairCheck,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
 })();

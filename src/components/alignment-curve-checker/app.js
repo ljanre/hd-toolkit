@@ -1,7 +1,7 @@
 (() => {
 'use strict';
-const C=AlignmentChecker,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='hd-alignment-curve-checker-v1';
-const inputs=['project','mode','startStation','startAz','startE','startN','minimumTangent','maximumRatio'],fields=C.columns;
+const C=AlignmentChecker,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='hd-alignment-curve-checker-v2';
+const inputs=['project','stationBasis','startStation','minimumTangent','maximumRatio'],fields=C.stationColumns;
 const colors=['#197657','#2778ad','#c47b17','#8b50a6','#ba5451','#218c92'];
 let model=null,lastReplacement=null,view=null,drag=null,origin={x:0,y:0};
 const f=(n,d=3)=>Number.isFinite(n)?n.toFixed(d):'—';
@@ -9,24 +9,32 @@ const badge=status=>{const e=document.createElement('span');e.className='badge '
 function options(){return Object.fromEntries(inputs.map(id=>[id,$(id).value]));}
 function rows(){return [...$('inputRows').children].map(tr=>Object.fromEntries(fields.map(field=>[field,tr.querySelector('[data-field="'+field+'"]').value])));}
 function capture(){return {options:options(),rows:rows(),compare:$('compareInputs').checked,sight:$('showSight').checked};}
-function restore(data){for(const id of inputs)if(data.options?.[id]!==undefined)$(id).value=data.options[id];$('compareInputs').checked=!!data.compare;$('showSight').checked=!!data.sight;renderRows(data.rows||[]);calculate();}
+function restore(data){
+ if(!data.options?.stationBasis){
+  const legacy=C.analyze(data.rows||[],data.options||{});
+  data={...data,options:{...data.options,stationBasis:'stations'},rows:(data.rows||[]).map((r,i)=>{const c=legacy.curves[i];return c?{...r,piStation:String(c.piStation),delta:String(c.delta),turn:c.s===1?'R':'L',gap:String(c.gap)}:r;})};
+  $('notice').textContent='Previous schedule converted to station inputs. Plot origin and orientation are now local; review any unresolved angles or directions.';
+ }
+ for(const id of inputs)if(data.options?.[id]!==undefined)$(id).value=data.options[id];$('compareInputs').checked=!!data.compare;$('showSight').checked=!!data.sight;renderRows(data.rows||[]);calculate();}
 function renderRows(values){
  $('inputRows').replaceChildren();
- for(const value of values){
+ for(const [rowIndex,value] of values.entries()){
   const tr=document.createElement('tr');
   for(const field of fields){
    const td=document.createElement('td');
-   if(['n','e'].includes(field))td.className='pi-only';
-   if(field==='gap')td.className='seq-only';
+   if(field==='piStation')td.className='station-only';
+   if(field==='gap')td.className='spacing-only';
    if(field.startsWith('given'))td.className='compare-only';
    if(['sightRadius','sightDistance','availableOffset'].includes(field))td.className='sight-only';
    const control=document.createElement(field==='turn'?'select':'input');
-   if(field==='turn')for(const [text,val] of [['Choose…',''],['Left','L'],['Right','R'],['Auto · interior','AUTO']]){const opt=document.createElement('option');opt.value=val;opt.textContent=text;control.append(opt);}
-   control.dataset.field=field;control.value=value[field]??'';control.setAttribute('aria-label',(value.id||'Curve')+' '+({n:'Northing',e:'Easting',r:'Radius',delta:'Intersection angle',piStation:'PI station',gap:'Tangent before',givenT:'Entered T',givenPC:'Entered PC',givenL:'Entered curve length',givenPT:'Entered PT',turn:'Direction',id:'PI number',sightRadius:'Sight path radius',sightDistance:'Required sight distance',availableOffset:'Available horizontal sight offset'}[field]));
+   if(field==='turn')for(const [text,val] of [['Choose…',''],['Left','L'],['Right','R']]){const opt=document.createElement('option');opt.value=val;opt.textContent=text;control.append(opt);}
+   control.dataset.field=field;control.value=value[field]??'';control.setAttribute('aria-label',(value.id||'Curve')+' '+({r:'Radius',delta:'Intersection angle',piStation:'PI station',gap:'Tangent before',givenT:'Entered T',givenPC:'Entered PC',givenL:'Entered curve length',givenPT:'Entered PT',turn:'Direction',id:'PI number',sightRadius:'Sight path radius',sightDistance:'Required sight distance',availableOffset:'Available horizontal sight offset'}[field]));
+   if(field==='gap'&&rowIndex===0){control.value='0';control.readOnly=true;control.title='First curve: position is set by the First PC station.';}
    if(field!=='turn'){control.autocomplete='off';control.spellcheck=false;if(!['id','delta','piStation','givenPC','givenPT'].includes(field))control.inputMode='decimal';}
+   if(['piStation','givenPC','givenPT'].includes(field))control.addEventListener('blur',()=>{try{if(control.value.trim())control.value=C.formatStation(C.station(control.value));}catch{}calculate();});
    control.addEventListener('input',calculate);td.append(control);tr.append(td);
   }
-  const action=document.createElement('td'),button=document.createElement('button');button.textContent='Remove';button.setAttribute('aria-label','Remove '+value.id);button.addEventListener('click',()=>{lastReplacement=capture();tr.remove();$('undo').disabled=false;calculate();});action.append(button);tr.append(action);$('inputRows').append(tr);
+  const action=document.createElement('td'),button=document.createElement('button');button.textContent='Remove';button.setAttribute('aria-label','Remove '+value.id);button.addEventListener('click',()=>{lastReplacement=capture();tr.remove();renderRows(rows());$('undo').disabled=false;calculate();});action.append(button);tr.append(action);$('inputRows').append(tr);
  }
 }
 function addCell(row,value){const cell=document.createElement('td');cell.textContent=value;row.append(cell);return cell;}
@@ -36,12 +44,13 @@ function errors(messages){
  if(messages.length){const strong=document.createElement('strong');strong.textContent='Check the input schedule';box.append(strong);const ul=document.createElement('ul');for(const message of messages){const li=document.createElement('li');li.textContent=message;ul.append(li);}box.append(ul);}
 }
 function calculate(){
- document.body.dataset.mode=$('mode').value;document.body.classList.toggle('compare',$('compareInputs').checked);document.body.classList.toggle('show-sight',$('showSight').checked);$('sightHelp').hidden=!$('showSight').checked;
- const raw=rows();
- try{model=C.analyze(raw,options());}catch(error){model={errors:['Calculation could not be completed: '+error.message],curves:[],pairs:[],points:[],checks:[],summary:null};}
+ document.body.dataset.stationBasis=$('stationBasis').value;document.body.classList.toggle('compare',$('compareInputs').checked);document.body.classList.toggle('show-sight',$('showSight').checked);$('sightHelp').hidden=!$('showSight').checked;
+ const raw=rows().map(r=>{const clean={...r};if(!$('compareInputs').checked)for(const key of ['givenT','givenPC','givenL','givenPT'])clean[key]='';if(!$('showSight').checked)for(const key of ['sightRadius','sightDistance','availableOffset'])clean[key]='';return clean;});
+ try{model=C.stationSchedule(raw,options());}catch(error){model={errors:['Calculation could not be completed: '+error.message],curves:[],pairs:[],points:[],checks:[],summary:null};}
  errors(model.errors);
+ const generated=!!model.summary&&!model.errors.length;for(const id of ['plotWorkspace','elementsPanel','stationsPanel','checksPanel','compliancePanel','summary'])$(id).hidden=!generated;
  $('complianceRows').replaceChildren();
- for(const item of C.complianceChecklist(model)){
+ for(const item of generated?C.complianceChecklist(model):[]){
    const tr=document.createElement('tr');tr.dataset.answer=item.answer;addCell(tr,item.label);
    for(const answer of ['YES','NO','N/A']){
      const td=addCell(tr,'');const indicator=document.createElement('span');
@@ -64,8 +73,8 @@ function calculate(){
   }
   if(!model.pairs.length)$('pairCards').textContent='Add another curve to screen the intervening tangent and radius relationship.';
  }
- fillTable('geometryRows',model.curves.map(c=>[c.id,c.s===1?'R':'L',f(c.R),f(c.delta,6),f(c.T),f(c.L),f(c.chord),f(c.external),f(c.middle),C.formatStation(c.pcStation),C.formatStation(c.piStation),C.formatStation(c.ptStation),f(c.gap),f(c.startAz,6),f(c.endAz,6)]));
- fillTable('pointRows',model.points.map(p=>[p.id,p.station===null?'—':C.formatStation(p.station),f(p.e),f(p.n),p.type==='PI'?'Tangent intersection · not on circular arc':p.type==='Center'?'Circle center':p.type==='PC'?'Beginning of curve':'End of curve']));
+ fillTable('geometryRows',model.curves.map(c=>[c.id,c.s===1?'R':'L',f(c.R),f(c.delta,6),f(c.T),f(c.L),f(c.chord),f(c.external),f(c.middle),C.formatStation(c.pcStation),C.formatStation(c.piStation),C.formatStation(c.ptStation),f(c.gap)]));
+ fillTable('pointRows',model.points.filter(p=>p.type!=='Center').map(p=>[p.id,p.station===null?'—':C.formatStation(p.station),p.type==='PI'?'Tangent intersection · not on circular arc':p.type==='Center'?'Circle center':p.type==='PC'?'Beginning of curve':'End of curve']));
  $('checkRows').replaceChildren();for(const check of model.checks){const tr=document.createElement('tr');const status=addCell(tr,'');status.append(badge(check.status));for(const value of [check.subject,check.actual,check.criterion,check.message])addCell(tr,value);$('checkRows').append(tr);}
  $('evaluationStamp').textContent='Evaluation: '+new Date().toLocaleString('en-PH',{timeZone:'Asia/Manila'})+' · Asia/Manila · preliminary circular-curve geometry screening.';
  try{localStorage.setItem(KEY,JSON.stringify(capture()));}catch{$('notice').textContent='Browser storage is unavailable. Export inputs to retain this schedule.';}
@@ -86,7 +95,7 @@ function fitPlot(){
  view={x:(minX+maxX-width)/2,y:(minY+maxY-height)/2,width,height};draw();
 }
 function draw(){
- const plot=$('plot');plot.replaceChildren();svg('title',{},'Calculated horizontal alignment, equal scales and north up');
+ const plot=$('plot');plot.replaceChildren();svg('title',{},'Calculated station-based alignment, equal local scales; arbitrary orientation');
  if(!view||!model?.curves.length){plot.setAttribute('viewBox','0 0 1000 600');svg('text',{x:500,y:300,'text-anchor':'middle',fill:'#71877a','font-size':18},'Enter valid curve data to plot the alignment.');return;}
  plot.setAttribute('viewBox',[view.x,view.y,view.width,view.height].join(' '));
  const rect=plot.getBoundingClientRect(),scale=view.width/Math.max(rect.width,1),line=1.8*scale,font=11*scale;
@@ -113,8 +122,8 @@ function draw(){
   }
   if($('labels').checked){label(c.pi,c.id+' · R '+f(c.R,1)+' · Δ '+f(c.delta,3)+'°',color,26);const q=xy(c.pi);svg('path',{d:'M '+q.x+' '+(q.y-4*scale)+' l '+4*scale+' '+8*scale+' h '+(-8*scale)+' Z',fill:color});}
  });
- svg('text',{x:view.x+view.width-20*scale,y:view.y+25*scale,'text-anchor':'end',fill:'#456c56','font-size':13*scale},'↑ N');
- $('plotScale').textContent='Equal E / N scales · '+f(scale*100,2)+' m per 100 screen px · E / N in metres';
+ svg('text',{x:view.x+view.width-20*scale,y:view.y+25*scale,'text-anchor':'end',fill:'#456c56','font-size':13*scale},'↑ Local Y');
+ $('plotScale').textContent='Equal local scales · '+f(scale*100,2)+' m per 100 screen px · local offsets, m';
 }
 function zoom(factor,point){
  if(!view)return;
@@ -131,36 +140,34 @@ $('plot').addEventListener('keydown',event=>{if(['+','=','-','0'].includes(event
 $('zoomIn').addEventListener('click',()=>zoom(.8));$('zoomOut').addEventListener('click',()=>zoom(1.25));$('fit').addEventListener('click',fitPlot);
 for(const id of ['labels','stations','construction','grid'])$(id).addEventListener('change',draw);$('centers').addEventListener('change',fitPlot);
 let resizeTimer;addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(fitPlot,100);});
-for(const id of inputs)$(id).addEventListener('input',calculate);$('compareInputs').addEventListener('change',calculate);$('showSight').addEventListener('change',calculate);
+for(const id of inputs.filter(id=>id!=='stationBasis'))$(id).addEventListener('input',calculate);
+$('stationBasis').addEventListener('change',()=>{const values=rows();if(model?.summary&&$('stationBasis').value==='spacing')$('startStation').value=C.formatStation(model.curves[0].pcStation);if(model?.summary)model.curves.forEach((c,i)=>{values[i].piStation=String(c.piStation);values[i].gap=String(c.gap);});renderRows(values);calculate();});$('compareInputs').addEventListener('change',calculate);$('showSight').addEventListener('change',calculate);
 $('addRow').addEventListener('click',()=>{const old=rows();if(old.length>=200){$('notice').textContent='Maximum 200 rows.';return;}const ids=new Set(old.map(r=>r.id));let n=old.length+1;while(ids.has('PI-'+n))n++;old.push({id:'PI-'+n,turn:'',r:'',delta:''});renderRows(old);calculate();});
 $('undo').addEventListener('click',()=>{if(!lastReplacement)return;const previous=lastReplacement;lastReplacement=capture();restore(previous);});
 $('pasteOpen').addEventListener('click',()=>{$('pasteError').textContent='';$('pasteDialog').showModal();$('pasteText').focus();});
-$('applyPaste').addEventListener('click',()=>{try{const imported=C.parseTable($('pasteText').value);lastReplacement=capture();$('undo').disabled=false;renderRows(imported);$('pasteDialog').close();calculate();$('notice').textContent='Imported '+imported.length+' rows. Review terminal directions and highlighted errors.';}catch(error){$('pasteError').textContent=error.message;}});
+$('applyPaste').addEventListener('click',()=>{try{const imported=C.parseTable($('pasteText').value,'station');lastReplacement=capture();$('undo').disabled=false;renderRows(imported);$('pasteDialog').close();calculate();$('notice').textContent='Imported '+imported.length+' rows. Coordinate columns are ignored. Review angles, L/R directions, stations and highlighted errors.';}catch(error){$('pasteError').textContent=error.message;}});
 function sample(name){
- const base={project:'ILLUSTRATIVE EXAMPLE · not surveyed project data',mode:'sequential',startStation:'2+000',startE:'0',startN:'0',startAz:'0',minimumTangent:'30',maximumRatio:'1.5'};
- let data=[{id:'PI-1',r:'150',delta:'40',turn:'R',gap:'0'},{id:'PI-2',r:'200',delta:'35',turn:'L',gap:'30'}],compare=false;
+ const base={project:'ILLUSTRATIVE EXAMPLE · not surveyed project data',stationBasis:'stations',startStation:'2+000',minimumTangent:'30',maximumRatio:'1.5'};
+ let data=[{id:'PI-1',r:'150',delta:'40',turn:'R',gap:'0'},{id:'PI-2',r:'200',delta:'35',turn:'L',gap:'30'}];
  if(name==='reverse20')data[1].gap='20';
- if(name==='compound'||name==='compoundFail'){data[1]={id:'PI-2',r:name==='compound'?'225':'300',delta:'35',turn:'R',gap:'0'};}
+ if(name==='compound'||name==='compoundFail')data[1]={id:'PI-2',r:name==='compound'?'225':'300',delta:'35',turn:'R',gap:'0'};
  if(name==='broken')data[1]={id:'PI-2',r:'200',delta:'35',turn:'R',gap:'20'};
- if(name==='coordinate'){
-  const source=[...data,{id:'PI-3',r:'180',delta:'25',turn:'R',gap:'45'}];
-  const solved=C.analyze(source,{...base,startE:496200,startN:1790800,startAz:30});
-  data=solved.curves.map(c=>({id:c.id,n:f(c.pi.y,6),e:f(c.pi.x,6),piStation:C.formatStation(c.piStation),delta:String(c.delta),r:String(c.R),turn:c.s===1?'R':'L',givenT:f(c.T,2),givenPC:C.formatStation(c.pcStation),givenL:f(c.L,2),givenPT:C.formatStation(c.ptStation)}));
-  base.mode='pi';base.startAz='';compare=true;
- }
- return {options:base,rows:data,compare};
+ const solved=C.analyze(data,{...base,mode:'sequential'});
+ let previousPT=null;
+ const stationRows=data.map((r,i)=>{const c=solved.curves[i],pc=previousPT===null?2000:previousPT+Number(r.gap);let pi=Number((pc+c.T).toFixed(3));if(previousPT!==null&&Number(r.gap)>=30&&pi-c.T-previousPT<Number(r.gap))pi+=.001;previousPT=pi-c.T+c.L;return {...r,piStation:C.formatStation(pi)};});
+ return {options:base,rows:stationRows,compare:false};
 }
 $('sample').addEventListener('change',()=>{if(!$('sample').value)return;lastReplacement=capture();$('undo').disabled=false;restore(sample($('sample').value));$('notice').textContent='Illustrative example loaded. Undo replacement restores the previous schedule.';$('sample').value='';});
 let currentExportUrl;
 function download(name,text){if(currentExportUrl)URL.revokeObjectURL(currentExportUrl);const blob=new Blob(['\uFEFF'+text],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');currentExportUrl=url;$('saveCsv').href=url;$('saveCsv').download=name;$('exportTitle').textContent=name;$('exportText').value=text;$('exportDialog').showModal();}
-$('exportInputs').addEventListener('click',()=>download('alignment-curve-inputs.csv',C.csv(['PI NO.','NORTHING','EASTING','PI STATION','I','R','TURN','TANGENT BEFORE','T','PC','Lc','PT','SIGHT PATH RADIUS','SIGHT DISTANCE','AVAILABLE OFFSET'],rows().map(r=>fields.map(field=>r[field])))));
+$('exportInputs').addEventListener('click',()=>{const exportRows=rows().map((r,i)=>({...r,piStation:$('stationBasis').value==='spacing'?(model?.curves[i]?String(model.curves[i].piStation):''):r.piStation}));download('alignment-curve-inputs.csv',C.csv(['PI NO.','PI STATION','I','R','TURN','TANGENT BEFORE','T','PC','Lc','PT','SIGHT PATH RADIUS','SIGHT DISTANCE','AVAILABLE OFFSET'],exportRows.map(r=>fields.map(field=>r[field]))));});
 $('exportResults').addEventListener('click',()=>{
  if(!model?.summary)return;
- const records=[['Project',$('project').value],['Mode',model.mode],['Screening tangent m',model.summary.minimumTangent],['Radius ratio limit',model.summary.maximumRatio],['Evaluation (PH)',new Date().toLocaleString('en-PH',{timeZone:'Asia/Manila'})],[],['COMPLIANCE CHECKLIST'],['Review item','Answer','Reason'],...C.complianceChecklist(model).map(c=>[c.label,c.answer,c.reason]),[],['CURVE ELEMENTS'],['PI','Turn','R (m)','Delta (degrees)','T (m)','Lc (m)','Long chord (m)','External (m)','Middle ordinate (m)','PC station (m)','PI tangent station (m)','PT station (m)','Gap before (m)','Start azimuth','End azimuth'],
- ...model.curves.map(c=>[c.id,c.s===1?'R':'L',c.R,c.delta,c.T,c.L,c.chord,c.external,c.middle,c.pcStation,c.piStation,c.ptStation,c.gap,c.startAz,c.endAz]),[],['POINTS'],['Point','Station (m)','Easting (m)','Northing (m)','Type'],...model.points.map(p=>[p.id,p.station??'',p.e,p.n,p.type]),[],['CHECKS'],['Status','Subject','Actual','Criterion','Finding'],...model.checks.map(c=>[c.status,c.subject,c.actual,c.criterion,c.message])];
+ const records=[['Project',$('project').value],['Station basis',$('stationBasis').value],['First PC station',$('startStation').value],['Plot basis','Local schematic; arbitrary origin and orientation'],['Screening tangent m',model.summary.minimumTangent],['Radius ratio limit',model.summary.maximumRatio],['Evaluation (PH)',new Date().toLocaleString('en-PH',{timeZone:'Asia/Manila'})],[],['COMPLIANCE CHECKLIST'],['Review item','Answer','Reason'],...C.complianceChecklist(model).map(c=>[c.label,c.answer,c.reason]),[],['CURVE ELEMENTS'],['PI','Turn','R (m)','Delta (degrees)','T (m)','Lc (m)','Long chord (m)','External (m)','Middle ordinate (m)','PC station (m)','PI tangent station (m)','PT station (m)','Gap before (m)'],
+ ...model.curves.map(c=>[c.id,c.s===1?'R':'L',c.R,c.delta,c.T,c.L,c.chord,c.external,c.middle,c.pcStation,c.piStation,c.ptStation,c.gap]),[],['POINTS'],['Point','Station (m)','Type'],...model.points.filter(p=>p.type!=='Center').map(p=>[p.id,p.station??'',p.type]),[],['CHECKS'],['Status','Subject','Actual','Criterion','Finding'],...model.checks.map(c=>[c.status,c.subject,c.actual,c.criterion,c.message])];
  download('alignment-curve-results.csv',records.map(r=>C.csv(r,[])).join('\r\n'));
 });
 $('printReport').addEventListener('click',()=>{fitPlot();window.print();});
-let saved;try{saved=JSON.parse(localStorage.getItem(KEY));}catch{}
-if(saved?.rows?.length)restore(saved);else restore(sample('coordinate'));
+let saved;try{saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('hd-alignment-curve-checker-v1'));}catch{}
+if(saved?.rows?.length)restore(saved);else restore(sample('reverse30'));
 })();
