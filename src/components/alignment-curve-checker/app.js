@@ -45,7 +45,8 @@ function calculate(){
  const raw=rows();
  try{model=C.alignmentSchedule(raw,options());}catch(error){model={errors:['Calculation could not be completed: '+error.message],curves:[],pairs:[],points:[],checks:[],summary:null};}
  errors(model.errors);$('inputReadiness').textContent=C.alignmentReadiness(raw,model);
- const generated=!!model.summary&&!model.errors.length;for(const id of ['plotWorkspace','elementsPanel','stationsPanel','checksPanel','compliancePanel'])$(id).hidden=!generated;
+ const generated=!!model.summary&&!model.errors.length;for(const id of ['plotWorkspace','elementsPanel','stationsPanel','checksPanel','compliancePanel','qualityPanel'])$(id).hidden=!generated;
+ $('qualityRows').replaceChildren();for(const item of generated?C.alignmentQualityChecklist(model):[]){const row=document.createElement('tr');addCell(row,item.label);addCell(row,item.status==='NOT APPLICABLE'?'Not Applicable':item.status==='NOT EVALUATED'?'Not evaluated':item.status).className=item.status==='WARNING'||item.status==='FAIL'?'quality-alert':'';addCell(row,item.evidence);$('qualityRows').append(row);}
  $('complianceRows').replaceChildren();
  for(const item of generated?C.complianceChecklist(model):[]){
    const tr=document.createElement('tr');tr.dataset.answer=item.answer;addCell(tr,item.label);
@@ -103,7 +104,7 @@ function draw(){
  model.curves.forEach((c,i)=>{
   const color=colors[i%colors.length],prev=model.curves[i-1];
   if(prev){
-   const pair=model.pairs[i-1],tone=pair.status==='PASS'?'#18724c':pair.status==='FAIL'?'#c33129':'#a66b00',checked=$('checkedTangents').checked;
+   const pair=model.pairs[i-1],tone=pair.status==='PASS'?'#18724c':['FAIL','WARNING'].includes(pair.status)?'#c33129':'#a66b00',checked=$('checkedTangents').checked;
    if(checked)path([prev.pt,c.pc],{class:'checked-tangent-halo',stroke:tone,'stroke-width':12*scale,opacity:.17});
    path([prev.pt,c.pc],{class:'checked-tangent','data-connection':prev.id+' → '+c.id,'data-status':pair.status,stroke:checked?tone:pair.status==='FAIL'?'#c33129':'#83988a','stroke-width':checked?4*scale:line,'stroke-dasharray':pair.kind==='Overlap'?[6*scale,4*scale].join(' '):'none'});
   }
@@ -120,12 +121,28 @@ function draw(){
   }
  });
  if($('checkedTangents').checked)model.pairs.forEach((pair,i)=>{
-  const a=model.curves[i],b=model.curves[i+1],mid={x:(a.pt.x+b.pc.x)/2,y:(a.pt.y+b.pc.y)/2},color=pair.status==='PASS'?'#18724c':pair.status==='FAIL'?'#c33129':'#a66b00',direct=Math.abs(pair.gap)<=.05;
+  const a=model.curves[i],b=model.curves[i+1],mid={x:(a.pt.x+b.pc.x)/2,y:(a.pt.y+b.pc.y)/2},color=pair.status==='PASS'?'#18724c':['FAIL','WARNING'].includes(pair.status)?'#c33129':'#a66b00',direct=Math.abs(pair.gap)<=.05;
   const title='T'+String(i+1).padStart(2,'0')+' · '+pair.kind.toUpperCase();
   const detail=direct?'R/r = '+f(pair.ratio,3)+' · '+pair.status:'Lt = '+f(pair.gap,3)+' m · '+(pair.status==='NOT EVALUATED'?'REVIEW':pair.status);
   const lines=[title,'PT '+a.id+' · '+C.formatStation(a.ptStation),'PC '+b.id+' · '+C.formatStation(b.pcStation),detail];
   const q=xy(mid);if(direct)svg('circle',{class:'connection-marker',cx:q.x,cy:q.y,r:7*scale,fill:'white',stroke:color,'stroke-width':2*scale});annotate(mid,lines,color,'tangent',i);
  });
+ // Symbol-only engineering tags remain visible independently of numeric detail boxes.
+ const screen=p=>{const q=xy(p);return {x:(q.x-view.x)/scale,y:(q.y-view.y)/scale};};
+ const symbolAnchors=[],segments=[];
+ model.curves.forEach((c,i)=>{
+  const color=colors[i%colors.length];
+  for(const [text,p] of [['PC',c.pc],['PT',c.pt],['PI',c.pi],['R',C.pointOnArc(c.pc,c.startAz,c.s,c.R,c.L*.55)]])symbolAnchors.push({...screen(p),text,color});
+  for(let j=1;j<c.points.length;j++)segments.push([screen(c.points[j-1]),screen(c.points[j])]);
+  if(i)segments.push([screen(model.curves[i-1].pt),screen(c.pc)]);
+  if(!$('labels').checked){const q=xy(c.pi);svg('path',{class:'pi-marker','data-pi':c.id,d:'M '+q.x+' '+(q.y-4*scale)+' l '+4*scale+' '+8*scale+' h '+(-8*scale)+' Z',fill:color});}
+ });
+ const symbolLayer=svg('g',{class:'engineering-symbols','clip-path':'url(#alignmentGeometryClip)'},undefined,labels);
+ for(const box of AlignmentPlotLayout.symbols(g,symbolAnchors,segments)){
+  const p=world(box.anchor.x,box.anchor.y),q=world(box.x+box.width/2,box.y+box.height/2);
+  svg('line',{x1:p.x,y1:p.y,x2:q.x,y2:q.y,stroke:box.color,'stroke-width':.8*scale,opacity:.65},undefined,leaders);
+  svg('text',{x:q.x,y:q.y+4*scale,'text-anchor':'middle',fill:box.color,'font-size':11*scale,class:'symbol-label'},box.text,symbolLayer);
+ }
  const boxes=AlignmentPlotLayout.place(plotFrame,annotations);
  for(const kind of ['pi','tangent'])if(boxes.some(b=>b.kind===kind)){
   const rail=plotFrame[kind],q=world(rail.x,rail.y+12);svg('text',{x:q.x,y:q.y,fill:'#65766e','font-size':9*scale,'font-weight':700},kind==='pi'?'CURVE DATA / CHAINAGE':'TANGENT SCHEDULE',labels);

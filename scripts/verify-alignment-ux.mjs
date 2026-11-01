@@ -32,3 +32,16 @@ console.log('Alignment UX: 12 readiness cases, prompt-only copy, row controls an
 
 assert.deepEqual([...html.matchAll(/<input type="checkbox" id="([^"]+)" checked/g)].map(m=>m[1]),['checkedTangents']);
 assert.doesNotMatch(html,/N\/A/);assert.match(html,/Not Applicable/);assert.match(app,/TANGENT SCHEDULE/);assert.match(app,/Lt = /);
+
+// Independent boundary expectations for reverse tangent guidance.
+for(const [gap,status] of [[0,'FAIL'],[10,'FAIL'],[29,'FAIL'],[29.999,'FAIL'],[30,'WARNING'],[30.001,'WARNING'],[40,'WARNING'],[49.999,'WARNING'],[50,'PASS'],[50.001,'PASS'],[100,'PASS']]){
+ const m=C.alignmentSchedule(pair(gap));assert.equal(m.pairs[0].status,status,`Reverse gap ${gap}`);
+ assert.equal(C.complianceChecklist(m)[1].answer,status==='PASS'?'YES':'NO');
+ const quality=C.alignmentQualityChecklist(m);assert.equal(quality[0].status,'PASS');assert.equal(quality.find(q=>q.label.includes('reversal')).status,'NOT EVALUATED');
+}
+for(const width of [280,360,600,759,760,900,1000,1200,1400,1600]){
+ const rect={x:0,y:0,width,height:450},anchors=[{x:width/2,y:160,text:'PC'},{x:width/2,y:160,text:'PT'},{x:width/2,y:200,text:'PI'},{x:width/2,y:240,text:'R'}],segments=[[{x:width/2,y:100},{x:width/2,y:350}]];
+ const symbols=P.symbols(rect,anchors,segments);assert.equal(symbols.length,4);
+ for(let i=0;i<symbols.length;i++){assert.ok(symbols[i].x+symbols[i].width<width);for(let j=i+1;j<symbols.length;j++)assert.equal(intersects(symbols[i],symbols[j]),false);}
+}
+assert.match(app,/engineering-symbols/);assert.match(app,/\['FAIL','WARNING'\]\.includes\(pair.status\)/);

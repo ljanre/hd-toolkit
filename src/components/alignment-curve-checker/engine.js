@@ -53,11 +53,26 @@ function pairCheck(first,second,gap,criteria={minimumTangent:30,maximumRatio:1.5
  const ratio=Math.max(first.R,second.R)/Math.min(first.R,second.R);
  if(gap < -tolerance)return {kind:'Overlap',status:'FAIL',ratio,gap,actual:gap,limit:0,deficiency:-gap,message:'Curves overlap. Reduce tangent distances, change radii, or revise PI geometry.'};
  const same=first.s===second.s,zero=Math.abs(gap)<=tolerance;
- if(!same)return {kind:'Reverse',status:gap+1e-9>=criteria.minimumTangent?'PASS':'FAIL',ratio,gap,actual:gap,limit:criteria.minimumTangent,deficiency:Math.max(0,criteria.minimumTangent-gap),message:'Project reverse-curve tangent screen; verify superelevation transitions separately.'};
+ const recommended=criteria.recommendedTangent??criteria.minimumTangent;
+ if(!same)return {recommended,kind:'Reverse',status:gap+1e-9<criteria.minimumTangent?'FAIL':gap+1e-9<recommended?'WARNING':'PASS',ratio,gap,actual:gap,limit:criteria.minimumTangent,deficiency:Math.max(0,criteria.minimumTangent-gap),message:recommended>criteria.minimumTangent?'Reverse tangent: '+criteria.minimumTangent+' m floor; '+recommended+' m recommended. Below recommendation requires review. Verify required superelevation runoff/runout separately.':'Project reverse-curve tangent screen; verify superelevation transitions separately.'};
  if(zero)return {kind:Math.abs(first.R-second.R)<1e-9?'Same-radius connection':'Compound',status:ratio<=criteria.maximumRatio+1e-12?'PASS':'FAIL',ratio,gap,actual:ratio,limit:criteria.maximumRatio,deficiency:Math.max(0,ratio-criteria.maximumRatio),message:'Direct same-direction connection: compare larger/smaller radius. Equal radii form a continuous circular arc.'};
  return {kind:'Same-direction with tangent',status:gap<criteria.minimumTangent?'WARNING':'NOT EVALUATED',ratio,gap,actual:gap,limit:criteria.minimumTangent,deficiency:Math.max(0,criteria.minimumTangent-gap),message:gap<criteria.minimumTangent?'Short tangent / broken-back screening warning. Review appearance, transitions and driver expectancy.':'Short-tangent warning not triggered. This does not establish overall acceptability.'};
 }
 // FHWA-RD-02-045 Eq. 3.5.1: metric SSD, grade signed + uphill / - downhill.
+function alignmentQualityChecklist(model){
+ const valid=!!model?.summary&&!model.errors?.length,curves=model?.curves||[],pairs=model?.pairs||[];
+ const entry=(label,status,evidence)=>({label,status,evidence});
+ const result=[entry('Station chain and geometric continuity',valid?(model.summary.continuous?'PASS':'FAIL'):'NOT EVALUATED',valid?(model.summary.continuous?'Entered circular curves have a continuous station chain within the calculation tolerance.':'Resolve overlap or station-chain findings in Detailed checks.'):'Enter valid geometry.')];
+ result.push(entry('Speed, radius and superelevation compatibility','NOT EVALUATED','Requires adopted design speed, applicable minimum radius, crossfall, superelevation and side-friction criteria. Curve radius alone cannot establish compliance.'));
+ result.push(entry('Superelevation reversal and transition length',pairs.some(p=>p.kind==='Reverse')?'NOT EVALUATED':valid?'NOT APPLICABLE':'NOT EVALUATED',pairs.some(p=>p.kind==='Reverse')?'Reverse curves present. Check runoff and tangent runout lengths, lane rotation, crossfall reversal and any spiral lengths against the available tangent. A 50 m tangent is not automatic transition approval.':'No reverse connection in the entered schedule; individual curve transitions still require design.'));
+ result.push(entry('Same-direction curve arrangement',pairs.some(p=>p.kind==='Same-direction with tangent')?'WARNING':valid?'NOT APPLICABLE':'NOT EVALUATED','Avoid broken-back arrangements. The 30 m short-tangent flag is a tool screen, not a verified universal minimum for same-direction curves. Review all same-direction separated curves for appearance and transitions.'));
+ result.push(entry('Compound-curve justification',pairs.some(p=>p.kind==='Compound')?'NOT EVALUATED':valid?'NOT APPLICABLE':'NOT EVALUATED','Where compound curves are necessary, document terrain/right-of-way constraints and verify the flatter radius is no more than 1.5 times the sharper radius.'));
+ result.push(entry('Sight distance and obstruction clearance','NOT EVALUATED','Requires speed, grade, sight-distance criterion and surveyed obstruction envelope; use the separate sight-offset tool and full sightline review.'));
+ result.push(entry('Curve widening and vehicle tracking','NOT EVALUATED','Check design vehicle, swept path, lane widths and gradual widening transitions.'));
+ result.push(entry('Horizontal / vertical alignment coordination','NOT EVALUATED','Requires vertical profile, terrain and survey orientation. Review hidden dips, sharp curves after long tangents, small-angle kinks and approach visibility.'));
+ return result;
+}
+
 function stoppingSightDistance(speed,grade,reaction=2.5,deceleration=3.4){
  const V=number(speed,'Design speed'),G=number(grade,'Grade'),t=number(reaction,'Reaction time'),a=number(deceleration,'Deceleration');
  if(V<=0||t<=0||a<=0||Math.abs(G)>=100)throw Error('Speed, reaction time and deceleration must be positive; grade must be between -100% and 100%.');
@@ -89,9 +104,11 @@ function complianceChecklist(model){
   const applicable=pairs.filter(p=>p.kind===kind);
   const failed=applicable.filter(p=>p.status==='FAIL');
   if(failed.length)return item(index,'NO',failed.map(p=>p.from+' → '+p.to+': '+(kind==='Compound'?'radius ratio '+p.ratio.toFixed(4)+' > '+criteria.maximumRatio:'tangent '+p.gap.toFixed(4)+' m < '+criteria.minimumTangent+' m')).join('; '));
+  const warnings=applicable.filter(p=>p.status==='WARNING');
+  if(warnings.length)return item(index,'NO',warnings.map(p=>p.from+' → '+p.to+': '+p.gap.toFixed(3)+' m meets the '+criteria.minimumTangent+' m floor but is below the '+p.recommended+' m recommendation. Review transition design.').join('; '));
   if(unknown.length||!criteria.continuous)return item(index,'NOT EVALUATED','Resolve overlaps, station-chain errors or disconnected tangents before confirming this requirement.');
   if(!applicable.length)return item(index,'N/A','No '+description+' occurs in the entered schedule.');
-  return item(index,'YES',applicable.length+' '+description+' checked against '+(kind==='Compound'?'larger/smaller radius ≤ '+criteria.maximumRatio:'intervening tangent ≥ '+criteria.minimumTangent+' m')+'.');
+  return item(index,'YES',applicable.length+' '+description+' checked against '+(kind==='Compound'?'larger/smaller radius ≤ '+criteria.maximumRatio:'intervening tangent ≥ '+(model.scope==='alignment'?50:criteria.minimumTangent)+' m')+'.');
  }
  const broken=pairs.filter(p=>p.kind==='Same-direction with tangent'&&p.status==='WARNING');
  const brokenResult=broken.length?item(2,'NO',broken.map(p=>p.from+' → '+p.to+': same-direction tangent '+p.gap.toFixed(4)+' m is shorter than '+criteria.minimumTangent+' m.').join('; ')):unknown.length||!criteria.continuous?item(2,'NOT EVALUATED','Resolve geometric continuity and station-chain errors before confirming absence.'):!pairs.length?item(2,'N/A','At least two successive curves are needed for this arrangement check.'):item(2,'YES','No same-direction positive tangent shorter than '+criteria.minimumTangent+' m was found. This confirms only the selected short-tangent screen; appearance and transition design still need review.');
@@ -181,10 +198,10 @@ function analyze(inputRows,options={}){
    if(row[field]!==null){const residual=row[field]-c[key];check(Math.abs(residual)<=tol?'PASS':'FAIL',row.id+' entered '+label,residual.toFixed(4)+' m residual','± '+tol+' m',label+' supplied '+row[field]+'; calculated '+c[key].toFixed(6)+'. Check transcription, rounding, units and curve type.');}
   }
   if(prev){
-   let pair=pairCheck(prev,c,gap,{minimumTangent,maximumRatio},tol);
+   let pair=pairCheck(prev,c,gap,{minimumTangent,maximumRatio,recommendedTangent:options.scope==='alignment'?50:minimumTangent},tol);
    if(mode==='pi'&&!row.connectionValid)pair={...pair,status:'NOT EVALUATED',message:'Adjacent curve tangents are not geometrically continuous. Resolve the continuity failure before using the pairing screen.'};
    pair={...pair,from:prev.id,to:c.id};pairs.push(pair);
-   check(pair.status,prev.id+' → '+c.id+' '+pair.kind,Number(pair.actual).toFixed(4)+(pair.kind==='Compound'||pair.kind==='Same-radius connection'?' ratio':' m'),pair.kind==='Compound'||pair.kind==='Same-radius connection'?'Radius ratio ≤ '+maximumRatio:'Project tangent screen ≥ '+minimumTangent+' m',pair.message+' Deficiency: '+pair.deficiency.toFixed(4)+((pair.kind==='Compound'||pair.kind==='Same-radius connection')?' ratio units.':' m.'));
+   check(pair.status,prev.id+' → '+c.id+' '+pair.kind,Number(pair.actual).toFixed(4)+(pair.kind==='Compound'||pair.kind==='Same-radius connection'?' ratio':' m'),pair.kind==='Compound'||pair.kind==='Same-radius connection'?'Radius ratio ≤ '+maximumRatio:(options.scope==='alignment'&&pair.kind==='Reverse'?'Reverse tangent: floor '+minimumTangent+' m; recommended 50':'Project tangent screen ≥ '+minimumTangent)+' m',pair.message+' Deficiency: '+pair.deficiency.toFixed(4)+((pair.kind==='Compound'||pair.kind==='Same-radius connection')?' ratio units.':' m.'));
   }
   for(const [type,p,sta] of [['PC',c.pc,c.pcStation],['PI',c.pi,c.piStation],['PT',c.pt,c.ptStation],['Center',c.center,null]])points.push({id:c.id+' '+type,type,station:sta,e:p.x,n:p.y});
   curves.push(c);
@@ -266,8 +283,8 @@ function alignmentPrompt(){
  '- Preserve identifiers, source values, order and precision. Resolve duplicates or conflicting readings explicitly. Do not infer left/right from station values or an unsigned angle.',
  '- Required per curve: PI identifier, PI station, 0 < intersection angle < 180 degrees, positive radius and explicit L/R direction. Stations must be nonnegative. Flag unreadable or inconsistent entries.',
  '- For checking only, calculate T = R tan(I/2), Lc = pi R I/180, PC = PI station - T, PT = PC + Lc, and the intervening tangent = next PC - previous PT. Distinguish T from the PT-to-PC connecting tangent. Do not include derived columns in the five-column import block.',
- '- Flag PC before zero and overlapping curves. For reverse curves compare the PT-to-PC tangent with the project screen of 30 m. For directly connected same-direction compound curves compare larger/smaller radius with 1.5. For same-direction curves with a positive tangent shorter than 30 m, flag a broken-back screening concern. The app treats gaps within 0.05 m of zero as direct connections.',
- '- Treat 30 m and 1.5 as project screening settings, not universal design approval. If inputs are incomplete, state Not evaluated rather than Pass. Exclude sight-offset, speed and georeferenced-position inputs from this alignment worksheet.',
+ '- Flag PC before zero and overlapping curves. For reverse curves compare the PT-to-PC tangent with the 30 m minimum floor and 50 m recommendation. For directly connected same-direction compound curves compare larger/smaller radius with 1.5. For same-direction curves with a positive tangent shorter than 30 m, flag a broken-back screening concern. The app treats gaps within 0.05 m of zero as direct connections.',
+ '- For reverse curves flag less than 30 m as Fail, 30 to less than 50 m as Warning and 50 m or more as passing the length recommendation only. Transition design still requires separate verification; 1.5 is the compound-radius screen. These checks are not universal design approval. If inputs are incomplete, state Not evaluated rather than Pass. Exclude sight-offset, speed and georeferenced-position inputs from this alignment worksheet.',
  '- In a short separate review after the import block, report errors, connection findings and information still required. The user will paste only the TSV block into Paste table. The generated app output should be curve geometry, PC/PI/PT stations, labelled PI markers, highlighted PT-to-PC tangents and the dynamic connection checklist.'
  ].join('\n');
 }
@@ -287,7 +304,7 @@ function alignmentChatTable(rows,model){
  const headers=['PI','PI station','Δ (deg)','R (m)','Turn','T (m)','Lc (m)','PC','PT','Tangent before (m)'];
  const records=[headers,headers.map(()=>'---'),...rows.map((r,i)=>{const c=model?.curves?.[i];return [r.id,r.piStation,r.delta,r.r,r.turn,c?.T??'',c?.L??'',c?formatStation(c.pcStation):'',c?formatStation(c.ptStation):'',c?.gap??''];})];
  const findings=model?.summary?complianceChecklist(model).map(c=>'- '+c.label+': '+c.answer+' — '+c.reason).join('\n'):'';
- return 'Alignment Check · simple circular curves · local schematic. Project screens: reverse tangent ≥ 30 m; compound larger/smaller radius ≤ 1.5.\n\n'+records.map(row=>'| '+row.map(esc).join(' | ')+' |').join('\n')+(findings?'\n\n'+findings:'');
+ return 'Alignment Check · simple circular curves · local schematic. Reverse tangents: 30 m floor / 50 m recommended; verify transitions separately. Compound larger/smaller radius ≤ 1.5.\n\n'+records.map(row=>'| '+row.map(esc).join(' | ')+' |').join('\n')+(findings?'\n\n'+findings:'');
 }
 function chatTable(rows,model,options={}){
  const escape=value=>String(value??'').replace(/\|/g,'\\|').replace(/[\r\n]+/g,' ');
@@ -297,5 +314,5 @@ function chatTable(rows,model,options={}){
  const findings=(model?.summary?complianceChecklist(model):[]).map(c=>'- '+c.label+': '+c.answer+' — '+c.reason).join('\n');
  return assumptions+'\n\n'+table.map(row=>'| '+row.map(escape).join(' | ')+' |').join('\n')+(findings?'\n\n'+findings:'');
 }
-globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,designColumns,alignmentColumns,alignmentSchedule,alignmentPrompt,alignmentReadiness,alignmentChatTable,stoppingSightDistance,chatTable,pairCheck,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
+globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,designColumns,alignmentColumns,alignmentSchedule,alignmentPrompt,alignmentReadiness,alignmentChatTable,stoppingSightDistance,chatTable,pairCheck,alignmentQualityChecklist,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
 })();

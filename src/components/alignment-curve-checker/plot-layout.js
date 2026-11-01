@@ -21,5 +21,22 @@
   }
   return boxes;
  }
- globalThis.AlignmentPlotLayout=Object.freeze({frame,place});
+ function symbols(rect,anchors,segments){
+  const placed=[],inside=(p,b)=>p.x>=b.x&&p.x<=b.x+b.width&&p.y>=b.y&&p.y<=b.y+b.height;
+  const overlaps=(a,b)=>a.x<b.x+b.width+4&&a.x+a.width+4>b.x&&a.y<b.y+b.height+4&&a.y+a.height+4>b.y;
+  const hits=(a,b,box)=>{let lo=0,hi=1;for(const [v,d,min,max] of [[a.x,b.x-a.x,box.x-4,box.x+box.width+4],[a.y,b.y-a.y,box.y-4,box.y+box.height+4]]){if(Math.abs(d)<1e-9){if(v<min||v>max)return false;}else{let t1=(min-v)/d,t2=(max-v)/d;if(t1>t2)[t1,t2]=[t2,t1];lo=Math.max(lo,t1);hi=Math.min(hi,t2);if(lo>hi)return false;}}return true;};
+  for(const anchor of anchors){
+   if(!inside(anchor,rect))continue;
+   let selected=null;
+   for(const radius of [18,28,42,60,84,115,150]){
+    for(const [dx,dy] of [[1,-1],[-1,-1],[1,1],[-1,1],[1,0],[-1,0],[0,-1],[0,1]]){
+     const b={...anchor,x:anchor.x+dx*radius-10,y:anchor.y+dy*radius-8,width:20,height:16};
+     if(!inside(b,rect)||!inside({x:b.x+b.width,y:b.y+b.height},rect)||placed.some(p=>overlaps(b,p))||segments.some(([a,c])=>hits(a,c,b)))continue;
+     selected=b;break;
+    }if(selected)break;
+   }
+   if(selected)placed.push({...selected,anchor});
+  }return placed;
+ }
+ globalThis.AlignmentPlotLayout=Object.freeze({frame,place,symbols});
 })();
