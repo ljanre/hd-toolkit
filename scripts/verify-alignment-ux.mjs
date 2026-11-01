@@ -82,3 +82,7 @@ for(const [source,expected] of [['L','L'],['R','R'],['l','L'],['r','R'],['Left',
 const [noTurn]=C.parseTable('PI NO.\tPI STATION\tI\tR\nA\t1000\t20\t100','alignment');assert.equal(noTurn.turn,'');assert.ok(C.alignmentSchedule([noTurn]).errors.length);
 for(const text of ['staggered ELEMENTS OF CURVE','TURN audit table OUTSIDE the TSV','Aout - Ain + 540','back azimuths','uE*vN - uN*vE','leave TURN blank','spiral-plus-circular'])assert.ok(C.alignmentPrompt().includes(text),text);
 assert.doesNotMatch(C.alignmentPrompt(),/327.42|7\+225|PI 29/,'Prompt must remain generic, not embed current project data.');
+
+assert.match(html,/<option value="8" selected>8% · default/);
+for(const text of ['Design Controls table','Source Details / Review table','Actual per-curve superelevation e is NOT emax','never assume missing speed','does not import speed automatically','do not average speeds'])assert.ok(C.alignmentPrompt().includes(text),text);
+assert.match(app,/id==='radiusEmax'/);

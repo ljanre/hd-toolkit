@@ -12,7 +12,7 @@ The excerpt also asks for PI/PC/PT stations, PI coordinates, intersection angle,
 
 ## Minimum curve radius — DGCS 2015
 
-The full local DGCS Volume 4 (527 PDF pages) was located and read for this update. §3.6.2.1, printed p.3-19, identifies speed and maximum superelevation as controls. Table 3-12, printed pp.3-20–3-21 (PDF pages 95–96), supplies limiting rounded radii for emax 4%, 6%, 8% and 10%. The lookup uses exact printed speeds only; no interpolation or extrapolation. V and emax start blank to avoid assuming project controls and apply to all curves in the schedule.
+The full local DGCS Volume 4 (527 PDF pages) was located and read for this update. §3.6.2.1, printed p.3-19, identifies speed and maximum superelevation as controls. Table 3-12, printed pp.3-20–3-21 (PDF pages 95–96), supplies limiting rounded radii for emax 4%, 6%, 8% and 10%. The lookup uses exact printed speeds only; no interpolation or extrapolation. V starts blank; emax defaults to the user-adopted 8% and remains editable. Both controls apply to all curves in the schedule.
 
 Source inconsistency: at 70 km/h / 4%, Table 3-12 prints calculated 203.1 m but rounded 135 m. Table 3-13, p.3-26 (PDF page 101), gives 203 m for 70 km/h at e=4%; the worksheet uses 203 m with this explicit correction. The 4% table is limited to urban conditions by Table 3-13. The 15 km/h / 4% and >100 km/h / 4% cases are absent from the table and remain Not evaluated.
 
@@ -25,3 +25,9 @@ Radius failures color the radius input, calculated radius cell, curve centerline
 The copy prompt requires a separate turn audit: incoming/outgoing forward azimuths, signed change, source-angle residual, evidence and uncertainty. Staggered azimuth cells belong to tangent segments; both headings must be oriented in increasing-station travel. Clockwise-from-north signed change is ((Aout−Ain+540) mod 360)−180: positive Right, negative Left. Uniformly converting both back azimuths by 180 degrees preserves that difference. Coordinate confirmation uses E/N vectors and their cross product (positive Left). Missing endpoints, ambiguous row pairing, angle disagreement, zero/180-degree changes and unresolvable direction remain blank. Spiral geometry is flagged as outside this circular reconstruction model.
 
 The five-column TSV format remains unchanged. Alignment imports now normalize Left/Right and lowercase L/R to the dropdown values. A missing TURN stays blank rather than receiving the legacy AUTO placeholder. Other import layouts retain their original behavior.
+
+## Supplementary source details and default emax
+
+The reusable prompt now requests a separate Design Controls table (speed, road classification, terrain, source and scope) and a per-PI Source Details / Review table (V, actual e, widening, T, Lc, PC/PT and spiral station/length details). These do not change the supported five-column import. Speed remains a separately selected shared control, not an automatically imported field; varying speeds must be identified and checked in separate applicable runs.
+
+Maximum superelevation now defaults to 8%, remains editable, and fills an older blank saved maximum. An existing nonblank selection is preserved. No design speed is assumed. The prompt distinguishes the 8% default maximum from actual per-curve e, preserves printed e, and reports any conflicting governing emax for review.

@@ -15,7 +15,7 @@ function restore(data){
   const legacy=data.options?.stationBasis?C.stationSchedule(data.rows||[],data.options):C.analyze(data.rows||[],data.options||{});
   data={...data,rows:(data.rows||[]).map((r,i)=>{const c=legacy.curves[i];return c?{...r,piStation:C.formatStation(c.piStation),delta:String(c.delta),turn:c.s===1?'R':'L'}:r;})};
  }
- for(const id of inputs)if(data.options?.[id]!==undefined)$(id).value=data.options[id];renderRows(data.rows||[]);calculate();
+ for(const id of inputs)if(data.options?.[id]!==undefined)$(id).value=id==='radiusEmax'&&!String(data.options[id]).trim()?'8':data.options[id];renderRows(data.rows||[]);calculate();
 }
 function renderRows(values){
  $('inputRows').replaceChildren();
