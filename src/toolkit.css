@@ -80,3 +80,5 @@ seismic-coefficients{display:block}seismic-coefficients iframe{display:block;wid
 hydrology-tool{display:block}hydrology-tool iframe{display:block;width:100%;height:calc(100dvh - 48px);min-height:650px;border:0;border-radius:14px;background:#f5f7fa}@media(max-width:760px){hydrology-tool iframe{height:calc(100dvh - 180px);min-height:650px}}
 
 alignment-curve-checker{display:block;width:100%;min-width:0}alignment-curve-checker iframe{display:block;width:100%;border:0;height:calc(100dvh - 48px);min-height:600px;background:white}@media(max-width:760px){alignment-curve-checker iframe{height:calc(100dvh - 210px)}}
+
+hso-tool{display:block;width:100%;min-width:0}hso-tool iframe{display:block;width:100%;border:0;height:calc(100dvh - 48px);min-height:600px;background:white}@media(max-width:760px){hso-tool iframe{height:calc(100dvh - 210px)}}

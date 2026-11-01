@@ -160,7 +160,7 @@ test('ChatGPT copy includes editable values, assumptions and current findings',(
 });
 test('Removed panels and controls stay absent; HSO inputs and copy remain',()=>{
  for(const id of ['project','stationBasis','startStation','undo','compareInputs','showSight','evaluationStamp'])assert.ok(!alignmentHtml.includes('id="'+id+'"'));
- assert.ok(!alignmentHtml.includes('Method, references &amp; use'));for(const id of ['reactionTime','deceleration','copyTable'])assert.ok(alignmentHtml.includes('id="'+id+'"'));
+ assert.ok(!alignmentHtml.includes('Method, references &amp; use'));assert.ok(alignmentHtml.includes('id="copyTable"'));assert.ok(!alignmentHtml.includes('id="reactionTime"'));assert.ok(!alignmentHtml.includes('id="deceleration"'));
 });
 await mkdir(new URL('Reports/',root),{recursive:true});
 await writeFile(new URL('Reports/alignment-curve-checker-tests.json',root),JSON.stringify({date:'2026-11-01',tool:'Alignment Curve Checker',baseline:'Speed/grade HSO revision from 4defff4',results,passed:results.length,failed:0,limits:'Independent circle rotation and worked benchmarks. SSD: FHWA-RD-02-045 Eq.3.5.1; HSO: TxDOT Roadway Design Manual 4.7.9, reviewed 2026-11-01. Project tangent/radius screens remain from the user brief; no universal DPWH approval is claimed. Numerical agreement is not design approval.'},null,2)+'\n');

@@ -83,7 +83,7 @@ function sightOffsetCheck(curve){
 function complianceChecklist(model){
  const labels=['Radius requirement of compound curves','Tangent length between PT and PC of reverse curves','Absence of broken-back / flat-back arrangement','Horizontal sight offset'];
  const item=(index,answer,reason)=>({id:['compound','reverse','brokenBack','sightOffset'][index],label:labels[index],answer,reason});
- if(!model?.summary || model.errors?.length)return labels.map((_,i)=>item(i,'NOT EVALUATED','Enter valid curve geometry before evaluating this item.'));
+ if(!model?.summary || model.errors?.length)return (model?.scope==='alignment'?labels.slice(0,3):labels).map((_,i)=>item(i,'NOT EVALUATED','Enter valid curve geometry before evaluating this item.'));
  const pairs=model.pairs,unknown=pairs.filter(p=>p.kind==='Overlap'||p.status==='NOT EVALUATED'&&p.kind!=='Same-direction with tangent'),criteria=model.summary;
  function pairItem(index,kind,description){
   const applicable=pairs.filter(p=>p.kind===kind);
@@ -95,6 +95,7 @@ function complianceChecklist(model){
  }
  const broken=pairs.filter(p=>p.kind==='Same-direction with tangent'&&p.status==='WARNING');
  const brokenResult=broken.length?item(2,'NO',broken.map(p=>p.from+' → '+p.to+': same-direction tangent '+p.gap.toFixed(4)+' m is shorter than '+criteria.minimumTangent+' m.').join('; ')):unknown.length||!criteria.continuous?item(2,'NOT EVALUATED','Resolve geometric continuity and station-chain errors before confirming absence.'):!pairs.length?item(2,'N/A','At least two successive curves are needed for this arrangement check.'):item(2,'YES','No same-direction positive tangent shorter than '+criteria.minimumTangent+' m was found. This confirms only the selected short-tangent screen; appearance and transition design still need review.');
+ if(model.scope==='alignment')return [pairItem(0,'Compound','compound-curve connection'),pairItem(1,'Reverse','reverse-curve connection'),brokenResult];
  const sight=model.sightOffsets||model.curves.map(sightOffsetCheck),bad=sight.filter(s=>s.status==='FAIL'),missing=sight.filter(s=>s.status==='NOT EVALUATED');
  let sightResult;
  if(bad.length)sightResult=item(3,'NO',bad.map(s=>s.id+': offset deficit '+(-s.margin).toFixed(6)+' m.').join('; ')+(missing.length?' Other curves still need evaluation.':''));
@@ -189,11 +190,11 @@ function analyze(inputRows,options={}){
   curves.push(c);
  }
  if(errors.length)return {errors,curves:[],pairs:[],points:[],checks:[],summary:null};
- const sightOffsets=curves.map(sightOffsetCheck);
- for(const sight of sightOffsets)check(sight.status,sight.id+' horizontal sight offset',sight.required===null?'—':sight.required.toFixed(6)+' m required; '+sight.available.toFixed(6)+' m available','Inside-lane offset ≥ Rs[1 − cos(S/(2Rs))], S ≤ Rs × Δ',sight.message);
- for(const name of ['Minimum radius / design speed','Superelevation, runoff and transitions','Stopping sight distance / side friction','Curve widening'])check('NOT EVALUATED',name,'—','Applicable standard and project inputs required','Not determined by this geometry screen.');
+ const sightOffsets=options.scope==='alignment'?[]:curves.map(sightOffsetCheck);
+ for(const sight of sightOffsets)check(sight.status,sight.id+' horizontal sight offset',sight.required===null?'—':sight.required.toFixed(6)+' m required; '+(sight.available==null?'not entered':sight.available.toFixed(6))+' m available','Inside-lane offset ≥ Rs[1 − cos(S/(2Rs))], S ≤ Rs × Δ',sight.message);
+ if(options.scope!=='alignment')for(const name of ['Minimum radius / design speed','Superelevation, runoff and transitions','Stopping sight distance / side friction','Curve widening'])check('NOT EVALUATED',name,'—','Applicable standard and project inputs required','Not determined by this geometry screen.');
  const count=status=>checks.filter(c=>c.status===status).length;
- const result={errors,curves,pairs,points,checks,mode,sightOffsets,summary:{passed:count('PASS'),failed:count('FAIL'),warnings:count('WARNING'),notEvaluated:count('NOT EVALUATED'),total:checks.length,continuous:curves.every((c,i)=>!i||(c.source.connectionValid&&c.gap>=-tol))&&!checks.some(c=>c.status==='FAIL'&&(c.subject.includes('station chain')||c.subject.includes('station precision'))),length:curves.reduce((sum,c,i)=>sum+c.L+(i?c.gap:0),0),start:curves[0].pcStation,end:curves.at(-1).ptStation,minimumTangent,maximumRatio}};
+ const result={errors,curves,pairs,points,checks,mode,sightOffsets,scope:options.scope||'all',summary:{passed:count('PASS'),failed:count('FAIL'),warnings:count('WARNING'),notEvaluated:count('NOT EVALUATED'),total:checks.length,continuous:curves.every((c,i)=>!i||(c.source.connectionValid&&c.gap>=-tol))&&!checks.some(c=>c.status==='FAIL'&&(c.subject.includes('station chain')||c.subject.includes('station precision'))),length:curves.reduce((sum,c,i)=>sum+c.L+(i?c.gap:0),0),start:curves[0].pcStation,end:curves.at(-1).ptStation,minimumTangent,maximumRatio}};
  result.checklist=complianceChecklist(result);return result;
 }
 function parseDelimited(text){
@@ -217,7 +218,7 @@ function parseTable(text,layout='legacy'){
  const normalize=s=>s.toLowerCase().replace(/[^a-z]/g,'');
  const header=records[0].map(s=>s.trim()==='e'?null:aliases[normalize(s)]||null);
  const hasHeader=header.includes('id')&&header.includes('r');
- const names=hasHeader?header:layout==='design'?designColumns:layout==='station'?stationColumns:columns;
+ const names=hasHeader?header:layout==='alignment'?alignmentColumns:layout==='design'?designColumns:layout==='station'?stationColumns:columns;
  const result=(hasHeader?records.slice(1):records).map(fields=>{
   const row={turn:'AUTO'};fields.forEach((v,i)=>{if(names[i])row[names[i]]=v.trim();});return row;
  });
@@ -246,6 +247,17 @@ function stationSchedule(inputRows,options={}){
  if(errors.length)return {...model,errors:[...errors,...model.errors],curves:[],pairs:[],points:[],checks:[],sightOffsets:[],summary:null};
  return model;
 }
+const alignmentColumns=['id','piStation','delta','r','turn'];
+function alignmentSchedule(rows,options={}){
+ return {...stationSchedule(rows.map(row=>Object.fromEntries(alignmentColumns.map(key=>[key,row[key]]))),{...options,scope:'alignment'}),scope:'alignment'};
+}
+function alignmentChatTable(rows,model){
+ const esc=value=>String(value??'').replace(/\|/g,'\\|').replace(/[\r\n]+/g,' ');
+ const headers=['PI','PI station','Δ (deg)','R (m)','Turn','T (m)','Lc (m)','PC','PT','Tangent before (m)'];
+ const records=[headers,headers.map(()=>'---'),...rows.map((r,i)=>{const c=model?.curves?.[i];return [r.id,r.piStation,r.delta,r.r,r.turn,c?.T??'',c?.L??'',c?formatStation(c.pcStation):'',c?formatStation(c.ptStation):'',c?.gap??''];})];
+ const findings=model?.summary?complianceChecklist(model).map(c=>'- '+c.label+': '+c.answer+' — '+c.reason).join('\n'):'';
+ return 'Alignment Check · simple circular curves · local schematic. Project screens: reverse tangent ≥ 30 m; compound larger/smaller radius ≤ 1.5.\n\n'+records.map(row=>'| '+row.map(esc).join(' | ')+' |').join('\n')+(findings?'\n\n'+findings:'');
+}
 function chatTable(rows,model,options={}){
  const escape=value=>String(value??'').replace(/\|/g,'\\|').replace(/[\r\n]+/g,' ');
  const headers=['PI','PI station','Δ (deg)','R (m)','Turn','V (km/h)','G (%)','Rs (m)','Adopted S (m)','M available (m)','S used (m)','Required HSO (m)','HSO result'];
@@ -254,5 +266,5 @@ function chatTable(rows,model,options={}){
  const findings=(model?.summary?complianceChecklist(model):[]).map(c=>'- '+c.label+': '+c.answer+' — '+c.reason).join('\n');
  return assumptions+'\n\n'+table.map(row=>'| '+row.map(escape).join(' | ')+' |').join('\n')+(findings?'\n\n'+findings:'');
 }
-globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,designColumns,stoppingSightDistance,chatTable,pairCheck,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
+globalThis.AlignmentChecker={number,station,formatStation,angle,geometry,pointOnArc,reconstruct,analyze,stationSchedule,stationColumns,designColumns,alignmentColumns,alignmentSchedule,alignmentChatTable,stoppingSightDistance,chatTable,pairCheck,sightOffsetCheck,complianceChecklist,parseTable,csv,bearing,distance,diff,columns};
 })();

@@ -1,7 +1,7 @@
 (() => {
 'use strict';
-const C=AlignmentChecker,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='hd-alignment-curve-checker-v3';
-const inputs=['reactionTime','deceleration'],fields=C.designColumns;
+const C=AlignmentChecker,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',KEY='hd-alignment-check-v4';
+const inputs=[],fields=C.alignmentColumns;
 const colors=['#197657','#2778ad','#c47b17','#8b50a6','#ba5451','#218c92'];
 let model=null,view=null,drag=null,origin={x:0,y:0};
 const f=(n,d=3)=>Number.isFinite(n)?n.toFixed(d):'—';
@@ -25,13 +25,12 @@ function renderRows(values){
 
    const control=document.createElement(field==='turn'?'select':'input');
    if(field==='turn')for(const [text,val] of [['Choose…',''],['Left','L'],['Right','R']]){const opt=document.createElement('option');opt.value=val;opt.textContent=text;control.append(opt);}
-   control.dataset.field=field;control.value=value[field]??(field==='grade'?'0':'');control.setAttribute('aria-label',(value.id||'Curve')+' '+({designSpeed:'Design speed',grade:'Grade',r:'Radius',delta:'Intersection angle',piStation:'PI station',gap:'Tangent before',givenT:'Entered T',givenPC:'Entered PC',givenL:'Entered curve length',givenPT:'Entered PT',turn:'Direction',id:'PI number',sightRadius:'Sight path radius',sightDistance:'Adopted sight distance override',availableOffset:'Available horizontal sight offset'}[field]));
+   control.dataset.field=field;control.value=value[field]??'';control.setAttribute('aria-label',(value.id||'Curve')+' '+({r:'Radius',delta:'Intersection angle',piStation:'PI station',turn:'Direction',id:'PI number'}[field]));
    if(field!=='turn'){control.autocomplete='off';control.spellcheck=false;if(!['id','delta','piStation','givenPC','givenPT'].includes(field))control.inputMode='decimal';}
    if(['piStation','givenPC','givenPT'].includes(field))control.addEventListener('blur',()=>{try{if(control.value.trim())control.value=C.formatStation(C.station(control.value));}catch{}calculate();});
-   control.title=({designSpeed:'Design speed V, km/h; used when adopted S is blank.',grade:'Grade in travel direction: positive uphill, negative downhill. Initial 0 means level.',sightRadius:'Radius at the inside-lane path center; enter the correct lane radius.',sightDistance:'Optional adopted S in metres overrides the speed-based SSD.',availableOffset:'Minimum unobstructed inward clearance from the inside-lane path to the obstruction.'}[field])||'';
+   control.title=({piStation:'Tangent PI station: PC = PI − T; PT = PC + Lc.',delta:'Intersection angle: decimal degrees or D°M′S″.',r:'Simple circular-curve radius, metres.'}[field])||'';
    control.addEventListener('input',calculate);td.append(control);tr.append(td);
   }
-  for(const key of ['S','required','status']){const td=document.createElement('td');td.dataset.result=key;td.className='auto-result';tr.append(td);}
   const action=document.createElement('td'),button=document.createElement('button');button.textContent='Remove';button.setAttribute('aria-label','Remove '+value.id);button.addEventListener('click',()=>{tr.remove();renderRows(rows());calculate();});action.append(button);tr.append(action);$('inputRows').append(tr);
  }
 }
@@ -43,7 +42,7 @@ function errors(messages){
 }
 function calculate(){
  const raw=rows();
- try{model=C.stationSchedule(raw,options());}catch(error){model={errors:['Calculation could not be completed: '+error.message],curves:[],pairs:[],points:[],checks:[],summary:null};}
+ try{model=C.alignmentSchedule(raw,options());}catch(error){model={errors:['Calculation could not be completed: '+error.message],curves:[],pairs:[],points:[],checks:[],summary:null};}
  errors(model.errors);
  const generated=!!model.summary&&!model.errors.length;for(const id of ['plotWorkspace','elementsPanel','stationsPanel','checksPanel','compliancePanel','summary'])$(id).hidden=!generated;
  $('complianceRows').replaceChildren();
@@ -57,11 +56,11 @@ function calculate(){
    const finding=addCell(tr,'');const answer=document.createElement('span');answer.className='checklist-answer';answer.textContent=item.answer==='NOT EVALUATED'?'Not evaluated':item.answer;finding.append(answer,document.createTextNode(item.reason));$('complianceRows').append(tr);
  }
 
- [...$('inputRows').children].forEach((tr,i)=>{const h=model.sightOffsets?.[i];for(const key of ['S','required','status']){const cell=tr.querySelector('[data-result="'+key+'"]');cell.textContent=key==='status'?(h?.status??'NOT EVALUATED'):f(h?.[key]);cell.title=h?.message??'Enter valid curve geometry.';cell.classList.toggle('hso-fail',h?.status==='FAIL');}const invalid=model.errors.some(message=>message.startsWith('Row '+(i+1)+':'));for(const control of tr.querySelectorAll('input,select'))invalid?control.setAttribute('aria-invalid','true'):control.removeAttribute('aria-invalid');});
+ [...$('inputRows').children].forEach((tr,i)=>{const invalid=model.errors.some(message=>message.startsWith('Row '+(i+1)+':'));for(const control of tr.querySelectorAll('input,select'))invalid?control.setAttribute('aria-invalid','true'):control.removeAttribute('aria-invalid');});
  $('summary').replaceChildren();$('pairCards').replaceChildren();
 
  if(model.summary){
-  const s=model.summary,items=[['Screening status',s.failed?'Checks failed':s.warnings?'Review warnings':'Further evaluation required',C.formatStation(s.start)+' → '+C.formatStation(s.end)+' · '+(s.continuous?f(s.length,2)+' m':'Discontinuous chain — review geometry')],['Passed',s.passed,'Evaluated checks'],['Failed',s.failed,'Resolve deficiencies'],['Warnings',s.warnings,'Review arrangement'],['Not evaluated',s.notEvaluated,'Further design inputs']];
+  const s=model.summary,items=[['Screening status',s.failed?'Checks failed':s.warnings?'Review warnings':s.notEvaluated?'Review connections':'Geometry screens satisfied',C.formatStation(s.start)+' → '+C.formatStation(s.end)+' · '+(s.continuous?f(s.length,2)+' m':'Discontinuous chain — review geometry')],['Passed',s.passed,'Evaluated checks'],['Failed',s.failed,'Resolve deficiencies'],['Warnings',s.warnings,'Review arrangement'],['Not evaluated',s.notEvaluated,'Further design inputs']];
   items.forEach(([title,value,note],i)=>{const card=document.createElement('div');card.className='stat'+(!i?' title'+(s.failed?' failed':''):'');const label=document.createElement('small'),strong=document.createElement('strong'),small=document.createElement('small');label.textContent=title;strong.textContent=value;small.textContent=note;card.append(label,strong,small);$('summary').append(card);});
   for(const pair of model.pairs){
    const card=document.createElement('div');card.className='pair-card';const h=document.createElement('h3');h.textContent=pair.from+' → '+pair.to+' · '+pair.kind;
@@ -74,7 +73,7 @@ function calculate(){
  fillTable('pointRows',model.points.filter(p=>p.type!=='Center').map(p=>[p.id,p.station===null?'—':C.formatStation(p.station),p.type==='PI'?'Tangent intersection · not on circular arc':p.type==='Center'?'Circle center':p.type==='PC'?'Beginning of curve':'End of curve']));
  $('checkRows').replaceChildren();for(const check of model.checks){const tr=document.createElement('tr');const status=addCell(tr,'');status.append(badge(check.status));for(const value of [check.subject,check.actual,check.criterion,check.message])addCell(tr,value);$('checkRows').append(tr);}
 
- try{localStorage.setItem(KEY,JSON.stringify(capture()));}catch{$('notice').textContent='Browser storage is unavailable. Export inputs to retain this schedule.';}
+ try{localStorage.setItem(KEY,JSON.stringify(capture()));}catch{$('notice').textContent='Browser storage is unavailable. Copy the table to retain this schedule.';}
  fitPlot();
 }
 function svg(name,attributes={},text,parent=$('plot')){
@@ -140,7 +139,7 @@ let resizeTimer;addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeT
 for(const id of inputs)$(id).addEventListener('input',calculate);
 $('addRow').addEventListener('click',()=>{const old=rows();if(old.length>=200){$('notice').textContent='Maximum 200 rows.';return;}const ids=new Set(old.map(r=>r.id));let n=old.length+1;while(ids.has('PI-'+n))n++;old.push({id:'PI-'+n,turn:'',r:'',delta:''});renderRows(old);calculate();});
 $('pasteOpen').addEventListener('click',()=>{$('pasteError').textContent='';$('pasteDialog').showModal();$('pasteText').focus();});
-$('applyPaste').addEventListener('click',()=>{try{const imported=C.parseTable($('pasteText').value,'design');renderRows(imported);$('pasteDialog').close();calculate();$('notice').textContent='Imported '+imported.length+' rows. Coordinate columns are ignored. Review angles, L/R directions, stations and highlighted errors.';}catch(error){$('pasteError').textContent=error.message;}});
+$('applyPaste').addEventListener('click',()=>{try{const imported=C.parseTable($('pasteText').value,'alignment');renderRows(imported);$('pasteDialog').close();calculate();$('notice').textContent='Imported '+imported.length+' rows. Coordinate columns are ignored. Review angles, L/R directions, stations and highlighted errors.';}catch(error){$('pasteError').textContent=error.message;}});
 function sample(name){
  const base={project:'ILLUSTRATIVE EXAMPLE · not surveyed project data',stationBasis:'stations',startStation:'2+000',minimumTangent:'30',maximumRatio:'1.5'};
  let data=[{id:'PI-1',r:'150',delta:'40',turn:'R',gap:'0'},{id:'PI-2',r:'200',delta:'35',turn:'L',gap:'30'}];
@@ -154,11 +153,11 @@ function sample(name){
 }
 $('sample').addEventListener('change',()=>{if(!$('sample').value)return;restore(sample($('sample').value));$('notice').textContent='Illustrative example loaded. Replace sample values with project inputs.';$('sample').value='';});
 async function copyTable(){
- const text=C.chatTable(rows(),model,options());
+ const text=C.alignmentChatTable(rows(),model);
  try{await navigator.clipboard.writeText(text);$('notice').textContent='Table copied. Paste it into ChatGPT.';}
  catch{$('copyText').value=text;$('copyDialog').showModal();$('copyText').focus();$('copyText').select();$('notice').textContent='Clipboard access unavailable. Copy the selected table from the dialog.';}
 }
 $('copyTable').addEventListener('click',copyTable);$('retryCopy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('copyText').value);$('copyDialog').close();$('notice').textContent='Table copied. Paste it into ChatGPT.';}catch{$('copyText').focus();$('copyText').select();}});
-let saved;try{saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('hd-alignment-curve-checker-v2')||localStorage.getItem('hd-alignment-curve-checker-v1'));}catch{}
+let saved;try{saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('hd-alignment-curve-checker-v3')||localStorage.getItem('hd-alignment-curve-checker-v2')||localStorage.getItem('hd-alignment-curve-checker-v1'));}catch{}
 if(saved?.rows?.length)restore(saved);else restore(sample('reverse30'));
 })();

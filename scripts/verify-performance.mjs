@@ -44,7 +44,7 @@ await assert.rejects(access(new URL('../dist/stale-build-artifact.txt',import.me
 const definitions=new Map();let admin=false;
 const context={document:{body:{classList:{contains:()=>admin}},querySelector(){return {content:'release-test'};},createElement(){return {children:[],append(...items){this.children.push(...items);}};}},window:{location:{search:''}},URLSearchParams,customElements:{get:name=>definitions.get(name),define:(name,type)=>definitions.set(name,type)},HTMLElement:class{constructor(){this.frames=[];this.hidden=true;}closest(){return this.hidden?{}:null;}querySelector(selector){return this.frames.find(e=>selector==='iframe'?!!e.src:e.className==='tool-development');}append(frame){this.frames.push(frame);}}};
 runInNewContext(await read('src/tool-registry.js'),context);
-assert.equal(definitions.size,18);
+assert.equal(definitions.size,19);
 assert.ok(definitions.has('alignment-curve-checker'));
 assert.equal(context.ToolkitRegistry.tools.alignment.group,'geometry');
 assert.equal(context.ToolkitRegistry.tools.alignment.access,undefined);
