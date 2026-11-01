@@ -34,7 +34,7 @@ assert.deepEqual([...html.matchAll(/<input type="checkbox" id="([^"]+)" checked/
 assert.doesNotMatch(html,/N\/A/);assert.match(html,/Not Applicable/);assert.match(app,/TANGENT SCHEDULE/);assert.match(app,/Lt = /);
 
 // Independent boundary expectations for reverse tangent guidance.
-for(const [gap,status] of [[0,'FAIL'],[10,'FAIL'],[29,'FAIL'],[29.999,'FAIL'],[30,'WARNING'],[30.001,'WARNING'],[40,'WARNING'],[49.999,'WARNING'],[50,'PASS'],[50.001,'PASS'],[100,'PASS']]){
+for(const [gap,status] of [[0,'FAIL'],[10,'FAIL'],[29,'FAIL'],[29.999,'FAIL'],[30,'PASS'],[30.001,'PASS'],[40,'PASS'],[49.999,'PASS'],[50,'PASS'],[50.001,'PASS'],[100,'PASS']]){
  const m=C.alignmentSchedule(pair(gap));assert.equal(m.pairs[0].status,status,`Reverse gap ${gap}`);
  assert.equal(C.complianceChecklist(m)[1].answer,status==='PASS'?'YES':'NO');
  const quality=C.alignmentQualityChecklist(m);assert.equal(quality[0].status,'PASS');assert.equal(quality.find(q=>q.label.includes('reversal')).status,'NOT EVALUATED');
@@ -45,3 +45,13 @@ for(const width of [280,360,600,759,760,900,1000,1200,1400,1600]){
  for(let i=0;i<symbols.length;i++){assert.ok(symbols[i].x+symbols[i].width<width);for(let j=i+1;j<symbols.length;j++)assert.equal(intersects(symbols[i],symbols[j]),false);}
 }
 assert.match(app,/engineering-symbols/);assert.match(app,/\['FAIL','WARNING'\]\.includes\(pair.status\)/);
+
+// Supplied-note boundaries for same-direction tangents and compound radius ratio.
+for(const [gap,warning] of [[.1,true],[1,true],[10,true],[20,true],[29,true],[29.999,true],[30,false],[30.001,false],[40,false],[50,false]]){
+ const rows=pair(gap);rows[1].turn='R';const m=C.alignmentSchedule(rows);
+ assert.equal(m.pairs[0].status,warning?'WARNING':'NOT EVALUATED');
+ assert.equal(C.complianceChecklist(m)[2].answer,warning?'NO':'YES');
+ assert.equal(C.alignmentQualityChecklist(m).find(q=>q.label==='Same-direction curve arrangement').status,warning?'WARNING':'PASS');
+}
+for(const ratio of [1,1.2,1.4999,1.5,1.5001,2])assert.equal(C.pairCheck({R:100,s:1},{R:100*ratio,s:1},0).status,ratio<=1.5?'PASS':'FAIL');
+assert.doesNotMatch(html,/50 m recommended/);assert.doesNotMatch(C.alignmentPrompt(),/50 m/);
