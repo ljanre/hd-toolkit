@@ -96,3 +96,7 @@ for(const degrees of [0,15,30,45,60,90,135,180,225,270,315,360]){
 const cw=P.rotate({x:0,y:10},{x:0,y:0},90);assert.ok(Math.abs(cw.x-10)<1e-10&&Math.abs(cw.y)<1e-10);
 assert.match(html,/id="rotateLeft"/);assert.match(html,/id="rotateRight"/);assert.match(app,/function resetView\(\)\{rotation=0/);
 console.log('View rotation: 12 distance-preservation cases, clockwise direction and reset verified.');
+
+// Patched-image extraction must keep provenance and uncertainty outside the import cells.
+for(const requirement of ['Inventory every supplied image / patch','printed heading and grid boundaries','transcribe each visible source cell verbatim','At every patch seam','show BOTH literal readings','re-read the original images row-by-row and then column-by-column','Separate literal source transcription','Missing / cropped','Reconcile counts','Source Verification table OUTSIDE the TSV','Needs source verification','not engineering approval or a guarantee of image-reading accuracy'])assert.ok(C.alignmentPrompt().includes(requirement),requirement);
+assert.match(C.alignmentPrompt(),/exactly these five headers/);
