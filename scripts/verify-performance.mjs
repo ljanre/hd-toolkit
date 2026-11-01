@@ -32,7 +32,7 @@ assert.match(html,new RegExp('hd-toolkit-build" content="'+manifest.version));
 assert.match(html,new RegExp('tool-registry.js\\?v='+manifest.version));
 assert.equal((html.match(/\/component\.js/g)||[]).length,0,'Individual registration scripts should not load in the main page');
 assert.ok(manifest.excludedFiles>=23);
-const alignmentFiles=['index.html','styles.css','engine.js','app.js'];
+const alignmentFiles=['index.html','styles.css','engine.js','plot-layout.js','app.js'];
 const alignmentBytes=(await Promise.all(alignmentFiles.map(file=>readFile(new URL('../dist/components/alignment-curve-checker/'+file,import.meta.url))))).reduce((sum,bytes)=>sum+bytes.length,0);
 assert.ok(alignmentBytes<100000,'Alignment Curve Checker must remain below its 100 kB runtime budget');
 const orderBytes=(await readFile(new URL('../src/components/design-criteria/do-112-s2024-reference.pdf',import.meta.url))).length;

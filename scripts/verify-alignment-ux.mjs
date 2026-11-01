@@ -15,4 +15,17 @@ const prompt=C.alignmentPrompt();assert.match(prompt,/PI NO\.\tPI STATION\tI\tR\
 const html=await readFile(new URL('../src/components/alignment-curve-checker/index.html',import.meta.url),'utf8'),app=await readFile(new URL('../src/components/alignment-curve-checker/app.js',import.meta.url),'utf8');
 assert.match(html,/<h1>Alignment Checker/);assert.match(html,/Copy Table Format \(Prompt\)/);assert.ok(html.indexOf('id="addRow"')>html.indexOf('id="inputRows"'));assert.match(html,/id="inputReadiness"/);assert.doesNotMatch(html,/Connection screening|Successive curves|Plot labels may be offset/);
 assert.match(app,/const text=C\.alignmentPrompt\(\)/);assert.doesNotMatch(app,/C\.alignmentChatTable\(rows/);assert.match(app,/class:'checked-tangent'/);assert.match(app,/class:'pi-marker'/);
+runInNewContext(await readFile(new URL('../src/components/alignment-curve-checker/plot-layout.js',import.meta.url),'utf8'),context);
+const P=context.AlignmentPlotLayout;
+const intersects=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
+for(const [width,count] of [[280,1],[360,3],[600,6],[759,10],[760,2],[900,4],[1200,8],[1600,12],[1000,30],[1400,50]]){
+ const frame=P.frame(width,count,Math.max(0,count-1));
+ const items=Array.from({length:count},(_,index)=>({kind:'pi',index,anchorY:index%2?99999:-100,lines:['PI identifier','PC station','PT station','Radius / angle']})).concat(Array.from({length:Math.max(0,count-1)},(_,index)=>({kind:'tangent',index,anchorY:index%3?250:-50,lines:['PT → PC','Length / result']})));
+ const boxes=P.place(frame,items);assert.equal(boxes.length,items.length);
+ for(const box of boxes){assert.ok(box.x>=0&&box.y>=0&&box.x+box.width<=frame.width+1e-6&&box.y+box.height<=frame.height+1e-6);assert.equal(intersects(box,frame.geometry),false,'Annotation covers geometry');}
+ for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++)assert.equal(intersects(boxes[i],boxes[j]),false,'Annotation boxes overlap');
+}
+assert.match(html,/<details[^>]+id="elementsPanel"[^>]*><summary>Calculated curve elements/);assert.match(html,/<details[^>]+id="stationsPanel"[^>]*><summary>Station register/);
+assert.ok(html.indexOf('id="checksPanel"')>html.indexOf('id="plotWorkspace"'));assert.ok(html.indexOf('id="checksPanel"')<html.indexOf('id="elementsPanel"'));
+assert.doesNotMatch(html,/id="summary"/);assert.doesNotMatch(app,/Illustrative example loaded|\$\('summary'\)/);
 console.log('Alignment UX: 12 readiness cases, prompt-only copy, row controls and tangent/PI plotting contracts verified.');
